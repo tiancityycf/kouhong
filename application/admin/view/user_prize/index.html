@@ -1,0 +1,81 @@
+{extend name='admin@public/content'}
+
+{block name="content"}
+<!-- 表单搜索 开始 -->
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+    <div class="layui-form-item layui-inline">
+        <?php
+            $url = '/admin/user_prize/load';
+            $str = http_build_query($data);
+
+        ?>
+        <a href='{:url("$classuri/load")}?{$str}' class="layui-btn">导出表格</a>
+    </div>
+	<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+        <label class="layui-form-label">玩家搜索</label>
+        <div class="layui-input-inline">
+            <input name="name" value="{$Think.get.name|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">领取时间</label>
+        <div class="layui-input-inline" style="width: 265px;">
+            <input name="create_time" id='create_time' value="{$Think.get.create_time|default=''}" placeholder="请选择领取时间" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+
+    
+
+</form>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+    	<tr>
+            <!-- <th class='text-left nowrap'>用户ID</th> -->
+            <th class='text-left nowrap'>礼物ID</th>
+            <th class='text-left nowrap'>用户名字</th>
+            <th class='text-left nowrap'>手机号码</th>
+            <th class='text-left nowrap'>地址</th>
+            <th class='text-left nowrap'>领取时间</th>
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+    		<!-- <td class='text-left nowrap'>
+    			{//$vo.user_id}
+    		</td> -->
+    		<td class='text-left nowrap'>
+    			{$vo.prize_id}
+    		</td>
+    		<td class='text-left nowrap'>
+    			{$vo.name}
+    		</td>
+    		<td class='text-left nowrap'>
+    			{$vo.phone}
+    		</td>
+    		<td class='text-left nowrap'>
+    			{$vo.address}
+    		</td>
+            <td class='text-left nowrap'>
+                {$vo.create_time|date='Y-m-d H:i:s'}
+            </td>
+    	</tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+</form>
+<script>
+    window.form.render();
+    window.laydate.render({range: true, elem: '#create_time', type: 'datetime'});
+</script>
+
+{/block}

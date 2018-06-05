@@ -1,0 +1,114 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+	<div class="layui-form-item">
+        <label class="layui-form-label">成语</label>
+        <div class="layui-input-block">
+            {//if $vo and isset($vo.word)}
+            <!-- <input id="word"  name="word" value='{//$vo.word|default=""}' word_id="{//$vo.id|default=''}" word_mix="{//$vo.mix_num|default=''}" required="required" pattern="^.{4,}$" title="请输入" placeholder="请输入4个子及以上成语" class="layui-input layui-bg-gray"> -->
+            {//else}
+            <input id="word" name="word" value='{$vo.word|default=""}' word_id="{$vo.id|default=''}" word_mix="{$vo.mix_num|default=''}" required="required" pattern="^.{2,}$" title="请输入2个子及以上词语" placeholder="请输入2个子及以上词语" class="layui-input">
+            {///if}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">混淆第几个字</label>
+        <div class="layui-input-block">
+           <!--  <input type="num" autofocus name="mix_num" required="required" value='{//$vo.mix_num|default="1"}' pattern="^[1-9]d*$" title="请填写数字" placeholder="混淆第几个字" class="layui-input"> -->
+           <select id="mix_num" name="mix_num" required="required" class="layui-select">
+           </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">混淆字</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="mix_char" required="required" value='{$vo.mix_char|default=""}' pattern="" title="请输入混淆字" placeholder="请输入混淆字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">词语拼音</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="pinyin" required="required" value='{$vo.pinyin|default=""}' pattern="" title="请输入成语的拼音" placeholder="请输入成语的拼音" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">词语释义</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="intro" required="required" value='{$vo.intro|default=""}' pattern="" title="词语释义" placeholder="词语释义" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">词语说明</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="caution" required="required" value='{$vo.caution|default=""}' pattern="" title="词语说明" placeholder="词语说明" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">难度等级</label>
+        <div class="layui-input-block">
+            <input type="number" autofocus name="level" required="required" value='{$vo.level|default="1"}' pattern="^[1-9]\d?$" title="请填大于0的一位或两位数字" placeholder="难度等级" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">词语状态</label>
+        <div class="layui-input-block">
+                <select id="status" name="status" class="layui-select">
+                	<!--{foreach [1=>'启用',0=>'禁用'] as $key=>$st}-->
+                	<!--{if (!isset($vo['status']) AND $key eq 1) OR (isset($vo['status']) AND $vo.status eq $key)}-->
+                	<option selected value="{$key}">- {$st} -</option>
+	                <!--{else}-->
+	                <option value="{$key}">- {$st} -</option>
+	                <!--{/if}-->
+                	<!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+    	$("#word").on('change', function(){
+    		var length = $(this).val().length;
+    		var mix_num = $("#mix_num option:selected").val();
+    		var html = '';
+    		for(var i = 1; i <= length; i++){
+    			if(mix_num == i){
+    				html += "<option selected value='"+ i +"'>- "+ i +" -</option>";
+    			}else{
+    				html += "<option value='"+ i +"'>- "+ i +" -</option>";
+    			}
+    		}
+    		$("#mix_num").html(html);
+            renderForm();
+    	});
+
+        function renderForm(){
+            layui.use('form', function(){
+                var form = layui.form;
+                form.render();
+            });
+        }
+
+    	$(document).ready(function(){
+    		var word = $("#word");
+		    var length = word.val().length;
+		    var mix_num = word.attr("word_mix");
+		    var word_id = word.attr("word_id");
+
+            var html = '';
+		    if(word_id != ''){
+                for(var i = 1; i <= length; i++){
+                    if(mix_num == i){
+                        html += "<option selected value='"+ i +"'>- "+ i +" -</option>";
+                    }else{
+                        html += "<option value='"+ i +"'>- "+ i +" -</option>";
+                    }
+                }
+                $("#mix_num").html(html);
+                renderForm();
+            }
+		});
+    </script>
+</form>
