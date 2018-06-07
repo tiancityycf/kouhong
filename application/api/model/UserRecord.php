@@ -10,6 +10,9 @@ use app\api\service\Config as ConfigService;
  */
 class UserRecord extends Model
 {
+	protected $type = [
+		'amount' => 'float',
+	];
 	/**
 	 * 获取荣誉榜
 	 * @return array
@@ -52,6 +55,26 @@ class UserRecord extends Model
 				'avatar' => $value->avatar,
 				'nickname' => $value->nickname,
 				'challenge_num' => $value->challenge_num,
+			];
+		}
+
+		return $result;
+	}
+
+	public function getWealthList()
+	{
+		$wealthCount = ConfigService::get('wealth_list_count');
+		$wealthList = self::where('amount_total', '>', 0)
+			->limit($wealthCount)
+			->order('amount_total', 'desc')
+			->select();
+
+		$result = [];
+		foreach ($wealthList as $key => $value) {
+			$result[$key] = [
+				'avatar' => $value->avatar,
+				'nickname' => $value->nickname,
+				'amount_total' => $value->amount_total,
 			];
 		}
 

@@ -6,6 +6,7 @@ use app\api\model\ChallengeLog;
 use app\api\model\FormidLog;
 use app\api\model\LinkLog;
 use app\api\model\ShareLog;
+use app\api\model\AdvertisementLog;
 use app\api\service\Share as ShareService;
 
 /**
@@ -69,6 +70,20 @@ class Log
 		LinkLog::create([
 			'user_id' => $data['user_id'],
 			'app_id' => $data['app_id'],
+			'create_time' => time(),
+		]);
+	}
+
+	/**
+	 * 创建广告位日志
+	 * @param $data 请求数据
+	 * @return void
+	 */
+	public function createAdvertisementLog($data)
+	{
+		AdvertisementLog::create([
+			'user_id' => $data['user_id'],
+			'advertisement_id' => $data['advertisement_id'],
 			'create_time' => time(),
 		]);
 	}

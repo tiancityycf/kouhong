@@ -1,10 +1,11 @@
 <?php
 
-namespace app\api\controller\v1;
+namespace app\api\controller\v1_0_1;
 
 use think\facade\Request;
 use app\api\service\Log as LogService;
-use app\api\controller\v1\BasicController;
+
+use app\api\controller\v1_0_1\BasicController;
 
 /**
  * 用户日志控制器类

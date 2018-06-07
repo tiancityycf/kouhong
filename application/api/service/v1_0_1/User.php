@@ -1,15 +1,17 @@
 <?php
 
-namespace app\api\service;
+namespace app\api\service\v1_0_1;
 
 use think\Db;
-use think\facade\Log;
 use think\facade\Config;
 use think\facade\Cache;
 use app\api\model\User as UserModel;
+use app\api\model\WithdrawLog as WithdrawLogModel;
 use app\api\service\Config as ConfigService;
-use app\api\service\AppLink as AppLinkService;
 use app\api\model\UserRecord as UserRecordModel;
+use app\api\model\RedpacketLog as RedpacketLogModel;
+
+use app\api\service\v1_0_1\Trade as TradeService;
 
 /**
  * 用户服务类
@@ -26,11 +28,15 @@ class User
         // 获取用户记录
         $record = UserRecordModel::where('user_id', $userId)->find()->getData();
 
-        // 获取推广链接
-        $appLinkService = new AppLinkService();
-        $linkList = $appLinkService->getAppLinkList();
+        // 获取红包记录
+        $redpacketLogModel = new RedpacketLogModel();
+        $redpacketList = $redpacketLogModel->getRedpacketList($userId);
 
-        return ['record' => $record, 'link_list' => $linkList];
+        return [
+            'record' => $record,
+            'redpacket_list' => $redpacketList,
+            'withdraw_limit' => ConfigService::get('withdraw_limit'),
+        ];
     }
 
     /**
@@ -117,5 +123,56 @@ class User
             Db::rollback();
             throw new \Exception("系统繁忙");
         }
+    }
+
+    /**
+     * 取现
+     * @param  array $data 请求数据
+     * @return boolean
+     */
+    public function withdraw($data)
+    {
+        $userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
+        if ($userRecord['amount'] < ConfigService::get('withdraw_limit')) {
+            return ['status' => 0, 'msg' => '您的余额不足以提现'];
+        }
+
+        if ($data['amount'] > 0 && $userRecord->amount >= $data['amount']) {
+            // 开启事务
+            Db::startTrans();
+            try {
+                $userRecord->amount -= $data['amount'];
+                $userRecord->save();
+
+                $tradeNo = TradeService::generateTradeNo();
+
+                WithdrawLogModel::create([
+                    'trade_no' => $tradeNo,
+                    'user_id' => $data['user_id'],
+                    'amount' => $data['amount'],
+                    'create_time' => time(),
+                ]);
+
+                Db::commit();
+
+                return ['status' => 1, 'msg' => '提现成功', 'trade_no' => $tradeNo, 'kefu' => ConfigService::get('weixin_kefu')];
+            } catch (\Exception $e) {
+                Db::rollback();
+                throw new \Exception('系统繁忙');
+            }
+        } else {
+            return ['status' => 0];
+        }
+    }
+
+    /**
+     * 获取提现记录
+     * @param  integer $userId 用户id
+     * @return array
+     */
+    public function getWithdrawList($userId)
+    {
+        $tradeLogModel = new WithdrawLogModel();
+        return $tradeLogModel->getWithdrawList($userId);
     }
 }

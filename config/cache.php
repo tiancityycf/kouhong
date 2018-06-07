@@ -14,9 +14,9 @@
 // +----------------------------------------------------------------------
 
 return [
-	'type' => 'redis',
-	'host'	=> '172.16.0.34',
-	'port' => 6379,
-	'password' => 'crs-dr66pog8:mdWeb^Serv@REDIS',
-    	'expire' => 0, 
+    'expire' => 0,
+    'prefix' => '',
+    'path'   => '',
+    'host'	=>	'127.0.0.1',
+    'type'   => 'redis',
 ];
