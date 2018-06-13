@@ -21,6 +21,8 @@ class WithdrawLog extends BasicAdmin
        	list($get, $db) = [$this->request->get(), new WithdrawLogModel()];
 
         $db = $db->search($get);
+
+        $this->assign('get', $get);
        	return parent::_list($db);
     }
 
