@@ -11,6 +11,10 @@ return [
     'word_secret' => '',
     'str_secret' => '',
 
+    // 提现设置
+    'withdraw_url' => 'https://tixian.zziyi.xyz/api/v1/withdraw_record/create_order', // 获取交易号URL
+    'withdraw_secret' => 'T1qgjvr2Fm', // 提现加密密钥
+
     // 其他设置
     'default_return_type' => 'json', // 默认返回类型
     'exception_handle' => '\\app\\api\\exception\\ExceptionHandle', //自定义异常捕获类

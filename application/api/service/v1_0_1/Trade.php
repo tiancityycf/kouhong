@@ -15,7 +15,7 @@ class Trade
 	{
 		//return 'Z1'.date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
 
-		$str = 'Z1'.date('ymdHis').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 4);
+		$str = 'H1'.date('ymdHis').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 4);
 
 		$model = WithdrawLogModel::where('trade_no', $str)->find();
 

@@ -24,6 +24,7 @@ class WithdrawLog extends Model
             	'trade_no' => $withdraw['trade_no'],
                 'amount' => $withdraw['amount'],
                 'create_time' => $withdraw['create_time'],
+                'status' => $withdraw['status'],
             ];
         }
 
