@@ -16,7 +16,7 @@ class RedpacketLog extends Model
      */
     public function getRedpacketList($userId)
     {
-        $receiveList = self::where('user_id', $userId)->select();
+        $receiveList = self::where('user_id', $userId)->order('id desc')->select();
         $result = [];
         foreach ($receiveList as $key => $receive) {
             $result[$key] = [

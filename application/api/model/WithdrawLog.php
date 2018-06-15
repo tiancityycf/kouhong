@@ -17,7 +17,7 @@ class WithdrawLog extends Model
 	 */
 	public function getWithdrawList($userId)
 	{
-		$withdrawList = self::where('user_id', $userId)->select();
+		$withdrawList = self::where('user_id', $userId)->order('id desc')->select();
 		$result = [];
         foreach ($withdrawList as $key => $withdraw) {
             $result[$key] = [
