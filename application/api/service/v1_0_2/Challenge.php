@@ -65,6 +65,7 @@ class Challenge
 	 */
 	public function end($data)
 	{
+		$result = ['status' => 0];
 		$userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
 		if (isset($data['score']) && $data['score'] > $userRecord->highest_score) {
             $userRecord->highest_score = $data['score'];
@@ -82,23 +83,23 @@ class Challenge
                 $userRecord->user_level += 1;
             }
 
-            // 开启事务
-			Db::startTrans();
-			try {
-				$userRecord->save();
-
-				$logService = new LogService();
-				$logService->updateChallengeLog($data);
-				Db::commit();
-
-				return ['status' => 1, 'amount' => RedpacketService::randOne($data['user_id'])];
-			} catch (\Exception $e) {
-				Db::rollback();
-				throw new \Exception("系统繁忙");
-			}
+            $result = ['status' => 1, 'amount' => RedpacketService::randOne($data['user_id'])];
         }
 
-        return ['status' => 0];
+        // 开启事务
+		Db::startTrans();
+		try {
+			$userRecord->save();
+
+			$logService = new LogService();
+			$logService->updateChallengeLog($data);
+			Db::commit();
+
+			return $result;
+		} catch (\Exception $e) {
+			Db::rollback();
+			throw new \Exception("系统繁忙");
+		} 
 	}
 
 	/**
