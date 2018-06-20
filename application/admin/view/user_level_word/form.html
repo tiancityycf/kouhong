@@ -1,0 +1,76 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+	<div class="layui-form-item">
+        <label class="layui-form-label">用户等级</label>
+        <div class="layui-input-block">
+                <select required="required" id="user_level_id" name="user_level_id" class="layui-select">
+                	<option value="">- 请选择 -</option>
+                	<!--{foreach $filter_level_list as $key=>$st}-->
+                	<!--{if isset($vo['user_level_id']) AND $vo.user_level_id eq $key}-->
+                	<option selected value="{$key}">- {$st} -</option>
+	                <!--{else}-->
+	                <option value="{$key}">- {$st} -</option>
+	                <!--{/if}-->
+                	<!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">题目难度</label>
+        <div class="layui-input-block">
+            <input type="number" autofocus name="word_level" required="required" value='{$vo.word_level|default=""}' pattern="" title="请输入数字" placeholder="请输入数字" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">题目数量</label>
+        <div class="layui-input-block">
+            <input type="number" autofocus name="word_num" required="required" value='{$vo.word_num|default=""}' pattern="" title="请输入数字" placeholder="请输入数字" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">答题时间</label>
+        <div class="layui-input-block">
+            <input type="number" autofocus name="word_time" required="required" value='{$vo.word_time|default=""}' pattern="" title="请输入数字" placeholder="请输入数字" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+                <select id="status" name="status" class="layui-select">
+                    <!--{foreach [1=>'启用',0=>'禁用'] as $key=>$st}-->
+                    <!--{if (!isset($vo['status']) AND $key eq 1) OR (isset($vo['status']) AND $vo.status eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+	<div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+        /*$(document).ready(function() {
+            var type = "<?php echo $type; ?>";
+            if(type == 'user_level'){
+                $("#user_level_id").attr('readonly', 'readonly');
+                renderForm();
+            }
+        });
+
+        function renderForm(){
+            layui.use('form', function(){
+                var form = layui.form;
+                form.render();
+            });
+        }*/
+    </script>
+</form>

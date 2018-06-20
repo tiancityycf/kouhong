@@ -1,0 +1,34 @@
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='vo'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+	<table class="layui-table" lay-skin="line">
+		<thead>
+        <tr>
+            <th class='text-left nowrap'>用户等级</th>
+            <th class='text-left nowrap'>题目等级</th>
+            <th class='text-left nowrap'>题目数量</th>
+            <th class='text-left nowrap'>答题时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--{foreach $vo as $key=>$v}-->
+        <tr>
+        	<td class='text-left nowrap'>
+                {$v.user_level_id}
+            </td>
+            <td class='text-left nowrap'>
+                {$v.word_level}
+            </td>
+            <td class='text-left nowrap'>
+                {$v.word_num}
+            </td>
+            <td class='text-left nowrap'>
+                {$v.word_time}
+            </td>
+        </tr>
+        <!--{/foreach}-->
+        </tbody>
+	</table>
+	<!--{/empty}-->
+</form>

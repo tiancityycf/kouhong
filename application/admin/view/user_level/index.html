@@ -1,0 +1,102 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline">
+    <!--{if auth("$classuri/add")}-->
+    <button data-modal='{:url("$classuri/add")}' data-title="添加用户难度等级" class='layui-btn layui-btn-sm'>添加难度</button>
+    <!--{/if}-->
+</div>
+<div class="layui-form-item layui-inline" style="margin-left: 30px; ">
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+	<div class="layui-form-item layui-inline">
+        <label class="layui-form-label">难度搜索</label>
+        <div class="layui-input-inline">
+            <input name="title" value="{$Think.get.title|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">成功次数搜索</label>
+        <div class="layui-input-inline">
+            <input name="success_num" value="{$Think.get.success_num|default=''}" placeholder="请输入想要搜索的数字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>难度等级</th>
+            <th class='text-left nowrap'>标题</th>
+            <th class='text-left nowrap'>需要通关次数</th>
+            <th class='text-left nowrap'>描述</th>
+            <th class='text-left nowrap'>状态</th>
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                {/if}
+
+                {if auth("$classuri/view")}
+                <span class="text-explode">|</span>
+                <a data-title="详请" data-modal='{:url("$classuri/view")}?id={$vo.id}'>详请</a>
+                {/if}
+
+                {if auth("$classuri/create")}
+                <span class="text-explode">|</span>
+                <a data-title="{$vo.title}题目设置" data-modal='{:url("$classuri/create")}?id={$vo.id}'>添加</a>
+                {/if}
+
+                {if $vo.status eq 1 and auth("$classuri/forbid")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-value='0' data-action='{:url("$classuri/forbid")}'>禁用</a>
+                {elseif auth("$classuri/resume")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-value='1' data-action='{:url("$classuri/resume")}'>启用</a>
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.title}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.success_num}
+            </td>
+            <td class='text-left nowrap'>
+                共<b>{$vo.level_word_sum|default=0}</b>题，分<b>{$vo.level_word_count}</b>个难度。其中：<br>
+                <?php 
+                    if ($vo->levelWord) {
+                        foreach ($vo->levelWord as $k) {
+                            echo "题目难度<b>".$k->word_level."</b>有<b>".$k->word_num."</b>道题，作答时间为<b>".$k->word_time."秒</b><br>";
+                        }
+                    }
+                ?>
+            </td>
+            <td class='text-left nowrap'>
+                {if $vo.status eq 0}<span class="color-red">禁用</span>{elseif $vo.status eq 1}<span class="color-green">启用</span>{/if}
+            </td>
+            
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    <!--{/empty}-->
+</form>
+{/block}
