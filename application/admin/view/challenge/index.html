@@ -19,6 +19,12 @@
 		</div>
 	</div>
     <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户ID</label>
+        <div class="layui-input-inline">
+            <input name="user_id" value="{$Think.get.user_id|default=''}" placeholder="请输入想要搜索的用户ID" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
         <label class="layui-form-label">分数搜索</label>
         <div class="layui-input-inline">
             <input name="score" value="{$Think.get.score|default=''}" placeholder="请输入想要搜索的分数" class="layui-input">

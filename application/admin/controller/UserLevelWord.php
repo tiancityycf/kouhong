@@ -97,8 +97,8 @@ class UserLevelWord extends BasicAdmin
     {
         $data = $this->request->post();
         if ($data) {
-            $model = AppRelationModel::get($data['id']);
-            if($model->delete() !== false && $this->redisSave()){
+            $model = UserLevelWordModel::get($data['id']);
+            if($model->delete() !== false){
                 $this->success("删除成功！", '');
             }
         }

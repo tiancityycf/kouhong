@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">成功次数搜索</label>
+        <label class="layui-form-label">需要通关次数搜索</label>
         <div class="layui-input-inline">
             <input name="success_num" value="{$Think.get.success_num|default=''}" placeholder="请输入想要搜索的数字" class="layui-input">
         </div>
@@ -60,6 +60,11 @@
                 {if auth("$classuri/create")}
                 <span class="text-explode">|</span>
                 <a data-title="{$vo.title}题目设置" data-modal='{:url("$classuri/create")}?id={$vo.id}'>添加</a>
+                {/if}
+
+                {if auth("$classuri/create")}
+                <span class="text-explode">|</span>
+                <a data-title="{$vo.title}题目设置修改" data-modal='{:url("$classuri/update")}?id={$vo.id}'>题目设置修改</a>
                 {/if}
 
                 {if $vo.status eq 1 and auth("$classuri/forbid")}

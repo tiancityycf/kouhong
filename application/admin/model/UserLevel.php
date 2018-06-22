@@ -21,7 +21,7 @@ class UserLevel extends Model
         }
 
         foreach (['success_num'] as $key) {
-            (isset($params[$key]) && $params[$key] !== '') && $query->where($key, $params[$key]);
+            (isset($params[$key]) && $params[$key] !== '') && $query->where($key, '>=', $params[$key]);
         }
 
         return $query;

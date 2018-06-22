@@ -6,6 +6,10 @@ use think\facade\Cache;
 use app\api\model\Word as WordModel;
 use app\api\service\Config as ConfigService;
 
+use app\api\model\UserRecord as UserRecordModel;
+use app\admin\model\UserLevel as UserLevelModel;
+use app\admin\model\UserLevelWord as UserLevelWordModel;
+
 /**
  * 词语服务类
  */
@@ -74,5 +78,63 @@ class Word
         }
         
         return $words;
+    }
+
+    /**
+     * 随机取题(重构)
+     * @param  $userId 用户id
+     * @return array
+     */
+    public function getWords($userId)
+    {
+        $userRecord = UserRecordModel::where('user_id', $userId)->find();
+
+        $info = UserLevelWordModel::where('user_level_id', $userRecord->user_level)->select();
+
+        $cacheKey = CACHE_APP_NAME . ':' . CACHE_APP_UNIQ . ':word:level:';
+        $cache = Cache::init();
+        $handler = $cache->handler();
+        $wordIds = [];
+        $i = 0;
+        $word_data = [];
+        foreach ($info as $key => $value) {
+            if ($value->word_num > 0) {
+                if (!Cache::has($cacheKey . $value->word_level)) {
+                    $orderedWordIds = WordModel::getAllIdsByLevel($value->word_level);
+                    // phpredis低版本不支持sAddArray
+                    // $handler->sAddArray($cacheKey . $wordLevel, $orderedWordIds);
+                    if (!empty($orderedWordIds)) {
+                        call_user_func_array([$handler, "sadd"], array_merge([$cacheKey . $value->word_level], $orderedWordIds));
+                    }
+                }
+
+                $randWordIds = $handler->sRandMember($cacheKey . $value->word_level, $value->word_num);
+
+                //$wordIds = array_merge($wordIds, $randWordIds);
+                $randWordIds = implode(',', $randWordIds);
+                $all = WordModel::where('id', 'in', $randWordIds)->orderRaw('field (id, ' . $randWordIds . ')')->select();
+
+                foreach ($all as $k => $word) {
+
+                    preg_match_all('/./u', $word->word, $hanziArr);
+                    $trueHanzi = $hanziArr[0][$word->mix_num - 1];
+                    $hanziArr[0][$word->mix_num - 1] = '__';
+                    $word_data[$i]['word'] = implode('', $hanziArr[0]);
+                    $word_data[$i]['primary'] = str_encode($word->word);
+                    $word_data[$i]['pinyin'] = str_encode($word->pinyin);
+                    $word_data[$i]['intro'] = str_encode($word->intro);
+                    $word_data[$i]['caution'] = str_encode($word->caution);
+                    $word_data[$i]['valid'] = hanzi_encode($trueHanzi);
+                    $mixArr = [$trueHanzi, $word->mix_char];
+                    shuffle($mixArr);
+                    $word_data[$i]['option'] = $mixArr;
+                    $word_data[$i]['time_limit'] = $value->word_time;
+
+                    $i++;
+                }
+            }
+        }
+
+        return $word_data;
     }
 }

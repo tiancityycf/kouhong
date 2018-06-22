@@ -6,8 +6,11 @@ use think\Db;
 
 use app\api\service\Log as LogService;
 use app\api\service\Config as ConfigService;
+
 use app\api\model\UserRecord as UserRecordModel;
 use app\api\model\ChallengeLog as ChallengeLogModel;
+use app\admin\model\UserLevel as UserLevelModel;
+
 use app\api\service\v1_0_2\Word as WordService;
 use app\api\service\v1_0_2\Redpacket as RedpacketService;
 
@@ -47,7 +50,7 @@ class Challenge
 
 			// 获取词语列表
 			$wordService = new WordService();
-			$words = $wordService->getRandWords($data['user_id']);
+			$words = $wordService->getWords($data['user_id']);
 
 			Db::commit();
 
@@ -76,11 +79,17 @@ class Challenge
         	return ['status' => 0];
         }
 
+        $user_level = UserLevelModel::where('id', $userRecord->user_level + 1)->find();
+
         if (isset($data['successed']) && $data['successed']) {
             $userRecord->success_num += 1;
-            $nextLevel = $userRecord->user_level + 1;
+            /*$nextLevel = $userRecord->user_level + 1;
             if ($userRecord->success_num == ConfigService::get('user_level_' . $nextLevel . '_success_num')) {
                 $userRecord->user_level += 1;
+            }*/
+
+            if ($user_level && $userRecord->success_num >= $user_level->success_num) {
+            	$userRecord->user_level += 1;
             }
 
             $result = ['status' => 1, 'amount' => RedpacketService::randOne($data['user_id'])];

@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
+use think\Db;
 use app\admin\model\UserLevel as UserLevelModel;
 use app\admin\model\UserLevelWord as UserLevelWordModel;
 use app\admin\validate\UserLevel as UserLevelValidate;
@@ -140,5 +141,53 @@ class UserLevel extends BasicAdmin
     	}
     	$data['user_level_id'] = $get_data['id'];
     	return  $this->fetch('user_level_word/form', ['vo' => $data, 'type' => 'user_level']);
+    }
+
+
+    public function update()
+    {
+        $get_data = $this->request->get();
+
+
+        $all_data = UserLevelWordModel::where('user_level_id', $get_data['id'])->select();
+        $id_arr = UserLevelWordModel::where('user_level_id', $get_data['id'])->column('id');
+
+        $post_data = $this->request->post();
+        if ($post_data) {
+            if ($post_data['user_level_id'] != $get_data['id']) {
+                $this->error('数据保存失败, 请稍候再试!');
+            }
+
+            if (!isset($post_data['item']) || empty($post_data['item'])) {
+                $this->error('请先添加题目设置！');
+            }
+
+
+            foreach ($post_data['item'] as $k => $v) {
+                if (!in_array($v['id'], $id_arr)) {
+                    $this->error('数据保存失败, 请稍候再试!');
+                } else {
+                    foreach ($id_arr as $key => $value) {
+                        if ($value == $v['id']) {
+                            unset($id_arr[$key]);
+                        }
+                    }
+                }
+            }
+
+            $model = new UserLevelWordModel();
+            $model->saveAll($post_data['item']); 
+            if ($id_arr) {
+                foreach ($id_arr as $id) {
+                    $del_model = UserLevelWordModel::get($id);
+                    $del_model->delete();
+                }
+            }
+
+            $this->success('恭喜, 数据保存成功!', '');
+
+        }
+
+        return  $this->fetch('update', ['list' => $all_data, 'user_level_id' =>$get_data['id']]);
     }
 }

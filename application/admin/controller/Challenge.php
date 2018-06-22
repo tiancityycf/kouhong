@@ -19,7 +19,7 @@ class Challenge extends BasicAdmin
 
        	list($get, $db) = [$this->request->get(), Db::name($this->table)];
 
-        foreach (['successed'] as $key) {
+        foreach (['successed', 'user_id'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->where([$key => $get[$key]]);
         }
         if (isset($get['score']) && $get['score'] !== '') {
