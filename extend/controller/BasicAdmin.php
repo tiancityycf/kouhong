@@ -130,11 +130,13 @@ class BasicAdmin extends Controller
                     list($query['rows'], $query['page']) = [$rows, $i];
                     $url = url('@admin') . '#' . $this->request->baseUrl() . '?' . http_build_query($query);
                     $selected = $i === intval($page->currentPage()) ? 'selected' : '';
-                    $pageHTML[] = "<option data-url='{$url}' {$selected} value='{$i}'>{$i}</option>";
+                    //$pageHTML[] = "<option data-url='{$url}' {$selected} value='{$i}'>{$i}</option>";
                 }
 
                 list($pattern, $replacement) = [['|href="(.*?)"|', '|pagination|'], ['data-open="$1"', 'pagination pull-right']];
-                $html = "<span class='pagination-trigger nowrap'>共 {$totalNum} 条记录，每页显示 <select data-auto-none>" . join('', $rowsHTML) . "</select> 条，共 " . ceil($totalNum / $rows) . " 页当前显示第 <select>" . join('', $pageHTML) . "</select> 页。</span>";
+                //$html = "<span class='pagination-trigger nowrap'>共 {$totalNum} 条记录，每页显示 <select data-auto-none>" . join('', $rowsHTML) . "</select> 条，共 " . ceil($totalNum / $rows) . " 页当前显示第 <select>" . join('', $pageHTML) . "</select> 页。</span>";
+
+                $html = "<span class='pagination-trigger nowrap'>共 {$totalNum} 条记录，每页显示 <select data-auto-none>" . join('', $rowsHTML) . "</select> 条，共 " . ceil($totalNum / $rows) . " 页。</span>";
                 
                 list($result['total'], $result['list'], $result['page']) = [$totalNum, $page->all(), $html . preg_replace($pattern, $replacement, $page->render())];
             } else {

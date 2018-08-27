@@ -9,29 +9,16 @@ use think\Model;
  */
 class WithdrawLog extends Model
 {
-	public function search($params)
-	{
-		$query = self::buildQuery();
-
-		foreach (['trade_no'] as $key) {
-            (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
-        }
-
-        foreach (['user_id', 'status'] as $key) {
-            (isset($params[$key]) && $params[$key] !== '') && $query->where($key, $params[$key]);
-        }
-
-        if (isset($params['create_time']) && $params['create_time'] !== '') {
-            list($start_create_time, $end_create_time) = explode(' - ', $params['create_time']);
-            $query->whereBetweenTime('create_time', "{$start_create_time}", "{$end_create_time}");
-        }
-
-        if (!isset($params['status']) && empty($params['user_id']) && empty($params['trade_no']) && empty($params['create_time'])) {
-            $query->where('status', '=', 0);
-        }
-
-        $query->order('id', 'desc');
-
-        return $query;
-	}
+	protected $connection = [
+        // 数据库类型
+        'type'            => 'mysql',
+        // 服务器地址
+        'hostname'        => '172.16.1.66',
+        // 数据库名
+        'database'        => 'dbssszw',
+        // 用户名
+        'username'        => 'root',
+        // 密码
+        'password'        => 'mdWeb^Serv$MYSQL',
+    ];
 }

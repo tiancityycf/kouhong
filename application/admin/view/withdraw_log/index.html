@@ -74,12 +74,18 @@
                 {$vo.create_time|date='Y-m-d H:i:s'}
             </td>
             <td class='text-left nowrap'>
-                {if $vo.status eq 0}<span class="color-red">未支付</span>{elseif $vo.status eq 1}<span class="color-green">已支付</span>{/if}
+                <?php if ($vo['status'] == 0) { ?>
+                <span class="color-red">未支付</span>
+                <?php } else if ($vo['status'] == 1) { ?>
+                <span class="color-green">已支付</span>
+                <?php } else { ?>
+                <span class="color-red">支付失败</span>
+                <?php } ?>
             </td>
             <td>
-                {if $vo.status eq 0 and auth("$classuri/pay")}
+                <?php if ($vo['status'] != 1 &&  auth("$classuri/pay")) { ?>
                 <a data-update="{$vo.id}" data-field='status' data-value='1' class="layui-btn" data-action='{:url("$classuri/pay")}'>确认支付</a>
-                {/if}
+                <?php } ?>
             </td>
             
         </tr>

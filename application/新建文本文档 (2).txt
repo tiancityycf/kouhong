@@ -1,0 +1,14 @@
+INSERT INTO `t_system_menu` ( `pid`, `title`, `node`, `icon`, `url`, `params`, `target`, `sort`, `status`, `create_by`, `create_at`) VALUES
+(1173, '词语设置', '', 'fa fa-circle-o', '/szqyh/word/index', '', '_self', 0, 1, 0, '2018-07-24 02:09:17'),
+(1173, '配置设置', '', 'fa fa-circle-o', '/szqyh/tpfig/index', '', '_self', 0, 1, 0, '2018-07-24 02:10:24'),
+(1173, '挑战记录', '', 'fa fa-circle-o', '/szqyh/challenge/index', '', '_self', 0, 1, 0, '2018-07-24 02:10:47'),
+(1173, '礼物配置', '', 'fa fa-circle-o', '/szqyh/prize/index', '', '_self', 0, 1, 0, '2018-07-24 02:11:08'),
+(1173, '礼物领取', '', 'fa fa-circle-o', '/szqyh/user_prize/index', '', '_self', 0, 1, 0, '2018-07-24 02:11:28'),
+(1173, '图片管理', '', 'fa fa-circle-o', '/szqyh/img/index', '', '_self', 0, 1, 0, '2018-07-24 02:11:51'),
+(1173, '提现记录', '', 'fa fa-circle-o', '/szqyh/withdraw_log/index', '', '_self', 0, 1, 0, '2018-07-24 02:12:16'),
+(1173, '用户等级', '', 'fa fa-circle-o', '/szqyh/user_level/index', '', '_self', 0, 1, 0, '2018-07-24 02:12:41'),
+(1173, '题目设置', '', 'fa fa-circle-o', '/szqyh/user_level_word/index', '', '_self', 0, 1, 0, '2018-07-24 02:13:06'),
+(1173, '皮肤配置', '', 'fa fa-circle-o', '/szqyh/pifu/index', '', '_self', 0, 1, 0, '2018-07-24 02:13:06'),
+(1173, '黑名单管理', '', 'fa fa-circle-o', '/szqyh/complain/index', '', '_self', 0, 1, 0, '2018-07-24 02:13:33'),
+(1173, '用户信息', '', 'fa fa-circle-o', '/szqyh/user_record/index', '', '_self', 0, 1, 0, '2018-07-24 02:13:56'),
+(1173, '小程序的黑名单', '', 'fa fa-circle-o', '/szqyh/heimingdan/index', '', '_self', 0, 1, 0, '2018-07-24 02:13:33');

@@ -1,9 +1,15 @@
 {extend name="admin@public/main"}
 
 {block name='body'}
-
+<style type="text/css">
+    .clearfix:after{
+    content:"";
+    display: block;
+    clear:both;
+    }
+</style>
 <!-- 顶部菜单区域 开始 -->
-<div class="framework-topbar">
+<div class="framework-topbar clearfix">
     <div class="topbar-head pull-left">
         <a href="{:url('@')}" class="topbar-logo pull-left">{:sysconf('app_name')} <sup>{:sysconf('app_version')}</sup></a>
     </div>
@@ -56,7 +62,7 @@
             {$twoMenu.title}
         </a>
         <!--{else}-->
-        <div data-submenu-layout='m-{$oneMenu.id}-{$twoMenu.id}'>
+        <div data-submenu-layout='m-{$oneMenu.id}-{$twoMenu.id}' class="">
             <a class='menu-title transition'>
                 {notempty name='twoMenu.icon'}<span class='{$twoMenu.icon} font-icon'></span>&nbsp;{/notempty}
                 {$twoMenu.title} <i class='layui-icon pull-right font-s12 transition'>&#xe619;</i>

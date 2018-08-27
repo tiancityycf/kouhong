@@ -136,21 +136,16 @@ return [
     'exception_handle'       => '',
 
 
-    // +----------------------------------------------------------------------
-    // | 其他设置
-    // +----------------------------------------------------------------------
-    // 缓存中应用的名称, pingyin("汉字填填看")
-    'cache_app_name' => 'xsc',
-    // 缓存中应用的唯一标识, substr(md5("汉字天天看"), 0, 5)
-    'cache_app_uniq' => '829fc',
-    // 配置的缓存时间(秒)
-    'conf_cache_time' => 60,
+    
+    'word_key' => 'admin:829fc:word:level:',
+    'word_list_key' => 'admin:829fc:word:list',
+    'heimingdao_url' => 'http://kf.ali-yun.wang/api/complain_user/check',
 
+    'heimingdan_zongkaiguan' => 1,
+    'heimingdan_redis_key' => 'admin:heimingdan:list',
 
-    // +----------------------------------------------------------------------
-    // | 网宿云配置
-    // +----------------------------------------------------------------------
     'img_url_config' => 'https://txcdn.ylll111.xyz/', //图片地址配置
     'bucketName' => 'ylll111xyz', //空间名字
-    'folder' => 'xsc/', //图片存储文件夹名字
+    'folder' => 'hanzi/', //图片存储文件夹名字
+    
 ];

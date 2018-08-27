@@ -1,0 +1,27 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+	<div class="layui-form-item">
+        <label class="layui-form-label">部位名称</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="name" required="required" value='{$vo.name|default=""}' pattern="" title="请输入部位名称" placeholder="请输入部位名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">定义</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="index" required="required" value='{$vo.index|default=""}' pattern="" title="请输入定义" placeholder="请输入定义" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">几率设置</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="percent" required="required" value='{$vo.percent|default=""}' pattern="" title="请输入几率设置" placeholder="请输入几率设置" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+</form>

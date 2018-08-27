@@ -1,0 +1,120 @@
+172.16.1.16    root/dbhz   mdWeb^Serv$MYSQL/vI9rf5v6xH2F8awE     汉字一数据库  加上总数据库一起1个数据库
+
+
+
+172.16.0.32    root/dbhz2   mdWeb^Serv$MYSQL/vI9rf5v6xH2F8awE     汉字二数据库  一起18个数据库
+汉字天才        dbhztc
+汉字天王        dbhztw
+孔子课堂        dbkzkt
+墨子教学        dbmzjx
+识字大考验      dbszdky
+识字达人        dbszdr
+识字大师        dbszds
+识字大挑战      dbszdtz
+识字大作战      dbszdzz
+识字赢现金      dbszyxj
+唐伯虎识字      dbtbhsz
+填字大挑战      dbthzdtz
+填字大作战      dbtzdzz
+填字课堂        dbtzkt
+填字天才        dbtztc
+填字挑战        dbtztz
+小明识字        dbxmsz
+汉字挑战王      dbhztzw
+
+
+172.16.0.47    root/dbhz3   mdWeb^Serv$MYSQL/vI9rf5v6xH2F8awE     汉字三数据库  一起16个数据库
+词语填空        dbcytk
+大家学汉字      dbdjxhz
+夫子学堂        dbfzxt
+汉字大考验      dbhzdky
+汉字大挑战      dbhzdtz
+汉字大王        dbhzdw
+汉字练习课      dbhzlxk
+魔力汉字        dbmlhz
+识汉字大师      dbshzds
+识字课堂        dbszkt
+识字天王        dbsztw
+识字挑战王      dbsztzw
+识字学堂        dbszxt
+填字闯关        dbtzcg
+填字大王        dbtzdw
+最强汉字        dbzqhz
+
+
+172.16.0.99    dbhz4   AnD4dVLfnTdZ6Zg0@!2018     汉字四数据库  一起14个数据库
+杜甫学堂        dbdfxt
+疯狂识字        dbfksz
+疯狂识字王      dbfkszw  （目不识字）
+夫子教学        dbfzjx
+汉字猜猜猜      dbhzcck
+汉字大家猜      dbhzdjc
+汉字接力        dbhzjl
+奖金提现        dbjjtx
+李白识字        dblbsz
+识字闯天关      dbszctg
+天天识字        dbttsz
+填字挑战王      dbtztzw
+大家都来玩      djdlw
+
+172.16.0.86    dbhz5   AnD4dVLfnTdZ6Zg0@!2018     汉字五数据库  一起9个数据库
+汉字加油站      dbhzjyz
+汉字小超人      dbhzxcr
+汉字学前班      dbhzxqb
+汉字小天才      dbhzxtc
+识字闯关        dbszcg
+识字王          dbszw
+我爱填字        dbwatz
+司马光识字      dbsmgsz
+一起识汉字      dbyqshz
+
+
+172.16.0.55    dbhz6   AnD4dVLfnTdZ6Zg0@!2018     汉字六数据库  一起6个数据库
+识字大王        dbszdw
+我爱识字        dbwasz
+汉字天天学      dbhzttx
+识字天梯        dbsztt
+汉字先锋        dbhzxf
+跟我学汉字      dbgwxhz
+识字接力        dbszjl
+汉字联盟        dbhzlm
+我来识汉字      dbwlshz
+汉字我来看      dbhzwlk
+汉字世界        dbhzsj
+
+
+172.16.0.127    dbhz7   AnD4dVLfnTdZ6Zg0@!2018     汉字七数据库  一起5个数据库
+汉字研究所       dbhzyjs
+识字天才         dbsztc
+识字填字         dbsztz
+识字小天才       dbszxtc
+填字值千金       dbtzzqj
+识字群英会       dbszqyh
+跟我识汉字       dbgwshz
+
+
+172.16.0.143    dbhz8   AnD4dVLfnTdZ6Zg0@!2018     汉字八数据库  一起14个数据库
+我爱识汉字       dbwashz 
+疯狂汉字王       dbfkhzw
+汉字课堂         dbhzkt
+谁是识字王       dbssszw
+识字挑战         dbsztz
+填汉字大师       dbthzds
+填字百科         dbtzbk
+我们爱填字       dbwmatz
+一起猜汉字       dbyqchz
+凿壁借光识汉字   dbzbjgshz
+最强识字王       dbzqszw
+知识挑战王       dbzstzw
+汉字填填看       hzttk
+雪诗词           xsc
+
+
+另一个汉字后台   
+
+172.16.0.8/ gz-cdb-ec6r2in7.sql.tencentcdb.com:62192  dbhz/root   C44nylovOcAdefJW/zhise666
+汉语比拼         dbhybp
+汉字连连看       dbhzllk
+汉字连连         dbhzll
+汉字词典王       dbhzcdw
+汉字天天看       dbhzttk

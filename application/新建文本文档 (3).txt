@@ -1,0 +1,102 @@
+INSERT INTO `t_system_menu` (`pid`, `title`, `node`, `icon`, `url`, `params`, `target`, `sort`, `status`, `create_by`, `create_at`) VALUES
+(197, '识字群英会', '', '', '#', '', '_self', 9088, 1, 0, '2018-07-26 01:50:45');
+
+
+
+ALTER TABLE `t_config` CHANGE `value` `value` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '配置项值';
+
+INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
+('提现跳转appid', 'tianxian_appid', 'wx66272d03d73e196d', 1, 1),
+('提现跳转路径', 'tixian_app_path', 'pages/withdraw/withdraw', 1, 1);
+
+INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
+('提现按钮文字', 'tixian_anniu', '单号已复制，去粘贴', 1, 1);
+
+
+ALTER TABLE  `t_user_record` ADD  `user_status` TINYINT( 1 ) NOT NULL DEFAULT  '1' COMMENT  '1=>白  0=>黑' AFTER  `user_id`;
+ALTER TABLE  `t_user_record` ADD  `tiaozhuan_num` INT NOT NULL DEFAULT  '0' COMMENT  '跳转次数' AFTER  `withdraw_num`;
+
+ALTER TABLE `t_user_record` ADD `lianxi_num` INT NOT NULL DEFAULT '0' COMMENT '练习场次数' AFTER `success_num`;
+
+
+
+172.16.1.66   root   mdWeb^Serv$MYSQL
+
+172.16.0.32  root   mdWeb^Serv$MYSQL
+
+172.16.0.47  dbhz3  Tywefwe@!@$
+
+hz3数据库172.16.0.47  dbhz3                  vI9rf5v6xH2F8awE
+hz2数据库172.16.0.32  dbhz2                 vI9rf5v6xH2F8awE
+数据库172.16.1.66:3306 dbhz   vI9rf5v6xH2F8awE
+
+172.16.0.99   dbhz4    AnD4dVLfnTdZ6Zg0@!2018
+
+dbhz5  AnD4dVLfnTdZ6Zg0@!2018   172.16.0.86
+
+dbhz6 AnD4dVLfnTdZ6Zg0@!2018    172.16.0.55
+
+172.16.0.127   dbhz7 AnD4dVLfnTdZ6Zg0@!2018
+
+INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
+('跳转其他小程序配置(0不跳转，1当天跳转一次，2永久跳转)', 'tiaozhuankongzhi', '0', 1, 1);
+INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
+('黑名单功能开关(1开，0关)', 'heimingdan_in_off', '1', 1, 1);
+
+INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
+('去游戏盒子的按钮文字', 'youxihezi_anniu_txt', '去游戏盒子', 1, 1);
+
+
+INSERT INTO `t_system_node` (`node`, `title`, `is_menu`, `is_auth`, `is_login`, `create_at`) VALUES
+('zqhz/heimingdan', '小程序后台的黑名单', 0, 1, 1, '2018-08-03 01:07:30'),
+('zqhz/heimingdan/index', '', 1, 1, 1, '2018-08-03 01:07:37'),
+('zqhz/heimingdan/add', '', 0, 1, 1, '2018-08-03 01:07:42'),
+('zqhz/heimingdan/forbid', '', 0, 1, 1, '2018-08-03 01:07:48'),
+('zqhz/heimingdan/resume', '', 0, 1, 1, '2018-08-03 01:07:53'),
+('zqhz/heimingdan/del', '', 0, 1, 1, '2018-08-03 01:07:59');
+
+SELECT * FROM `t_share_log` WHERE `create_time` >= 1534003200 and create_time <= 1534089600
+
+UPDATE t_user_record SET user_status = 1 WHERE user_status = 0;
+UPDATE t_user_record SET avatar = '', nickname = '';
+UPDATE t_user SET avatar = '', nickname = '';
+
+
+
+https://ad.ali-yun.wang/api/appad/collect?user_id=100001&from_id=wx392b9aa04c89dc2b&to_id=41&timestamp=1534413294925&sign=0d525df6ffc5ef502d21678a43b698ee
+
+from_id:wx73096fa7c1c93250timestamp:1534780800to_id:1user_id:1AZYR2FYgYBwegrfe
+
+3b1766f5ac1f0d7d1eb463d3a9f06593
+
+
+[169238,175466,125751,50538,391005,198883,160025]	
+
+
+appid:wx73096fa7c1c93250timestamp:1534780800AZYR2FYgYBwegrfe
+
+timestamp:1534780800user_id:1pQxHXrXpaI
+timestamp:1534780800pQxHXrXpaI
+
+challenge_id:7score:5successed:1timestamp:1534780800user_id:1pQxHXrXpaI
+
+https://txcdn.ylll111.xyz/hanzi/169296691cf8c01b29134959769b0513.png
+
+INSERT INTO `t_user_level` (`id`, `title`, `success_num`, `status`) VALUES
+(10000, '练习场难度设置', 0, 1);
+INSERT INTO `t_user_level_word` (`user_level_id`, `word_level`, `word_num`, `word_time`, `status`) VALUES
+(10000, 1, 5, 4.00, 1);
+
+INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
+('练习场继续练习按钮', 'lianxi_jixu_anniu', '继续练习（无红包）', 1, 1),
+('练习场获得次数按钮', 'lianxi_huode_anniu', '红包场（需入场券）', 1, 1),
+('红包入场券', 'hongbaoruchangquan', '红包入场券', 1, 1),
+('邀请好友，获得更多入场券', 'hongbao_yaoqing', '入场券获得方式：1、每天自动获得一张；2、分享到群，获得入场券', 1, 1),
+('去练习场', 'qulianxichang', '去练习场（无红包）', 1, 1),
+('练习场成功提示', 'lianxi_success_txt', '恭喜通过，去挑战红包场领红包吧！', 1, 1),
+('练习场标题', 'lianxi_top_title', '[\"练习场\",\"无红包\"]', 2, 1);
+
+INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
+('提现跳转appid', 'tianxian_appid', 'wx66272d03d73e196d', 1, 1),
+('提现跳转路径', 'tixian_app_path', 'pages/withdraw/withdraw', 1, 1),
+('提现按钮文字', 'tixian_anniu', '单号已复制，点击继续', 1, 1);
