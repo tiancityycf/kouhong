@@ -100,3 +100,6 @@ INSERT INTO `t_config` (`name`, `index`, `value`, `type`, `status`) VALUES
 ('提现跳转appid', 'tianxian_appid', 'wx66272d03d73e196d', 1, 1),
 ('提现跳转路径', 'tixian_app_path', 'pages/withdraw/withdraw', 1, 1),
 ('提现按钮文字', 'tixian_anniu', '单号已复制，点击继续', 1, 1);
+
+
+appid:wx123456789nickname:123timestamp:1534780800123456
