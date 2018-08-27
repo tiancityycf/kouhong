@@ -3,7 +3,7 @@
 namespace app\szds\controller\api\v1_0_4;
 
 use think\facade\Request;
-use api_data_service\v1_0_7\Complain as ComplainService;
+use api_data_service\v1_0_5\Complain as ComplainService;
 use controller\BasicController;
 
 /**

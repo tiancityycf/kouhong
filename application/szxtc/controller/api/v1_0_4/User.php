@@ -4,7 +4,7 @@ namespace app\szxtc\controller\api\v1_0_4;
 
 use think\facade\Request;
 
-use api_data_service\v1_0_3\User as UserService;
+use api_data_service\v1_0_5\User as UserService;
 use controller\BasicController;
 
 /**
@@ -35,9 +35,10 @@ class User extends BasicController
 	{
 		require_params('code');
 		$code = Request::param('code');
+		$from_type = Request::param('from_type') ? Request::param('from_type') : 0;
 
 		$userService = new UserService();
-		$result = $userService->login($code);
+		$result = $userService->login($code, $from_type);
 
 		return result(200, 'ok', $result);
 	}

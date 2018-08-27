@@ -35,9 +35,10 @@ class User extends BasicController
 	{
 		require_params('code');
 		$code = Request::param('code');
+		$from_type = Request::param('from_type') ? Request::param('from_type') : 0;
 
 		$userService = new UserService();
-		$result = $userService->login($code);
+		$result = $userService->login($code, $from_type);
 
 		return result(200, 'ok', $result);
 	}
