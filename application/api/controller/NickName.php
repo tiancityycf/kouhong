@@ -117,14 +117,19 @@ class NickName extends Controller
         if(empty($params) || $timeout <=0){
             return false;
         }
-        $con = curl_init((string)$url);
+        $con = curl_init();
         curl_setopt($con, CURLOPT_HEADER, false);
-        curl_setopt($con, CURLOPT_POSTFIELDS, $params);
-//        curl_setopt($con, CURLOPT_POST,true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "put");
+        curl_setopt($con, CURLOPT_POST,true);
+        curl_setopt($con, CURLOPT_POSTFIELDS, json_encode($params));
         curl_setopt($con, CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($con, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-Type: application/json'));
+        curl_setopt($con, CURLOPT_URL, $url);
+        curl_setopt($con, CURLOPT_SSL_VERIFYPEER, FALSE);
+
         curl_setopt($con, CURLOPT_TIMEOUT,(int)$timeout);
-        return curl_exec($con);
+        $result = curl_exec($con);
+        curl_close($con);
+        return $result;
     }
 
     public function sign($params,$app_secret){
