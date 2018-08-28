@@ -19,8 +19,9 @@ class NickName extends BasicAdmin
     	$this->title = '小程序可访问ip配置';
 
        	list($get, $db) = [$this->request->get(), new WhitelistModel()];
+        $user = session('user');
 
-        $db = $db->search($get);
+        $db = $db->search($get, $user['id']);
        	$result = parent::_list($db, true, false, false);
         $this->assign('title', $this->title);
         return  $this->fetch('admin@nickname/index', $result);
@@ -32,7 +33,15 @@ class NickName extends BasicAdmin
         $data = $this->request->post();
         if ($data) {
             $model = new WhitelistModel();
-            if ($model->save($data) !== false) {
+            $model->title = $data['title'];
+            $model->appid = $data['appid'];
+            $model->ips = $data['ips'];
+            $model->memo = $data['memo'];
+            $model->app_secret = $data['app_secret'];
+            $user = session('user');
+            $model->admin_user_id = $user['id'];
+            $model->create_time = time();
+            if ($model->save() !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -51,7 +60,13 @@ class NickName extends BasicAdmin
 
         $post_data = $this->request->post();
         if ($post_data) {
-            if ($vo->save($post_data) !== false) {
+            $vo->title = $post_data['title'];
+            $vo->appid = $post_data['appid'];
+            $vo->ips = $post_data['ips'];
+            $vo->memo = $post_data['memo'];
+            $vo->app_secret = $post_data['app_secret'];
+            $vo->update_time = time();
+            if ($vo->save() !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
