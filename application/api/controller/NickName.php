@@ -106,7 +106,7 @@ class NickName extends Controller
         $params['source'] = '3';
         $app_secret = 'wx123'; //登录后台管理系统，ip配置菜单，添加自己小程序的信息，获取app_secret
         $params['sign'] = $this->sign($params,$app_secret);
-        $result = doRequest($params,$timeout = 5);
+        $result = $this->doRequest($params,$timeout = 5);
     }
 
     public function doRequest($params,$timeout = 5){
