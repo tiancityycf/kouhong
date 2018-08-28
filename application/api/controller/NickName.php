@@ -62,13 +62,19 @@ class NickName extends Controller
 
 	private function check($nickname)
 	{
-		$model = HeimingdanModel::where('nickname', $nickname)->where('status', 0)->find();
-		if ($model) {
-			$user_status = 0;
-		} else {
-			$user_status = 1;
-		}
-
+	    //source  小程序跳转来源 1-搜索跳转 2-从搜索分享点击跳转 3-直接跳转过来
+        //1-搜索跳转 2-从搜索分享点击跳转  会直接显示 属于黑名单  3-直接跳转过来 需要判断是否在系统黑名单表中
+        $source = Request::param('source');
+	    if($source==1 || $source==2 ){
+            $user_status = 0;
+        }else{
+            $model = HeimingdanModel::where('nickname', $nickname)->where('status', 0)->find();
+            if ($model) {
+                $user_status = 0;
+            } else {
+                $user_status = 1;
+            }
+        }
 		return ['user_status' => $user_status];
 	}
 
