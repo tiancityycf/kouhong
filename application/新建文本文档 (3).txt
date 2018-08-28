@@ -65,7 +65,7 @@ UPDATE t_user SET avatar = '', nickname = '';
 
 https://ad.ali-yun.wang/api/appad/collect?user_id=100001&from_id=wx392b9aa04c89dc2b&to_id=41&timestamp=1534413294925&sign=0d525df6ffc5ef502d21678a43b698ee
 
-from_id:wx73096fa7c1c93250timestamp:1534780800to_id:1user_id:1AZYR2FYgYBwegrfe
+from_id:wx32a12af9a57336b8timestamp:1534780800to_id:1user_id:1kD29vxYaaSF5BNlM
 
 3b1766f5ac1f0d7d1eb463d3a9f06593
 
@@ -73,7 +73,7 @@ from_id:wx73096fa7c1c93250timestamp:1534780800to_id:1user_id:1AZYR2FYgYBwegrfe
 [169238,175466,125751,50538,391005,198883,160025]	
 
 
-appid:wx73096fa7c1c93250timestamp:1534780800AZYR2FYgYBwegrfe
+appid:wx32a12af9a57336b8timestamp:1534780800kD29vxYaaSF5BNlM
 
 timestamp:1534780800user_id:1pQxHXrXpaI
 timestamp:1534780800pQxHXrXpaI
