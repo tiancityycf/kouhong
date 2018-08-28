@@ -29,7 +29,7 @@ class NickName extends Controller
 		}
 
 		$ip = Request::ip();
-		if (!in_array($ip, explode('; ', $model->ips))) {
+		if (!in_array($ip, explode(';', $model->ips))) {
 			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
 		}
 
