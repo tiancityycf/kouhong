@@ -102,9 +102,9 @@ class NickName extends Controller
 	public function demo(){
 	    $params = [];
 	    $params['appid'] = 'wx123';
-        $params['nickname'] = '123';
-        $params['source'] = '3';
-        $params['timestamp'] = time();
+        $params['nickname'] = 'zhangsan';
+        $params['source'] = 3;
+        $params['timestamp'] = 1;
         $app_secret = 'wx123'; //登录后台管理系统，ip配置菜单，添加自己小程序的信息，获取app_secret
         $url = 'https://hz.zxmn2018.com/api/nick_name/index';
         $params['sign'] = $this->sign($params,$app_secret);
@@ -120,7 +120,8 @@ class NickName extends Controller
         $con = curl_init((string)$url);
         curl_setopt($con, CURLOPT_HEADER, false);
         curl_setopt($con, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($con, CURLOPT_POST,true);
+//        curl_setopt($con, CURLOPT_POST,true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "put");
         curl_setopt($con, CURLOPT_RETURNTRANSFER,true);
         curl_setopt($con, CURLOPT_TIMEOUT,(int)$timeout);
         return curl_exec($con);
