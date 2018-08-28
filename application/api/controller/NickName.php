@@ -104,14 +104,16 @@ class NickName extends Controller
 	    $params['appid'] = 'wx123';
         $params['nickname'] = '123';
         $params['source'] = '3';
+        $params['timestamp'] = time();
         $app_secret = 'wx123'; //登录后台管理系统，ip配置菜单，添加自己小程序的信息，获取app_secret
+        $url = 'https://hz.zxmn2018.com/api/nick_name/index';
         $params['sign'] = $this->sign($params,$app_secret);
-        $result = $this->doRequest($params,$timeout = 5);
+        $result = $this->doRequest($url,$params,$timeout = 5);
         echo $result;
     }
 
-    public function doRequest($params,$timeout = 5){
-        $url = 'https://hz.zxmn2018.com/api/nick_name/index';
+    public function doRequest($url,$params,$timeout = 5){
+
         if(empty($params) || $timeout <=0){
             return false;
         }
