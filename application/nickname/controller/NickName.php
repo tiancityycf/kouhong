@@ -4,6 +4,7 @@ namespace app\nickname\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
+use think\Db;
 use model\Whitelist as WhitelistModel;
 
 class NickName extends BasicAdmin
@@ -21,9 +22,12 @@ class NickName extends BasicAdmin
        	list($get, $db) = [$this->request->get(), new WhitelistModel()];
         $user = session('user');
 
+        $user_arr = Db::name('system_user')->column('username', 'id');
+
         $db = $db->search($get, $user['id']);
        	$result = parent::_list($db, true, false, false);
         $this->assign('title', $this->title);
+        $this->assign('user_arr', $user_arr);
         return  $this->fetch('admin@nickname/index', $result);
     }
 
@@ -66,7 +70,8 @@ class NickName extends BasicAdmin
             $vo->memo = $post_data['memo'];
             $vo->app_secret = $post_data['app_secret'];
             $vo->update_time = time();
-            if ($vo->save() !== false) {
+            $user = session('user');
+            if (($user['id'] == 10000 || $user['id'] == $v['admin_user_id']) && $vo->save() !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -83,8 +88,15 @@ class NickName extends BasicAdmin
      */
     public function forbid()
     {
-        if (DataService::update($this->table)) {
-            $this->success("禁用成功！", '');
+        $data = $this->request->post();
+        $model = WhitelistModel::get($data['id']);
+        $user = session('user');
+
+        if ($user['id'] == 10000 || $user['id'] == $model->admin_user_id) {
+            $model->status = 0;
+            if ($model->save() !== false) {
+                $this->success("禁用成功！", '');
+            }
         }
         $this->error("禁用失败，请稍候再试！");
     }
@@ -96,8 +108,15 @@ class NickName extends BasicAdmin
      */
     public function resume()
     {
-        if (DataService::update($this->table)) {
-            $this->success("启用成功！", '');
+        $data = $this->request->post();
+        $model = WhitelistModel::get($data['id']);
+        $user = session('user');
+
+        if ($user['id'] == 10000 || $user['id'] == $model->admin_user_id) {
+            $model->status = 1;
+            if ($model->save() !== false) {
+                $this->success("启用成功！", '');
+            }
         }
         $this->error("启用失败，请稍候再试！");
     }
