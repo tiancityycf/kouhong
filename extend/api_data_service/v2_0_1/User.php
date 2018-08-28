@@ -38,7 +38,7 @@ class User
 
         $first_withdraw_success_num = ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0;
         $first_withdraw_limit = ConfigService::get('first_withdraw_limit');
-        $withdraw_limit = $record['success_num'] > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
+        $withdraw_limit = $record['redpacket_num'] > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
 
         $heimingdan_config = ConfigService::get('heimingdan_in_off');
         $zongheimingdan_config = config('heimingdan_zongkaiguan');
@@ -201,7 +201,7 @@ class User
         Db::startTrans();
         try {
             $userRecord = UserRecordModel::where('user_id', $data['user_id'])->lock(true)->find();
-            $withdraw_limit = $userRecord->success_num > (ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0) ? ConfigService::get('withdraw_limit') : ConfigService::get('first_withdraw_limit');
+            $withdraw_limit = $userRecord->redpacket_num > (ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0) ? ConfigService::get('withdraw_limit') : ConfigService::get('first_withdraw_limit');
             if ($userRecord['amount'] < $withdraw_limit) {
                 return ['status' => 0, 'msg' => '您的余额不足以提现'];
             }

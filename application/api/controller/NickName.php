@@ -60,11 +60,11 @@ class NickName extends Controller
 		}*/
 	}
 
-	private function check($nickname)
+	private function check($nickname, $source)
 	{
 	    //source  小程序跳转来源 1-搜索跳转 2-从搜索分享点击跳转 3-直接跳转过来
         //1-搜索跳转 2-从搜索分享点击跳转  会直接显示 属于黑名单  3-直接跳转过来 需要判断是否在系统黑名单表中
-        $source = Request::param('source');
+        //$source = Request::param('source');
 	    if($source==1 || $source==2 ){
             $user_status = 0;
         }else{
@@ -92,8 +92,9 @@ class NickName extends Controller
         $this->validSign(Request::param());
 
         $nickname = Request::param('nickname');
+        $source = Request::param('source');
 
-        $result = $this->check($nickname);
+        $result = $this->check($nickname, $source);
 
         return result(200, 'ok',$result);
 	}

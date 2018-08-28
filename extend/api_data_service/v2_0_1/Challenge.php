@@ -112,7 +112,7 @@ class Challenge
 	                $userRecord->user_level += 1;
 	            }*/
 
-	            if ($user_level && $userRecord->success_num >= $user_level->success_num) {
+	            if ($user_level && $userRecord->redpacket_num >= $user_level->success_num) {
 	            	$userRecord->user_level += 1;
 	            }
 
@@ -163,11 +163,11 @@ class Challenge
 			if ($is_free) {
 				$first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
 		    	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
-		    	$withdraw_limit = $userRecord->success_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
+		    	$withdraw_limit = $userRecord->redpacket_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
 
 		    	$other_result = [
 		    		'withdraw_limit' => $withdraw_limit,
-					'success_num' => $userRecord->success_num,
+					'success_num' => $userRecord->redpacket_num,
 					'user_amount' => $userRecord->amount + (isset($result['amount']) ? $result['amount'] : 0),
 		    	];
 			} else {

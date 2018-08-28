@@ -147,5 +147,8 @@ return [
     'img_url_config' => 'https://txcdn.ylll111.xyz/', //图片地址配置
     'bucketName' => 'ylll111xyz', //空间名字
     'folder' => 'hanzi/', //图片存储文件夹名字
+
+
+    'other_user' => ['shangwu'],
     
 ];

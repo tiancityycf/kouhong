@@ -54,10 +54,10 @@ class RedpacketLog extends Model
 
         if ($old_lists) {
             foreach ($old_lists as $old_list) {
-                $list_data[$i]['redpacket_id'] = $list['id'];;
-                $list_data[$i]['redpacket_status'] = $list['status'];
-                $list_data[$i]['amount'] = $list['amount'];
-                $list_data[$i]['create_time'] = $list['create_time'];
+                $list_data[$i]['redpacket_id'] = $old_list['id'];;
+                $list_data[$i]['redpacket_status'] = $old_list['status'];
+                $list_data[$i]['amount'] = $old_list['amount'];
+                $list_data[$i]['create_time'] = $old_list['create_time'];
                 $i ++; 
             }
         }

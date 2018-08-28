@@ -47,6 +47,7 @@ class Redpacket
 				$userRecord = UserRecordModel::where('user_id', $userId)->find();
 				$userRecord->amount += $amount;
 				$userRecord->amount_total += $amount;
+				$userRecord->redpacket_num += 1;
 				$userRecord->save();
 
 				$model->status = 1;
@@ -106,6 +107,7 @@ class Redpacket
 						
 						$userRecord->amount += $redpacketLog->amount;
 						$userRecord->amount_total += $redpacketLog->amount;
+						$userRecord->redpacket_num += 1;
 						$userRecord->save();
 
 						$redpacketLog->status = 1;
