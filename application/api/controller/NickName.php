@@ -25,12 +25,12 @@ class NickName extends Controller
 		$model = WhitelistModel::where('appid', $params['appid'])->where('status',1)->find();
 
 		if (!$model) {
-			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
+			echo json_encode(['code' => 500,'msg' => '缺少接口秘钥'], JSON_UNESCAPED_UNICODE);exit();
 		}
 
 		$ip = Request::ip();
 		if (!in_array($ip, explode(';', $model->ips))) {
-			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
+			echo json_encode(['code' => 500,'msg' => '请求IP不合法'], JSON_UNESCAPED_UNICODE);exit();
 		}
 
 		$primary = '';
@@ -97,4 +97,37 @@ class NickName extends Controller
 
         return result(200, 'ok',$result);
 	}
+
+	public function demo(){
+	    $params = [];
+	    $params['appid'] = 'wx123';
+        $params['nickname'] = '123';
+        $params['source'] = '3';
+        $app_secret = 'wx123'; //登录后台管理系统，ip配置菜单，添加自己小程序的信息，获取app_secret
+        $params['sign'] = $this->sign($params,$app_secret);
+        $result = doRequest($params,$timeout = 5);
+    }
+
+    public function doRequest($params,$timeout = 5){
+        $url = 'https://hz.zxmn2018.com/api/nick_name/index';
+        if(empty($params) || $timeout <=0){
+            return false;
+        }
+        $con = curl_init((string)$url);
+        curl_setopt($con, CURLOPT_HEADER, false);
+        curl_setopt($con, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($con, CURLOPT_POST,true);
+        curl_setopt($con, CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($con, CURLOPT_TIMEOUT,(int)$timeout);
+        return curl_exec($con);
+    }
+
+    public function sign($params,$app_secret){
+        ksort($params);
+        $primary = '';
+        foreach ($params as $key => $value) {
+            $primary .= $key . ':' . $value;
+        }
+        return md5($primary . $app_secret);
+    }
 }
