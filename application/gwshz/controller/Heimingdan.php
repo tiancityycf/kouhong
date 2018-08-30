@@ -1,5 +1,5 @@
 <?php
-namespace app\zqszw\controller;
+namespace app\gwshz\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
@@ -16,7 +16,7 @@ class Heimingdan extends BasicAdmin
 
 	public function index()
     {
-    	$this->title = '小程序的黑名单';
+    	$this->title = '用户难度等级设置';
 
        	list($get, $db) = [$this->request->get(), new HeimingdanModel()];
 

@@ -130,7 +130,7 @@ class Redpacket
 
 		$first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
     	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
-    	$withdraw_limit = $userRecord->success_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
+    	$withdraw_limit = $userRecord->redpacket_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
 
 		return [
 			'status' => $status,
@@ -139,7 +139,7 @@ class Redpacket
 			'is_open' => $is_open,
 			'amount' => $amount,
 			'withdraw_limit' => $withdraw_limit,
-			'success_num' => $userRecord->success_num,
+			'success_num' => $userRecord->redpacket_num,
 			'user_amount' => $userRecord->amount,
 		];
 	}

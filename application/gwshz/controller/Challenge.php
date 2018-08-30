@@ -1,6 +1,6 @@
 <?php
 
-namespace app\zqszw\controller;
+namespace app\gwshz\controller;
 
 use controller\BasicAdmin;
 use think\Db;

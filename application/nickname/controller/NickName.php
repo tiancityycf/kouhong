@@ -71,7 +71,7 @@ class NickName extends BasicAdmin
             $vo->app_secret = $post_data['app_secret'];
             $vo->update_time = time();
             $user = session('user');
-            if (($user['id'] == 10000 || $user['id'] == $v['admin_user_id']) && $vo->save() !== false) {
+            if (($user['id'] == 10000 || $user['id'] == $vo->admin_user_id) && $vo->save() !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');

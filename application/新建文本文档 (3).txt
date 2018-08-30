@@ -1,5 +1,5 @@
 INSERT INTO `t_system_menu` (`pid`, `title`, `node`, `icon`, `url`, `params`, `target`, `sort`, `status`, `create_by`, `create_at`) VALUES
-(197, '识字群英会', '', '', '#', '', '_self', 9088, 1, 0, '2018-07-26 01:50:45');
+(197, '识汉字王者', '', '', '#', '', '_self', 9094, 1, 0, '2018-07-26 01:50:45');
 
 
 
@@ -106,3 +106,5 @@ appid:wx123456789nickname:123timestamp:1534780800123456
 
 
 ALTER TABLE `t_user_record` ADD `redpacket_num` INT NOT NULL DEFAULT '0' COMMENT '开红包数量' AFTER `success_num`;
+
+ALTER TABLE `t_user_record` ADD INDEX(`redpacket_num`);

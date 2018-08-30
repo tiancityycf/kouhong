@@ -101,4 +101,26 @@ class UserRecord extends Model
 
 		return $result;
 	}
+
+
+	public function getRedpacketList()
+	{
+		$wealthCount = ConfigService::get('wealth_list_count');
+		$wealthList = self::where('redpacket_num', '>', 0)
+			->where('user_status', 1)
+			->limit($wealthCount)
+			->order('redpacket_num', 'desc')
+			->select();
+
+		$result = [];
+		foreach ($wealthList as $key => $value) {
+			$result[$key] = [
+				'avatar' => $value->avatar,
+				'nickname' => $value->nickname,
+				'success_num' => $value->redpacket_num,
+			];
+		}
+
+		return $result;
+	}
 }

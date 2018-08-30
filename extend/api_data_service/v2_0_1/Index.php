@@ -195,7 +195,7 @@ class Index
             return Cache::get($cacheKey);
         } else {
             $userRecordModel = new UserRecordModel();
-            $list = $userRecordModel->getSuccessList();
+            $list = $userRecordModel->getRedpacketList();
             $expire = ConfigService::get('wealth_refresh_time') * 60;
             Cache::set($cacheKey, $list, $expire);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\zqszw\controller\api\v1_0_4;
+namespace app\gwshz\controller\api\v1_0_4;
 
 use think\facade\Request;
 use api_data_service\Log as LogService;

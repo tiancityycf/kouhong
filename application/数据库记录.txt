@@ -91,7 +91,11 @@
 填字值千金       dbtzzqj
 识字群英会       dbszqyh
 跟我识汉字       dbgwshz
-
+汉字天梯         dbhztt
+汉字大舞台       dbhzdwt
+汉字攻略         dbhzgl
+识字攻略         dbszgl
+识汉字王者       dbshzwz
 
 172.16.0.143    dbhz8   AnD4dVLfnTdZ6Zg0@!2018     汉字八数据库  一起14个数据库
 我爱识汉字       dbwashz 

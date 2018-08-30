@@ -1,10 +1,10 @@
 <?php
 
-namespace app\zqszw\controller\api\v1_0_4;
+namespace app\gwshz\controller\api\v1_0_4;
 
 use think\facade\Request;
 
-use api_data_service\v1_0_2\Index as IndexService;
+use api_data_service\v1_0_3\Index as IndexService;
 use controller\BasicController;
 
 /**
