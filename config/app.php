@@ -149,6 +149,6 @@ return [
     'folder' => 'hanzi/', //图片存储文件夹名字
 
 
-    'other_user' => ['shangwu'],
+    'other_user' => ['shangwu','lanhui','sanmo','forestgame'],
     
 ];
