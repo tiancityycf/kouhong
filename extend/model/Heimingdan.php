@@ -33,4 +33,6 @@ class Heimingdan extends Model
 
         return $query;
 	}
+
+
 }
