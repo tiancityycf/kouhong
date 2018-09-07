@@ -47,6 +47,7 @@ class Index extends BasicAdmin
         if (in_array($user['username'], config('other_user'))) {
             unset($menus[0]);
             unset($menus[2]);
+            unset($menus[3]);
         }
         if (empty($menus) && !session('user.id')) {
             $this->redirect('@admin/login');

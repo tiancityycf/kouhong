@@ -4,8 +4,8 @@ namespace app\szqyh\controller\api\v1_0_4;
 
 use think\facade\Request;
 
-use api_data_service\v1_0_9\User as UserService;
-use api_data_service\v1_0_9\Tili as TiliService;
+use api_data_service\v1_0_9_1\User as UserService;
+use api_data_service\v1_0_9_1\Tili as TiliService;
 use controller\BasicController;
 
 /**

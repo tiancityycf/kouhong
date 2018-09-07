@@ -40,6 +40,11 @@ class User extends Model
         	$query->where('ur.user_status', $params['status'] - 1);
         }
 
+        if (isset($params['amount_total']) && $params['amount_total'] !== '') {
+            $query->where('ur.amount_total', '>=', $params['amount_total']);
+            $query->order('ur.amount_total desc');
+        }
+
         $query->order('id desc');
 
         return $query;

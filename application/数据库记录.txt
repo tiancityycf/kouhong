@@ -57,7 +57,7 @@
 填字挑战王      dbtztzw
 大家都来玩      djdlw
 
-172.16.0.86    dbhz5   AnD4dVLfnTdZ6Zg0@!2018     汉字五数据库  一起9个数据库
+172.16.0.86    dbhz5   AnD4dVLfnTdZ6Zg0@!2018     汉字五数据库  一起14个数据库
 汉字加油站      dbhzjyz
 汉字小超人      dbhzxcr
 汉字学前班      dbhzxqb
@@ -67,9 +67,15 @@
 我爱填字        dbwatz
 司马光识字      dbsmgsz
 一起识汉字      dbyqshz
+极限斗牛        dbjxdn
+开心识字        dbkxsz
+识汉字          dbshz
+小识字郎        dbxszl
+识字联盟        dbszlm
+汉字大擂台       dbhzdlt
 
 
-172.16.0.55    dbhz6   AnD4dVLfnTdZ6Zg0@!2018     汉字六数据库  一起6个数据库
+172.16.0.55    dbhz6   AnD4dVLfnTdZ6Zg0@!2018     汉字六数据库  一起11个数据库
 识字大王        dbszdw
 我爱识字        dbwasz
 汉字天天学      dbhzttx
@@ -83,19 +89,22 @@
 汉字世界        dbhzsj
 
 
-172.16.0.127    dbhz7   AnD4dVLfnTdZ6Zg0@!2018     汉字七数据库  一起5个数据库
+172.16.0.127    dbhz7   AnD4dVLfnTdZ6Zg0@!2018     汉字七数据库  一起14个数据库
 汉字研究所       dbhzyjs
 识字天才         dbsztc
 识字填字         dbsztz
 识字小天才       dbszxtc
 填字值千金       dbtzzqj
 识字群英会       dbszqyh
+汉字群英会       dbhzqyh
 跟我识汉字       dbgwshz
 汉字天梯         dbhztt
 汉字大舞台       dbhzdwt
 汉字攻略         dbhzgl
 识字攻略         dbszgl
 识汉字王者       dbshzwz
+汉字大擂台       dbhzdlt
+
 
 172.16.0.143    dbhz8   AnD4dVLfnTdZ6Zg0@!2018     汉字八数据库  一起14个数据库
 我爱识汉字       dbwashz 
@@ -116,9 +125,13 @@
 
 另一个汉字后台   
 
-172.16.0.8/ gz-cdb-ec6r2in7.sql.tencentcdb.com:62192  dbhz/root   C44nylovOcAdefJW/zhise666
+172.16.0.8  dbhz/root   C44nylovOcAdefJW/mdWeb^Serv$2019   
 汉语比拼         dbhybp
 汉字连连看       dbhzllk
 汉字连连         dbhzll
 汉字词典王       dbhzcdw
 汉字天天看       dbhzttk
+猜汉字           dbchz
+汉字小博士        dbhzxbs
+我爱方块字       dbwafkz
+识字秀           dbszx

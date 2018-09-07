@@ -65,9 +65,9 @@ class Share
 	 */
 	private function shareGroup($data)
 	{
-		$status = 0;
-		$chanceNum = 0;
-		$diff = 0;
+		$status = 0;   //接口状态  0 失败， 1成功
+		$chanceNum = 0;   //分享状态 0失败  1成功
+		$diff = 0;  //是否重复群 0 重复，1不重复
 		$LogService = new LogService();
 		$shareInfo = $LogService->createShareLog($data);
 		$limit = ConfigService::get('qun_limit_today') ? ConfigService::get('qun_limit_today') : 20;

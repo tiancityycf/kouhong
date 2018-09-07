@@ -1,5 +1,8 @@
 INSERT INTO `t_system_menu` (`pid`, `title`, `node`, `icon`, `url`, `params`, `target`, `sort`, `status`, `create_by`, `create_at`) VALUES
-(197, '识汉字王者', '', '', '#', '', '_self', 9094, 1, 0, '2018-07-26 01:50:45');
+(197, '汉字大擂台', '', '', '#', '', '_self', 9104, 1, 0, '2018-07-26 01:50:45');
+
+INSERT INTO `t_system_menu` (`pid`, `title`, `node`, `icon`, `url`, `params`, `target`, `sort`, `status`, `create_by`, `create_at`) VALUES
+(18, '识字秀', '', '', '#', '', '_self', 9, 1, 0, '2018-07-26 01:50:45');
 
 
 
@@ -65,7 +68,7 @@ UPDATE t_user SET avatar = '', nickname = '';
 
 https://ad.ali-yun.wang/api/appad/collect?user_id=100001&from_id=wx392b9aa04c89dc2b&to_id=41&timestamp=1534413294925&sign=0d525df6ffc5ef502d21678a43b698ee
 
-from_id:wx19011e5a73d44e6ctimestamp:1534780800to_id:1user_id:1gClrIRp1t0IxBFIT
+from_id:wxa48eb7e24c744f60timestamp:1534780800to_id:1user_id:1JI9Ne3mLkTTxNjqw
 
 3b1766f5ac1f0d7d1eb463d3a9f06593
 
@@ -73,12 +76,15 @@ from_id:wx19011e5a73d44e6ctimestamp:1534780800to_id:1user_id:1gClrIRp1t0IxBFIT
 [169238,175466,125751,50538,391005,198883,160025]	
 
 
-appid:wx19011e5a73d44e6ctimestamp:1534780800gClrIRp1t0IxBFIT
+appid:wx5d44da14af338874timestamp:1534780800
 
-timestamp:1534780800user_id:1pQxHXrXpaI
-timestamp:1534780800pQxHXrXpaI
+timestamp:1534780800user_id:192Z1b8T4ZO
+timestamp:1534780800type:用户截屏user_id:1bnsxxoIEht
+timestamp:1534780800bnsxxoIEht
 
-challenge_id:7score:5successed:1timestamp:1534780800user_id:1pQxHXrXpaI
+pifu_id:1timestamp:1534780800user_id:1bnsxxoIEht
+
+challenge_id:7score:5successed:1timestamp:1534780800user_id:1bnsxxoIEht
 
 https://txcdn.ylll111.xyz/hanzi/169296691cf8c01b29134959769b0513.png
 
@@ -108,3 +114,11 @@ appid:wx123456789nickname:123timestamp:1534780800123456
 ALTER TABLE `t_user_record` ADD `redpacket_num` INT NOT NULL DEFAULT '0' COMMENT '开红包数量' AFTER `success_num`;
 
 ALTER TABLE `t_user_record` ADD INDEX(`redpacket_num`);
+
+grant all privileges on dbchz.* to dbhz@'%' identified by 'C44nylovOcAdefJW';
+
+
+1  => 1
+2  => 1 
+
+52 => 13

@@ -5,6 +5,7 @@ namespace api_data_service\v1_0_9;
 use think\facade\Config;
 use model\UserRecord as UserRecordModel;
 use model\UserTili as UserTiliModel;
+use api_data_service\Config as ConfigService;
 
 class Tili
 {
