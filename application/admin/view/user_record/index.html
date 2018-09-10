@@ -30,6 +30,12 @@
         </div>
     </div>
     <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">累计金额</label>
+        <div class="layui-input-inline">
+            <input name="amount_total" value="{$Think.get.amount_total|default=''}" placeholder="搜索出大于你填入的数字的数据" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-inline">
             <select name='status' class='layui-select' lay-search="">

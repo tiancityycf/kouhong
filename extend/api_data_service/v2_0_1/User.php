@@ -174,7 +174,15 @@ class User
             $user_status = $user->userRecord->user_status;
 
             if ($zongheimingdan_config == 1 && $heimingdan_config == 1) {
-                $user_status = $user->userRecord->user_status;
+                if ($user_status != 0) {
+                    $heimingdan = HeimingdanModel::where('nickname', $data['nickname'])->find();
+                    if ($heimingdan && $heimingdan->status == 0) {
+                        $user->userRecord->user_status = 0;
+                        $user->userRecord->save();
+
+                        $user_status = 0;
+                    }
+                }
             } else {
                 $user_status = $user_status == 0 ? 1 : $user_status;
             }

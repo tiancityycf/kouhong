@@ -148,5 +148,6 @@ return [
     'bucketName' => 'ylll111xyz', //空间名字
     'folder' => 'hanzi/', //图片存储文件夹名字
 
-    'other_user' => ['shangwu','lanhui','sanmo','forestgame','qmpy','bjjkc','mkzp2048','markgodboy'],
+
+    'other_user' => ['shangwu','lanhui','sanmo','forestgame','qmpy','bjjkc','mkzp2048','markgodboy','tcs888'],
 ];

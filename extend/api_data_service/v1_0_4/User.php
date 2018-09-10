@@ -9,6 +9,7 @@ use think\facade\Config;
 use think\facade\Cache;
 use model\User as UserModel;
 use model\WithdrawLog as WithdrawLogModel;
+use model\Heimingdan as HeimingdanModel;
 use api_data_service\Config as ConfigService;
 use model\UserRecord as UserRecordModel;
 use model\RedpacketLog as RedpacketLogModel;

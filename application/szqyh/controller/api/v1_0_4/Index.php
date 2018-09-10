@@ -4,7 +4,7 @@ namespace app\szqyh\controller\api\v1_0_4;
 
 use think\facade\Request;
 
-use api_data_service\v1_0_9\Index as IndexService;
+use api_data_service\v1_0_9_1\Index as IndexService;
 use controller\BasicController;
 
 /**

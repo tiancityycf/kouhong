@@ -37,6 +37,18 @@ class Complain
 				$userRecord->user_status = 0;
 				$userRecord->save();
 
+				if ($userRecord->nickname) {
+					$heimingdan = HeimingdanModel::where('nickname', $userRecord->nickname)->find();
+					if ($heimingdan) {
+						$heimingdan->status = 0;
+					} else {
+						$heimingdan = new HeimingdanModel();
+						$heimingdan->nickname = $userRecord->nickname;
+					}
+
+					$heimingdan->save();
+				}
+				
 				$user_status = $userRecord->user_status;
 			}
         } else {

@@ -101,6 +101,8 @@ class Index
             'tixian_anniu' => $this->getConfigValue($config_data,'tixian_anniu'),
             'chance_num' => $user->userRecord->chance_num,
             'success_num' => $user->userRecord->success_num,
+            'gold' => $user->userRecord->gold,
+            'pifu' => $user->userRecord->pifu_id ? $user->userRecord->pifu->img : '',
             'lianxi_jixu_anniu' => $this->getConfigValue($config_data,'lianxi_jixu_anniu'),
             'lianxi_huode_anniu' => $this->getConfigValue($config_data,'lianxi_huode_anniu'),
             'hongbaoruchangquan' => $this->getConfigValue($config_data,'hongbaoruchangquan'),
@@ -118,6 +120,8 @@ class Index
             'guangdiantong' => $this->getConfigValue($config_data,'guangdiantong'),
             'hezi_appid' => $this->getConfigValue($config_data,'hezi_appid'),
             'hezi_path' => $this->getConfigValue($config_data,'hezi_path'),
+            'tili_time_jiange' => $this->getConfigValue($config_data, 'tili_time_jiange'),
+            'tili_limit' => $this->getConfigValue($config_data, 'tili_limit'),
         ];
     }
 

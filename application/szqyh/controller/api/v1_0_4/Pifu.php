@@ -3,7 +3,7 @@
 namespace app\szqyh\controller\api\v1_0_4;
 
 use think\facade\Request;
-use api_data_service\v1_0_9\Pifu as PifuService;
+use api_data_service\v1_0_9_1\Pifu as PifuService;
 use controller\BasicController;
 
 /**
@@ -15,7 +15,7 @@ class Pifu extends BasicController
      * 皮肤商店列表
      * @return json
      */
-    public function list()
+    public function pifu_list()
     {
         require_params('user_id');
         $data = Request::param();
@@ -39,7 +39,7 @@ class Pifu extends BasicController
     }
 
     //选择当前皮肤
-    public function select()
+    public function pifu_select()
     {
     	require_params('user_id', 'pifu_id');
         $data = Request::param();

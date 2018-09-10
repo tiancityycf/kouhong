@@ -123,4 +123,9 @@ class UserRecord extends Model
 
 		return $result;
 	}
+
+	public function pifu()
+    {
+        return $this->hasOne('Pifu', 'pifu_id', 'id');
+    }
 }
