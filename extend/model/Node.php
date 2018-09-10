@@ -11,6 +11,7 @@ class Node extends Model
 {
 	// 设置当前模型对应的完整数据表名称
     protected $table = 't_system_node';
+//    protected $connection = 'db_config1';
 
     protected $connection = [
 		// 数据库类型

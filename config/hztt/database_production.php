@@ -13,13 +13,13 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => 'localhost',
+    'hostname'        => '172.16.0.127',
     // 数据库名
-    'database'        => 'ceshi_jichudatabase',
+    'database'        => 'dbhztt',
     // 用户名
-    'username'        => 'test_dba',
+    'username'        => 'dbhz7',
     // 密码
-    'password'        => '123456',
+    'password'        => 'AnD4dVLfnTdZ6Zg0@!2018',
     // 端口
     'hostport'        => '',
     // 连接dsn
@@ -58,22 +58,4 @@ return [
     'break_reconnect' => false,
     // 断线标识字符串
     'break_match_str' => [],
-
-    //数据库配置1
-    'db_config1' => [
-        // 数据库类型
-        'type'            => 'mysql',
-        // 服务器地址
-        'hostname'        => 'localhost',
-        // 数据库名
-        'database'        => 'ceshi_jichudatabase',
-        // 用户名
-        'username'        => 'test_dba',
-        // 密码
-        'password'        => '123456',
-        // 数据库编码默认采用utf8
-        'charset'     => 'utf8',
-        // 数据库表前缀
-        'prefix'          => 't_',
-    ],
 ];

@@ -44,11 +44,18 @@ class Index extends BasicAdmin
         $menus = $this->buildMenuData(ToolsService::arr2tree($list), NodeService::get(), !!session('user'));
 
         $user = session('user');
-        if (in_array($user['username'], config('other_user'))) {
+
+        $blacklist = (array)Db::name('SystemUser')->where(['username' => $user['username']])->field('authorize')->find();
+
+        if (!empty($blacklist) && $blacklist['authorize']==4) {
             unset($menus[0]);
             unset($menus[2]);
             unset($menus[3]);
         }
+//        if (in_array($user['username'], config('other_user'))) {
+//            unset($menus[0]);
+//            unset($menus[2]);
+//        }
         if (empty($menus) && !session('user.id')) {
             $this->redirect('@admin/login');
         }
