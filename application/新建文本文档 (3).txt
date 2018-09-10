@@ -78,9 +78,9 @@ from_id:wxa48eb7e24c744f60timestamp:1534780800to_id:1user_id:1JI9Ne3mLkTTxNjqw
 
 appid:wx5d44da14af338874timestamp:1534780800
 
-timestamp:1534780800user_id:192Z1b8T4ZO
-timestamp:1534780800type:用户截屏user_id:1bnsxxoIEht
-timestamp:1534780800bnsxxoIEht
+timestamp:1534780800user_id:1C31zGUDbDY
+timestamp:1534780800type:用户截屏user_id:1C31zGUDbDY
+timestamp:1534780800C31zGUDbDY
 
 pifu_id:1timestamp:1534780800user_id:1bnsxxoIEht
 
