@@ -68,7 +68,6 @@ class Controller
 
         // 控制器初始化
         $this->initialize();
-
         // 前置操作方法
         foreach ((array) $this->beforeActionList as $method => $options) {
             is_numeric($method) ?

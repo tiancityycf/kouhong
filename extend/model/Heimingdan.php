@@ -9,18 +9,18 @@ use think\Model;
  */
 class Heimingdan extends Model
 {
-	protected $connection = [
-		// 数据库类型
-	    'type'            => 'mysql',
-	    // 服务器地址
-	    'hostname'        => 'localhost',
-	    // 数据库名
-	    'database'        => 'ceshi_jichu_1002',
-	    // 用户名
-	    'username'        => 'root',
-	    // 密码
-	    'password'        => '',
-	];
+    protected $connection = [
+        // 数据库类型
+        'type'            => 'mysql',
+        // 服务器地址
+        'hostname'        => 'localhost',
+        // 数据库名
+        'database'        => 'ceshi_jichudatabase',
+        // 用户名
+        'username'        => 'root',
+        // 密码
+        'password'        => 'root',
+    ];
 
 	public function search($params)
 	{

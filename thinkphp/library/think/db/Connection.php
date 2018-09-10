@@ -146,6 +146,7 @@ abstract class Connection
      */
     public function __construct(array $config = [])
     {
+
         if (!empty($config)) {
             $this->config = array_merge($this->config, $config);
         }
@@ -154,7 +155,6 @@ abstract class Connection
         $class = $this->getBuilderClass();
 
         $this->builder = new $class($this);
-
         // 执行初始化操作
         $this->initialize();
     }
