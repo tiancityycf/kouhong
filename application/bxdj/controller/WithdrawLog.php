@@ -1,5 +1,5 @@
 <?php
-namespace app\jxdn\controller;
+namespace app\bxdj\controller;
 
 use controller\BasicAdmin;
 use service\DataService;

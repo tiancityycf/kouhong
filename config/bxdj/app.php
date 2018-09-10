@@ -49,4 +49,5 @@ return [
     'success_key' => 'jxdn:829fc:successlist',
 
     'heimingdan_kaiguan' => 1,
+
 ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\jxdn\controller\api\v1_0_5;
+namespace app\bxdj\controller\api\v1_0_5;
 
 use think\facade\Request;
 use api_data_service\v2_0_2\Challenge as ChallengeService;
