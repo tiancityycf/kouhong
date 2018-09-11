@@ -82,7 +82,7 @@ timestamp:1534780800user_id:1C31zGUDbDY
 timestamp:1534780800type:用户截屏user_id:1C31zGUDbDY
 timestamp:1534780800C31zGUDbDY
 
-pifu_id:1timestamp:1534780800user_id:1bnsxxoIEht
+pifu_id:4timestamp:1534780800user_id:1bnsxxoIEht
 
 challenge_id:7score:5successed:1timestamp:1534780800user_id:1bnsxxoIEht
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace api_data_service\v1_0_9;
+namespace api_data_service\v2_0_2;
 
 use think\Db;
 use think\Loader;
@@ -34,11 +34,11 @@ class User
 
         // 获取红包记录
         $redpacketLogModel = new RedpacketLogModel();
-        $redpacketList = $redpacketLogModel->getRedpacketList($userId);
+        $redpacketList = $redpacketLogModel->getNewList($userId);
 
         $first_withdraw_success_num = ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0;
         $first_withdraw_limit = ConfigService::get('first_withdraw_limit');
-        $withdraw_limit = $record['success_num'] > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
+        $withdraw_limit = $record['redpacket_num'] > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
 
         $heimingdan_config = ConfigService::get('heimingdan_in_off');
         $zongheimingdan_config = config('heimingdan_zongkaiguan');
@@ -64,6 +64,7 @@ class User
      */
     public function login($code, $from_type = 0)
     {
+        return ['status' => 1, 'user_id' => 1];
         $appid = Config::get('wx_appid');
         $secret = Config::get('wx_secret');
         $loginUrl = Config::get('wx_login_url');
@@ -85,13 +86,6 @@ class User
                         if ($user->userRecord->chance_num < ConfigService::get('login_get_chance_num')) {
                             $user->userRecord->chance_num = ConfigService::get('login_get_chance_num');
                         }
-                        /*if ($user->userRecord->lianxu_login > 7) {
-                            $user->userRecord->gold += 600;
-                        } else {
-                            $user->userRecord->gold += ($user->userRecord->lianxu_login + 1) * 50;
-                        }
-                        $user->userRecord->lianxu_login +=1;*/
-
                         $user->userRecord->tiaozhuan_num = 0;
                     }
                     $user->userRecord->last_login = $time;
@@ -140,8 +134,6 @@ class User
                 'user_id' => $user->id,
                 'last_login' => $time,
                 'openid' => $data['openid'],
-                //'lianxu_login' => $user->userRecord->lianxu_login,
-                //'gold' => $user->userRecord->lianxu_login > 7 ? 600 : $user->userRecord->lianxu_login + 1) * 50,
                 'chance_num' => $user->userRecord->chance_num,
                 'tiaozhuan_num' => $user->userRecord->tiaozhuan_num,
                 'user_status' => $user_status,
@@ -218,7 +210,7 @@ class User
         Db::startTrans();
         try {
             $userRecord = UserRecordModel::where('user_id', $data['user_id'])->lock(true)->find();
-            $withdraw_limit = $userRecord->success_num > (ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0) ? ConfigService::get('withdraw_limit') : ConfigService::get('first_withdraw_limit');
+            $withdraw_limit = $userRecord->redpacket_num > (ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0) ? ConfigService::get('withdraw_limit') : ConfigService::get('first_withdraw_limit');
             if ($userRecord['amount'] < $withdraw_limit) {
                 return ['status' => 0, 'msg' => '您的余额不足以提现'];
             }

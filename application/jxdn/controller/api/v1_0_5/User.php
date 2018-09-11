@@ -4,7 +4,7 @@ namespace app\jxdn\controller\api\v1_0_5;
 
 use think\facade\Request;
 
-use api_data_service\v2_0_1\User as UserService;
+use api_data_service\v2_0_2\User as UserService;
 use controller\BasicController;
 
 /**
