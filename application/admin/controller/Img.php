@@ -11,8 +11,10 @@ class Img extends BasicAdmin
 	public function upload()
     {
     	$file = request()->file('file');
+
 		$info = $file->validate(['ext'=>'jpg,png,gif']);
 		if($info){
+			
 			$file_info = $file->getInfo();
 
 			$obj = new WangSuService();

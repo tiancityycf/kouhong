@@ -13,15 +13,15 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => 'localhost',
+    'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
     // 数据库名
-    'database'        => 'ceshi_bxdj',
+    'database'        => 'bxdj',
     // 用户名
-    'username'        => 'root',
+    'username'        => 'dbbxdj',
     // 密码
-    'password'        => 'root',
+    'password'        => 'eY8vvgOs!Lq%4h4D',
     // 端口
-    'hostport'        => '',
+    'hostport'        => '62072',
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数

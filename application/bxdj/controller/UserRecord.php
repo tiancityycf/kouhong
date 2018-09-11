@@ -6,19 +6,26 @@ use service\DataService;
 use model\User as UserModel;
 use model\Heimingdan as HeimingdanModel;
 
+use app\bxdj\model\UserRecord as UserRecordModel;
+use app\bxdj\model\Address as AddressModel;
+
 class UserRecord extends BasicAdmin
 {
 
 	public function index()
     {
+
     	$this->title = '用户数据';
 
-       	list($get, $db) = [$this->request->get(), new UserModel()];
+       	list($get, $db) = [$this->request->get(), new UserRecordModel()];
 
         $db = $db->search($get);
+        
        	$result = parent::_list($db, true, false, false);
+
         $this->assign('title', $this->title);
-        return  $this->fetch('admin@user_record/index', $result);
+
+        return  $this->fetch('index', $result);
     }
 
     /**
@@ -67,4 +74,25 @@ class UserRecord extends BasicAdmin
         }
         $this->error("恢复失败，请稍候再试！");
     }
+
+    /**
+     * 用户收货地址信息
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function address()
+    {
+        $data = $this->request->get();
+
+        $model = new AddressModel();
+
+        if ($data['openid'] && $model) {
+           $vo = $model->where('openid',$data['openid'])->select();
+           return  $this->fetch('address', ['vo' => $vo]);
+        }
+        $this->error("查看地址信息失败，请稍候再试！");
+
+    }
+
+
 }
