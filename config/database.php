@@ -60,7 +60,7 @@ return [
     'break_match_str' => [],
 
     //数据库配置1
-    'db_config1' => [
+    'db_base' => [
         // 数据库类型
         'type'            => 'mysql',
          // 服务器地址

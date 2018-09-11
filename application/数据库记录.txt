@@ -1,4 +1,4 @@
-172.16.1.16    root/dbhz   mdWeb^Serv$MYSQL/vI9rf5v6xH2F8awE     汉字一数据库  加上总数据库一起1个数据库
+172.16.1.66    root/dbhz   mdWeb^Serv$MYSQL/vI9rf5v6xH2F8awE     汉字一数据库  加上总数据库一起1个数据库
 
 
 
