@@ -59,7 +59,7 @@ return [
     // 断线标识字符串
     'break_match_str' => [],
 
-    //数据库配置1
+    //数据库公共库配置
     'db_base' => [
         // 数据库类型
         'type'            => 'mysql',
