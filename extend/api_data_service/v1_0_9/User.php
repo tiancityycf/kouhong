@@ -85,6 +85,13 @@ class User
                         if ($user->userRecord->chance_num < ConfigService::get('login_get_chance_num')) {
                             $user->userRecord->chance_num = ConfigService::get('login_get_chance_num');
                         }
+                        /*if ($user->userRecord->lianxu_login > 7) {
+                            $user->userRecord->gold += 600;
+                        } else {
+                            $user->userRecord->gold += ($user->userRecord->lianxu_login + 1) * 50;
+                        }
+                        $user->userRecord->lianxu_login +=1;*/
+
                         $user->userRecord->tiaozhuan_num = 0;
                     }
                     $user->userRecord->last_login = $time;
@@ -133,6 +140,8 @@ class User
                 'user_id' => $user->id,
                 'last_login' => $time,
                 'openid' => $data['openid'],
+                //'lianxu_login' => $user->userRecord->lianxu_login,
+                //'gold' => $user->userRecord->lianxu_login > 7 ? 600 : $user->userRecord->lianxu_login + 1) * 50,
                 'chance_num' => $user->userRecord->chance_num,
                 'tiaozhuan_num' => $user->userRecord->tiaozhuan_num,
                 'user_status' => $user_status,

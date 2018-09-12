@@ -126,6 +126,6 @@ class UserRecord extends Model
 
 	public function pifu()
     {
-        return $this->hasOne('Pifu', 'pifu_id', 'id');
+        return $this->hasOne('Pifu', 'id', 'pifu_id');
     }
 }
