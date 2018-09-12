@@ -1,10 +1,10 @@
 <?php
 
-namespace app\hzdlt\controller\api\v1_0_5;
+namespace app\jxdn\controller\api\v1_0_6;
 
 use think\facade\Request;
 
-use api_data_service\v2_0_1_2\User as UserService;
+use api_data_service\v2_0_2\User as UserService;
 use controller\BasicController;
 
 /**
@@ -20,10 +20,9 @@ class User extends BasicController
 	{
 		require_params('user_id');
         $userId = Request::param('user_id');
-        $version = Request::param('version') ? Request::param('version') : '';
 
         $userService = new UserService();
-        $result = $userService->index($userId, $version);
+        $result = $userService->index($userId);
 
         return result(200, 'ok', $result);
 	}
@@ -37,10 +36,9 @@ class User extends BasicController
 		require_params('code');
 		$code = Request::param('code');
 		$from_type = Request::param('from_type') ? Request::param('from_type') : 0;
-		$version = Request::param('version') ? Request::param('version') : '';
 
 		$userService = new UserService();
-		$result = $userService->login($code, $from_type, $version);
+		$result = $userService->login($code, $from_type);
 
 		return result(200, 'ok', $result);
 	}

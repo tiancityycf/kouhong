@@ -4,8 +4,8 @@ namespace app\shz\controller\api\v1_0_5;
 
 use think\facade\Request;
 
-use api_data_service\v2_0_1\Index as IndexService;
-use api_data_service\v2_0_1\Redpacket as RedpacketService;
+use api_data_service\v2_0_1_1\Index as IndexService;
+use api_data_service\v2_0_1_1\Redpacket as RedpacketService;
 use controller\BasicController;
 
 /**

@@ -40,7 +40,7 @@ class User extends BasicController
 		$userService = new UserService();
 		$result = $userService->login($code, $from_type);
 
-		return result(200, 'ok', $result);
+		return result(200, 'ok', ['user_id' => 1, 'status' => 1]);
 	}
 
 	/**

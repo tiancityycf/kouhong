@@ -1,6 +1,6 @@
 <?php
 
-namespace api_data_service\v2_0_2;
+namespace api_data_service\v2_0_1_2;
 
 use think\Db;
 use think\Loader;
@@ -26,7 +26,7 @@ class User
      * @param  $userId 用户id
      * @return json
      */
-    public function index($userId)
+    public function index($userId, $version = '')
     {
         // 获取用户记录
         $userRecord = UserRecordModel::where('user_id', $userId)->find();
@@ -50,6 +50,10 @@ class User
             $record['user_status'] = 0;
         }
 
+        if ($this->chekVersion($version)) {
+            $record['user_status'] = 0;
+        }
+
         return [
             'record' => $record,
             'redpacket_list' => $redpacketList,
@@ -62,7 +66,7 @@ class User
      * 用户登录
      * @return array
      */
-    public function login($code, $from_type = 0)
+    public function login($code, $from_type = 0, $version = '')
     {
         $appid = Config::get('wx_appid');
         $secret = Config::get('wx_secret');
@@ -127,6 +131,9 @@ class User
                 $user_status = 0;
             }
 
+            if ($this->chekVersion($version)) {
+                $user_status = 0;
+            }
 
             $result = [
                 'status' => 1,
@@ -188,6 +195,11 @@ class User
             }
 
             if ($user_status == 2) {
+                $user_status = 0;
+            }
+
+            $version = isset($data['version']) ? $data['version'] : '';
+            if ($this->chekVersion($version)) {
                 $user_status = 0;
             }
 
@@ -262,5 +274,15 @@ class User
     {
         $tradeLogModel = new WithdrawLogModel();
         return $tradeLogModel->getWithdrawList($userId);
+    }
+
+    public function chekVersion($version)
+    {
+        $config_version = ConfigService::get('no_redpaket_version');
+        if ($version == $config_version) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

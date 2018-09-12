@@ -1,6 +1,6 @@
 <?php
 
-namespace api_data_service\v2_0_2;
+namespace api_data_service\v2_0_1_1;
 
 use think\Db;
 use think\Loader;

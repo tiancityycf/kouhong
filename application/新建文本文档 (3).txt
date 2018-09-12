@@ -122,3 +122,6 @@ grant all privileges on dbchz.* to dbhz@'%' identified by 'C44nylovOcAdefJW';
 2  => 1 
 
 52 => 13
+
+ALTER TABLE  `t_user_level` ADD  `amount_min` DECIMAL( 11, 2 ) NOT NULL DEFAULT  '0.1' COMMENT  '红包金额下限' AFTER  `success_num` ,
+ADD  `amount_max` DECIMAL( 11, 2 ) NOT NULL DEFAULT  '0.15' COMMENT  '红包金额上限' AFTER  `amount_min`
