@@ -1,11 +1,11 @@
 <?php
 
-namespace app\hzdlt\controller\api\v1_0_5;
+namespace app\jxdn\controller\api\v1_0_6;
 
 use think\facade\Request;
 
-use api_data_service\v2_0_1_2\Index as IndexService;
-use api_data_service\v2_0_1_2\Redpacket as RedpacketService;
+use api_data_service\v2_0_2\Index as IndexService;
+use api_data_service\v2_0_2\Redpacket as RedpacketService;
 use controller\BasicController;
 
 /**
@@ -23,11 +23,9 @@ class Index extends BasicController
         $userId = Request::param('user_id');
 
         $indexService = new IndexService();
-        $fakerList = $indexService->getFakerWinPrizeList();
         $indexInfo = $indexService->getIndexInfo($userId);
 
         return result(200, 'ok', [
-            'faker_list' => $fakerList,
             'index_info' => $indexInfo,
         ]);
     }
@@ -40,24 +38,12 @@ class Index extends BasicController
     {
         $indexService = new IndexService();
         $wealthList = $indexService->getSuccessList();
-        $willList = $indexService->getWillList();
+        //$willList = $indexService->getWillList();
 
         return result(200, 'ok', [
             'wealth_list' => $wealthList,
-            'will_list' => $willList,
+            //'will_list' => $willList,
         ]);
-    }
-
-    /**
-     * 用户须知
-     * @return json
-     */
-    public function readme()
-    {
-        $indexService = new IndexService();
-        $result = $indexService->getReadme();
-
-        return result(200, 'ok', $result);
     }
 
     public function check()

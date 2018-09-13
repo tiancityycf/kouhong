@@ -1,9 +1,9 @@
 <?php
 
-namespace app\shz\controller\api\v1_0_5;
+namespace app\jxdn\controller\api\v1_0_6;
 
 use think\facade\Request;
-use api_data_service\v2_0_1_1\Challenge as ChallengeService;
+use api_data_service\v2_0_2\Challenge as ChallengeService;
 use controller\BasicController;
 
 /**

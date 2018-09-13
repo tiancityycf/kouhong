@@ -68,6 +68,15 @@ class Pifu
 			return ['status' => 0, 'msg' => '系统错误！'];
 		}
 
+		$user_pifu_total = UserPifuTotalModel::where('user_id', $user_id)->find();
+		if (!$user_pifu_total) {
+			return ['status' => 0, 'msg' => '系统错误！'];
+		}
+
+		if (!in_array($pifu_id, json_decode($user_pifu_total->pifu))) {
+			return ['status' => 0, 'msg' => '系统错误！'];
+		}
+
 		$userRecord->pifu_id = $pifu_id;
 		 if ($userRecord->save()) {
 		 	$pifu_list = $this->pifuList($user_id);
@@ -101,7 +110,7 @@ class Pifu
 
 		$user_pifu = UserPifuModel::where('user_id', $user_id)->where('pifu_id', $pifu_id)->find();
 		if ($user_pifu) {
-			return ['status' => 2, 'msg' => '当前皮肤已经购买！', 'pifu_id' => $pifu_id];
+			return ['status' => 3, 'msg' => '当前皮肤已经购买！', 'pifu_id' => $pifu_id];
 		}
 
 		$this->savePifu($user_id,$pifu_id);

@@ -13,15 +13,15 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
+    'hostname'        => 'localhost',
     // 数据库名
     'database'        => 'ceshi_jichudatabase',
     // 用户名
-    'username'        => 'dbbase',
+    'username'        => 'test_dba',
     // 密码
-    'password'        => 'fY3vvgOs2Lq%4h42',
+    'password'        => '123456',
     // 端口
-    'hostport'        => '62072',
+    'hostport'        => '',
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数
@@ -59,20 +59,18 @@ return [
     // 断线标识字符串
     'break_match_str' => [],
 
-    //数据库公共库配置
-    'db_base' => [
+    //数据库配置1
+    'db_config1' => [
         // 数据库类型
         'type'            => 'mysql',
-         // 服务器地址
-        'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
+        // 服务器地址
+        'hostname'        => 'localhost',
         // 数据库名
         'database'        => 'ceshi_jichudatabase',
         // 用户名
-        'username'        => 'dbbase',
+        'username'        => 'test_dba',
         // 密码
-        'password'        => 'fY3vvgOs2Lq%4h42',
-        // 端口
-        'hostport'        => '62072',
+        'password'        => '123456',
         // 数据库编码默认采用utf8
         'charset'     => 'utf8',
         // 数据库表前缀
