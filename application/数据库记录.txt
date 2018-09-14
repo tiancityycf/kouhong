@@ -87,7 +87,7 @@
 我来识汉字      dbwlshz
 汉字我来看      dbhzwlk
 汉字世界        dbhzsj
-步行兑奖        dbbxdj 
+步行兑奖        dbbxdj
 
 
 172.16.0.127    dbhz7   AnD4dVLfnTdZ6Zg0@!2018     汉字七数据库  一起14个数据库
