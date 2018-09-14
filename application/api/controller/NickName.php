@@ -46,7 +46,8 @@ class NickName extends Controller
 		$correntSign = md5($primary . $secret);
 
 		if ($sign !== $correntSign) {
-			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
+            trace('传的sign='.$sign." 计算sign=".$correntSign.' 加密前='.$primary.$secret,'error');
+			echo json_encode(['code' => 500,'msg' => '签名错误'], JSON_UNESCAPED_UNICODE);exit();
 		}
 
 		/*$primary = '';
