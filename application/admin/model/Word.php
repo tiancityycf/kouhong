@@ -9,18 +9,21 @@ use think\Model;
  */
 class Word extends Model
 {
-	protected $connection = [
-		// 数据库类型
-	    'type'            => 'mysql',
-	    // 服务器地址
-	    'hostname'        => 'localhost',
-	    // 数据库名
-	    'database'        => 'ceshi_jichudatabase',
-	    // 用户名
-	    'username'        => 'root',
-	    // 密码
-	    'password'        => 'root',
-	];
+
+    protected $connection = 'db_base';
+
+//    protected $connection = [
+//		// 数据库类型
+//	    'type'            => 'mysql',
+//	    // 服务器地址
+//	    'hostname'        => 'localhost',
+//	    // 数据库名
+//	    'database'        => 'ceshi_jichudatabase',
+//	    // 用户名
+//	    'username'        => 'root',
+//	    // 密码
+//	    'password'        => 'root',
+//	];
 	/**
 	 * 获取指定难度下的所有词语id
 	 * @param  integer $level 难度等级

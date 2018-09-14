@@ -5,6 +5,7 @@ namespace app\hzqyh\controller\api\v1_0_4;
 use think\facade\Request;
 
 use api_data_service\v1_0_9\Index as IndexService;
+use api_data_service\v1_0_9\Fuhuo as FuhuoService;
 use controller\BasicController;
 
 /**
@@ -64,6 +65,17 @@ class Index extends BasicController
 
         $indexService = new IndexService();
         $result = $indexService->check($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    public function share()
+    {
+        require_params('user_id', 'encryptedData', 'iv');
+        $data = Request::param();
+
+        $fuhuoService = new FuhuoService();
+        $result = $redpacketService->share($data);
 
         return result(200, 'ok', $result);
     }

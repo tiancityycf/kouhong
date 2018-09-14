@@ -34,7 +34,12 @@
             <th class='text-left nowrap'>皮肤名字</th>
             <th class='text-left nowrap'>图片展示</th>
             <th class='text-left nowrap'>图片地址</th>
-            <th class='text-left nowrap'>购买需要的金币</th>
+            <th class='text-left nowrap'>购买金币</th>
+            <th class='text-left nowrap'>购买条件</th>
+            <th class='text-left nowrap'>背景</th>
+            <th class='text-left nowrap'>选中描述</th>
+            <th class='text-left nowrap'>成功文字</th>
+            <th class='text-left nowrap'>失败文字</th>
             <th class='text-left nowrap'>状态</th>
             
     	</tr>
@@ -64,6 +69,21 @@
             
             <td class='text-left nowrap'>
                 {$vo.gold}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.tiaojian}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.beijing}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.miaoshu}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.success_txt}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.false_txt}
             </td>
             <td class='text-left nowrap'>
                 {if $vo.status eq 0}<span class="color-red">禁用</span>{elseif $vo.status eq 1}<span class="color-green">启用</span>{/if}

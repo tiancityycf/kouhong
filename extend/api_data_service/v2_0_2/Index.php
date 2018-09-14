@@ -102,6 +102,7 @@ class Index
             'success_three_withdraw' => $this->getConfigValue($config_data,'success_three_withdraw'),
             'wen_xin_ti_shi' => $this->getConfigValue($config_data,'wen_xin_ti_shi'),
             'jxdn_in_off' => $this->getConfigValue($config_data,'jxdn_in_off'),
+            'fuzhi_danhao' => $this->getConfigValue($config_data,'fuzhi_danhao'),
         ];
     }
 

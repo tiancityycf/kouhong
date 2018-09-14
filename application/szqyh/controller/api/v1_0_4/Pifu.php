@@ -21,7 +21,7 @@ class Pifu extends BasicController
         $data = Request::param();
 
         $pifuService = new PifuService();
-        $result = $pifuService->pifuList($data['user_id']);
+        $result = $pifuService->pifu_list($data);
 
         return result(200, 'ok', $result);
     }
@@ -33,7 +33,7 @@ class Pifu extends BasicController
         $data = Request::param();
 
         $pifuService = new PifuService();
-        $result = $pifuService->buy($data);
+        $result = $pifuService->buyPifu($data);
 
         return result(200, 'ok', $result);
     }
@@ -45,7 +45,29 @@ class Pifu extends BasicController
         $data = Request::param();
 
         $pifuService = new PifuService();
-        $result = $pifuService->select($data);
+        $result = $pifuService->selectPifu($data);
+
+        return result(200, 'ok', $result);
+    }
+    
+    public function pifu_share()
+    {
+        require_params('user_id', 'pifu_id', 'encryptedData', 'iv');
+        $data = Request::param();
+
+        $pifuService = new PifuService();
+        $result = $pifuService->sharePifu($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    public function pifu_info()
+    {
+        require_params('user_id', 'pifu_id');
+        $data = Request::param();
+
+        $pifuService = new PifuService();
+        $result = $pifuService->pifuIfo($data);
 
         return result(200, 'ok', $result);
     }

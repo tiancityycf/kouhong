@@ -27,11 +27,14 @@ class NickName extends Controller
 		if (!$model) {
 			echo json_encode(['code' => 500,'msg' => '缺少接口秘钥'], JSON_UNESCAPED_UNICODE);exit();
 		}
-
-		$ip = Request::ip();
-		if (!in_array($ip, explode(';', $model->ips))) {
-			echo json_encode(['code' => 500,'msg' => '请求IP不合法'], JSON_UNESCAPED_UNICODE);exit();
-		}
+        //因小程序支持云开发 暂时去掉IP限制
+        $cloud = ['wx19011e5a73d44e6c'];
+        if(!in_array($params['appid'],$cloud)){
+            $ip = Request::ip();
+            if (!in_array($ip, explode(';', $model->ips))) {
+                echo json_encode(['code' => 500,'msg' => '请求IP不合法'], JSON_UNESCAPED_UNICODE);exit();
+            }
+        }
 
 		$primary = '';
 		foreach ($params as $key => $value) {
@@ -43,7 +46,8 @@ class NickName extends Controller
 		$correntSign = md5($primary . $secret);
 
 		if ($sign !== $correntSign) {
-			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
+            trace('传的sign='.$sign." 计算sign=".$correntSign.' 加密前='.$primary.$secret,'error');
+			echo json_encode(['code' => 500,'msg' => '签名错误'], JSON_UNESCAPED_UNICODE);exit();
 		}
 
 		/*$primary = '';

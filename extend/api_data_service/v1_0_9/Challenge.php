@@ -115,7 +115,7 @@ class Challenge
 
 	        $user_level = UserLevelModel::where('id', $userRecord->user_level + 1)->find();
 
-	        if (isset($data['successed']) && $data['successed']) {
+	        if (isset($data['successed']) && $data['successed']) { 
 	            $userRecord->success_num += 1;
 	            /*$nextLevel = $userRecord->user_level + 1;
 	            if ($userRecord->success_num == ConfigService::get('user_level_' . $nextLevel . '_success_num')) {
@@ -127,7 +127,7 @@ class Challenge
 	            }
 
 	            
-	            $result = ['status' => 1, 'amount' => $user_status ? RedpacketService::randOne($data['user_id']) : 0, 'user_status' => $user_status];
+	            $result = ['status' => 1, /*'amount' => $user_status ? RedpacketService::randOne($data['user_id']) : 0, */'user_status' => $user_status];
 	        }
 
 	        $userRecord->gold +=  $data['score'] * $get_gold;
@@ -139,11 +139,11 @@ class Challenge
 			$logService->updateChallengeLog($data);
 			Db::commit();
 
-			$first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
-        	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
-        	$withdraw_limit = $userRecord->success_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
+			// $first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
+   //      	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
+   //      	$withdraw_limit = $userRecord->success_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
 
-			return $result + ['withdraw_limit' => $withdraw_limit, 'success_num' => $userRecord->success_num, 'user_amount' => $userRecord->amount + (isset($result['amount']) ? $result['amount'] : 0)];
+			return $result; //+ ['withdraw_limit' => $withdraw_limit, 'success_num' => $userRecord->success_num, 'user_amount' => $userRecord->amount + (isset($result['amount']) ? $result['amount'] : 0)];
 		} catch (\Exception $e) {
 			Db::rollback();
 			trace($e->getMessage(),'error');
