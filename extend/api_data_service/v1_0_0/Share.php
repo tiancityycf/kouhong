@@ -47,7 +47,7 @@ class Share
 	 * @param  $data 请求数据
 	 * @return void
 	 */
-	private function shareUser($data)
+	public function shareUser($data)
 	{
 		$getSteps = 0;
 
@@ -72,8 +72,7 @@ class Share
         	 ];
         	 //记录分享次数表
         	 Db::name('share_count')->insert($insert_data);
-        	 //？？
-
+        	 
         	 //插入分享或签到后的步数日志信息
         	 $steps_data = [
         	 	   'openid' => $data['openid'],

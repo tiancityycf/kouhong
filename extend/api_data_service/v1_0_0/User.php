@@ -31,9 +31,10 @@ class User
         $userRecord = UserRecordModel::where('openid', $openid)->find();
         //$record = $userRecord->getData();
 
-        //获取缓存商品信息
-        $goods_info = Cache::get(config('goods_info'));
-        
+        //获取缓存商品信息  商品的库存信息实时更新  不能查询缓存数据
+        //$goods_info = Cache::get(config('goods_info'));
+        $goods_info = $this->get_product_info();
+            
         //获取配置信息
         $config = Cache::get(config('config_key'));
 
@@ -46,6 +47,32 @@ class User
             'config' => $config,
             
         ];
+    }
+
+    //获取产品信息
+    public function get_product_info(){
+
+         $arr = Db::name('goods')->where(['status' => 1, 'onsale' => 1])->column('id, cate, title, img, stock, price', 'id');
+
+            foreach ($arr as $k => $v) {
+                $arr[$k]['imgs'] = Db::name('good_imgs')->where('product_id',$v['id'])->select();
+            }
+
+            //1.新人换礼 2.邀请专区 3.精品好礼;
+            foreach ($arr as $k => $v) {
+                if($v['cate'] == 1){
+                     $v['cate'] = '新人换礼';
+                     $goods_info['xrhl'][] =$v;
+                }else if($v['cate'] == 2){
+                    $v['cate'] = '邀请专区';
+                    $goods_info['yqzq'][] =$v;
+                }else{
+                    $v['cate'] = '精品好礼';
+                    $goods_info['jphl'][] =$v;
+                }
+            }
+
+            return $goods_info;
     }
 
     /**
