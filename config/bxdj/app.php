@@ -2,8 +2,8 @@
 //配置文件
 return [
 	// 微信设置
-    'wx_appid' => 'wx6dc8bdca214e14e7',
-    'wx_secret' => 'c0714e2eb875952a6103c07852056dbd',
+    'wx_appid' => 'wxbe7091bfd1ddf7e9',
+    'wx_secret' => '1e9a6cfb36ba76972655e718718a200b',
     'wx_login_url' => "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
 
     // 加密设置
@@ -50,4 +50,9 @@ return [
 
     'heimingdan_kaiguan' => 1,
 
+    'goods_info'=>'goods_list',
+
+    'dairy_info'=>'dairy_list',
+    
+    'message_info' => 'message_list',
 ];

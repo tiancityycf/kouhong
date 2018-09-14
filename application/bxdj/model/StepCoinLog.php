@@ -14,19 +14,20 @@ class StepCoinLog extends Model
     {
         $query = self::buildQuery();
 
-        $query->alias('u');
+        $query->alias('s');
 
-        $query->field('u.id, u.openid, u.avatar,u.nickname, u.user_status,s.coins');
+        $query->field('s.*, u.avatar,u.nickname');
 
-        $query->join(['t_step_coin'=>'s'],'u.openid=s.openid');
+        $query->join(['t_user'=>'u'],'s.openid=u.openid','left');
       
         if (isset($params['openid']) && $params['openid'] !== '') {
-            $query->where('openid', "{$params['openid']}");
+            $query->whereLike('u.openid', "%{$params['openid']}%");
         }
 
-        if (isset($params['nickname']) && $params['nickname'] !== '') {
-            $query->where('nickname', $params['nickname']);
+         if (isset($params['nickname']) && $params['nickname'] !== '') {
+            $query->whereLike('u.nickname', "%{$params['nickname']}%");
         }
+
 
         $query->order('id desc');
 

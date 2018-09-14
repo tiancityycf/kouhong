@@ -8,8 +8,12 @@
     <!--{if auth("$classuri/add")}-->
      <button data-modal='{:url("$classuri/add")}' data-title="添加" data-width='50%' class='layui-btn layui-btn-sm'>添加</button> 
     <!--{/if}-->
+
+     <button class="layui-btn layui-btn-primary" id='redisSave'><i class="layui-icon">&#xe600;</i> 刷新缓存</button>
+
 </div>
 <div class="layui-form-item layui-inline" style="margin-left: 30px;">
+
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 
     <div class="layui-form-item layui-inline">
@@ -48,6 +52,7 @@
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 </form>
+    
 </div>
 <form onsubmit="return false;" data-auto="true" method="post">
 	<!--{empty name='list'}-->
@@ -75,6 +80,8 @@
                 <span class="text-explode">|</span>
                 <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
                 {/if}
+                <span class="text-explode">|</span>
+                <a data-title="添加图片集" data-modal='{:url("$classuri/add_pics")}?id={$vo.id}'>产品图片集</a>
             </td>
             <td class='text-left nowrap'>
                 {$vo.id}
@@ -103,7 +110,7 @@
             </td>
 
             <td class='text-left nowrap'>
-                 {if condition="$vo.cate == 1"}
+                 {if condition="$vo.status == 1"}
                  <span style="color:green">启用</span>
                  {else}
                  <span style="color:red">停用</span> 
@@ -117,5 +124,30 @@
     {if isset($page)}<p>{$page|raw}</p>{/if}
     <!--{/empty}-->
     <script>window.form.render();</script>
+    <script type="text/javascript">
+            $(function() {
+             //console.log($('.del').length);
+             $('#redisSave').click(function(){
+                 
+                  $.get("/bxdj/goods/redisSave", function(result){
+                         if(result == 'success'){
+
+                            alert('刷新缓存成功');
+
+
+                         }else if(result == 'fail'){
+
+                            alert('刷新缓存失败');
+
+                         }else{
+
+                            alert('异常');
+
+                         }
+                        //window.location.reload();
+                });    
+            });
+         });
+    </script>
 </form>
 {/block}

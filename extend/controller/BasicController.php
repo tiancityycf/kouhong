@@ -42,10 +42,9 @@ class BasicController extends Controller
 		}
 
 		$secret = Config::get('app_secret');
-
-		//echo $primary . $secret; exit();
+		
 		$correntSign = md5($primary . $secret);
-
+		//echo $correntSign;die;
 		return $sign === $correntSign;
 	}
 }

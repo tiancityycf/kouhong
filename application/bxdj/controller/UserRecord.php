@@ -22,7 +22,7 @@ class UserRecord extends BasicAdmin
         $db = $db->search($get);
         
        	$result = parent::_list($db, true, false, false);
-
+       
         $this->assign('title', $this->title);
 
         return  $this->fetch('index', $result);

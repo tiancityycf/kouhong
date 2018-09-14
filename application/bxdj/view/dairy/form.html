@@ -1,0 +1,24 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post" style="overflow-y:scroll; height:400px;">
+	<div class="layui-form-item">
+        <label class="layui-form-label">步数最小值</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="min_step" required="required" value='' pattern="" title="" placeholder="请输入步数最小值" class="layui-input" style="width: 25%;">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">步数最大值</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="max_step" required="required" value='' pattern="" title="" placeholder="请输入步数最大值" class="layui-input" style="width: 25%;">
+        </div>
+    </div>
+  
+
+	<div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+   
+</form>

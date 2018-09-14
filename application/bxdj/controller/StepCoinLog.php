@@ -19,8 +19,6 @@ class StepCoinLog extends BasicAdmin
     {
 
     	$this->title = '燃力币日志';
-        //$model = new StepCoinLogModel();
-        //dump($model);die;
 
        	list($get, $db) = [$this->request->get(), new StepCoinLogModel()];
 
@@ -30,7 +28,7 @@ class StepCoinLog extends BasicAdmin
 
         $this->assign('title', $this->title);
 
-        return  $this->fetch('index');
+        return  $this->fetch('index',$result);
     }
 
   

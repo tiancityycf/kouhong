@@ -1,0 +1,67 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline">
+    <!--{if auth("$classuri/add")}-->
+   <button data-modal='{:url("$classuri/add")}' data-title="添加" data-width='50%' class='layui-btn layui-btn-sm'>添加</button>
+    <!--{/if}-->
+</div>
+<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>相册ID</th>
+            <th class='text-left nowrap'>步数区间（步）</th>
+            <th class='text-left nowrap'>创建时间</th>
+            <th class='text-left nowrap'>更新时间</th>
+            <th class='text-left nowrap'>操作</th>
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+           
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            
+            <td class='text-left nowrap'>
+                {$vo.min_step} —— {$vo.max_step}
+            </td>
+
+            <td class='text-left nowrap'>
+                {$vo.create_time}
+            </td>
+
+            <td class='text-left nowrap'>
+
+               {$vo.update_time}
+            </td>
+
+            <td>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                <span class="text-explode">|</span>
+
+                <a data-title="删除" data-confirm="确定要删除吗？" data-modal='{:url("$classuri/delete")}?id={$vo.id}'>删除</a>
+                <span class="text-explode">|</span>
+                <a data-title="燃力日记图册" data-confirm="确定要删除吗？" data-modal='{:url("$classuri/add_imgs")}?id={$vo.id}'>日记图册</a>
+            </td>
+   
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+    <script>window.form.render();</script>
+</form>
+{/block}
