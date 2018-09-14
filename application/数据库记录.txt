@@ -75,7 +75,7 @@
 汉字大擂台       dbhzdlt
 
 
-172.16.0.55    dbhz6   AnD4dVLfnTdZ6Zg0@!2018     汉字六数据库  一起11个数据库
+172.16.0.55    dbhz6   AnD4dVLfnTdZ6Zg0@!2018     汉字六数据库  一起12个数据库
 识字大王        dbszdw
 我爱识字        dbwasz
 汉字天天学      dbhzttx
@@ -87,6 +87,7 @@
 我来识汉字      dbwlshz
 汉字我来看      dbhzwlk
 汉字世界        dbhzsj
+步行兑奖        dbbxdj 
 
 
 172.16.0.127    dbhz7   AnD4dVLfnTdZ6Zg0@!2018     汉字七数据库  一起14个数据库
