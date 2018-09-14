@@ -1,6 +1,6 @@
 /.idea
 /.vscode
 *.log
-/config/*
+config/database.php
 runtime
 .env
