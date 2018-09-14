@@ -3,7 +3,7 @@
 namespace app\hzgl\controller\api\v1_0_5;
 
 use think\facade\Request;
-use api_data_service\v2_0_1\Challenge as ChallengeService;
+use api_data_service\v2_0_1_1\Challenge as ChallengeService;
 use controller\BasicController;
 
 /**

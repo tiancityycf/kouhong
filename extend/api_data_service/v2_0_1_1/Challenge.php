@@ -95,15 +95,15 @@ class Challenge
         }
 
         // 开启事务
-		//Db::startTrans();
-		//try {
+		Db::startTrans();
+		try {
 	        $challengeLog = ChallengeLogModel::where('id', $data['challenge_id'])->where('user_id', $data['user_id'])->lock(true)->find();
 	        if (!$challengeLog || $challengeLog['end_time'] != 0) {
 	        	Db::commit();
 	        	return ['status' => 0];
 	        }
 
-	        $user_level = UserLevelModel::where('id', $userRecord->user_level + 1)->find();
+	        //$user_level = UserLevelModel::where('id', $userRecord->user_level + 1)->find();
 
 	        if (isset($data['successed']) && $data['successed']) {
 	            $userRecord->success_num += 1;
@@ -112,9 +112,12 @@ class Challenge
 	                $userRecord->user_level += 1;
 	            }*/
 
-	            if ($user_level && $userRecord->redpacket_num >= $user_level->success_num) {
+	            /*if ($user_level && $userRecord->redpacket_num >= $user_level->success_num) {
 	            	$userRecord->user_level += 1;
-	            }
+	            }*/
+
+	            $user_level = UserLevelModel::where('success_num', '>=',$userRecord->redpacket_num + 1)->find();
+	            $user_level_max = UserLevelModel::order('id desc')->find()->id;
 
 	            $heimingdan_config = ConfigService::get('heimingdan_in_off');
         		$zongheimingdan_config = config('heimingdan_zongkaiguan');
@@ -159,7 +162,7 @@ class Challenge
 
 			$logService = new LogService();
 			$logService->updateChallengeLog($data);
-			//Db::commit();
+			Db::commit();
 			if ($is_free) {
 				$first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
 		    	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
@@ -175,11 +178,11 @@ class Challenge
 			}
 
 			return $result + $other_result;
-		//} catch (\Exception $e) {
-			//Db::rollback();
-			//trace($e->getMessage(),'error');
-			//throw new \Exception("系统繁忙");
-		//} 
+		} catch (\Exception $e) {
+			Db::rollback();
+			trace($e->getMessage(),'error');
+			throw new \Exception("系统繁忙");
+		}
 	}
 
 	/**

@@ -74,7 +74,7 @@ class Challenge
 				'niuniu' => $niuniu['data'],  //牌面
 				'total_num' => $niuniu['total_num'], //当前等级的总局数
 				'tongguan_num' => $niuniu['tongguan_num'], //通关需要赢得局数
-				'is_huanpai' => $userRecord->share_num < ConfigService::get('share_get_chance_num_limit') ? 1 : 0,  //是否能换牌 1是  0否
+				'is_huanpai' => 1,  //是否能换牌 1是  0否
 			];
 		} catch (\Exception $e) {
 			Db::rollback();

@@ -55,6 +55,10 @@ class Redpacket
 				$userRecord->redpacket_num += 1;
 				$userRecord->save();
 
+				$level = self::checkLevel($userRecord->redpacket_num);
+				$userRecord->user_level = $level;
+				$userRecord->save();
+
 				$model->status = 1;
 				$model->save();
 
@@ -115,6 +119,10 @@ class Redpacket
 						$userRecord->redpacket_num += 1;
 						$userRecord->save();
 
+						$level = self::checkLevel($userRecord->redpacket_num + 1);
+						$userRecord->user_level = $level;
+						$userRecord->save();
+
 						$redpacketLog->status = 1;
 						$redpacketLog->save();
 						Db::commit();
@@ -160,5 +168,20 @@ class Redpacket
 		} else {
 			return false;
 		}
+	}
+
+
+	public static function checkLevel($num)
+	{
+		$user_level = UserLevelModel::where('success_num', '<=',$num)->order('id desc')->find();
+        $user_level_max = UserLevelModel::order('id desc')->find()->id;
+
+        if ($user_level) {
+        	$level = $user_level->id;
+        } else {
+        	$level = $user_level_max;
+        }
+
+        return $level;
 	}
 }

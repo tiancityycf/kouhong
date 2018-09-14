@@ -123,5 +123,31 @@ grant all privileges on dbchz.* to dbhz@'%' identified by 'C44nylovOcAdefJW';
 
 52 => 13
 
+UPDATE t_user_record SET user_level = 1 WHERE redpacket_num < 2;
+UPDATE t_user_record SET user_level = 2 WHERE redpacket_num >= 2 AND redpacket_num < 6;
+UPDATE t_user_record SET user_level = 3 WHERE redpacket_num >= 6 AND redpacket_num < 7;
+UPDATE t_user_record SET user_level = 4 WHERE redpacket_num >= 7 AND redpacket_num < 10;
+UPDATE t_user_record SET user_level = 5 WHERE redpacket_num >= 10 AND redpacket_num < 11;
+UPDATE t_user_record SET user_level = 6 WHERE redpacket_num >= 11 AND redpacket_num < 15;
+UPDATE t_user_record SET user_level = 7 WHERE redpacket_num >= 15 AND redpacket_num < 16;
+UPDATE t_user_record SET user_level = 8 WHERE redpacket_num >= 16 AND redpacket_num < 20;
+UPDATE t_user_record SET user_level = 9 WHERE redpacket_num >= 20 AND redpacket_num < 21;
+UPDATE t_user_record SET user_level = 10 WHERE redpacket_num >= 21 AND redpacket_num < 25;
+UPDATE t_user_record SET user_level = 11 WHERE redpacket_num >= 25 AND redpacket_num < 26;
+UPDATE t_user_record SET user_level = 12 WHERE redpacket_num >= 26 AND redpacket_num < 30;
+UPDATE t_user_record SET user_level = 13 WHERE redpacket_num >= 30 AND redpacket_num < 35;
+UPDATE t_user_record SET user_level = 14 WHERE redpacket_num >= 35;
+
+UPDATE t_user_record SET amount = 1, amount_total = 1 WHERE success_num > 0 and success_num <= 4;
+UPDATE t_user_record SET amount = 2, amount_total = 2 WHERE success_num > 4 and success_num <= 15;
+UPDATE t_user_record SET amount = 3, amount_total = 3 WHERE success_num > 15 and success_num <= 28;
+UPDATE t_user_record SET amount = 4, amount_total = 4 WHERE success_num > 28 and success_num <= 35;
+
+UPDATE t_user_record SET amount = 0, amount_total = 0 WHERE redpacket_num = 0;
+UPDATE t_user_record SET amount = 0.5, amount_total = 0.5 WHERE redpacket_num > 0 AND redpacket_num <2  and amount_total > 0.5;
+UPDATE t_user_record SET amount = 1, amount_total = 1 WHERE redpacket_num >= 2 AND redpacket_num <8 and amount_total > 1;
+UPDATE t_user_record SET amount = 2, amount_total = 2 WHERE redpacket_num >= 8 AND redpacket_num <15 and amount_total > 2;
+UPDATE t_user_record SET amount = 3, amount_total = 3 WHERE redpacket_num >= 15 AND redpacket_num <25 and amount_total > 3;
+
 ALTER TABLE  `t_user_level` ADD  `amount_min` DECIMAL( 11, 2 ) NOT NULL DEFAULT  '0.1' COMMENT  '红包金额下限' AFTER  `success_num` ,
 ADD  `amount_max` DECIMAL( 11, 2 ) NOT NULL DEFAULT  '0.15' COMMENT  '红包金额上限' AFTER  `amount_min`

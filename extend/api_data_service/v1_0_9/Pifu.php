@@ -23,6 +23,7 @@ class Pifu
 		if ($pifu_data) {
 			foreach ($pifu_data as $key => $pifu) {
 				$pifu_list[$key]['id'] = $pifu->id;
+				$pifu_list[$key]['name'] = $pifu->name;
 				$pifu_list[$key]['img'] = $pifu->img;
 				$pifu_list[$key]['gold'] = $pifu->gold;
 				$pifu_list[$key]['tiaojian'] = $pifu->tiaojian;
