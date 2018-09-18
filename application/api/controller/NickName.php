@@ -6,6 +6,7 @@ use think\facade\Request;
 use think\Controller;
 use model\Heimingdan as HeimingdanModel;
 use model\Whitelist as WhitelistModel;
+use service\HttpService;
 
 class NickName extends Controller
 {
@@ -95,12 +96,18 @@ class NickName extends Controller
 		require_params('nickname', 'appid');
         trace("app_blacklist params=".json_encode(Request::param(),JSON_UNESCAPED_UNICODE),'info');
         $this->validSign(Request::param());
-
+        $appid = Request::param('appid');
         $nickname = Request::param('nickname');
         $source = Request::param('source');
-
-        $result = $this->check($nickname, $source);
-
+        //判断黑名单开关是否打开
+        $ad_url = config("ad_url").'/api/app_card/status?app_id='.$appid;
+        $json = HttpService::get($ad_url,[],['timeout'=>5]);
+        $json = json_decode($json,true);
+        if($json['data']==1){
+            $result = ['user_status' => 1];
+        }else{
+            $result = $this->check($nickname, $source);
+        }
         return result(200, 'ok',$result);
 	}
 
