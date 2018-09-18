@@ -52,6 +52,7 @@ class UserRecord extends Model
 		$result = [];
 		foreach ($willList as $key => $value) {
 			$result[$key] = [
+				'user_id' => $value->user_id,
 				'avatar' => $value->avatar,
 				'nickname' => $value->nickname,
 				'challenge_num' => $value->challenge_num,
@@ -93,6 +94,7 @@ class UserRecord extends Model
 		$result = [];
 		foreach ($wealthList as $key => $value) {
 			$result[$key] = [
+				'user_id' => $value->user_id,
 				'avatar' => $value->avatar,
 				'nickname' => $value->nickname,
 				'success_num' => $value->success_num,

@@ -36,13 +36,18 @@ class Index extends BasicController
      */
     public function top()
     {
+        require_params('user_id');
+        $userId = Request::param('user_id');
         $indexService = new IndexService();
         $wealthList = $indexService->getSuccessList();
         $willList = $indexService->getWillList();
+        $your_list = $indexService->getYourList($userId);
+        $count_list = $indexService->getCount($userId, $wealthList, $willList);
 
         return result(200, 'ok', [
             'wealth_list' => $wealthList,
             'will_list' => $willList,
+            'your_list' => $your_list + $count_list,
         ]);
     }
 

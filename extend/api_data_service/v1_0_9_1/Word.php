@@ -84,7 +84,7 @@ class Word
     public function getArr()
     {
         $arr = [];
-        for ($i=2; $i <= 30; $i++) { 
+        for ($i=1; $i <= 29; $i++) { 
             $arr[$i] = $i;
         }
 

@@ -54,7 +54,12 @@ class Pifu
 
 	public function pifu_list($data){
 		$user_id = $data['user_id'];
-		return ['status' => 1, 'pifu_list' => $this->pifuList($user_id)];
+		$pifu_data = PifuModel::where('status', 1)->select();
+		$pifu_arr = [];
+		foreach ($pifu_data as $key => $value) {
+			$pifu_arr[$key] = $value->img;
+		}
+		return ['status' => 1, 'pifu_list' => $this->pifuList($user_id), 'pifu_arr' => $pifu_arr];
 	}
 
 	public function selectPifu($data)
