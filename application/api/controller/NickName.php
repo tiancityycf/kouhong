@@ -93,6 +93,7 @@ class NickName extends Controller
 	public function index()
 	{
 		require_params('nickname', 'appid');
+        trace("app_blacklist params=".json_encode(Request::param(),JSON_UNESCAPED_UNICODE),'info');
         $this->validSign(Request::param());
 
         $nickname = Request::param('nickname');
