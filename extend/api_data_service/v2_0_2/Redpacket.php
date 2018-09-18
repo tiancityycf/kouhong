@@ -30,7 +30,10 @@ class Redpacket
 		$now_amount = 0;
 		$is_free = 0;
 		if ($is_limit_status) {
-			list($min, $max) = ConfigService::get('redpacket_range');
+			$userRecord = UserRecordModel::where('user_id', $userId)->find();
+			$user_level = UserLevelModel::where('id', $userRecord->user_level)->find();
+			$min = $user_level->amount_min;
+			$max = $user_level->amount_max;
 			$amount = rand($min * 100, $max * 100) / 100;
 
 			
@@ -44,7 +47,7 @@ class Redpacket
 
 			$count = RedpacketLogModel::where('user_id', $userId)->where('create_date', date('ymd', time()))->where('status', 1)->count();
 			if ($count < ConfigService::get('login_get_chance_num')) {
-				$userRecord = UserRecordModel::where('user_id', $userId)->find();
+				//$userRecord = UserRecordModel::where('user_id', $userId)->find();
 				$userRecord->amount += $amount;
 				$userRecord->amount_total += $amount;
 				$userRecord->redpacket_num += 1;

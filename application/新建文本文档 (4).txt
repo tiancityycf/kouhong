@@ -1,0 +1,14 @@
+皮肤商店接口     /pifu/pifu_list   参数user_id    返回参数 status   pifu_list
+
+皮肤购买接口     /pifu/buy         参数user_id  pifu_id    
+                                  返回参数   status  0 系统错误
+                                                    1  正常
+                                                    2  金币不足
+                                                    3皮肤已经购买
+                                            pifu_list
+皮肤选择接口    /pifu/pifu_select  参数user_id  pifu_id    返回参数status   pifu_list   pifu //选择的皮肤图片地址
+
+皮肤分享接口    /pifu/pifu_share    参数 user_id pifu_id encryptedData iv   返回参数  status    is_new_group //0 重复群  1 未重复
+
+皮肤信息接口    /pifu/pifu_info    参数user_id  pifu_id    返回参数  count  // 这个皮肤已经分享几次
+																   share_limit  // 需要分享几次才能获得当前皮肤

@@ -103,6 +103,10 @@ class UserLevel extends BasicAdmin
             $this->error($validate->getError());
         }
 
+        if ($data['amount_min'] > $data['amount_max']) {
+            $this->error("红包金额设置错误！");
+        }
+
         return true;
     }
 }

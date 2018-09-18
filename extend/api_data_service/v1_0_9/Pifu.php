@@ -54,7 +54,12 @@ class Pifu
 
 	public function pifu_list($data){
 		$user_id = $data['user_id'];
-		return ['status' => 1, 'pifu_list' => $this->pifuList($user_id)];
+		$pifu_data = PifuModel::where('status', 1)->select();
+		$pifu_arr = [];
+		foreach ($pifu_data as $key => $value) {
+			$pifu_arr[$key] = $value->img;
+		}
+		return ['status' => 1, 'pifu_list' => $this->pifuList($user_id), 'pifu_arr' => $pifu_arr];
 	}
 
 	public function selectPifu($data)
@@ -223,9 +228,11 @@ class Pifu
 			return ['status' => 0, 'msg' => '系统错误！'];
 		}
 
+		$pifu = PifuModel::where('id', $pifu_id)->find();
+
 		$count = PifuShareLogModel::where('user_id', $user_id)->where('pifu_id', $pifu_id)->count();
 		$pifu_share_num = ConfigService::get('pifu_share_num');
 
-		return ['count' => $count, 'share_limit' => $pifu_share_num];
+		return ['status' =>1, 'count' => $count, 'share_limit' => $pifu_share_num, 'pifu' => $pifu->img];
 	}
 }
