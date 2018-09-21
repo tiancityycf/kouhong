@@ -119,7 +119,7 @@ class Redpacket
 						$userRecord->redpacket_num += 1;
 						$userRecord->save();
 
-						$level = self::checkLevel($userRecord->redpacket_num + 1);
+						$level = self::checkLevel($userRecord->redpacket_num);
 						$userRecord->user_level = $level;
 						$userRecord->save();
 

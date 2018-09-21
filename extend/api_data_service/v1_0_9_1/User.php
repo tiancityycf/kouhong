@@ -34,7 +34,7 @@ class User
 
         // 获取红包记录
         $redpacketLogModel = new RedpacketLogModel();
-        $redpacketList = $redpacketLogModel->getRedpacketList($userId);
+        $redpacketList = $redpacketLogModel->getNewList($userId);
 
         $first_withdraw_success_num = ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0;
         $first_withdraw_limit = ConfigService::get('first_withdraw_limit');

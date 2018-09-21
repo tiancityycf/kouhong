@@ -7,6 +7,7 @@ use api_data_service\Share as ShareService;
 use model\UserRecord as UserRecordModel;
 use model\RedpacketLog as RedpacketLogModel;
 use model\ShareRedpacket as ShareRedpacketModel;
+use model\UserLevel as UserLevelModel;
 
 /**
  * 红包服务类
@@ -51,6 +52,10 @@ class Redpacket
 				$userRecord->amount += $amount;
 				$userRecord->amount_total += $amount;
 				$userRecord->redpacket_num += 1;
+				$userRecord->save();
+
+				$level = self::checkLevel($userRecord->redpacket_num);
+				$userRecord->user_level = $level;
 				$userRecord->save();
 
 				$model->status = 1;
@@ -115,6 +120,11 @@ class Redpacket
 
 						$redpacketLog->status = 1;
 						$redpacketLog->save();
+
+						$level = self::checkLevel($userRecord->redpacket_num);
+						$userRecord->user_level = $level;
+						$userRecord->save();
+
 						Db::commit();
 						$is_open = 1;
 						$amount = $redpacketLog->amount;
@@ -158,5 +168,19 @@ class Redpacket
 		} else {
 			return false;
 		}
+	}
+
+	public static function checkLevel($num)
+	{
+		$user_level = UserLevelModel::where('success_num', '<=',$num)->order('id desc')->find();
+        $user_level_max = UserLevelModel::order('id desc')->find()->id;
+
+        if ($user_level) {
+        	$level = $user_level->id;
+        } else {
+        	$level = $user_level_max;
+        }
+
+        return $level;
 	}
 }

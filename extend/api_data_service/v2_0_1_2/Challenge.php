@@ -12,7 +12,7 @@ use model\ChallengeLog as ChallengeLogModel;
 use model\UserLevel as UserLevelModel;
 use model\ShareRedpacket as ShareRedpacketModel;
 
-use api_data_service\Word as WordService;
+use api_data_service\v2_0_1_2\Word as WordService;
 use api_data_service\v2_0_1_2\Redpacket as RedpacketService;
 use api_data_service\v2_0_1_2\User as UserService;
 
@@ -83,8 +83,8 @@ class Challenge
         }
 
         // 开启事务
-		//Db::startTrans();
-		//try {
+		Db::startTrans();
+		try {
 	        $challengeLog = ChallengeLogModel::where('id', $data['challenge_id'])->where('user_id', $data['user_id'])->lock(true)->find();
 	        if (!$challengeLog || $challengeLog['end_time'] != 0) {
 	        	Db::commit();
@@ -152,7 +152,7 @@ class Challenge
 
 			$logService = new LogService();
 			$logService->updateChallengeLog($data);
-			//Db::commit();
+			Db::commit();
 			if ($is_free) {
 				$first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
 		    	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
@@ -168,11 +168,11 @@ class Challenge
 			}
 
 			return $result + $other_result;
-		//} catch (\Exception $e) {
-			//Db::rollback();
-			//trace($e->getMessage(),'error');
-			//throw new \Exception("系统繁忙");
-		//} 
+		} catch (\Exception $e) {
+			Db::rollback();
+			trace($e->getMessage(),'error');
+			throw new \Exception("系统繁忙");
+		} 
 	}
 
 	/**

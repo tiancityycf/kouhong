@@ -7,6 +7,7 @@ use api_data_service\Share as ShareService;
 use model\UserRecord as UserRecordModel;
 use model\RedpacketLog as RedpacketLogModel;
 use model\ShareRedpacket as ShareRedpacketModel;
+use model\UserLevel as UserLevelModel;
 
 /**
  * 红包服务类
@@ -30,7 +31,10 @@ class Redpacket
 		$now_amount = 0;
 		$is_free = 0;
 		if ($is_limit_status) {
-			list($min, $max) = ConfigService::get('redpacket_range');
+			$userRecord = UserRecordModel::where('user_id', $userId)->find();
+			$user_level = UserLevelModel::where('id', $userRecord->user_level)->find();
+			$min = $user_level->amount_min;
+			$max = $user_level->amount_max;
 			$amount = rand($min * 100, $max * 100) / 100;
 
 			
@@ -44,10 +48,13 @@ class Redpacket
 
 			$count = RedpacketLogModel::where('user_id', $userId)->where('create_date', date('ymd', time()))->where('status', 1)->count();
 			if ($count < ConfigService::get('login_get_chance_num')) {
-				$userRecord = UserRecordModel::where('user_id', $userId)->find();
 				$userRecord->amount += $amount;
 				$userRecord->amount_total += $amount;
 				$userRecord->redpacket_num += 1;
+				$userRecord->save();
+
+				$level = self::checkLevel($userRecord->redpacket_num);
+				$userRecord->user_level = $level;
 				$userRecord->save();
 
 				$model->status = 1;
@@ -112,6 +119,11 @@ class Redpacket
 
 						$redpacketLog->status = 1;
 						$redpacketLog->save();
+
+						$level = self::checkLevel($userRecord->redpacket_num);
+						$userRecord->user_level = $level;
+						$userRecord->save();
+
 						Db::commit();
 						$is_open = 1;
 						$amount = $redpacketLog->amount;
@@ -155,5 +167,19 @@ class Redpacket
 		} else {
 			return false;
 		}
+	}
+
+	public static function checkLevel($num)
+	{
+		$user_level = UserLevelModel::where('success_num', '<=',$num)->order('id desc')->find();
+        $user_level_max = UserLevelModel::order('id desc')->find()->id;
+
+        if ($user_level) {
+        	$level = $user_level->id;
+        } else {
+        	$level = $user_level_max;
+        }
+
+        return $level;
 	}
 }

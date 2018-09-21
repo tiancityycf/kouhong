@@ -122,6 +122,9 @@ class Index
             'hezi_path' => $this->getConfigValue($config_data,'hezi_path'),
             'tili_time_jiange' => $this->getConfigValue($config_data, 'tili_time_jiange'),
             'tili_limit' => $this->getConfigValue($config_data, 'tili_limit'),
+            'chaihongbaoanniu' => $this->getConfigValue($config_data,'chaihongbaoanniu'),
+            'hongbaofenxiangchongfu' => $this->getConfigValue($config_data,'hongbaofenxiangchongfu'),
+            'hongbaofenxiang_limit' => $this->getConfigValue($config_data,'hongbaofenxiang_limit'),
         ];
     }
 

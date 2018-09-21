@@ -29,7 +29,7 @@ class UserLevel extends BasicAdmin
 
         $result = parent::_list($db, false, false, false);
         $this->assign('title', $this->title);
-       	return  $this->fetch('admin@user_level/index', $result);
+       	return  $this->fetch('admin@user_level/szx_index', $result);
     }
 
     //添加
@@ -45,7 +45,7 @@ class UserLevel extends BasicAdmin
             }
         }
         
-        return  $this->fetch('admin@user_level/form', ['vo' => $data]);
+        return  $this->fetch('admin@user_level/szx_form', ['vo' => $data]);
     }
 
     //编辑
@@ -64,7 +64,7 @@ class UserLevel extends BasicAdmin
             }
         }
 
-        return  $this->fetch('admin@user_level/form', ['vo' => $vo->toArray()]);
+        return  $this->fetch('admin@user_level/szx_form', ['vo' => $vo->toArray()]);
     }
 
     /**

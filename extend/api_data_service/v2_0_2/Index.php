@@ -58,7 +58,7 @@ class Index
      * @param $userId
      * @return array
      */
-    public function getIndexInfo($userId)
+    public function getIndexInfo($userId, $version = '')
     {
         $user = UserModel::get($userId);
         $who = "有人";
@@ -73,6 +73,8 @@ class Index
         $openShareUser = $this->getConfigValue($config_data, 'open_share_user');
         $shareToUserSuccessText =  $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_success_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_success_text_when_close_share_user');
         $shareToUserLimitText = $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_close_share_user');
+
+        $jxdn_in_off = $this->getConfigValue($config_data,'in_off_version') == $version ? 1 : 0;
 
         return [
             'complain_txt' => $this->getConfigValue($config_data,'complain_txt'),  //投诉内容
@@ -101,7 +103,7 @@ class Index
             'first_withdraw_success_num' => $this->getConfigValue($config_data,'first_withdraw_success_num'),
             'success_three_withdraw' => $this->getConfigValue($config_data,'success_three_withdraw'),
             'wen_xin_ti_shi' => $this->getConfigValue($config_data,'wen_xin_ti_shi'),
-            'jxdn_in_off' => $this->getConfigValue($config_data,'jxdn_in_off'),
+            'jxdn_in_off' => $jxdn_in_off,
             'fuzhi_danhao' => $this->getConfigValue($config_data,'fuzhi_danhao'),
         ];
     }
