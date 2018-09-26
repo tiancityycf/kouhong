@@ -1,0 +1,46 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+	<table class="layui-table" lay-skin="line">
+		<thead>
+        <tr>
+            <th class='text-left nowrap'>分数段</th>
+            <th class='text-left nowrap'>最大点击次数</th>
+            <th class='text-left nowrap'>跳跃时间</th>
+            <th class='text-left nowrap'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--{foreach $list as $key=>$v}-->
+        <tr>
+            <td class='text-left nowrap'>
+                <input type="number" autofocus name="item[<?php echo $key; ?>][score_mark]" required="required" value='{$v.score_mark|default=""}' pattern="" title="请输入数字" placeholder="请输入数字" class="layui-input">
+            </td>
+            <td class='text-left nowrap'>
+                <input type="number" autofocus name="item[<?php echo $key; ?>][max]" required="required" value='{$v.max|default=""}' pattern="" title="请输入数字" placeholder="请输入数字" class="layui-input">
+            </td>
+            <td class='text-left nowrap'>
+                <input type="number" autofocus name="item[<?php echo $key; ?>][time]" required="required" value='{$v.time|default=""}' pattern="" title="请输入需要通关次数" placeholder="请输入需要通关次数" class="layui-input">
+            </td>
+            <td class='text-left nowrap'>
+                <button class="layui-btn del layui-btn-danger" style="margin-left: 10px;">删除</button>
+            </td>
+            <input name="item[<?php echo $key; ?>][id]" value='{$v.id|default=""}' type='hidden'>
+        </tr>
+        <!--{/foreach}-->
+        </tbody>
+	</table>
+    <div class="layui-form-item text-center">
+        <input type='hidden' value='{$user_level_id}' name='user_level_id'>
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+	<!--{/empty}-->
+</form>
+<script type="text/javascript">
+    $(".del").on('click', function(){
+        $(this).parent().parent().remove();
+    });
+</script>

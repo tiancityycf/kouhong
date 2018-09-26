@@ -23,11 +23,9 @@ class Index extends BasicController
         $userId = Request::param('user_id');
 
         $indexService = new IndexService();
-        $fakerList = $indexService->getFakerWinPrizeList();
         $indexInfo = $indexService->getIndexInfo($userId);
 
         return result(200, 'ok', [
-            'faker_list' => $fakerList,
             'index_info' => $indexInfo,
         ]);
     }

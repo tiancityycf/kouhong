@@ -90,6 +90,7 @@
 汉字我来看      dbhzwlk
 汉字世界        dbhzsj
 步行兑奖        dbbxdj
+多彩青蛙小游戏   dbdcqw
 
 
 172.16.0.127    dbhz7   AnD4dVLfnTdZ6Zg0@!2018     汉字七数据库  一起16个数据库
@@ -109,6 +110,7 @@
 汉字大擂台       dbhzdlt
 汉字宝典         dbhzbd
 汉字拼拼         dbhzpp
+识字门生         dbszms
 
 172.16.0.143    dbhz8   AnD4dVLfnTdZ6Zg0@!2018     汉字八数据库  一起14个数据库
 我爱识汉字       dbwashz 

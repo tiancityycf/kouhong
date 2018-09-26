@@ -7,6 +7,7 @@ use think\Db;
 use model\UserLevel as UserLevelModel;
 use model\UserLevelWord as UserLevelWordModel;
 use validate\UserLevel as UserLevelValidate;
+use validate\SzxUserLevel as SzxUserLevelValidate;
 use validate\UserLevelWord as UserLevelWordValidate;
 
 class UserLevel extends BasicAdmin
@@ -97,10 +98,14 @@ class UserLevel extends BasicAdmin
     //字段验证
     protected function checkData($data)
     {
-        $validate = new UserLevelValidate();
+        $validate = new SzxUserLevelValidate();
 
         if (!$validate->check($data)) {
             $this->error($validate->getError());
+        }
+
+        if ($data['amount_min'] > $data['amount_max']) {
+            $this->error("红包金额设置错误！");
         }
 
         return true;

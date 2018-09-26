@@ -1,11 +1,10 @@
 <?php
 
-namespace app\hzqyh\controller\api\v1_0_4;
+namespace app\dcqw_xyx\controller\api\v1_0_4;
 
 use think\facade\Request;
 
-use api_data_service\v1_0_9\User as UserService;
-use api_data_service\v1_0_9\Tili as TiliService;
+use api_data_service\dcqw_xyx\User as UserService;
 use controller\BasicController;
 
 /**
@@ -21,10 +20,9 @@ class User extends BasicController
 	{
 		require_params('user_id');
         $userId = Request::param('user_id');
-        $version = Request::param('version') ? Request::param('version') : '';
 
         $userService = new UserService();
-        $result = $userService->index($userId, $version);
+        $result = $userService->index($userId);
 
         return result(200, 'ok', $result);
 	}
@@ -38,10 +36,9 @@ class User extends BasicController
 		require_params('code');
 		$code = Request::param('code');
 		$from_type = Request::param('from_type') ? Request::param('from_type') : 0;
-		$version = Request::param('version') ? Request::param('version') : '';
 
 		$userService = new UserService();
-		$result = $userService->login($code, $from_type, $version);
+		$result = $userService->login($code, $from_type);
 
 		return result(200, 'ok', $result);
 	}
@@ -89,17 +86,5 @@ class User extends BasicController
 		$withdrawList = $userService->getWithdrawList($userId);
 
 		return result(200, 'ok', ['withdraw_list' => $withdrawList]);
-	}
-
-
-	public function tili()
-	{
-		require_params('user_id');
-		$data = Request::param();
-
-		$tiliService = new TiliService();
-		$result = $tiliService->tili($data);
-
-		return result(200, 'ok', $result);
 	}
 }

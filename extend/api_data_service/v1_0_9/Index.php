@@ -57,7 +57,7 @@ class Index
      * @param $userId
      * @return array
      */
-    public function getIndexInfo($userId)
+    public function getIndexInfo($userId, $version = '')
     {
         $user = UserModel::get($userId);
         $who = "有人";
@@ -72,6 +72,8 @@ class Index
         $openShareUser = $this->getConfigValue($config_data, 'open_share_user');
         $shareToUserSuccessText =  $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_success_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_success_text_when_close_share_user');
         $shareToUserLimitText = $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_close_share_user');
+
+        $share_version = ($this->getConfigValue($config_data,'share_version') === $version) ? 1 : 0;
 
         return [
             'index_other_appid' => $openOtherApp ? $this->getConfigValue($config_data,'index_other_appid') : '',
@@ -103,13 +105,6 @@ class Index
             'success_num' => $user->userRecord->success_num,
             'gold' => $user->userRecord->gold,
             'pifu' => $user->userRecord->pifu_id ? $user->userRecord->pifu->img : '',
-            'lianxi_jixu_anniu' => $this->getConfigValue($config_data,'lianxi_jixu_anniu'),
-            'lianxi_huode_anniu' => $this->getConfigValue($config_data,'lianxi_huode_anniu'),
-            'hongbaoruchangquan' => $this->getConfigValue($config_data,'hongbaoruchangquan'),
-            'hongbao_yaoqing' => $this->getConfigValue($config_data,'hongbao_yaoqing'),
-            'qulianxichang' => $this->getConfigValue($config_data,'qulianxichang'),
-            'lianxi_success_txt' => $this->getConfigValue($config_data,'lianxi_success_txt'),
-            'lianxi_top_title' => $this->getConfigValue($config_data,'lianxi_top_title'),
             'success_three_withdraw' => $this->getConfigValue($config_data,'success_three_withdraw'),
             'input_on_off' => $this->getConfigValue($config_data,'input_on_off'),
             'allow_success_num' => $this->getConfigValue($config_data,'allow_success_num'),
@@ -122,6 +117,7 @@ class Index
             'hezi_path' => $this->getConfigValue($config_data,'hezi_path'),
             'tili_time_jiange' => $this->getConfigValue($config_data, 'tili_time_jiange'),
             'tili_limit' => $this->getConfigValue($config_data, 'tili_limit'),
+            'share_version' => $share_version,
         ];
     }
 
