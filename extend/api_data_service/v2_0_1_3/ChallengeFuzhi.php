@@ -1,6 +1,6 @@
 <?php
 
-namespace api_data_service\v1_0_9;
+namespace api_data_service\v2_0_1_3;
 
 use think\Db;
 
@@ -10,16 +10,17 @@ use api_data_service\Config as ConfigService;
 use model\UserRecord as UserRecordModel;
 use model\ChallengeLog as ChallengeLogModel;
 use model\UserLevel as UserLevelModel;
+use model\ShareRedpacket as ShareRedpacketModel;
 
-use api_data_service\Word as WordService;
-use api_data_service\v1_0_9\Redpacket as RedpacketService;
-use api_data_service\v1_0_9\User as UserService;
+use api_data_service\v2_0_1_3\Word as WordService;
+use api_data_service\v2_0_1_3\Redpacket as RedpacketService;
+use api_data_service\v2_0_1_3\User as UserService;
 
 
 /**
  * 游戏挑战服务类
  */
-class Challenge
+class ChallengeFuzhi
 {
 	/**
 	 * 游戏挑战开始
@@ -34,19 +35,6 @@ class Challenge
 				return ['status' => 0];
 			}
 		}*/
-
-		$heimingdan_config = ConfigService::get('heimingdan_in_off');
-        $zongheimingdan_config = config('heimingdan_zongkaiguan');
-
-        if ($zongheimingdan_config == 1 && $heimingdan_config == 1) {
-            $user_status = $userRecord->user_status;
-        } else {
-            $user_status = 1;
-        }
-
-        if ($userRecord->user_status == 2) {
-        	$user_status = 0;
-        }
 
 		// 开启事务
 		Db::startTrans();
@@ -64,7 +52,7 @@ class Challenge
 
 			// 获取词语列表
 			$wordService = new WordService();
-			$words = $wordService->getWords($data['user_id']);
+			$words = $wordService->getNewWord($data['user_id']);
 
 			Db::commit();
 
@@ -94,24 +82,6 @@ class Challenge
             $userRecord->highest_score = $data['score'];
         }
 
-        $get_gold = ConfigService::get('get_gold') ? ConfigService::get('get_gold') : 5;
-        $heimingdan_config = ConfigService::get('heimingdan_in_off');
-		$zongheimingdan_config = config('heimingdan_zongkaiguan');
-        if ($zongheimingdan_config == 1 && $heimingdan_config == 1) {
-            $user_status = $userRecord->user_status;
-        } else {
-            $user_status = 1;
-        }
-
-        if ($userRecord->user_status == 2) {
-        	$user_status = 0;
-        }
-
-        $version = isset($data['version']) ? $data['version'] : '';
-        if ($this->chekVersion($version)) {
-            $user_status = 0;
-        }
-
         // 开启事务
 		Db::startTrans();
 		try {
@@ -123,10 +93,35 @@ class Challenge
 
 	        $user_level = UserLevelModel::where('id', $userRecord->user_level + 1)->find();
 
-	        if (isset($data['successed']) && $data['successed']) { 
+	        if (isset($data['successed']) && $data['successed']) {
 	            $userRecord->success_num += 1;
+	            /*$nextLevel = $userRecord->user_level + 1;
+	            if ($userRecord->success_num == ConfigService::get('user_level_' . $nextLevel . '_success_num')) {
+	                $userRecord->user_level += 1;
+	            }*/
 
-	            if ($user_status) {
+	            if ($user_level && $userRecord->redpacket_num >= $user_level->success_num) {
+	            	$userRecord->user_level += 1;
+	            }
+
+	            $heimingdan_config = ConfigService::get('heimingdan_in_off');
+        		$zongheimingdan_config = config('heimingdan_zongkaiguan');
+	            if ($zongheimingdan_config == 1 && $heimingdan_config == 1) {
+		            $user_status = $userRecord->user_status;
+		        } else {
+		            $user_status = 1;
+		        }
+
+		        if ($userRecord->user_status == 2) {
+		        	$user_status = 0;
+		        }
+
+		        $version = isset($data['version']) ? $data['version'] : '';
+	            if ($this->chekVersion($version)) {
+	                $user_status = 0;
+	            }
+
+				if ($user_status) {
 					$arr = RedpacketService::randOne($data['user_id']);
 					$redpacket_id = $arr['redpacket_id'];
 					$amount = $arr['now_amount'];
@@ -152,20 +147,27 @@ class Challenge
 	            ];
 	        }
 
-	        $userRecord->gold +=  $data['score'] * $get_gold;
-
         
 			$userRecord->save();
 
 			$logService = new LogService();
 			$logService->updateChallengeLog($data);
 			Db::commit();
+			if ($is_free) {
+				$first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
+		    	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
+		    	$withdraw_limit = $userRecord->redpacket_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
 
-			$first_withdraw_success_num = ConfigService::get('first_withdraw_success_num');
-         	$first_withdraw_limit = ConfigService::get('first_withdraw_limit');
-         	$withdraw_limit = $userRecord->success_num > $first_withdraw_success_num ? ConfigService::get('withdraw_limit') : $first_withdraw_limit;
+		    	$other_result = [
+		    		'withdraw_limit' => $withdraw_limit,
+					'success_num' => $userRecord->redpacket_num,
+					'user_amount' => $userRecord->amount + (isset($result['amount']) ? $result['amount'] : 0),
+		    	];
+			} else {
+				$other_result = [];
+			}
 
-			return $result + ['withdraw_limit' => $withdraw_limit, 'success_num' => $userRecord->success_num, 'user_amount' => $userRecord->amount + (isset($result['amount']) ? $result['amount'] : 0)];
+			return $result + $other_result;
 		} catch (\Exception $e) {
 			Db::rollback();
 			trace($e->getMessage(),'error');
@@ -193,6 +195,20 @@ class Challenge
         	$user_status = 0;
         }
 		return ($userRecord->chance_num > 0 || $user_status == 0) ? true : false;
+	}
+
+	public function lianxi($data)
+	{
+		$userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
+
+		$userRecord->lianxi_num += 1;
+		$userRecord->save();
+
+		// 获取词语列表
+		$wordService = new WordService();
+		$words = $wordService->lianxi();
+
+		return ['status' => 1, 'words' => $words, 'challege_id' => 0,];
 	}
 
 	public function chekVersion($version)

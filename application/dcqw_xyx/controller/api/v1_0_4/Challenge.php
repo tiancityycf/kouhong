@@ -3,7 +3,7 @@
 namespace app\dcqw_xyx\controller\api\v1_0_4;
 
 use think\facade\Request;
-use api_data_service\dcqw_xyx\Game as ChallengeService;
+use api_data_service\dcqw_xyx\Game as GameService;
 use controller\BasicController;
 
 /**
@@ -20,8 +20,8 @@ class Challenge extends BasicController
         require_params('user_id');
         $data = Request::param();
 
-        $challengeService = new ChallengeService();
-        $result = $challengeService->start($data);
+        $gameService = new GameService();
+        $result = $gameService->start($data);
 
         return result(200, 'ok', $result);
     }
@@ -35,8 +35,8 @@ class Challenge extends BasicController
         require_params('user_id', 'challenge_id', 'score', 'successed');
         $data = Request::param();
 
-        $challengeService = new ChallengeService();
-        $result = $challengeService->end($data);
+        $gameService = new GameService();
+        $result = $gameService->end($data);
 
         return result(200, 'ok', $result);
     }

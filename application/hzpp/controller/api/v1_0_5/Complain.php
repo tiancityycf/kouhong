@@ -3,7 +3,7 @@
 namespace app\hzpp\controller\api\v1_0_5;
 
 use think\facade\Request;
-use api_data_service\v2_0_1_2\Complain as ComplainService;
+use api_data_service\v2_0_1_3\Complain as ComplainService;
 use controller\BasicController;
 
 /**

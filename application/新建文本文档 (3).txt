@@ -81,7 +81,7 @@ from_id:wxa48eb7e24c744f60timestamp:1534780800to_id:1user_id:1JI9Ne3mLkTTxNjqw
 
 appid:wx5d44da14af338874timestamp:1534780800
 
-timestamp:1534780800user_id:1xia6dKmNkQ
+timestamp:1534780800user_id:1version:1.1v0m3t6ycfq
 timestamp:1534780800type:用户截屏user_id:1xia6dKmNkQ
 timestamp:1534780800sDyoKPS0X1
 avatar:gender:1nickname:000timestamp:1534780800user_id:1C31zGUDbDY
@@ -95,6 +95,10 @@ challenge_id:1score:50successed:1timestamp:1534780800user_id:1xia6dKmNkQ
 https://txcdn.ylll111.xyz/hanzi/169296691cf8c01b29134959769b0513.png
 
 appid:wx123456789nickname:123timestamp:1534780800123456
+
+https://hz.zxmn2018.com/dcqw_xyx/api/v1_0_4/user/login?code=nnnnnxxxxx&timestamp=1534780800&sign=4fbbebf0c959a7f1c4394539cc6aaf5d
+
+md5(code:nnnnnxxxxxtimestamp:1534780800xia6dKmNkQ)   3b17da4a09965901bc03ce819405e99d
 
 
 ALTER TABLE `t_user_record` ADD `redpacket_num` INT NOT NULL DEFAULT '0' COMMENT '开红包数量' AFTER `success_num`;

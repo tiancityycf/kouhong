@@ -4,8 +4,8 @@ namespace app\hzpp\controller\api\v1_0_5;
 
 use think\facade\Request;
 
-use api_data_service\v2_0_1_2\Index as IndexService;
-use api_data_service\v2_0_1_2\Redpacket as RedpacketService;
+use api_data_service\v2_0_1_3\Index as IndexService;
+//use api_data_service\v2_0_1_2\Redpacket as RedpacketService;
 use controller\BasicController;
 
 /**
@@ -70,7 +70,7 @@ class Index extends BasicController
     }
 
 
-    public function share()
+    /*public function share()
     {
         require_params('user_id', 'encryptedData', 'iv', 'redpacket_id');
         $data = Request::param();
@@ -79,5 +79,5 @@ class Index extends BasicController
         $result = $redpacketService->share($data);
 
         return result(200, 'ok', $result);
-    }
+    }*/
 }

@@ -4,7 +4,7 @@ namespace app\hzpp\controller\api\v1_0_5;
 
 use think\facade\Request;
 
-use api_data_service\v2_0_1_2\User as UserService;
+use api_data_service\v2_0_1_3\User as UserService;
 use controller\BasicController;
 
 /**

@@ -32,8 +32,6 @@ class Index
         $shareToUserSuccessText =  $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_success_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_success_text_when_close_share_user');
         $shareToUserLimitText = $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_close_share_user');
 
-        $jxdn_in_off = $this->getConfigValue($config_data,'in_off_version') == $version ? 1 : 0;
-
         return [
             'complain_txt' => $this->getConfigValue($config_data,'complain_txt'),  //投诉内容
             'readme' => $this->getConfigValue($config_data,'readme'), //规则
@@ -44,7 +42,8 @@ class Index
             'guangdiantong' => $this->getConfigValue($config_data,'guangdiantong'), //广点通
             'hezi_appid' => $this->getConfigValue($config_data,'hezi_appid'), //盒子的appid
             'hezi_path' => $this->getConfigValue($config_data,'hezi_path'), //盒子的路径
-            'wen_xin_ti_shi' => $this->getConfigValue($config_data,'wen_xin_ti_shi'),
+            'index_middle_img_txt' => $this->getConfigValue($config_data,'index_middle_img_txt'),
+            'chance_num' => $user->userRecord->chance_num,
         ];
     }
 
