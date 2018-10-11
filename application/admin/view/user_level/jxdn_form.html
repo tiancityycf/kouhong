@@ -24,6 +24,18 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">红包金额下限</label>
+        <div class="layui-input-block">
+            <input type="number" autofocus name="amount_min" required="required" value='{$vo.amount_min|default=""}' pattern="" title="请输入红包金额下限" placeholder="请输入红包金额下限" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">红包金额上限</label>
+        <div class="layui-input-block">
+            <input type="number" autofocus name="amount_max" required="required" value='{$vo.amount_max|default=""}' pattern="" title="请输入红包金额上限" placeholder="请输入红包金额上限" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-block">
                 <select id="status" name="status" class="layui-select">

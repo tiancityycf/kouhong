@@ -206,6 +206,7 @@ class User
             return ['user_status' => $user_status];
         } catch (\Exception $e) {
             Db::rollback();
+            trace($e->getMessage(),'error');
             throw new \Exception("系统繁忙");
         }
     }

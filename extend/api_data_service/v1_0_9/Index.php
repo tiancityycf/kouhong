@@ -57,7 +57,7 @@ class Index
      * @param $userId
      * @return array
      */
-    public function getIndexInfo($userId)
+    public function getIndexInfo($userId, $version = '')
     {
         $user = UserModel::get($userId);
         $who = "有人";
@@ -72,6 +72,8 @@ class Index
         $openShareUser = $this->getConfigValue($config_data, 'open_share_user');
         $shareToUserSuccessText =  $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_success_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_success_text_when_close_share_user');
         $shareToUserLimitText = $openShareUser ? $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_open_share_user') : $this->getConfigValue($config_data, 'share_to_user_Limit_text_when_close_share_user');
+
+        $share_version = ($this->getConfigValue($config_data,'share_version') === $version) ? 1 : 0;
 
         return [
             'index_other_appid' => $openOtherApp ? $this->getConfigValue($config_data,'index_other_appid') : '',
@@ -103,13 +105,6 @@ class Index
             'success_num' => $user->userRecord->success_num,
             'gold' => $user->userRecord->gold,
             'pifu' => $user->userRecord->pifu_id ? $user->userRecord->pifu->img : '',
-            'lianxi_jixu_anniu' => $this->getConfigValue($config_data,'lianxi_jixu_anniu'),
-            'lianxi_huode_anniu' => $this->getConfigValue($config_data,'lianxi_huode_anniu'),
-            'hongbaoruchangquan' => $this->getConfigValue($config_data,'hongbaoruchangquan'),
-            'hongbao_yaoqing' => $this->getConfigValue($config_data,'hongbao_yaoqing'),
-            'qulianxichang' => $this->getConfigValue($config_data,'qulianxichang'),
-            'lianxi_success_txt' => $this->getConfigValue($config_data,'lianxi_success_txt'),
-            'lianxi_top_title' => $this->getConfigValue($config_data,'lianxi_top_title'),
             'success_three_withdraw' => $this->getConfigValue($config_data,'success_three_withdraw'),
             'input_on_off' => $this->getConfigValue($config_data,'input_on_off'),
             'allow_success_num' => $this->getConfigValue($config_data,'allow_success_num'),
@@ -122,12 +117,68 @@ class Index
             'hezi_path' => $this->getConfigValue($config_data,'hezi_path'),
             'tili_time_jiange' => $this->getConfigValue($config_data, 'tili_time_jiange'),
             'tili_limit' => $this->getConfigValue($config_data, 'tili_limit'),
+            'share_version' => $share_version,
         ];
     }
 
     private function  getConfigValue($data, $key)
     {
         return isset($data[$key]) ? $data[$key]: '';
+    }
+
+    public function getYourList($user_id)
+    {
+        $model = UserRecordModel::where('user_id', $user_id)->find();
+
+        $data = [];
+        if ($model) {
+            $data['user_id'] = $model->user_id;
+            $data['avatar'] = $model->avatar;
+            $data['nickname'] = $model->nickname;
+            $data['success_num'] = $model->success_num;
+            $data['challenge_num'] = $model->challenge_num;
+        } else {
+            $data['user_id'] = '';
+            $data['avatar'] = '';
+            $data['nickname'] = '';
+            $data['success_num'] = '';
+            $data['challenge_num'] = '';
+        }
+
+        return $data;      
+    }
+
+    public function getCount($user_id, $wealthList, $willList)
+    {
+        $data = [];
+
+        if ($wealthList) {
+            $data['wealth_count'] = '10+';
+            foreach ($wealthList as $k => $v) {
+                $list_user_id = isset($v['user_id']) ? $v['user_id'] : 0;
+                if ($user_id == $list_user_id) {
+                    $data['wealth_count'] = $k + 1;
+                    break;
+                }
+            }
+        } else {
+            $data['wealth_count'] = '';
+        }
+
+        if ($willList) {
+            $data['will_count'] = '10+';
+            foreach ($willList as $key => $value) {
+                $list_user_id = isset($value['user_id']) ? $value['user_id'] : 0;
+                if ($user_id == $list_user_id) {
+                    $data['will_count'] = $key + 1;
+                    break;
+                }
+            }
+        } else {
+            $data['will_count'] = '';
+        }
+
+        return $data;
     }
 
 	/**

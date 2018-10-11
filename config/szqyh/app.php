@@ -17,7 +17,7 @@ return [
 
     // 其他设置
     'default_return_type' => 'json', // 默认返回类型
-    'exception_handle' => '\\app\\api\\exception\\ExceptionHandle', //自定义异常捕获类
+    //'exception_handle' => '\\app\\api\\exception\\ExceptionHandle', //自定义异常捕获类
 
 
     // +----------------------------------------------------------------------

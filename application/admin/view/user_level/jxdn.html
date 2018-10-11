@@ -41,6 +41,8 @@
             <th class='text-left nowrap'>需要通关次数</th>
             <th class='text-left nowrap'>当前等级的局数</th>
             <th class='text-left nowrap'>通关需要赢的局数</th>
+            <th class='text-left nowrap'>红包金额下限</th>
+            <th class='text-left nowrap'>红包金额上限</th>
             <th class='text-left nowrap'>状态</th>
     	</tr>
     	</thead>
@@ -75,6 +77,12 @@
             </td>
             <td class='text-left nowrap'>
                 {$vo.tongguan_num}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.amount_min}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.amount_max}
             </td>
             <td class='text-left nowrap'>
                 {if $vo.status eq 0}<span class="color-red">禁用</span>{elseif $vo.status eq 1}<span class="color-green">启用</span>{/if}

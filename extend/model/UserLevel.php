@@ -31,4 +31,19 @@ class UserLevel extends Model
     {
         return $this->hasMany('UserLevelWord', 'user_level_id');
     }
+
+    public function searchDcqw($params)
+    {
+        $query = self::buildQuery();
+
+        foreach (['title'] as $key) {
+            (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
+        }
+
+        foreach (['success_num'] as $key) {
+            (isset($params[$key]) && $params[$key] !== '') && $query->where($key, '>=', $params[$key]);
+        }
+
+        return $query;
+    }
 }

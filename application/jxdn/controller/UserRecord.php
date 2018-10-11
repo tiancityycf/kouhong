@@ -15,10 +15,10 @@ class UserRecord extends BasicAdmin
 
        	list($get, $db) = [$this->request->get(), new UserModel()];
 
-        $db = $db->search($get);
+        $db = $db->searchRedpact($get);
        	$result = parent::_list($db, true, false, false);
         $this->assign('title', $this->title);
-        return  $this->fetch('admin@user_record/index', $result);
+        return  $this->fetch('admin@user_record/jxdn_index', $result);
     }
 
     /**

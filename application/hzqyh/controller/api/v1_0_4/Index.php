@@ -5,7 +5,7 @@ namespace app\hzqyh\controller\api\v1_0_4;
 use think\facade\Request;
 
 use api_data_service\v1_0_9\Index as IndexService;
-use api_data_service\v1_0_9\Fuhuo as FuhuoService;
+use api_data_service\v1_0_9\Redpacket as RedpacketService;
 use controller\BasicController;
 
 /**
@@ -21,9 +21,10 @@ class Index extends BasicController
     {
         require_params('user_id');
         $userId = Request::param('user_id');
+        $version = Request::param('version') ? Request::param('version') : '';
 
         $indexService = new IndexService();
-        $indexInfo = $indexService->getIndexInfo($userId);
+        $indexInfo = $indexService->getIndexInfo($userId, $version);
 
         return result(200, 'ok', [
             'index_info' => $indexInfo,
@@ -36,13 +37,18 @@ class Index extends BasicController
      */
     public function top()
     {
+        require_params('user_id');
+        $userId = Request::param('user_id');
         $indexService = new IndexService();
         $wealthList = $indexService->getSuccessList();
         $willList = $indexService->getWillList();
+        $your_list = $indexService->getYourList($userId);
+        $count_list = $indexService->getCount($userId, $wealthList, $willList);
 
         return result(200, 'ok', [
             'wealth_list' => $wealthList,
             'will_list' => $willList,
+            'your_list' => $your_list + $count_list,
         ]);
     }
 
@@ -74,7 +80,7 @@ class Index extends BasicController
         require_params('user_id', 'encryptedData', 'iv');
         $data = Request::param();
 
-        $fuhuoService = new FuhuoService();
+        $redpacketService = new RedpacketService();
         $result = $redpacketService->share($data);
 
         return result(200, 'ok', $result);

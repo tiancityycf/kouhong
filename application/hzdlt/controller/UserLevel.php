@@ -7,11 +7,12 @@ use think\Db;
 use model\UserLevel as UserLevelModel;
 use model\UserLevelWord as UserLevelWordModel;
 use validate\UserLevel as UserLevelValidate;
+use validate\SzxUserLevel as SzxUserLevelValidate;
 use validate\UserLevelWord as UserLevelWordValidate;
 
 class UserLevel extends BasicAdmin
 {
-	/**
+    /**
      * 指定当前数据表
      * @var string
      */
@@ -19,9 +20,9 @@ class UserLevel extends BasicAdmin
 
     public function index()
     {
-    	$this->title = '用户难度等级设置';
+        $this->title = '用户难度等级设置';
 
-       	list($get, $db) = [$this->request->get(), new UserLevelModel()];
+        list($get, $db) = [$this->request->get(), new UserLevelModel()];
 
         $db = $db->search($get);
 
@@ -29,7 +30,7 @@ class UserLevel extends BasicAdmin
 
         $result = parent::_list($db, false, false, false);
         $this->assign('title', $this->title);
-       	return  $this->fetch('admin@user_level/index', $result);
+        return  $this->fetch('admin@user_level/szx_index', $result);
     }
 
     //添加
@@ -45,7 +46,7 @@ class UserLevel extends BasicAdmin
             }
         }
         
-        return  $this->fetch('admin@user_level/form', ['vo' => $data]);
+        return  $this->fetch('admin@user_level/szx_form', ['vo' => $data]);
     }
 
     //编辑
@@ -64,7 +65,7 @@ class UserLevel extends BasicAdmin
             }
         }
 
-        return  $this->fetch('admin@user_level/form', ['vo' => $vo->toArray()]);
+        return  $this->fetch('admin@user_level/szx_form', ['vo' => $vo->toArray()]);
     }
 
     /**
@@ -97,10 +98,14 @@ class UserLevel extends BasicAdmin
     //字段验证
     protected function checkData($data)
     {
-        $validate = new UserLevelValidate();
+        $validate = new SzxUserLevelValidate();
 
         if (!$validate->check($data)) {
             $this->error($validate->getError());
+        }
+
+        if ($data['amount_min'] > $data['amount_max']) {
+            $this->error("红包金额设置错误！");
         }
 
         return true;
@@ -109,7 +114,7 @@ class UserLevel extends BasicAdmin
 
     public function view()
     {
-    	$get_data = $this->request->get();
+        $get_data = $this->request->get();
         
         $vo = UserLevelWordModel::where('user_level_id', $get_data['id'])->where('status',1)->select()->toArray();
 
@@ -118,29 +123,29 @@ class UserLevel extends BasicAdmin
 
     public function create()
     {
-    	$get_data = $this->request->get();
+        $get_data = $this->request->get();
 
-    	$filter_data = UserLevelModel::where('status', 1)->column('title', 'id');
-    	$this->assign('filter_level_list', $filter_data);
+        $filter_data = UserLevelModel::where('status', 1)->column('title', 'id');
+        $this->assign('filter_level_list', $filter_data);
 
-    	$post_data = $this->request->post();
-    	if ($post_data) {
-    		$model = new UserLevelWordModel();
+        $post_data = $this->request->post();
+        if ($post_data) {
+            $model = new UserLevelWordModel();
 
-    		$validate = new UserLevelWordValidate();
+            $validate = new UserLevelWordValidate();
 
-    		if (!$validate->check($post_data)) {
-	            $this->error($validate->getError());
-	        }
+            if (!$validate->check($post_data)) {
+                $this->error($validate->getError());
+            }
 
-	        if ($model->save($post_data) !== false) {
+            if ($model->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
             }
-    	}
-    	$data['user_level_id'] = $get_data['id'];
-    	return  $this->fetch('admin@user_level_word/form', ['vo' => $data, 'type' => 'user_level']);
+        }
+        $data['user_level_id'] = $get_data['id'];
+        return  $this->fetch('admin@user_level_word/form', ['vo' => $data, 'type' => 'user_level']);
     }
 
 

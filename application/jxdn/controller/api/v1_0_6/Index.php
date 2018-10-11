@@ -21,9 +21,10 @@ class Index extends BasicController
     {
         require_params('user_id');
         $userId = Request::param('user_id');
+        $version = Request::param('version') ? Request::param('version') : '';
 
         $indexService = new IndexService();
-        $indexInfo = $indexService->getIndexInfo($userId);
+        $indexInfo = $indexService->getIndexInfo($userId, $version);
 
         return result(200, 'ok', [
             'index_info' => $indexInfo,

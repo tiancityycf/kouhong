@@ -26,7 +26,7 @@ class User
      * @param  $userId 用户id
      * @return json
      */
-    public function index($userId)
+    public function index($userId, $version = '')
     {
         // 获取用户记录
         $userRecord = UserRecordModel::where('user_id', $userId)->find();
@@ -34,7 +34,7 @@ class User
 
         // 获取红包记录
         $redpacketLogModel = new RedpacketLogModel();
-        $redpacketList = $redpacketLogModel->getRedpacketList($userId);
+        $redpacketList = $redpacketLogModel->getNewList($userId);
 
         $first_withdraw_success_num = ConfigService::get('first_withdraw_success_num') ? ConfigService::get('first_withdraw_success_num') : 0;
         $first_withdraw_limit = ConfigService::get('first_withdraw_limit');
@@ -50,6 +50,10 @@ class User
             $record['user_status'] = 0;
         }
 
+        if ($this->chekVersion($version)) {
+            $record['user_status'] = 0;
+        }
+
         return [
             'record' => $record,
             'redpacket_list' => $redpacketList,
@@ -62,7 +66,7 @@ class User
      * 用户登录
      * @return array
      */
-    public function login($code, $from_type = 0)
+    public function login($code, $from_type = 0, $version = '')
     {
         $appid = Config::get('wx_appid');
         $secret = Config::get('wx_secret');
@@ -85,13 +89,6 @@ class User
                         if ($user->userRecord->chance_num < ConfigService::get('login_get_chance_num')) {
                             $user->userRecord->chance_num = ConfigService::get('login_get_chance_num');
                         }
-                        /*if ($user->userRecord->lianxu_login > 7) {
-                            $user->userRecord->gold += 600;
-                        } else {
-                            $user->userRecord->gold += ($user->userRecord->lianxu_login + 1) * 50;
-                        }
-                        $user->userRecord->lianxu_login +=1;*/
-
                         $user->userRecord->tiaozhuan_num = 0;
                     }
                     $user->userRecord->last_login = $time;
@@ -134,14 +131,16 @@ class User
                 $user_status = 0;
             }
 
+            if ($this->chekVersion($version)) {
+                $user_status = 0;
+            }
+
 
             $result = [
                 'status' => 1,
                 'user_id' => $user->id,
                 'last_login' => $time,
                 'openid' => $data['openid'],
-                //'lianxu_login' => $user->userRecord->lianxu_login,
-                //'gold' => $user->userRecord->lianxu_login > 7 ? 600 : $user->userRecord->lianxu_login + 1) * 50,
                 'chance_num' => $user->userRecord->chance_num,
                 'tiaozhuan_num' => $user->userRecord->tiaozhuan_num,
                 'user_status' => $user_status,
@@ -197,6 +196,11 @@ class User
             }
 
             if ($user_status == 2) {
+                $user_status = 0;
+            }
+
+            $version = isset($data['version']) ? $data['version'] : '';
+            if ($this->chekVersion($version)) {
                 $user_status = 0;
             }
 
@@ -271,5 +275,15 @@ class User
     {
         $tradeLogModel = new WithdrawLogModel();
         return $tradeLogModel->getWithdrawList($userId);
+    }
+
+    public function chekVersion($version)
+    {
+        $config_version = ConfigService::get('share_version');
+        if ($version == $config_version) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

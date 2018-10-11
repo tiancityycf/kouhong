@@ -1,0 +1,107 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline">
+    <!--{if auth("$classuri/add")}-->
+    <button data-modal='{:url("$classuri/add")}' data-title="添加" data-width='50%' class='layui-btn layui-btn-sm'>添加</button>
+    <!--{/if}-->
+</div>
+<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+	<div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户等级</label>
+        <div class="layui-input-inline">
+            <select name='user_level_id' class='layui-select' lay-search="">
+                <option value=''> - 所有等级 -</option>
+                <!--{foreach $filter_level_list as $k => $v}-->
+                <!--{if $Think.get.user_level_id == $k}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">分数段</label>
+        <div class="layui-input-inline">
+            <input name="score_mark" value="{$Think.get.score_mark|default=''}" placeholder="请输入想要搜索的数字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">最大点击次数</label>
+        <div class="layui-input-inline">
+            <input name="max" value="{$Think.get.max|default=''}" placeholder="请输入想要搜索的数字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">跳跃时间</label>
+        <div class="layui-input-inline">
+            <input name="time" value="{$Think.get.time|default=''}" placeholder="请输入想要搜索的数字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>用户等级</th>
+            <th class='text-left nowrap'>分数段</th>
+            <th class='text-left nowrap'>最大点击次数</th>
+            <th class='text-left nowrap'>跳跃时间(秒)</th>
+            <th class='text-left nowrap'>状态</th>
+            
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                {/if}
+
+                {if auth("$classuri/del")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-action='{:url("$classuri/del")}'>删除</a>
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+                <?php echo isset($level_list[$vo['user_level_id']]) ? $level_list[$vo['user_level_id']] : ''; ?>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.score_mark}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.max}
+            </td>
+            
+            <td class='text-left nowrap'>
+                {$vo.time}
+            </td>
+            <td class='text-left nowrap'>
+                {if $vo.status eq 0}<span class="color-red">禁用</span>{elseif $vo.status eq 1}<span class="color-green">启用</span>{/if}
+            </td>
+            
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+    <script>window.form.render();</script>
+</form>
+{/block}

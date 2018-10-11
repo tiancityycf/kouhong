@@ -122,12 +122,68 @@ class Index
             'hezi_path' => $this->getConfigValue($config_data,'hezi_path'),
             'tili_time_jiange' => $this->getConfigValue($config_data, 'tili_time_jiange'),
             'tili_limit' => $this->getConfigValue($config_data, 'tili_limit'),
+            'chaihongbaoanniu' => $this->getConfigValue($config_data,'chaihongbaoanniu'),
+            'hongbaofenxiangchongfu' => $this->getConfigValue($config_data,'hongbaofenxiangchongfu'),
+            'hongbaofenxiang_limit' => $this->getConfigValue($config_data,'hongbaofenxiang_limit'),
         ];
     }
 
     private function  getConfigValue($data, $key)
     {
         return isset($data[$key]) ? $data[$key]: '';
+    }
+
+    public function getYourList($user_id)
+    {
+        $model = UserRecordModel::where('user_id', $user_id)->find();
+
+        $data = [];
+        if ($model) {
+            $data['user_id'] = $model->user_id;
+            $data['avatar'] = $model->avatar;
+            $data['nickname'] = $model->nickname;
+            $data['success_num'] = $model->success_num;
+        } else {
+            $data['user_id'] = '';
+            $data['avatar'] = '';
+            $data['nickname'] = '';
+            $data['success_num'] = '';
+        }
+
+        return $data;      
+    }
+
+    public function getCount($user_id, $wealthList, $willList)
+    {
+        $data = [];
+
+        if ($wealthList) {
+            $data['wealth_count'] = '10+';
+            foreach ($wealthList as $k => $v) {
+                $list_user_id = isset($v['user_id']) ? $v['user_id'] : 0;
+                if ($user_id == $list_user_id) {
+                    $data['wealth_count'] = $k + 1;
+                    break;
+                }
+            }
+        } else {
+            $data['wealth_count'] = '';
+        }
+
+        if ($willList) {
+            $data['will_count'] = '10+';
+            foreach ($willList as $key => $value) {
+                $list_user_id = isset($value['user_id']) ? $value['user_id'] : 0;
+                if ($user_id == $list_user_id) {
+                    $data['will_count'] = $key + 1;
+                    break;
+                }
+            }
+        } else {
+            $data['will_count'] = '';
+        }
+
+        return $data;
     }
 
 	/**

@@ -21,4 +21,18 @@ class UserLevelWord extends Model
 
         return $query;
 	}
+
+
+	public function searchDcqw($params)
+	{
+		$query = self::buildQuery();
+
+        foreach (['user_level_id', 'srcoe_mark', 'max', 'time'] as $key) {
+            (isset($params[$key]) && $params[$key] !== '') && $query->where($key, $params[$key]);
+        }
+
+        $query->order('id', 'desc');
+
+        return $query;
+	}
 }

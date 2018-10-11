@@ -13,7 +13,7 @@ use model\UserLevel as UserLevelModel;
 use model\ShareRedpacket as ShareRedpacketModel;
 
 use api_data_service\v2_0_2\NiuNiu as NiuNiuService;
-use api_data_service\v2_0_1\Redpacket as RedpacketService;
+use api_data_service\v2_0_2\Redpacket as RedpacketService;
 
 
 /**
@@ -119,9 +119,9 @@ class Challenge
 	                $userRecord->user_level += 1;
 	            }*/
 
-	            if ($user_level && $userRecord->redpacket_num >= $user_level->success_num) {
+	            /*if ($user_level && $userRecord->redpacket_num >= $user_level->success_num) {
 	            	$userRecord->user_level += 1;
-	            }
+	            }*/
 
 	            $heimingdan_config = ConfigService::get('heimingdan_in_off');
         		$zongheimingdan_config = config('heimingdan_zongkaiguan');
