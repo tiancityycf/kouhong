@@ -1,29 +1,17 @@
 <form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post" style="overflow-y:scroll; height:400px;">
 	<div class="layui-form-item">
-        <label class="layui-form-label">商品名称</label>
+        <label class="layui-form-label">活动名称</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="title" required="required" value={$vo.title} pattern="" title="" placeholder="请输入商品名称" class="layui-input" style="width: 75%;">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">所属分类</label>
-        <div style="width: 35%;" class="layui-input-block">
-                <select id="cate" lay-filter="type" name="cate" class="layui-select" >
-                    <!--{foreach [1=>'新人换礼',2=>'邀请专区',3=>'精品好礼'] as $key=>$st}-->
-                  
-                    <option {if condition="$vo.cate == $key"}selected{/if} value="{$key}">- {$st} -</option>
-                
-                    <!--{/foreach}-->
-                </select>
+            <input type="text" autofocus name="title" required="required" value='' pattern="" title="" placeholder="请输入活动名称" class="layui-input" style="width: 55%;">
         </div>
     </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">上传图片</label>
+     <div class="layui-form-item">
+        <label class="layui-form-label">上传活动banner</label>
         <div class="layui-input-block">
             <div class="layui-row">
                 <div class="layui-col-md6">
-                    <input type="text" autofocus id="path" name="img" required="required" value='{$vo.img|default=""}' pattern="" title="图片地址" placeholder="图片地址" class="layui-input">
+                    <input type="text" autofocus id="path" name="img" required="required" value='{$vo.path|default=""}' pattern="" title="图片地址" placeholder="图片地址" class="layui-input">
                 </div>
                 <div class="layui-col-md3">
                     <div class="layui-upload" style="margin-left: 20px;">
@@ -33,42 +21,60 @@
                 <div class="layui-col-md3">
                     <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.path|default=""}' />
                 </div>
+
             </div>
+            
         </div>
+
         
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">商品库存</label>
+        <label class="layui-form-label">活动开始日期</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="stock" required="required" value={$vo.stock} pattern="" title="" placeholder="请输入商品库存量" class="layui-input" style="width: 75%;">
-        </div>
-    </div>
-    
-    <div class="layui-form-item">
-        <label class="layui-form-label">所需燃力币</label>
-        <div class="layui-input-block">
-            <input type="text" autofocus name="price" required="required" value={$vo.price} pattern="" title="" placeholder="兑换所需燃力币值" class="layui-input" style="width: 75%;">
-        </div>
-    </div>
-    
-    <div class="layui-form-item">
-        <label class="layui-form-label">首页推荐位</label>
-        <div style="width: 35%;" class="layui-input-block">
-                <select  name="onsale" class="layui-select">
-                	<!--{foreach [1=>'推荐',0=>'不推荐'] as $key=>$st}-->
-                	
-	                <option {if condition="$vo.onsale == $key"}selected{/if} value="{$key}">- {$st} -</option>
-	    
-                	<!--{/foreach}-->
-                </select>
+            <input type="text" autofocus name="start_date" required="required" value='' pattern="" title="" placeholder="格式:2018-09-17" class="layui-input" style="width: 55%;">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">排序</label>
+        <label class="layui-form-label">活动结束日期</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="order" required="required" value={$vo.order} pattern="" title="" placeholder="排序" class="layui-input" style="width: 75%;">
+            <input type="text" autofocus name="end_date" required="required" value='' pattern="" title="" placeholder="格式:2018-09-23" class="layui-input" style="width: 55%;">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">最多参与人数</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="limit_persons" required="required" value='' pattern="" title="" placeholder="请输入最多参与人数" class="layui-input" style="width: 55%;">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">活动奖励</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="reward" required="required" value='' pattern="" title="" placeholder='格式:{"1":1000,"2":500,"3":300}' class="layui-input" style="width: 55%;">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">奖励类型</label>
+        <div class="layui-input-inline">
+            <select name='reward_type' class='layui-select' lay-search="">
+                <option value=''> - 请选择 -</option>
+                <!--{foreach [ 1 => '现金', 2 => '实物',3 => '步数', 4 => '燃力币',5 => '其他'] as $k => $v}-->
+                <option value='{$k}'> - {$v} - </option>
+
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">活动简介</label>
+        <div class="layui-input-block">
+            <textarea name="description" cols="50" rows="10" style="width: 85%;">在这里输入内容...多条内容以|分隔</textarea>
         </div>
     </div>
 
@@ -78,7 +84,7 @@
                 <select  name="status" class="layui-select">
                     <!--{foreach [1=>'启用',0=>'不启用'] as $key=>$st}-->
 
-                    <option {if condition="$vo.status == $key"}selected{/if} value="{$key}">- {$st} -</option>
+                    <option value="{$key}">- {$st} -</option>
                     <!--{/foreach}-->
                 </select>
         </div>
@@ -120,4 +126,5 @@
         });
 
     </script>
+   
 </form>

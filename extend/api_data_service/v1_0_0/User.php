@@ -171,7 +171,8 @@ class User
             $user->userRecord->nickname = $data['nickname'];
             $user->userRecord->avatar = $data['avatar'];
             $user->userRecord->update_time = $time;
-
+            $user->userRecord->gender = $data['gender'];
+            
             $user->save();
             $user->userRecord->save();
 

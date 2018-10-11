@@ -35,7 +35,7 @@ class Order extends BasicAdmin
 
    
      /**
-     * 删除商品图片集
+     * 商品发货处理
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
@@ -48,7 +48,7 @@ class Order extends BasicAdmin
 
         $model = new ExchangeLogModel();
 
-        $res = $model->where('id',$product_id)->delete();
+        $res = $model->where('id',$product_id)->update(['status'=>1]);
 
         if($res){
 

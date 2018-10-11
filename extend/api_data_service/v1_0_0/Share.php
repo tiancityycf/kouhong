@@ -47,7 +47,7 @@ class Share
 	 * @param  $data 请求数据
 	 * @return void
 	 */
-	public function shareUser($data)
+	public function shareUser($openid)
 	{
 		$getSteps = 0;
 
@@ -61,11 +61,11 @@ class Share
 
         //判断个人用户分享次数是否达到每天限制
         $day = date('Y-m-d');
-        $is_shared = Db::name('share_count')->where(['openid'=>$data['openid'],'share_day'=>$day])->select();
+        $is_shared = Db::name('share_count')->where(['openid'=>$openid,'share_day'=>$day])->select();
         if(empty($is_shared)){
         	//当日没有分享过
         	 $insert_data = [
-        	 	'openid'=> $data['openid'],
+        	 	'openid'=> $openid,
         	 	'create_time' => time(),
         	 	'openGid' => 0,
         	 	'share_day' => $day
@@ -75,7 +75,7 @@ class Share
         	 
         	 //插入分享或签到后的步数日志信息
         	 $steps_data = [
-        	 	   'openid' => $data['openid'],
+        	 	   'openid' => $openid,
         	 	   'steps'  => $config['share_person_getStep'],
         	 	   'type'  => 2
          	 ];
@@ -90,7 +90,7 @@ class Share
         	};
 
         	 $insert_data = [
-        	 	'openid'=> $data['openid'],
+        	 	'openid'=> $openid,
         	 	'create_time' => time(),
         	 	'openGid' => 0,
         	 	'share_day' => $day
@@ -100,7 +100,7 @@ class Share
 
         	  //插入分享或签到后的步数日志信息
         	 $steps_data = [
-        	 	   'openid' => $data['openid'],
+        	 	   'openid' => $openid,
         	 	   'steps'  => $config['share_person_getStep'],
         	 	   'type'  => 2
          	 ];
@@ -121,9 +121,12 @@ class Share
 
 			$comment = '签到奖励';
 
-		}else{
+		}else if($data['type'] == 2){
 
 			$comment = '邀请好友';
+		}else{
+
+			$comment = '分享到群';
 		}
 		$insert_data = [
 				'openid'=>$data['openid'],
@@ -144,143 +147,126 @@ class Share
 	 */
 	private function shareGroup($data)
 	{
-		$status = 0;   //接口状态  0 失败， 1成功
-		$chanceNum = 0;   //分享状态 0失败  1成功
-		$diff = 0;  //是否重复群 0 重复，1不重复
-		$LogService = new LogService();
-		$shareInfo = $LogService->createShareLog($data);
-		$limit = ConfigService::get('qun_limit_today') ? ConfigService::get('qun_limit_today') : 20;
+		//获取配置信息
+        $config = Cache::get(config('config_key'));
 
-		if ($shareInfo['error_code'] == 0) {
-			$todayShare = ShareLogModel::where('user_id', $data['user_id'])
-				->whereTime('create_time', '>=', 'today')
-				->distinct(true)
-				->field('gid')
-				->select()
-				->toArray();
-			$count = $this->getCount($shareInfo['gid']);
-			if (!in_array($shareInfo['gid'], array_column($todayShare, 'gid')) && $count <= $limit) {
-				$diff = 1;
-				$chanceNum = $this->shareGetChance($data['user_id'], 2);
+		// 判断是否开启分享到个人用户分享次数与奖励步数配置
+        if(!isset($config['share_group_limit']) || !isset($config['share_group_getStep'])){
+        	return ['code' => 2000, 'message' => '未开启群分享的配置'];
+        }
 
-				if ($chanceNum != 0) {
-					ShareLogModel::create([
-						'user_id' => $data['user_id'],
-						'gid' => $shareInfo['gid'],
-						'create_time' => time(),
-					]);
+        //解密群数据
+        $share_gruop_info = $this->decryptedData($data['openid'],$data['encryptedData'],$data['iv']);
+       	
+       	if(!$share_gruop_info) return ['code' => 0, 'message' => '解密群数据失败'];
+        //判断用户分享到群次数是否达到每天限制且判断是否分享到了重复的群
+        $day = date('Y-m-d');
+        $is_shared = Db::name('share_count')->where(['openid'=>$data['openid'],'share_day'=>$day])->select();
 
-					$this->addCount($shareInfo['gid']);
-				}
-				
-			}
+        if(empty($is_shared)){
+        	//当日没有分享过
+        	 $insert_data = [
+        	 	'openid'=> $data['openid'],
+        	 	'create_time' => time(),
+        	 	'openGid' => $share_gruop_info['openGId'],
+        	 	'share_day' => $day
+        	 ];
+        	 //记录分享次数表
+        	 Db::name('share_count')->insert($insert_data);
+        	 
+        	 //插入分享或签到后的步数日志信息
+        	 $steps_data = [
+        	 	   'openid' => $data['openid'],
+        	 	   'steps'  => $config['share_group_getStep'],
+        	 	   'type'  => 3
+         	 ];
+        	 $this->add_steps($steps_data);
 
-			
+        	 return ['code' => 2010, 'message' => '分享到群成功','data'=>$config['share_group_getStep']];
+        }else{
+        	   //当日有分享过
+        	   //判断是否分享到了重复的群
+	        foreach ($is_shared as $k => $v) {
 
-			$status = 1;
-		}
+	        	if($share_gruop_info['openGId'] == $v['openGId']){
 
-		return ['status' => $status, 'chance_num' => $chanceNum, 'diff' => $diff];
+	        		return ['code' => 2020, 'message' => '分享到了重复的群'];
+	        	}
+	        }
+
+        	if(count($is_shared)>=$config['share_group_limit']){
+
+        		return ['code' => 3020, 'message' => '分享群次数以达上限'];
+        	}
+
+        	 $insert_data = [
+        	 	'openid'=> $data['openid'],
+        	 	'create_time' => time(),
+        	 	'openGid' => $share_gruop_info['openGId'],
+        	 	'share_day' => $day
+        	 ];
+        	 //记录分享次数表
+        	 Db::name('share_count')->insert($insert_data);
+
+        	  //插入分享或签到后的步数日志信息
+        	 $steps_data = [
+        	 	   'openid' => $data['openid'],
+        	 	   'steps'  => $config['share_group_getStep'],
+        	 	   'type'  => 3
+         	 ];
+        	 $this->add_steps($steps_data);
+
+        	 return ['code' => 2010, 'message' => '分享到群成功','data'=>$config['share_group_getStep']];
+        }
 	}
 
-	private function getCount($gid)
-	{
-		$date = date('ymd', time());
+	   /**
+   * 解密分享数据
+   * @param $userId
+   * @param $encryptedData
+   * @param $iv
+   * @see [加密数据解密算法](https://developers.weixin.qq.com/miniprogram/dev/api/signature.html#wxchecksessionobject)
+   * @return 
+   */
+    public static function decryptedData($openid, $encryptedData, $iv)
+    {
 
-		$model = ShareCountModel::where('create_date', $date)->where('gid', $gid)->find();
+      $UserModel = new UserModel();
 
-		if (!$model) {
-			$count = 0;
-		} else {
-			$count = $model->count;
-		}
+      $user = $UserModel->where(['openid'=>$openid])->find();
 
-		return $count;
-	}
+      $sessionKey = $user['session_key'];
 
-	private function addCount($gid)
-	{
-		$date = date('ymd', time());
+      if (strlen($sessionKey) != 24) {
+        //1: session_key格式不正确
+        return false;
+      }
 
-		$model = ShareCountModel::where('create_date', $date)->where('gid', $gid)->find();
+      if (strlen($iv) != 24) {
+        //2: iv格式不正确
+        return false;
+      }
 
-		if (!$model) {
-			$model = new ShareCountModel();
-			$model->save(['create_date' => $date, 'gid' => $gid, 'count' => 1]);
-		} else {
-			$model->save(['count' => ['inc', 1]]);
-		}
-	}
+      $aesKey = base64_decode($sessionKey);
+      $aesIV = base64_decode($iv);
+      $aesCipher = base64_decode($encryptedData);
+      $result = openssl_decrypt($aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
 
-	/**
-	 * 分享获取挑战机会
-	 * @param $userId 用户id
-	 * @param $shareType 分享类型
-	 * @return integer
-	 */
-	private function shareGetChance($userId, $shareType)
-	{
-		$chanceNum = 0;
-		$userRecord = UserRecordModel::where('user_id', $userId)->find();
-		if (date('Y-m-d', $userRecord['last_share']) !== date('Y-m-d')) {
-			$userRecord->share_user_num = 0;
-			$userRecord->share_num = 0;
-		}
+      //{"openGId":"tGDKhM5UF0H8J6TGG_Wh2Z4DTSsnA","watermark":{"timestamp":1535624932,"appid":"wx23ec7bcc4f962d4e"}}"
+      //dump($result);die;
+      $dataObj = json_decode($result,true);
 
-		if ($shareType == 1) { //分享到个人
-			if ($userRecord->share_user_num < ConfigService::get('share_user_get_chance_num_limit')) {
-				$userRecord->share_user_num += 1;
-				$userRecord->last_share = time();
-				$chanceNum = ConfigService::get('share_get_chance_num');
-				$userRecord->chance_num += $chanceNum;
-				$userRecord->save();
-			}
-		} elseif ($shareType == 2) { // 分享到群
-			if ($userRecord->share_num < ConfigService::get('share_get_chance_num_limit')) {
-				$userRecord->share_num += 1;
-				$userRecord->last_share = time();
-				$chanceNum = ConfigService::get('share_get_chance_num');
-				$userRecord->chance_num += $chanceNum;
-				$userRecord->save();
-			}
-		}
+      //成功验证后
+      if ($dataObj['watermark']['appid'] == Config::get('wx_appid')) {
+      		//返回群解密数据
+			return $dataObj;
+	  }else{
 
-		return $chanceNum;
-	}
+	  	   return false;
+	  }
 
-	/**
-	 * 解密分享数据
-	 * @param $userId
-	 * @param $encryptedData
-	 * @param $iv
-	 * @see [加密数据解密算法](https://developers.weixin.qq.com/miniprogram/dev/api/signature.html#wxchecksessionobject)
-	 * @return 
-	 */
-	public static function decryptedData($userId, $encryptedData, $iv, &$result)
-	{
-		$sessionKey = UserModel::get($userId)->session_key;
-		if (strlen($sessionKey) != 24) {
-			return self::$IllegalAesKey;
-		}
+      
+    }
 
-		if (strlen($iv) != 24) {
-			return self::$IllegalIv;
-		}
-
-		$aesKey = base64_decode($sessionKey);
-		$aesIV = base64_decode($iv);
-		$aesCipher = base64_decode($encryptedData);
-		$result = openssl_decrypt($aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
-		$dataObj = json_decode($result);
-
-		if ($dataObj == NULL) {
-			return self::$IllegalBuffer;
-		}
-
-		if ($dataObj->watermark->appid != Config::get('wx_appid')) {
-			return self::$IllegalBuffer;
-		}
-
-		return self::$OK;
-	}
+	
 }

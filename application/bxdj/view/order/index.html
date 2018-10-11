@@ -51,6 +51,8 @@
             <th class='text-left nowrap'>商品图片</th>
             <th class='text-left nowrap'>使用燃力币</th>
             <th class='text-left nowrap'>寄送地址</th>
+            <th class='text-left nowrap'>收件人姓名</th>
+            <th class='text-left nowrap'>联系电话</th>
             <th class='text-left nowrap'>发货状态</th>
             <th class='text-left nowrap'>兑换时间</th>
             
@@ -87,8 +89,15 @@
                 {$vo.used_coins}
             </td>
             <td class='text-left nowrap'>
-                {$vo.address}
+                {$vo.region}——{$vo.addr}
             </td>
+            <td class='text-left nowrap'>
+                {$vo.nickname}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.phone}
+            </td>
+            
             <td class='text-left nowrap'>
                  {if condition="$vo.status == 1"}
                  <span style="color: green;font-weight: bold;font-size: 15px;">已发货</span>
@@ -114,9 +123,9 @@
              $('.ship').click(function(){
                   var productId = $(this).val();
                   if(confirm('请确认是否成功发货')){
-                        alert(1);
-                        /*
+
                             $.get("/bxdj/order/ship?productId="+productId, function(result){
+                                
                              if(result == 'success'){
 
                                 alert('发货成功');
@@ -133,7 +142,7 @@
                              }
                             window.location.reload();
                         
-                    });    */
+                    });    
 
                 }else{
 

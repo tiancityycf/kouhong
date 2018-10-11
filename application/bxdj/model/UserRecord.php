@@ -16,7 +16,7 @@ class UserRecord extends Model
         $query = self::buildQuery();
         $query->alias('u');
 
-        $query->field('u.id, u.openid, u.avatar,u.nickname, u.user_status,s.coins');
+        $query->field('u.id, u.openid, u.avatar,u.nickname, u.user_status,u.gender,s.coins');
 
         $query->join(['t_step_coin'=>'s'],'u.openid=s.openid');
 
@@ -27,6 +27,10 @@ class UserRecord extends Model
 
          if (isset($params['nickname']) && $params['nickname'] !== '') {
             $query->whereLike('u.nickname', "%{$params['nickname']}%");
+        }
+
+        if (isset($params['gender']) && $params['gender'] !== '') {
+            $query->where('u.gender', "{$params['gender']}");
         }
 
         if (isset($params['status']) && $params['status'] !== '') {

@@ -34,10 +34,25 @@
         <label class="layui-form-label">状态</label>
         <div class="layui-input-inline">
             <select name='status' class='layui-select' lay-search="">
-                <option value=''> - 所有状态 -</option>
+                <option selected="selected" value=''> - 所有状态 -</option>
                 <!--{foreach [1 => '黑名单', 2=> '白名单', '3' => '羊毛党'] as $k => $v}-->
                 <!--{if $Think.get.status == $k}-->
-                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <option  value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-inline">
+            <select name='gender' class='layui-select' lay-search="">
+                <option selected="selected" value=''> - 所有状态 -</option>
+                <!--{foreach [1 => '男', 0=> '女'] as $k => $v}-->
+                <!--{if $Think.get.status == $k}-->
+                <option  value='{$k}'> - {$v} - </option>
                 <!--{else}-->
                 <option value='{$k}'> - {$v} - </option>
                 <!--{/if}-->
@@ -59,9 +74,9 @@
 		<tr>
             <th class='text-left nowrap'>操作</th>
             <th class='text-left nowrap'>用户ID</th>
-            <th class='text-left nowrap'>玩家头像</th>
             <th class='text-left nowrap'>openid</th>
             <th class='text-left nowrap'>昵称</th>
+            <th class='text-left nowrap'>性别</th>
             <th class='text-left nowrap'>燃力币</th>
             <th class='text-left nowrap'>玩家状态</th>
             
@@ -87,13 +102,13 @@
                 {$vo.id}
             </td>
             <td class='text-left nowrap'>
-                <img src="{$vo.avatar}"> 
-            </td>
-            <td class='text-left nowrap'>
                 {$vo.openid}
             </td>
             <td class='text-left nowrap'>
                 {$vo.nickname}
+            </td>
+            <td class='text-left nowrap'>
+                {if $vo.gender eq 1 } 男 {else /} 女 {/if}
             </td>
        
             <td class='text-left nowrap'>

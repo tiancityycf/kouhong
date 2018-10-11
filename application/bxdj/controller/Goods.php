@@ -49,7 +49,7 @@ class Goods extends BasicAdmin
             $arr = $data;
             $arr['create_time'] = time();
 
-            if (Db::name($this->table)->strict(false)->insert($arr) !== false) 
+            if (Db::name($this->table)->strict(false)->insert($arr) !== false && $this->redisSave()) 
             {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
@@ -80,7 +80,7 @@ class Goods extends BasicAdmin
             $arr = $post_data;
             $arr['update_time'] = time();
 
-            if (Db::name($this->table)->where(['id' => $get_data['id']])->update($arr) !== false) {
+            if (Db::name($this->table)->where(['id' => $get_data['id']])->update($arr) !== false && $this->redisSave()) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -95,7 +95,7 @@ class Goods extends BasicAdmin
     {
         $redis = Cache::init();
 
-        $arr = Db::name($this->table)->where(['status' => 1, 'onsale' => 1])->column('id, cate, title, img, stock, price', 'id');
+        $arr = Db::name($this->table)->where(['status' => 1, 'onsale' => 1])->order('order desc')->column('id, cate, title, img, stock, price', 'id');
 
         foreach ($arr as $k => $v) {
             $arr[$k]['imgs'] = Db::name('good_imgs')->where('product_id',$v['id'])->select();
@@ -147,7 +147,7 @@ class Goods extends BasicAdmin
             $arr = $post_data;
             $arr['product_id'] = $get_data['id'];
 
-            if ($model->save($arr) !== false) {
+            if ($model->save($arr) !== false && $this->redisSave()) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -173,7 +173,7 @@ class Goods extends BasicAdmin
 
         $res = $model->where('id',$product_id)->delete();
 
-        if($res){
+        if($res && $this->redisSave()){
 
             echo 'success';
         }else{

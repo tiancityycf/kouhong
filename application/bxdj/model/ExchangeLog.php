@@ -17,9 +17,11 @@ class ExchangeLog extends Model
 
         $query->alias('e');
 
-        $query->field('e.*,u.avatar,g.title,g.img');
+        $query->field('e.*,u.avatar,g.title,g.img,a.nickname,a.phone,a.addr,a.region');
 
         $query->join(['t_user'=>'u'],'e.openid=u.openid');
+
+        $query->join(['t_address'=>'a'],'e.address_id=a.id');
 
         $query->join(['t_goods'=>'g'],'e.good_id=g.id');
       

@@ -223,25 +223,13 @@ class User extends BasicController
 	    }
 	    //明天的兑换比例END
 
-	    //分享到群的水滴需要一直在首页面显示除非其到达了分享到群的限制上限
-	    //判断用户分享到群次数是否达到每天限制
-        $day = date('Y-m-d');
-        $is_shared = Db::name('share_count')->where(['openid'=>$data['openid'],'share_day'=>$day])->select();
-
-	    if(count($is_shared)>=$config['share_group_limit']['value']){
-	    	$result['drops']['fxdq'] = 0;
-	    }else{
-	    	$result['drops']['fxdq'] = $config['share_group_getStep']['value'];
-	    }
-	    
-
-
-        //邀请好友或加成奖励或签到成功，生成的水滴
+        //邀请或分享到群或签到成功，生成的水滴
         $reward_step = Db::name('step')->where(['openid'=>$data['openid'],'status'=>0])->select();
 
         if($reward_step){
         	$result['drops']['yqhy'] = 0;
         	$result['drops']['qdjl'] = 0;
+        	$result['drops']['fxdq'] = 0;
         	$result['drops']['jcjl'] = 0;
 
         	foreach ($reward_step as $k1 => $v1) {
@@ -252,7 +240,10 @@ class User extends BasicController
 
         			$result['drops']['qdjl'] += $v1['steps'];
 
-        		}else if($v1['comment'] == '加成奖励'){
+        		}else if($v1['comment'] == '分享到群'){
+
+        			$result['drops']['fxdq'] += $v1['steps'];
+        		}else{
 
         			$result['drops']['jcjl'] = $v1['steps'];
         		}
@@ -300,16 +291,17 @@ class User extends BasicController
 	 */
 	public function click_drops()
 	{
-		require_params('openid','type');  //type=1 '邀请好友';   type = 3  '签到奖励'
+		require_params('openid','type');  //type=1 '邀请好友';   type=2 '分享到群'; type = 3  '签到奖励'
         $data = Request::param();
 
         if($data['type'] == 1){
            $res = Db::name('step')->where(['openid'=>$data['openid'],'status'=>0,'comment'=>'邀请好友'])->update(['status'=>2]);
 
+        }else if($data['type'] == 2){
+           $res = Db::name('step')->where(['openid'=>$data['openid'],'status'=>0,'comment'=>'分享到群'])->update(['status'=>2]);
         }else if($data['type'] == 3){
            $res = Db::name('step')->where(['openid'=>$data['openid'],'status'=>0,'comment'=>'签到奖励'])->update(['status'=>2]);
-           
-        }else if($data['type'] == 4){
+        }else{
         	$res = Db::name('step')->where(['openid'=>$data['openid'],'status'=>0,'comment'=>'加成奖励'])->update(['status'=>2]);
         }
 

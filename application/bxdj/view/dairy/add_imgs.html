@@ -24,6 +24,35 @@
         
     </div>
 
+     <div class="layui-form-item">
+        <label class="layui-form-label">步数X坐标值</label>
+        <div class="layui-input-block">
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <input type="text" autofocus id="path" name="x" required="required" value='{$vo.path|default=""}' pattern="" title="步数X坐标值" placeholder="步数X坐标值" class="layui-input">
+                </div>
+            
+            </div>
+            
+        </div>
+
+        
+    </div>
+
+     <div class="layui-form-item">
+        <label class="layui-form-label">步数Y坐标值</label>
+        <div class="layui-input-block">
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <input type="text" autofocus id="path" name="y" required="required" value='{$vo.path|default=""}' pattern="" title="步数Y坐标值" placeholder="步数X坐标值" class="layui-input">
+                </div>
+            </div>
+            
+        </div>
+
+        
+    </div>
+
    <!--{foreach $vo as $k=>$v}-->
    <div style="margin-left: 20px;">
     <img style="height:100px;" src="{$v.img}"><button type="button" class='del layui-btn' value="{$v.id}" >删除</button>
