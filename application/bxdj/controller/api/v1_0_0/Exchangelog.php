@@ -76,8 +76,8 @@ class Exchangelog
 	 */
 	public function exchange_good()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Exchangelog/exchange_good.html?openid=1&id=2;
-		require_params('openid','id','address_id'); //id值good_id   address_id为地址id
+		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Exchangelog/exchange_good.html?openid=1&id=2&address_id=8;
+		require_params('openid','id','address_id'); //id值good_id address_id为地址id
 
 		$data = Request::param();
 		

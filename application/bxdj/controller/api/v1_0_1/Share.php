@@ -86,7 +86,7 @@ class Share
 		if(empty($hasOrNot)){
 				//1.是新用户
 				//获取配置信息
-		        $share = new \api_data_service\v1_0_1\Share();
+		        $share = new \api_data_service\v1_0_0\Share();
 		        //插入信息到分享记录表
 		        $insert_data = [
 		        	'share_openid' => $share_person['openid'],

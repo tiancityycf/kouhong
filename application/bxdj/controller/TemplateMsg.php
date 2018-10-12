@@ -115,12 +115,9 @@ class TemplateMsg extends BasicAdmin
             }
             // dump($content_arr1);exit;
         }
-
         $m = 0;
         foreach ($template_arr as $key => $value) {
-            
             foreach ($value as $k => $v) {
-
                 $template_arr1[$key][$k]['title'] = $tmp_name[$m][$k];
                 $template_arr1[$key][$k]['name'] = $v;
                 if($id){
@@ -130,16 +127,14 @@ class TemplateMsg extends BasicAdmin
                     $template_arr1[$key][$k]['color'] = '';
                     $template_arr1[$key][$k]['value'] = '';
                 }
-                
             }
             $m += 1;
         }
-        
-       // dump($template_arr1); dump($example); exit;
+// dump($template_arr1);exit;
         return [
             'template_arr' => $template_arr1,
             'example' => $example
-        ];
+        ];;
     }
 
     public function edit()

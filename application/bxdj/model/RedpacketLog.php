@@ -14,9 +14,10 @@ class RedpacketLog extends Model
    public function search($params)
     {
         $query = self::buildQuery();
-        $query->field('r.*,g.activity_id,g.get_reward');
         $query->alias('r');
-        $query->join(['t_group_persons'=>'g'],'r.openid = g.openid','right');
+        $query->field('r.*,g.activity_id,g.get_reward,g.group_id');
+        $query->join(['t_group_persons'=>'g'],'r.openid = g.openid and r.group_id = g.group_id');
+       
 
         if (isset($params['openid']) && $params['openid'] !== '') {
             $query->whereLike('r.openid', "%{$params['openid']}%");
@@ -32,7 +33,6 @@ class RedpacketLog extends Model
 
 
         $query->order('r.create_time desc');
-
         return $query;
     }
     

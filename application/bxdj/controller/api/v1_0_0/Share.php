@@ -19,7 +19,8 @@ class Share
 	 */
 	public function share()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/share/share.html?user_id=1&encryptedData=0a53bf188436d7372adfa7e613217f01&iv=1&share_type=1
+		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/share/share.html?user_id=1&encryptedData=0a53bf188436d7372adfa7e613217f01&iv=1&share_type=2
+		//share_type为2正常分享到群的逻辑。 share_type为6 签到水滴分享到群触发翻逻辑
 		require_params('openid','encryptedData', 'iv', 'share_type'); 
 		$data = Request::param();
 		//获得的user_id查询转换成openid下
@@ -28,11 +29,34 @@ class Share
 		if(!$user){
 			return ['code' => 0, 'message' => '分享人不存在'];
 		}
+		//正常分享逻辑
+		if($data['share_type'] == 2){
 
-		$shareService = new ShareService();
-		$result = $shareService->share($data);
+				$shareService = new ShareService();
+				$result = $shareService->share($data);
 
-		return result(200, '0k', $result);
+				return result(200, '0k', $result);
+
+	   //签到水滴分享到群触发翻倍接口
+		}else if(($data['share_type'] == 6)){
+			//获取该玩家今天的签到水滴
+			//php获取今日开始时间戳和结束时间戳
+			$beginToday=mktime(0,0,0,date('m'),date('d'),date('Y'));
+			$endToday=mktime(0,0,0,date('m'),date('d')+1,date('Y'))-1;
+
+			$qdjl_drop = Db::name('step')->where(['openid'=>$data['openid'],'comment'=>'签到奖励'])->where('create_time','between',[$beginToday,$endToday])->find();
+
+			$double_steps = 0;
+			if($qdjl_drop){
+				$double_steps = $qdjl_drop['steps']*2;
+				Db::name('step')->where(['id'=>$qdjl_drop['id'],'status'=>0])->update(['steps'=>$double_steps,'status'=>2]);
+			}
+			
+			return result(200, '0k', ['double_steps'=>$double_steps]);
+
+		}
+
+		
 	}
 
 	//分享到个人用户点击后的回调执行方法
@@ -46,8 +70,18 @@ class Share
 		if(!$share_person){
 			return ['message'=>'分享人不存在','code'=>1010];
 		}
-		
-		$hasOrNot = $UserModel->where('openid',$data['openid'])->find(); //判断被分享人是否是新用户
+
+		if($share_person['openid'] == $data['openid']){
+			return ['message'=>'分享人为自己','code'=>1011];
+		}
+
+		//$is_old = $UserModel->where('openid',$data['openid'])->find(); //判断被分享人是否是新用户
+		//相互分享
+		if(Db::name('share_record')->where(['share_openid'=>$data['openid'],'click_openid'=>$share_person['openid']])->find()){
+			return ['message'=>'不能玩家之间相互分享','code'=>1002];
+		};
+
+		$hasOrNot = Db::name('share_record')->where('click_openid',$data['openid'])->find();
 
 		if(empty($hasOrNot)){
 				//1.是新用户
@@ -80,6 +114,13 @@ class Share
         $openid = Request::param('openid');
 
 		$invitees = Db::name('share_record')->where('share_openid',$openid)->order('share_time desc')->select();
+
+		if(empty($invitees)){
+			$result['invitees'] = [];
+			$result['rate'] = 100;
+			$result['nums'] = 0;
+			return result(200, 'ok', $result);
+		}
    
     	$invitee_imgs = array();
     	foreach ($invitees as $k => $v) {
@@ -90,15 +131,14 @@ class Share
     	$result['invitees'] = $invitees_data;
        
 
-		//获取缓存信息
-	    $config = Cache::get(config('config_key'));
+	    //查询其当天未兑换步数应该的兑换比例；比例使用的是昨天与昨天之前的成功邀请的玩家的数量*配置比例
 
-	    //获取配置的邀请新玩家数量—增加步数的比例	
-	    $config_rate = $config['nums_to_rate']['value'];
-	    $nums = count($invitees);
-
-	    $result['rate'] = 100 + $config_rate*$nums;
-   
+		//直接插缓存中数据即可，在user/index接口有存入各用户的缓存兑换比例记录
+      	$cache_data = Cache::get($openid);
+      	$result['rate'] = $cache_data['exchange_step_rate']*100;
+	    //查询步数兑换比例END
+	    
+   		$nums = count($invitees);
         $result['nums'] = $nums;
 
        return result(200, 'ok', $result);

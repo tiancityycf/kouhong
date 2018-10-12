@@ -59,6 +59,5 @@ class Order extends BasicAdmin
         }
         
     }
-
   
 }

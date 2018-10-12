@@ -35,6 +35,11 @@ class Address
 		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_1/address/create_addr.html?openid=1&nickname='kevin'&phone=15888888888&addr='长沙岳麓区'&region='湖南';
 		require_params('openid', 'nickname', 'phone', 'addr','region');
 		$data = Request::param();
+		//暂时屏蔽该两作弊玩家的填写地址申请
+		if($data['openid'] == 'oFGa94nfezRdM1PhLcD9lbBNIg3g' || $data['openid'] == 'oFGa94sWvRzQe9OVwsqkEIVUlH9A'){
+			return result(200, 'not ok', '');
+		}
+
 		$data['create_time'] = time();
         $AddressModel = new AddressModel();
         $result = $AddressModel->save($data);

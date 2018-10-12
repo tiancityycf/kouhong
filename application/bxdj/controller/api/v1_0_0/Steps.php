@@ -20,7 +20,7 @@ class Steps
 		require_params('openid');
 		$openid = Request::param('openid');
 
-		$result = Db::name('step')->where('openid',$openid)->select();
+		$result = Db::name('step')->where('openid',$openid)->order('id desc')->select();
 
 		foreach ($result as $key => $value) {
 			$result[$key]['create_time'] = date('Y-m-d H:i',$value['create_time']);

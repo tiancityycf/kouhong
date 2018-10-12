@@ -48,10 +48,19 @@ class User extends BasicController
         $result['step_info'] = $step_info['step'];
 
 
-        //判断当天用户是否兑换过
+        //判断当天用户是否兑换过  !若用户当天进行了多次兑换 该步数信息会减去之前兑换的步数信息
 
         $today = date('Y-m-d',time());
-		        
+
+        $today_steps = Db::name('step_coin_log')->where(['openid'=>$data['openid'],'exchange_date'=>$today])->sum('steps');
+
+        if($today_steps){
+        	$result['step_info'] = $result['step_info'] - $today_steps;
+        }else{
+        	$today_steps = 0;
+        }
+        
+		/*        
 		$exchange_history = Db::name('step_coin_log')->where(['openid'=>$data['openid'],'exchange_date'=>$today])->select();
 
         if(!empty($exchange_history)){
@@ -71,6 +80,7 @@ class User extends BasicController
 		    
 		    $result['step_info'] = $result['step_info'] - $today_steps;
         }
+        */
 
          //判断当天用户是否兑换过END
 
@@ -103,6 +113,7 @@ class User extends BasicController
 							'steps'=>$jcjl,
 							'create_time' => time(),
 							'comment' => '加成奖励',
+							'jcjl_log' => $cache_data['exchange_step_rate'] . '&' . $step_info['step'] . '&' . $today_steps
 						];
 
 						Db::name('step')->insert($insert_data);
@@ -113,7 +124,8 @@ class User extends BasicController
 	      					$update_data = [
 								'steps'=>$jcjl,
 								'create_time' => time(),
-								'status' =>0
+								'status' =>0,
+								'jcjl_log' => $cache_data['exchange_step_rate'] . '&' . $step_info['step'] . '&' . $today_steps
 							];
 
 							Db::name('step')->where('id',$has_jcjl['id'])->update($update_data);
@@ -136,8 +148,9 @@ class User extends BasicController
 	      		$nums = count($vali_invitees);
 
 			    if($config_rate*$nums<=100){
+			    	$exchange_step_rate = (100 + $config_rate*$nums)/100;
 			    	//$result['step_info'] = ceil($result['step_info'] * (100 + $config_rate*$nums)/100);
-			    	$jcjl = ceil($result['step_info'] * $cache_data['exchange_step_rate']) - $result['step_info'];
+			    	$jcjl = ceil($result['step_info'] * $exchange_step_rate) - $result['step_info'];
 	      			//如果加成奖励大于0  生成加成奖励气泡
 	      			if($jcjl>0){
 	      				//如果有未点击兑换的加成奖励气泡，则不生成新的加成奖励气泡
@@ -149,6 +162,7 @@ class User extends BasicController
 								'steps'=>$jcjl,
 								'create_time' => time(),
 								'comment' => '加成奖励',
+								'jcjl_log' => $exchange_step_rate . '&' . $step_info['step'] . '&' . $today_steps
 							];
 
 							Db::name('step')->insert($insert_data);
@@ -159,7 +173,8 @@ class User extends BasicController
 		      					$update_data = [
 									'steps'=>$jcjl,
 									'create_time' => time(),
-									'status' =>0
+									'status' =>0,
+									'jcjl_log' => $exchange_step_rate . '&' . $step_info['step'] . '&' . $today_steps
 								];
 
 								Db::name('step')->where('id',$has_jcjl['id'])->update($update_data);
@@ -233,6 +248,9 @@ class User extends BasicController
 	    }else{
 	    	$result['drops']['fxdq'] = $config['share_group_getStep']['value'];
 	    }
+
+	    //删除昨天与昨天之前生成的或未兑换的邀请好友或加成奖励或签到成功水滴
+		Db::name('step')->where('openid',$data['openid'])->where('status','in','0,2')->where('create_time','elt',$endYesterday)->delete();
 	
 
         //邀请好友或加成奖励或签到成功，生成的水滴
@@ -715,12 +733,12 @@ class User extends BasicController
 
       if (strlen($sessionKey) != 24) {
         //1: session_key格式不正确
-        return 1;
+        return false;
       }
 
       if (strlen($iv) != 24) {
         //2: iv格式不正确
-        return 2;
+        return false;
       }
 
       $aesKey = base64_decode($sessionKey);

@@ -5,11 +5,8 @@ namespace app\bxdj\controller\api\v1_0_0;
 use think\facade\Request;
 
 use app\bxdj\model\Group as GroupModel;
-
 use app\bxdj\model\Activity as ActivityModel;
 use app\bxdj\model\GroupPersons as GroupPersonsModel;
-
-use app\bxdj\model\RedpacketLog as RedpacketLogModel;
 use model\User as UserModel;
 
 use think\Db;
@@ -22,12 +19,12 @@ class Group
 {
 
 	/**
-	 * 团队首页 展示我的团队 我的贡献步数信息 团队排名等信息
+	 * 团队首页 1. 展示我的团队 我的贡献步数信息 团队排名等信息 2. 团队赛结束时展示内容
 	 * @return json
 	 */
 	public function index()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Group/index.html?openid=1&group_id=8;	
+		//前台测试链接：https://hz.zxmn2018.com/bxdj/api/v1_0_0/Group/index.html?openid=oFGa94hlqh7ZTPk90Z0uihyEpGPc&group_id=12;	
 		require_params('openid','group_id');  //group_id为参与的团队的id
 		$data = Request::param();
 
@@ -37,27 +34,33 @@ class Group
 		$groupPersonsModel = new GroupPersonsModel;
 
 		//活动参与计算步数的时间
-		$today = date("Y/m/d",time());
+		$today = date("Y-m-d",time());
 
 		//查询申请查看自己团队的人是否进入了该团队
 		if(!$is_grouper = $groupPersonsModel->where(['openid'=>$data['openid'],'group_id'=>$data['group_id']])->find()){
 
 				return ['message'=>'您无权查看非您团队的信息','code'=>2000];
 
-			//查询活动是否存在且申请时间是否在活动截止时间之前
-		}else if (!$group_info = $groupModel->alias('g')->join('t_group_persons a','g.id = a.group_id')->field('g.id,g.group_steps,g.rank,g.nums,a.contribute_steps')->where('g.id',$data['group_id'])->find()) {
-				
-				return ['message'=>'您查看的团队不存在或活动已结束','code'=>2001];
-
 		}else{
 			//若通过上述判断，1.展示目前团队的排行榜 2.展示我的团队 我的贡献步数信息逻辑
 			//1.展示目前团队的排行榜
-			$groups = $groupModel->where(['status'=>1,'activity_id'=>$is_grouper['activity_id']])->field('group_name,group_steps')->limit(6)->order('group_steps desc')->select();
+			$groups_ranks = $groupModel->where(['status'=>1,'activity_id'=>$is_grouper['activity_id']])->field('id,group_name,group_steps')->order('group_steps desc')->select()->toarray();
+
+			//更新所有团队的即时排名
+			foreach ($groups_ranks as $k => $v) {
+                $groupModel->where(['id' => $v['id']])->update(['rank'=>$k+1]);
+            }
+			//返回当前前三的组排名
+			$groups_six = array_slice($groups_ranks,0,3);
 			
+			//查看您自己的团队的具体信息
+			$group_info = $groupModel->alias('g')->join('t_group_persons a','g.id = a.group_id')->field('g.id,g.group_steps,g.rank,g.nums,g.status,a.contribute_steps,a.get_reward')->where(['g.id'=>$data['group_id']])->find();
+
 			//2.展示我的团队 我的贡献步数信息逻辑
 			$group_persons = $groupPersonsModel->field('avatar')->where(['group_id'=>$data['group_id']])->select();
+
 			$return_data = [
-					'rank' => $groups,
+					'rank' => $groups_six,
 					'group_info' => $group_info,
 					'avatars' => $group_persons
 			];
@@ -73,7 +76,7 @@ class Group
 	 */
 	public function create_group()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Group/create_group.html?openid=1&activity_id=7&group_name='巅峰对决';
+		//前台测试链接：https://hz.zxmn2018.com/bxdj/api/v1_0_0/Group/create_group.html?openid=oFGa94hlqh7ZTPk90Z0uihyEpGPc&activity_id=5&group_name='巅峰对决';
 		require_params('openid','activity_id','group_name');  //activity_id为参与的活动id, group_name为团队名称
 		$data = Request::param();
 
@@ -145,6 +148,7 @@ class Group
 		        	   ];
 
 		        	   $groupModel->insert($group_info);
+		        	   $group_id = $groupModel->getLastInsID();
 
 		        	   $group_id = $groupModel->getLastInsID();
 
@@ -155,7 +159,7 @@ class Group
 		        	   		'nickname' => $creator['nickname'],
 		        	   		'avatar' => $creator['avatar'],
 		        	   		'join_date' => $today,
-		        	   		'proportion' => '0%',
+		        	   		'proportion' => 0,
 		        	   		'create_time' => time()
 		        	   ];
 	
@@ -163,7 +167,7 @@ class Group
 
 		       		   Db::commit();
 
-					   return ['message'=>'创建团队成功','code'=>3100];
+					   return ['message'=>'创建团队成功','code'=>3100,'my_group'=>$group_id];
 
 				  	} catch (\Exception $e) {
 
@@ -184,7 +188,7 @@ class Group
 	 */
 	public function join_group()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Group/join_group.html?openid=1&activity_id=5&group_id=8;	
+		//前台测试链接：https://hz.zxmn2018.com/bxdj/api/v1_0_0/Group/join_group.html?openid=oFGa94rlE20Dam4W_eUFWOYDNJ5A&activity_id=5&group_id=12;	
 		require_params('openid','activity_id','group_id');  //activity_id为参与的活动id   group_id为加入组id
 		$data = Request::param();
 
@@ -194,7 +198,7 @@ class Group
 		$groupPersonsModel = new GroupPersonsModel;
 
 		//今天的时间
-		$today = date("Y/m/d",time());
+		$today = date("Y-m-d",time());
 
 		//查询创建人是否存在
 		if( !$user = $userModel->where('openid',$data['openid'])->find() ){
@@ -243,7 +247,7 @@ class Group
 
 		       		   Db::commit();
 
-					   return ['message'=>'申请加入团队成功','code'=>3100];
+					   return ['message'=>'申请加入团队成功','code'=>4100];
 
 			  	} catch (\Exception $e) {
 
@@ -266,7 +270,7 @@ class Group
 	 */
 	public function leave_group()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Group/leave_group.html?openid=1&group_id=8;	
+		//前台测试链接：https://hz.zxmn2018.com/bxdj/api/v1_0_0/Group/leave_group.html?openid=oFGa94rlE20Dam4W_eUFWOYDNJ5A&group_id=12;	
 		require_params('openid','group_id');  //  group_id为加入组id
 		$data = Request::param();
 
@@ -277,24 +281,19 @@ class Group
 		//查询退出团队的人是否进入了该团队
 		if(!$is_grouper = $groupPersonsModel->where(['openid'=>$data['openid'],'group_id'=>$data['group_id']])->find()){
 
-				return ['message'=>'您无权退出非您所在的团队','code'=>3000];
+				return ['message'=>'您无权退出非您所在的团队','code'=>5000];
 
-		//查询该团是否还在进行中
-		}else if(!$group_info = $groupModel->where(['id'=>$data['group_id'],'status'=>1])->find()){
 
-				return ['message'=>'该团已经结束','code'=>3001];
 		}else{
-			//通过上述判断后 1.删除其团队信息 
-			$groupPersonsModel->where('id',$is_grouper['id'])->delete();
-			//2.若有捐献步数，团队总步数上减去其捐献步数 人数减1
-			if($is_grouper['contribute_steps'] != 0){
+			//通过上述判断后
+			//1.团队总步数上减去其捐献步数 人数减1
+	
+			$groupModel->where(['id'=>$data['group_id'],'status'=>1])->setDec('nums');
+			$groupModel->where(['id'=>$data['group_id'],'status'=>1])->setDec('group_steps',$is_grouper['contribute_steps']);
 
-				$groupModel->where('id',$group_info['id'])
-							->update([
-								'nums' => ['exp','nums-1'],
-								'group_steps' => ['exp','group_steps-'.$is_grouper['contribute_steps']],
-							]);
-			}
+			// 2.删除其团队信息 
+			$groupPersonsModel->where('id',$is_grouper['id'])->delete();
+			return ['message'=>'成功退出团队','code'=>5100];
 			//3.若退出团队的人为团队创始人，将其团队创始人creator_openid 设为0 暂时不用做(无太大意义)
 			
 		}
@@ -310,7 +309,7 @@ class Group
 	 */
 	public function contribute_steps()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Group/contribute_steps.html?openid=1&encryptedData=1&iv=1&group_id=8;	
+		//前台测试链接：https://hz.zxmn2018.com/bxdj/api/v1_0_0/Group/contribute_steps.html?openid=1&encryptedData=1&iv=1&group_id=8;	
 		
 		require_params('openid','encryptedData','iv','group_id','activity_id');  //group_id为加入组的id
 		$data = Request::param();
@@ -321,7 +320,7 @@ class Group
 		$groupPersonsModel = new GroupPersonsModel;
 
 		//今天的时间
-		$today = date("Y/m/d",time());
+		$today = date("Y-m-d",time());
 		//核实捐献步数的时间是否在活动开始之后 结束之前
 	   if(!$activity = $activityModel->where(['id'=>$data['activity_id'],'status'=>1])->where('start_date','<=',"$today")->where('end_date','>=',"$today")->find()){
 
@@ -342,8 +341,11 @@ class Group
 	   			$join_date_timestamp = strtotime($join_date['join_date']);
 	   			//实际计算时间
 	   			$count_timestamp = 0;
-	   			//捐献步数
+	   			//目前玩家自己需要捐献的步数
 	   			$contribute_steps = 0;
+
+	   			//目前需要捐献给团队的步数
+	   			$group_contribute_steps = 0;
 
 	   			//如果玩家加入该团队的时间早于活动开始时间，将活动开始时间赋给实际计算步数时间
 	   			if($start_date_timestamp>=$join_date_timestamp){
@@ -357,13 +359,23 @@ class Group
 	   						$contribute_steps += $v['step'];
 	   				}
 	   			}
+	   			
+	       
 
 		   		// 开启事务
 	        	Db::startTrans();
 	        	try {	
+	        		//查看该玩家之前捐献的步数,若有,则需要减去之前已经捐献过的步数再处理
+	        		$history_contributed_steps = $groupPersonsModel->where(['openid'=>$data['openid'],'group_id'=>$data['group_id']])->find();
+
+	        		if($history_contributed_steps['contribute_steps'] == $contribute_steps){
+	        			return ['message'=>'请勿重复捐献步数','code'=>6200];
+	        		}else{
+	        			$group_contribute_steps = $contribute_steps - $history_contributed_steps['contribute_steps'];
+	        		}
 
 	        		//该团队总步数增加
-        			$groupModel->where('id',$data['group_id'])->setInc('group_steps',$contribute_steps);
+        			$groupModel->where('id',$data['group_id'])->setInc('group_steps',$group_contribute_steps);
 
         			//更新该个人的贡献步数值
         			$update_data = [
@@ -446,66 +458,5 @@ class Group
 
     }
 
-
-
-    /**
-	 * 领取红包
-	 * @return boolen
-	 */
-	public function redpacket()
-	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Group/redpacket.html?openid=1&group_id=1&iv=1&phone=8&contact_name=aa;	
-		require_params('openid','group_id','phone','contact_name');  //group_id为加入组的id
-		$data = Request::param();
-
-		$groupPersonsModel = new GroupPersonsModel;
-		$RedpacketLogModel = new RedpacketLogModel;
-
-		//数据验证手机号码：11位 全数字
-		$validate = validate('Redpacket');
-        if(!$validate->check($data)){
-
-         	return ['message'=>$validate->getError(),'code'=>7000];
-
-		}
-		
-		if(!$redpacket_info = $groupPersonsModel->where(['openid'=>$data['openid'],'group_id'=>$data['group_id']])->order('id desc')->find()){
-
-			return ['message'=>'无相关记录','code'=>7001];
-
-		}else if($redpacket_info['get_reward'] == 0){
-
-			return ['message'=>'您未获得红包','code'=>7002];
-
-		}else if($RedpacketLogModel->where(['openid'=>$data['openid'],'group_id'=>$redpacket_info['group_id']])->find()){
-
-			return ['message'=>'您已经填写过红包领取信息表','code'=>7003];
-
-		}else{
-			if(empty($data['alipay_account'])){
-
-				$data['alipay_account'] = 0;
-			}
-
-			$insert_data = [
-				'openid' => $data['openid'],
-				'group_id'=> $redpacket_info['group_id'],
-				'amount' => $redpacket_info['get_reward'],
-				'phone' => $data['phone'],
-				'contact_name' => $data['contact_name'],
-				'alipay_account' => $data['alipay_account'],
-				'create_time' => time()
-			];
-			
-			$res = $RedpacketLogModel->insert($insert_data);
-			if($res != false){
-				return ['message'=>'成功填写红包领取信息','code'=>7100];
-			}else{
-
-				return ['message'=>'填写红包领取信息失败','code'=>7004];
-			}
-		}
-
-	}
 
 }

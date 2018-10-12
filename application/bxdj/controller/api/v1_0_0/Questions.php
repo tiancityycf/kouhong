@@ -28,7 +28,5 @@ class Questions
 		return result(200, '0k', $Questions_info);
 		
 	}
-
-	
 	
 }

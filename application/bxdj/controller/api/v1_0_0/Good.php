@@ -8,6 +8,8 @@ use think\Db;
 
 use think\facade\Config;
 use think\facade\Cache;
+
+use api_data_service\v1_0_0\User as GoodsInfoFunction;
 /**
  * 商品详情页控制器类
  */
@@ -23,8 +25,10 @@ class Good
 		require_params('id');  //id指的是good_id
 		$good_id = Request::param('id');
 
-		//获取缓存商品信息
-        $goods_info = Cache::get(config('goods_info'));
+		 //获取缓存商品信息  商品的库存信息实时更新  不能查询缓存数据
+        //$goods_info = Cache::get(config('goods_info'));
+               $model = new GoodsInfoFunction;
+               $goods_info = $model->get_product_info();
 
         foreach ($goods_info as $k1 => $v1) {
         	foreach ($v1 as $k2 => $v2) {
@@ -35,7 +39,7 @@ class Good
         	}
         }
 
-        $exchanger = Db::name('exchange_log')->alias('e')->join('t_user u','e.openid = u.openid')->field('nickname,avatar,e.create_time')->where('good_id',$good_id)->select();
+        $exchanger = Db::name('exchange_log')->alias('e')->join('t_user u','e.openid = u.openid')->field('nickname,avatar,e.create_time')->where('good_id',$good_id)->order('e.id desc')->limit(5)->select();
         //echo Db::name('exchange_log')->getLastSql();
         //dump($exchanger);die;
         foreach ($exchanger as $key => $value) {

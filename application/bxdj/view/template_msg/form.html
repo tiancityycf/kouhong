@@ -78,19 +78,17 @@
                     id:id
                 },
                 success: function(res){
-                      //console.log(res);return;
+
                     template_json = res.template_arr;
                     example_json = res.example;
                     $('.layui-form-select').css('width', '75%');
                     var type = $("#type option:selected").val();
                     template_id = type;
-
                     var template_arr = template_json[template_id];
                     var html = '';
                     console.log(111);
 
                     for (var i in template_arr) {
-
                         var obj = template_arr[i];
                         html += '<div class="layui-form-item">'
                              +        '<label class="layui-form-label">'+obj.title+'颜色</label>'

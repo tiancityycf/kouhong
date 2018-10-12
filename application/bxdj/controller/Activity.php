@@ -5,6 +5,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
 use app\bxdj\model\Activity as ActivityModel;
+use app\bxdj\model\GroupPersons as GroupPersonsModel;
 use think\cache\driver\Redis;
 use think\facade\Cache;
 
@@ -73,7 +74,7 @@ class Activity extends BasicAdmin
 
         $post_data = $this->request->post();
         if ($post_data) {
-                
+      
             $arr = [];
             $arr = $post_data;
 
@@ -87,8 +88,17 @@ class Activity extends BasicAdmin
                     foreach ($rank as $k => $v) {
                         Db::name('group')->where(['id' => $v['id']])->update(['rank'=>$k+1]);
                     }
+                    //3.刷新活动中奖项设置的人员的获奖情况
+
+                    $res = $this->count_proportion($get_data['id']);
+                    if(!$res){
+                        $this->error('数据保存失败, 请联系程序员!');
+                    }
                 }
+              
                 $this->success('恭喜, 数据保存成功!', '');
+                
+                
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
             }
@@ -96,6 +106,70 @@ class Activity extends BasicAdmin
 
         return  $this->fetch('edit', ['vo' => $vo]);
     }
+
+
+    //3.刷新活动中奖项设置的人员的获奖情况
+     public function count_proportion($activity_id)
+    {
+
+        $activityModel = new ActivityModel();
+        //查看奖项的设置情况  根据设置的奖项数量来查询数据条数
+        $reward_json = $activityModel->field('reward')->where('id',$activity_id)->find();
+        $reward_arr = json_decode($reward_json['reward'],true);
+        $limit = count($reward_arr);
+
+        //查询最新创建的开启的活动 并计算活动中前奖项设置数量的团队成员的贡献步数比例
+
+        $groups = $activityModel->alias('a')->join('t_group g','a.id = g.activity_id','right')->where(['a.id'=>$activity_id])->order('group_steps desc')->limit($limit)->select();
+    
+        if($groups){
+                $groupPersonsModel = new GroupPersonsModel();
+                //循环所有的组
+                foreach ($groups as $k => $v) {
+                    //找寻group中的所有成员
+                    $group_persons = $groupPersonsModel->where('group_id',$v['id'])->select();
+                    foreach ($group_persons as $k2 => $v2) {
+                     
+                        //计算各成员的捐献比例
+                        if($groups[$k]['group_steps'] != 0){
+                            $proportion = number_format($v2['contribute_steps']/$groups[$k]['group_steps'], 2);
+                        }else{
+                            $proportion = 0;
+                        }
+                        
+                        //请留意这里获取的数据是对应的前三名的奖励
+                        $reward = json_decode($groups[$k2]['reward'],true);
+                        if($proportion != 0){
+                            $get_reward = number_format($reward[$k+1] * $proportion,2,'.','');
+                        }else{
+                            $get_reward = 0;
+                        }
+                        
+
+                        $update_data = [
+                            'proportion' => $proportion,
+                            'get_reward' => $get_reward
+                        ];
+
+                        $res = $groupPersonsModel->where('id',$v2['id'])->update($update_data);
+                    }
+
+                }
+                if($res !== false){
+                    return true;
+                }else{
+                    return false;
+                }
+                
+        }else{
+
+             return false;
+        }
+     
+    }
+
+
+
 
      protected function redisSave()
     {

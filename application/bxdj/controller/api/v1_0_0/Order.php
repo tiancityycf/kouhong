@@ -24,7 +24,7 @@ class Order
 		$data = Request::param();
 
 		//查找玩家是否填写过地址信息
-		$address_info = Db::name('address')->field('id,phone,addr,region,status')->where('openid',$data['openid'])->select();
+		$address_info = Db::name('address')->field('id,phone,addr,region,status,nickname')->where('openid',$data['openid'])->select();
 
 		if(!$address_info){
 				$result['address_info'] = [];
@@ -54,7 +54,7 @@ class Order
 	 */
 	public function more_addr()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Order/more_addr.html?openid=1;
+		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/Order/more_addr.html?openid=1
 		require_params('openid');    
 		$openid = Request::param('openid');
 

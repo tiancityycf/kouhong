@@ -233,8 +233,7 @@ class User extends BasicController
 	    }else{
 	    	$result['drops']['fxdq'] = $config['share_group_getStep']['value'];
 	    }
-	    
-
+	
 
         //邀请好友或加成奖励或签到成功，生成的水滴
         $reward_step = Db::name('step')->where(['openid'=>$data['openid'],'status'=>0])->select();
@@ -258,8 +257,6 @@ class User extends BasicController
         		}
         	}
         	
-        }else{
-        	$result['drops'] = [];
         }
       	//生成水滴end
 
@@ -291,11 +288,17 @@ class User extends BasicController
         	$result['invitee'] = $invitee_imgs;
         }
 
+        //若玩家参与了活动且活动已经结束 返回对应参与活动的信息
+        //$groupPersonsModel = new app\bxdj\model\GroupPersons();
+
+
         return result(200, 'ok', $result);
+
+
 	}
 
 	/**
-	 * 用户登录
+	 * 点击水滴后改变水滴状态为2
 	 * @return boolen
 	 */
 	public function click_drops()

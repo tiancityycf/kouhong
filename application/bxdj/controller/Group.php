@@ -6,8 +6,8 @@ use service\DataService;
 use think\Db;
 use app\bxdj\model\Activity as ActivityModel;
 use app\bxdj\model\Group as GroupModel;
+
 use app\bxdj\model\GroupPersons as GroupPersonsModel;
-use app\bxdj\model\RedpacketLog as RedpacketLogModel;
 use think\cache\driver\Redis;
 use think\facade\Cache;
 
@@ -42,11 +42,12 @@ class Group extends BasicAdmin
         if($group_id){
 
           $groupPersonsModel = new GroupPersonsModel();
-          $redpacket_info = $RedpacketLogModel->where('group_id',$group_id)->select();
+          $group_persons = $groupPersonsModel->where('group_id',$group_id)->select();
+
 
         }
-
-        return  $this->fetch('group_persons', ['vo' => $group_persons,'redpacket_info' => $redpacket_info]);
+        
+        return  $this->fetch('group_persons', ['vo' => $group_persons]);
     }
 
      public function count_proportion()
@@ -54,13 +55,13 @@ class Group extends BasicAdmin
 
         $activityModel = new ActivityModel();
         //查看奖项的设置情况  根据设置的奖项数量来查询数据条数
-        $reward_json = $activityModel->field('reward')->where(['status'=>0])->find();
+        $reward_json = $activityModel->field('reward')->where(['status'=>1])->find();
         $reward_arr = json_decode($reward_json['reward'],true);
         $limit = count($reward_arr);
 
         //查询最新创建的开启的活动 并计算活动中前奖项设置数量的团队成员的贡献步数比例
 
-        $groups = $activityModel->alias('a')->join('t_group g','a.id = g.activity_id','right')->where(['a.status'=>0])->order('group_steps desc')->limit($limit)->select();
+        $groups = $activityModel->alias('a')->join('t_group g','a.id = g.activity_id','right')->where(['a.status'=>1])->order('group_steps desc')->limit($limit)->select();
 
         if($groups){
                 $groupPersonsModel = new GroupPersonsModel();
