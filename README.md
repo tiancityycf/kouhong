@@ -1,4 +1,4 @@
-新版本盒子介绍
+项目介绍
 * Gitlab 托管地址：ssh://git@gitlab.ganaa.cn:22022/backend/qmxz.git
 * 测试环境部署说明
 1.代码从版本库更新
@@ -19,3 +19,6 @@ config/database_dev.php 到 config/database.php
 ```
 
 * Cron定时任务介绍
+
+
+* 需要的服务
