@@ -19,10 +19,10 @@ class BasicController extends Controller
 	{
 		// 校验平台参数
 		require_params('sign', 'timestamp');
-
-		if (!preg_match('/\/user\/update$/i',Request::path()) && !$this->validSign(Request::param())) {
-			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
-		}
+		//暂时去掉签名验证
+//		if (!preg_match('/\/user\/update$/i',Request::path()) && !$this->validSign(Request::param())) {
+//			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
+//		}
 	}
 
 	/**
