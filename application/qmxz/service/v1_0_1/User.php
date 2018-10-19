@@ -13,18 +13,6 @@ use app\qmxz\model\UserRecord as UserRecordModel;
 class User
 {
     /**
-     * 用户首页
-     * @param  $userId 用户id
-     * @return json
-     */
-    public function index($openid)
-    {
-
-
-    }
-
-
-    /**
      * 用户登录
      * @return array
      */
