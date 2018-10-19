@@ -15,7 +15,7 @@ return [
    // 服务器地址
     'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
     // 数据库名
-    'database'        => 'qmxz',
+    'database'        => 'dbqmxz',
     // 用户名
     'username'        => 'root',
     // 密码
@@ -66,7 +66,7 @@ return [
     // 服务器地址
     'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
     // 数据库名
-    'database'        => 'qmxz',
+    'database'        => 'dbqmxz',
     // 用户名
     'username'        => 'root',
     // 密码

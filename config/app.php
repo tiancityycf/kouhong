@@ -134,20 +134,7 @@ return [
     'show_error_msg'         => true,
     // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
-
-
-    
-    'word_key' => 'admin:829fc:word:level:',
-    'word_list_key' => 'admin:829fc:word:list',
-    'heimingdao_url' => 'http://kf.ali-yun.wang/api/complain_user/check',
-
-    'heimingdan_zongkaiguan' => 1,
-    'heimingdan_redis_key' => 'admin:heimingdan:list',
-
     'img_url_config' => 'https://txcdn.ylll111.xyz/', //图片地址配置
     'bucketName' => 'ylll111xyz', //空间名字
-    'folder' => 'hanzi/', //图片存储文件夹名字
-
-
-    'other_user' => ['shangwu','lanhui','sanmo','forestgame','qmpy','bjjkc','mkzp2048','markgodboy','tcs888'],
+    'folder' => 'qmxz/', //图片存储文件夹名字
 ];
