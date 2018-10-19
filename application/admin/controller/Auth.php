@@ -15,7 +15,7 @@
 namespace app\admin\controller;
 
 use controller\BasicAdmin;
-use service\DataService;
+use service\DataSevice;
 use service\NodeService;
 use service\ToolsService;
 use think\Db;
