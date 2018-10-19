@@ -21,7 +21,7 @@ class BasicController extends Controller
 		require_params('sign', 'timestamp');
 
 		if (!preg_match('/\/user\/update$/i',Request::path()) && !$this->validSign(Request::param())) {
-			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
+//			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
 		}
 	}
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_0;
+namespace app\qmxz\controller\api\v1_0_1;
 
 use think\facade\Request;
 
-use api_data_service\v1_0_0\User as UserService;
+use app\qmxz\service\v1_0_1\User as UserService;
 use app\qmxz\model\User as UserModel;
 use controller\BasicController;
 
