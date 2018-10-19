@@ -19,13 +19,10 @@ class User extends BasicController
 	 */
 	public function index()
 	{
-
 		require_params('openid', 'encryptedData', 'iv');
         $data = Request::param();
         $result = [];
         return result(200, 'ok', $result);
-
-
 	}
 
 	/**
