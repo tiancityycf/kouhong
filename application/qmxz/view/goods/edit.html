@@ -1,0 +1,126 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post" style="overflow-y:scroll; height:400px;">
+	<div class="layui-form-item">
+        <label class="layui-form-label">商品名称</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="title" required="required" value={$vo.title} pattern="" title="" placeholder="请输入商品名称" class="layui-input" style="width: 75%;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属分类</label>
+        <div style="width: 35%;" class="layui-input-block">
+                <select id="cate" lay-filter="type" name="cate" class="layui-select" >
+                 
+                    <option value="">- 请选择分类 -</option>
+
+                    <!--{foreach $cates as $key=>$st}-->
+
+                    <option {if condition="$vo.cate == $st.id"}selected{/if} value="{$st.id}">- {$st.cate_name} -</option>
+
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">上传图片</label>
+        <div class="layui-input-block">
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <input type="text" autofocus id="path" name="img" required="required" value='{$vo.img|default=""}' pattern="" title="图片地址" placeholder="图片地址" class="layui-input">
+                </div>
+                <div class="layui-col-md3">
+                    <div class="layui-upload" style="margin-left: 20px;">
+                        <button type="button" class="layui-btn" id="test1">上传图片</button>
+                    </div>
+                </div>
+                <div class="layui-col-md3">
+                    <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.path|default=""}' />
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品库存</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="stock" required="required" value={$vo.stock} pattern="" title="" placeholder="请输入商品库存量" class="layui-input" style="width: 75%;">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">所需金币</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="price" required="required" value={$vo.price} pattern="" title="" placeholder="兑换所需金币值" class="layui-input" style="width: 75%;">
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">首页推荐位</label>
+        <div style="width: 35%;" class="layui-input-block">
+                <select  name="onsale" class="layui-select">
+                	<!--{foreach [1=>'推荐',0=>'不推荐'] as $key=>$st}-->
+                	
+	                <option {if condition="$vo.onsale == $key"}selected{/if} value="{$key}">- {$st} -</option>
+	    
+                	<!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="order" required="required" value={$vo.order} pattern="" title="" placeholder="排序" class="layui-input" style="width: 75%;">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否启用</label>
+        <div style="width: 35%;" class="layui-input-block">
+                <select  name="status" class="layui-select">
+                    <!--{foreach [1=>'启用',0=>'不启用'] as $key=>$st}-->
+
+                    <option {if condition="$vo.status == $key"}selected{/if} value="{$key}">- {$st} -</option>
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+
+	<div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+        
+        layui.use('upload', function(){
+            var $ = layui.jquery
+            ,upload = layui.upload;
+
+            var uploadInst = upload.render({
+                elem: '#test1' //绑定元素
+                ,url: '/admin/img/upload' //上传接口
+                ,method: 'post'
+                ,exts : 'jpg|png|gif'
+                ,done: function(res){
+                    if(res.code == 1){
+                        $("#path").val(res.path);
+                        $("#size").val(res.size);
+                        $("#type").val(res.type);
+                        $("#img").attr('src', res.path);
+                        layui.alert('图片已经上传到网宿云存储', {icon: 6});
+
+                    }else if(res.code == 0){
+                        layui.alert(res.msg);
+                    }else{
+                        layui.alert(res.error_msg);
+                    }
+                }
+            });
+        });
+
+    </script>
+</form>
