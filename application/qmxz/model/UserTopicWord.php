@@ -10,18 +10,18 @@ use think\Model;
 class UserTopicWord extends Model
 {
 
-    public $table = 't_user_topic_word';
-	
-    public function search($params)
+    public function topic()
     {
-        $query = self::buildQuery();
+        return $this->hasOne('Topic', 'id', 'topic_id');
+    }
 
-        foreach (['id'] as $key) {
-            (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
-        }
+    public function topicWord()
+    {
+        return $this->hasOne('TopicWord', 'id', 'topic_id');
+    }
 
-        $query->order('id desc');
-
-        return $query;
+    public function selectTopic()
+    {
+        return $this->hasOne('SelectTopic', 'id', 'topic_id');
     }
 }
