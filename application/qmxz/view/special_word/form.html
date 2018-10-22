@@ -1,0 +1,51 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+	<div class="layui-form-item">
+        <label class="layui-form-label">整点场选择</label>
+        <div class="layui-input-block">
+                <select id="special_id" name="special_id" lay-verify="required" class="layui-select" lay-search>
+                	<option value="">- 请选择 -</option>
+                	<!--{foreach $special_list as $key=>$st}-->
+                	<!--{if isset($vo['special_id']) AND $vo.special_id eq $key}-->
+                	<option selected value="{$key}">- {$st} -</option>
+	                <!--{else}-->
+	                <option value="{$key}">- {$st} -</option>
+	                <!--{/if}-->
+                	<!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="title" value='{$vo.title|default=""}' required="required" pattern="" title="标题" placeholder="标题" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="des" value='{$vo.des|default=""}' required="required" pattern="" title="描述" placeholder="描述" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">左选项</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="left_option" value='{$vo.left_option|default=""}' required="required" pattern="" title="左选项" placeholder="左选项" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">右选项</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="right_option" value='{$vo.right_option|default=""}' required="required" pattern="" title="右选项" placeholder="右选项" class="layui-input">
+        </div>
+    </div>
+
+	<div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+</form>
