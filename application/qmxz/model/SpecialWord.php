@@ -21,6 +21,8 @@ class SpecialWord extends Model
             (isset($params[$key]) && $params[$key] !== '') && $query->where($key, $params[$key]);
         }
 
+        $query->order('id desc');
+
         return $query;
 	}
 
