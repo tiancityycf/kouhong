@@ -1,10 +1,9 @@
 <?php
 namespace app\qmxz\controller;
 
+use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicWord as TopicWordModel;
 use controller\BasicAdmin;
-use think\Db;
-use think\facade\Cache;
 
 class TopicWord extends BasicAdmin
 {
@@ -22,9 +21,8 @@ class TopicWord extends BasicAdmin
 
         $db = $db->search($get);
 
-        $result = parent::_list($db, true, false, false);
-        $this->assign('title', $this->title);
-        return $this->fetch('qmxz@topic_word/index', $result);
+        $this->topic_list();
+        return parent::_list($db);
     }
 
     public function add()
@@ -33,23 +31,15 @@ class TopicWord extends BasicAdmin
         if ($data) {
             $data['create_time'] = time();
             $model               = new TopicWordModel();
-            if ($model->save($data) !== false && $this->redisSave()) {
+            if ($model->save($data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
-        //话题
-        $topic_list = Db::name('topic')->select();
-        $topic_arr = [];
-        if(!empty($topic_list)){
-            foreach ($topic_list as $key => $value) {
-                $topic_arr[$value['id']] = $value['title'];
-            }
-        }
-        $this->assign('topic_arr',$topic_arr);
 
-        return $this->fetch('qmxz@topic_word/form', ['vo' => $data]);
+        $this->topic_list();
+        return $this->fetch('form', ['vo' => $data]);
     }
 
     public function edit()
@@ -61,29 +51,23 @@ class TopicWord extends BasicAdmin
         $post_data = $this->request->post();
 
         if ($post_data) {
-            if ($vo->save($post_data) !== false && $this->redisSave()) {
+            if ($vo->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
-        //话题
-        $topic_list = Db::name('topic')->select();
-        $topic_arr = [];
-        if(!empty($topic_list)){
-            foreach ($topic_list as $key => $value) {
-                $topic_arr[$value['id']] = $value['title'];
-            }
-        }
-        $this->assign('topic_arr',$topic_arr);
-        return $this->fetch('qmxz@topic_word/form', ['vo' => $vo->toArray()]);
+
+        $this->topic_list();
+        return $this->fetch('form', ['vo' => $vo->toArray()]);
     }
 
     public function del()
     {
         $data = $this->request->post();
         if ($data) {
-            if (Db::name($this->table)->where('id', $data['id'])->delete()) {
+            $model = TopicWordModel::get($data['id']);
+            if ($model->delete() !== false) {
                 $this->success("删除成功！", '');
             }
         }
@@ -91,16 +75,23 @@ class TopicWord extends BasicAdmin
         $this->error("删除失败，请稍候再试！");
     }
 
-    protected function redisSave()
+    // protected function redisSave()
+    // {
+    //     $redis = Cache::init();
+
+    //     $topic_list = TopicWordModel::select();
+    //     if (Cache::set(config('topic_word_key'), $topic_list)) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+
+    // }
+
+    protected function topic_list()
     {
-        $redis = Cache::init();
+        $data = TopicModel::column('title', 'id');
 
-        $topic_list = TopicWordModel::select();
-        if (Cache::set(config('topic_word_key'), $topic_list)) {
-            return true;
-        } else {
-            return false;
-        }
-
+        $this->assign('topic_list', $data);
     }
 }
