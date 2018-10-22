@@ -1,0 +1,94 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+{/block}
+
+{block name="content"}
+<div class="layui-form-item layui-inline">
+    <div class="layui-form-item layui-inline">
+        <!--{if auth("$classuri/add")}-->
+        <button data-modal='{:url("$classuri/add")}' data-title="添加话题" class='layui-btn layui-btn-sm layui-bg-green'>添加</button>
+        <!--{/if}-->
+    </div>
+
+</div>
+<div class="layui-form-item layui-inline">
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+	<div class="layui-form-item layui-inline">
+        <label class="layui-form-label">ID搜索</label>
+        <div class="layui-input-inline">
+            <input name="id" value="{$Think.get.id|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-inline">
+            <input name="title" value="{$Think.get.title|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-inline">
+            <input name="des" value="{$Think.get.des|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+</div>
+
+
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+    	<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>ID</th>
+            <th class='text-left nowrap'>标题</th>
+            <th class='text-left nowrap'>描述</th>
+            <th class='text-left nowrap'>时间</th>
+            
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td class='text-left nowrap'>
+
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                {/if}
+
+                {if auth("$classuri/del")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
+                {/if}
+
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.title}
+            </td>
+            <td class='text-left nowrap'>
+                <?php if(mb_strlen($vo['des'], "utf-8") > 20) { echo mb_substr($vo['des'], 0, 20, "UTF8") . '...'; } else { echo $vo['des']; }?>
+                {//$vo.des}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.create_time|date='Y-m-d H:i:s'}
+            </td>
+            
+    	</tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+</form>
+{/block}
