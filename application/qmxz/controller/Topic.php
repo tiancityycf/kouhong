@@ -3,8 +3,6 @@ namespace app\qmxz\controller;
 
 use app\qmxz\model\Topic as TopicModel;
 use controller\BasicAdmin;
-use think\Db;
-use think\facade\Cache;
 
 class Topic extends BasicAdmin
 {
@@ -22,9 +20,7 @@ class Topic extends BasicAdmin
 
         $db = $db->search($get);
 
-        $result = parent::_list($db, true, false, false);
-        $this->assign('title', $this->title);
-        return $this->fetch('qmxz@topic/index', $result);
+        return parent::_list($db);
     }
 
     public function add()
@@ -33,14 +29,14 @@ class Topic extends BasicAdmin
         if ($data) {
             $data['create_time'] = time();
             $model               = new TopicModel();
-            if ($model->save($data) !== false && $this->redisSave()) {
+            if ($model->save($data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
 
-        return $this->fetch('qmxz@topic/form', ['vo' => $data]);
+        return $this->fetch('form', ['vo' => $data]);
     }
 
     public function edit()
@@ -52,20 +48,21 @@ class Topic extends BasicAdmin
         $post_data = $this->request->post();
 
         if ($post_data) {
-            if ($vo->save($post_data) !== false && $this->redisSave()) {
+            if ($vo->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
-        return $this->fetch('qmxz@topic/form', ['vo' => $vo->toArray()]);
+        return $this->fetch('form', ['vo' => $vo->toArray()]);
     }
 
     public function del()
     {
         $data = $this->request->post();
         if ($data) {
-            if (Db::name($this->table)->where('id', $data['id'])->delete()) {
+            $model = TopicModel::get($data['id']);
+            if ($model->delete() !== false) {
                 $this->success("删除成功！", '');
             }
         }
@@ -73,16 +70,16 @@ class Topic extends BasicAdmin
         $this->error("删除失败，请稍候再试！");
     }
 
-    protected function redisSave()
-    {
-        $redis = Cache::init();
+    // protected function redisSave()
+    // {
+    //     $redis = Cache::init();
 
-        $topic_list = TopicModel::select();
-        if (Cache::set(config('topic_key'), $topic_list)) {
-            return true;
-        } else {
-            return false;
-        }
+    //     $topic_list = TopicModel::select();
+    //     if (Cache::set(config('topic_key'), $topic_list)) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
 
-    }
+    // }
 }
