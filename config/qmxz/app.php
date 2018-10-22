@@ -21,4 +21,6 @@ return [
     'topic_word_key'   => 'qmxz:829fc:topicword',
     'select_topic_key' => 'qmxz:829fc:selecttopic',
 
+    'goods_info' => 'qmxz:goods_info',
+
 ];
