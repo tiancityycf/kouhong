@@ -116,8 +116,37 @@ server {
 1. 新加服务器，并配置nginx php-fpm基础服务，
 2. copy主服务器qmxz_2088.conf 到新机器nginx配置目录下，并重新加载nginx配置文件
 3. 主服务器配置：qmxz.conf 
-qmxz_backend 新增新机器的ip 端口等信息
-4. 重启proxy的nginx，并测试
+qmxz_backend 新增新机器的ip 端口等信息 
+4. walle配置,登录新购机器编辑如下脚本，并执行
+
+```
+#!/usr/bin/bash
+USER_COUNT=`cat /etc/passwd | grep '^walle:' -c`
+USER_NAME='walle'
+if [ $USER_COUNT -ne 1 ]
+ then
+ useradd -g www $USER_NAME
+ echo "8wIWjTm2TAgTpELF" | passwd $USER_NAME --stdin
+ 
+ KEY='ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEA8JlXn/Q/V5weCMYpUx9iJhZQRBg+W6tZjet8TwSCrqJuGsVBP6rcK0PyILbBS7taGpqZAVAxNKAANYX5PI3fi6zcCL1YZXBHbsJz52jrtXRjf49XwEcsiAya/nkkt10Fn9z5LE0bKSsFqaLmFtdu/4/EKfMfVeB/ETn0ivK+n/YV/loziyiHb5QC9IjBv4xhTEwf7xwggNNzTIc1NErGK1FyOV3sqAPlTyURb5DKBp7Df3ge4a84geLi/YNFN7YyoONXy1l+klfJT0UkdBoAosuKCyevePDtXOfiGN9Gwkk6F5OB/AHaxxu7atuc98Hof5ldHlveSfEy1pYNZefovFaG4KNb88ENkaFCIZKjrwvwre5lQ/qO3adLiMzY4ny66E2K0gZX7jcw3kHPD5S5iF5Ejo7VF62onb6dUusIHeuXm3eL6ojb2DJJKBYI4zMqX3ZiqjRX3lx6HR+e6AsD5MeuHABdTnh7m5uEavNuv2Ra9rKZN7T473+GsLlu4WL0qGaLPgoZEPBT6TcMYc5MDxIqBI0wgqxmfE0h+xM7zptDqmLMkci3CvLb1rhe4FlkmU5LF9x71eMeCaGleD0tK0J5UP5u2rl8QjSbKBLx80I/7xLY56Zq9JUKB11pNV/Ed8cl1Jwnbn12a66cA9eimn5NPJqYCMS8hGgHvFmpvHU= walle@zhise.com'
+ mkdir -p /home/walle/.ssh
+ echo $KEY >> /home/walle/.ssh/authorized_keys
+
+ WEB='/data/wwwroot'
+ LOG='/data/wwwlogs'
+ mkdir -p $WEB/walle 
+ chown -R www:www $WEB
+ chmod -R 775 $WEB
+ chown -R www:www $LOG
+ chmod -R 775 $LOG
+ 
+ else
+ echo 'user exits'
+fi
+
+```
+5. 登录walle系统，编辑项目，在机器列表中新增刚才机器的ip和端口
+6. 提交上线申请，部署成功，即可测试
 
 
 
