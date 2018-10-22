@@ -113,10 +113,11 @@ server {
 
 * 扩容方案
 
-1. 新加服务器，并配置nginx php-fpm基础服务，copy qmxz_2088.conf 到新机器
-2. 主服务器配置：qmxz.conf 
+1. 新加服务器，并配置nginx php-fpm基础服务，
+2. copy主服务器qmxz_2088.conf 到新机器nginx配置目录下，并重新加载nginx配置文件
+3. 主服务器配置：qmxz.conf 
 qmxz_backend 新增新机器的ip 端口等信息
-3. 重启nginx，并测试
+4. 重启proxy的nginx，并测试
 
 
 
