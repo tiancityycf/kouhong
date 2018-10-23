@@ -38,26 +38,23 @@ class Good
 	 */
 	public function good_detail()
 	{
-		//前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/good_detail.html?id=40;
+		//前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/good_detail.html?id=40&user_id=9;
 		require_params('id');  //id指的是good_id
 		$good_id = Request::param('id');
 
 		 //获取缓存商品信息  商品的库存信息实时更新  不能查询缓存数据
-        //$goods_info = Cache::get(config('goods_info'));
-        $good_detail = Db::name('goods')->where('id',$good_id)->find();
 
-        dump($good_detail);die;
+        $stock = Db::name('goods')->field('stock')->where('id',$good_id)->find();
 
-        $exchanger = Db::name('exchange_log')->alias('e')->join('t_user u','e.openid = u.openid')->field('nickname,avatar,e.create_time')->where('good_id',$good_id)->order('e.id desc')->limit(5)->select();
-        //echo Db::name('exchange_log')->getLastSql();
-        //dump($exchanger);die;
+        $exchanger = Db::name('exchange_log')->alias('e')->join('t_user u','e.user_id = u.id')->field('nickname,avatar,e.create_time')->where('good_id',$good_id)->order('e.id desc')->limit(10)->select();
+
         foreach ($exchanger as $key => $value) {
 			$exchanger[$key]['create_time'] = date('Y-m-d H:i',$value['create_time']);
 		}
 
-        $arr['good_detail'] = $good_detail;
+        $arr['stock'] = $stock;
         $arr['exchanger'] = $exchanger;
-        
+     
         return result(200, '0k', $arr);
 	}
 

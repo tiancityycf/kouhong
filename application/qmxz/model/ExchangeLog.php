@@ -3,7 +3,7 @@
 namespace app\qmxz\model;
 
 use think\Model;
-//use api_data_service\Config as ConfigService;
+
 
 /**
  * 用户记录模型类
@@ -29,7 +29,7 @@ class ExchangeLog extends Model
         if (isset($params['openid']) && $params['openid'] !== '') {
             $query->whereLike('e.openid', "%{$params['openid']}%");
         }
-        
+
         if (isset($params['status']) && $params['status'] !== '') {
             $query->where('e.status', $params['status']);
         }
