@@ -25,8 +25,11 @@ class Good
     {
         //前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/good/index.html;
         $goods_info = Cache::get(config('goods_info'));
-        dump($goods_info);die;
+        $config = Cache::get(config('config_key'));
 
+        $arr['banners'] = $config['good_banners']['value'];
+        $arr['good_info'] = $goods_info;
+        return result(200, '0k', $arr);
     }
 	/**
 	 * 查询具体商品信息与其兑换过的信息
