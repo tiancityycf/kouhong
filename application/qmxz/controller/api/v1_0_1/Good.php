@@ -68,7 +68,7 @@ class Good
      */
     public function exchange_good()
     {
-        //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/exchange_good.html?openid=1&id=2&address_id=8;
+        //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/exchange_good.html?user_id=1&id=2&address_id=8;
         require_params('user_id','id','address_id'); //id值good_id address_id为地址id
         $data = Request::param();
         
@@ -112,7 +112,7 @@ class Good
                 Db::rollback();
                 throw new \Exception("系统繁忙");
             }
-            return ['message'=>'成功兑换商品','code'=>2000];
+            return result(200, '成功兑换商品');
         }    
    
     }
