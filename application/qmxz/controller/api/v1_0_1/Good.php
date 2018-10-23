@@ -79,16 +79,16 @@ class Good
         $userInfo =  Db::name('user_record')->where('user_id',$data['user_id'])->find();
 
         if(!$goodsInfo){
-
-            return ['message'=>'无该商品','code'=>1000];
+           $res = ['code'=>1000];
+           return result(200, '无该商品', $res);
 
         }else if($goodsInfo['stock'] <= 0){
-
-            return ['message'=>'商品库存不足','code'=>1001];
+            $res =  ['code'=>1001];
+            return result(200, '商品库存不足', $res);
 
         }else if($goodsInfo['price'] > $userInfo['gold']){
-
-            return ['message'=>'用户金币低于商品价格','code'=>1002];
+            $res = ['code'=>1002];
+            return result(200, '用户金币低于商品价格', $res);
 
         }else{
              // 开启事务
@@ -112,7 +112,7 @@ class Good
                 Db::rollback();
                 throw new \Exception("系统繁忙");
             }
-            return result(200, '成功兑换商品');
+            return result(200, '成功兑换商品',['code' => 1500]);
         }    
    
     }
