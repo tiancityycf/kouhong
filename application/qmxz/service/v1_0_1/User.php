@@ -54,6 +54,7 @@ class User
                     $userRecord = new UserRecordModel();
                     $userRecord->user_id = $user->id;
                     $userRecord->openid = $data['openid'];
+                    $userRecord->gold = 500;
                     $userRecord->last_login = $time;
                     if ($from_type == 1) {
                         $userRecord->user_status = 2;
@@ -62,8 +63,7 @@ class User
                     }
                    
                     $userRecord->save();
-                    //初始化步数
-                    Db::name('step_coin')->insert(['openid'=>$data['openid']]);
+                    
                 }
 
                 Db::commit();

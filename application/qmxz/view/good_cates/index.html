@@ -1,0 +1,73 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline">
+    <!--{if auth("$classuri/add")}-->
+     <button data-modal='{:url("$classuri/add")}' data-title="添加" data-width='50%' class='layui-btn layui-btn-sm'>添加</button> 
+    <!--{/if}-->
+
+</div>
+
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>商品类别ID</th>
+            <th class='text-left nowrap'>商品类别名称</th>
+            <th class='text-left nowrap'>商品类别图</th>
+            <th class='text-left nowrap'>排序</th>
+            <th class='text-left nowrap'>状态</th>
+            
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.cate_name}
+            </td>
+            <td class='text-left nowrap'>
+                <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.banner}' />
+            
+            </td>
+            
+            <td class='text-left nowrap'>
+                {$vo.order}
+            </td>
+
+            <td class='text-left nowrap'>
+                 {if condition="$vo.status == 1"}
+                 <span style="color:green">启用</span>
+                 {else}
+                 <span style="color:red">停用</span> 
+                 {/if}
+            </td>
+            
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+
+    </script>
+</form>
+{/block}

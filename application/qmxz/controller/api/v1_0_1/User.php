@@ -31,7 +31,7 @@ class User extends BasicController
 	 */
 	public function login()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
+		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
 		require_params('code');
 		$code = Request::param('code');
 		$from_type = Request::param('from_type') ? Request::param('from_type') : 0;
@@ -95,7 +95,7 @@ class User extends BasicController
 
 	public function center()
 	{
-		//前台测试链接：http://www.zhuqian.com/bxdj/api/v1_0_0/user/center.html?openid=1&sign=0a53bf188436d7372adfa7e613217f01&timestamp=1
+		//前台测试链接：http://www.zhuqian.com/qmxz/api/v1_0_0/user/center.html?openid=1&sign=0a53bf188436d7372adfa7e613217f01&timestamp=1
 		require_params('openid');
         $openid = Request::param('openid');
 

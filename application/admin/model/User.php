@@ -9,7 +9,7 @@ use think\Model;
  */
 class User extends Model
 {
-	protected $connection = [
+	/*protected $connection = [
         // 数据库类型
         'type'            => 'mysql',
         // 服务器地址
@@ -20,6 +20,6 @@ class User extends Model
         'username'        => 'root',
         // 密码
         'password'        => 'mdWeb^Serv$MYSQL',
-    ];
+    ];*/
     
 }
