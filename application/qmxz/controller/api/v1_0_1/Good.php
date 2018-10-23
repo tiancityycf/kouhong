@@ -114,5 +114,27 @@ class Good
    
     }
 
+    /**
+     * 兑换成功
+     * @return boolen
+     */
+    public function good_info()
+    {
+        //前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/good/good_info.html?user_id=9&id=8;
+        require_params('user_id','id'); //id值good_id 
+        $data = Request::param();
+        
+        $GoodsModel = new GoodsModel();
+
+        $good_img = $GoodsModel->field('img')->where('id',$data['id'])->find();
+        
+        $gold = Db::name('user_record')->field('gold')->where('user_id',$data['user_id'])->find();
+
+        $arr['good_img'] = $good_img;
+        $arr['gold'] = $gold;
+     
+        return result(200, '0k', $arr);
+
+    }
 	
 }

@@ -73,8 +73,9 @@ class Order extends BasicAdmin
         $cellNum = count($expCellName);
         $dataNum = count($expTableData);
 
-        require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/PHPExcel/PHPExcel.php';
-        $objPHPExcel = new PHPExcel();
+        require '/../vendor/PHPExcel/PHPExcel.php';
+        $objPHPExcel = new \PHPExcel();
+    
         //vendor("PHPExcel.PHPExcel");
          
         //$objPHPExcel = new PHPExcel();
@@ -95,7 +96,7 @@ class Order extends BasicAdmin
         header('pragma:public');
         header('Content-type:application/vnd.ms-excel;charset=utf-8;name="'.$xlsTitle.'.xls"');
         header("Content-Disposition:attachment;filename=$fileName.xls");//attachment新窗口打印inline本窗口打印
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5'); 
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5'); 
         $objWriter->save('php://output'); 
         exit;  
 
@@ -106,7 +107,7 @@ class Order extends BasicAdmin
           $xlsName = "订单表";
           $xlsCell = array(
             array('id','订单序号'),
-            array('openid','玩家openid'),
+            array('user_id','玩家userid'),
             array('good_id','商品ID'),
             array('title','商品名称'),
             array('nickname','收件人名称'),
@@ -117,7 +118,7 @@ class Order extends BasicAdmin
             array('create_time','创建时间'),
          );
 
-          $xlsData = Db::name('exchange_log')->alias('e')->join(['t_address'=>'a'],'e.address_id=a.id')->join(['t_goods'=>'g'],'e.good_id=g.id')->field('e.id,e.openid,e.good_id,e.status,e.create_time,g.title,a.nickname,a.phone,a.addr,a.region')->order('id desc')->select();
+          $xlsData = Db::name('exchange_log')->alias('e')->join(['t_address'=>'a'],'e.address_id=a.id')->join(['t_goods'=>'g'],'e.good_id=g.id')->field('e.id,e.user_id,e.good_id,e.status,e.create_time,g.title,a.nickname,a.phone,a.addr,a.region')->order('id desc')->select();
           //dump($xlsData);die;
 
             foreach ($xlsData as $k => $v)
