@@ -1,0 +1,29 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post" style="overflow-y:scroll; height:400px;">
+	<div class="layui-form-item">
+        <label class="layui-form-label">签到天数</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="day" required="required" value='' pattern="" title="" placeholder="请输入签到天数" class="layui-input" style="width: 55%;">
+        </div>
+    </div>
+	<div class="layui-form-item">
+        <label class="layui-form-label">奖励金币</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="gold" required="required" value='' pattern="" title="" placeholder="请输入奖励金币" class="layui-input" style="width: 55%;">
+        </div>
+    </div>
+    	<div class="layui-form-item">
+        <label class="layui-form-label">奖励红包</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="money" required="required" value='' pattern="" title="" placeholder="请输入奖励红包" class="layui-input" style="width: 55%;">
+        </div>
+    </div>
+    
+	<div class="layui-form-item text-center">
+
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+   
+   
+</form>
