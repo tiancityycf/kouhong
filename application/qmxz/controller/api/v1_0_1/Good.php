@@ -23,11 +23,11 @@ class Good
 
     public function index()
     {
-        //前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/good/index.html;
+        //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/index.html;
         $goods_info = Cache::get(config('goods_info'));
         $config = Cache::get(config('config_key'));
 
-        $arr['banners'] = $config['good_banners']['value'];
+        $arr['banners'] = json_decode($config['good_banners']['value']);
         $arr['good_info'] = $goods_info;
         return result(200, '0k', $arr);
     }
@@ -37,7 +37,7 @@ class Good
 	 */
 	public function good_detail()
 	{
-		//前台测试链接：https://qmxz.com/qmxz/api/v1_0_1/good/good_detail.html?id=40;
+		//前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/good_detail.html?id=40;
 		require_params('id');  //id指的是good_id
 		$good_id = Request::param('id');
 
@@ -67,7 +67,7 @@ class Good
      */
     public function exchange_good()
     {
-        //前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/good/exchange_good.html?openid=1&id=2&address_id=8;
+        //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/exchange_good.html?openid=1&id=2&address_id=8;
         require_params('user_id','id','address_id'); //id值good_id address_id为地址id
         $data = Request::param();
         
