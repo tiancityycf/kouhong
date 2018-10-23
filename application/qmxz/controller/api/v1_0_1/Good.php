@@ -29,6 +29,7 @@ class Good
 
         $arr['banners'] = json_decode($config['good_banners']['value']);
         $arr['good_info'] = $goods_info;
+
         return result(200, '0k', $arr);
     }
 	/**

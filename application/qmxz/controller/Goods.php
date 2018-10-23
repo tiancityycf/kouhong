@@ -125,8 +125,9 @@ class Goods extends BasicAdmin
             foreach ($arr as $k2 => $v2) {
                 $arr[$k2]['imgs'] = Db::name('good_imgs')->where('product_id',$v2['id'])->select();
             }
-
+  
             $goods_info[$k]['info'] = $arr;
+            $goods_info[$k]['cate_name'] = $v['cate_name'];
             
         }
         if (Cache::set(config('goods_info'), $goods_info)) {
