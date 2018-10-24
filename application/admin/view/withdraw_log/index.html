@@ -1,0 +1,103 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">支付状态</label>
+        <div class="layui-input-inline">
+            <select name='status' class='layui-select' lay-search="">
+                <!--{foreach [0 => '未支付', 1 => '已支付'] as $k => $v}-->
+                <!--{if (isset($get['status']) and $get['status'] == $k) or (!isset($get['status'])  and $k == 0) }-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+	<div class="layui-form-item layui-inline">
+        <label class="layui-form-label">交易单号</label>
+        <div class="layui-input-inline">
+            <input name="trade_no" value="{$Think.get.trade_no|default=''}" placeholder="请输入想要搜索的交易单号" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户ID</label>
+        <div class="layui-input-inline">
+            <input name="user_id" value="{$Think.get.user_id|default=''}" placeholder="请输入想要搜索的用户ID" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">提现时间</label>
+        <div class="layui-input-inline" style="width: 265px;">
+            <input name="create_time" id='create_time' value="{$Think.get.create_time|default=''}" placeholder="请选择提现时间" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>交易单号</th>
+            <th class='text-left nowrap'>用户ID</th>
+            <th class='text-left nowrap'>提现金额</th>
+            <th class='text-left nowrap'>提现时间</th>
+            <th class='text-left nowrap'>状态</th>
+            <th class='text-left nowrap'>操作</th>
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td class='text-left nowrap'>
+                {$vo.trade_no}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.user_id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.amount}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.create_time|date='Y-m-d H:i:s'}
+            </td>
+            <td class='text-left nowrap'>
+                <?php if ($vo['status'] == 0) { ?>
+                <span class="color-red">未支付</span>
+                <?php } else if ($vo['status'] == 1) { ?>
+                <span class="color-green">已支付</span>
+                <?php } else { ?>
+                <span class="color-red">支付失败</span>
+                <?php } ?>
+            </td>
+            <td>
+                <?php if ($vo['status'] != 1 &&  auth("$classuri/pay")) { ?>
+                <a data-update="{$vo.id}" data-field='status' data-value='1' class="layui-btn" data-action='{:url("$classuri/pay")}'>确认支付</a>
+                <?php } ?>
+            </td>
+            
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+
+</form>
+<script>
+    window.form.render();
+    window.laydate.render({range: true, elem: '#create_time', type: 'datetime'});
+</script>
+{/block}

@@ -24,4 +24,10 @@ return [
     'goods_info' => 'qmxz:goods_info',
     'config_key' => 'qmxz:config_info',
 
+    // 提现设置
+    'withdraw_url' => 'http://wxpay.wudee.cc/api/v1/withdraw_record/create_order', // 获取交易号URL
+
+    //提现加密密钥
+    'withdraw_secret' => 'cVCM47ZDqD',
+
 ];
