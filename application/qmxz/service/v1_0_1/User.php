@@ -11,6 +11,7 @@ use model\WithdrawLog as WithdrawLogModel;
 
 use zhise\HttpClient;
 use api_data_service\Notify as NotifyService;
+use app\qmxz\service\Config as ConfigService;
 
 /**
  * 用户服务类
@@ -59,6 +60,9 @@ class User
                     //新用户初始化金币的值
                     $config = Cache::get(config('config_key'));
                     $init_gold = $config['init_gold']['value'];
+                    if(!isset($init_gold)){
+                        $init_gold = ConfigService::get('init_gold');
+                    }
 
                     $userRecord = new UserRecordModel();
                     $userRecord->user_id = $user->id;

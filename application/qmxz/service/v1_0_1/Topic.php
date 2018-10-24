@@ -85,10 +85,10 @@ class Topic
     public function topicList($userId)
     {
         try {
-            $list = SelectTopicModel::select();
-            $user_topic_list = UserTopicModel::where('user_id', $userId)->where('is_pass', 1)->column('topic_id');
-            $configService = new ConfigService();
-            $config_data   = $configService->getAll();
+            $list            = SelectTopicModel::select();
+            $user_topic_list = UserTopicModel::where('user_id', $userId)->column('topic_id');
+            $configService   = new ConfigService();
+            $config_data     = $configService->getAll();
             if (!empty($list)) {
                 foreach ($list as $key => $value) {
                     $topic_arr           = TopicModel::get($value['topic_id']);
@@ -104,7 +104,7 @@ class Topic
                     $default_option_base   = $this->getConfigValue($config_data, 'default_option_base');
                     $default_bottom_option = $this->getConfigValue($config_data, 'default_bottom_option');
                     if ($value['num'] < $default_bottom_option) {
-                        $list[$key]['num']  = $value['num'] + $default_option_base[0] + $default_option_base[1];
+                        $list[$key]['num'] = $value['num'] + $default_option_base[0] + $default_option_base[1];
                     }
                 }
             }
@@ -167,113 +167,125 @@ class Topic
             // 开启事务
             Db::startTrans();
             try {
-                //保存普通场记录
-                $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->find();
-                //添加普通场参与人数
-                if ($data['is_pass'] == 1) {
-                    $select_topic = SelectTopicModel::where('topic_id', $data['topic_id'])->find();
-                    if (!$select_topic) {
-                        return [
-                            'status' => 0,
-                            'msg'    => '不存在该话题',
-                        ];
+                //是否已打过此题
+                $user_topic_word = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('topic_word_id')->find();
+                if (!$user_topic_word) {
+                    //添加普通场参与人数
+                    if ($data['is_pass'] == 1) {
+                        $select_topic = SelectTopicModel::where('topic_id', $data['topic_id'])->find();
+                        if (!$select_topic) {
+                            return [
+                                'status' => 0,
+                                'msg'    => '不存在该话题',
+                            ];
+                        }
+                        $select_topic->num = $select_topic->num + 1;
+                        $select_topic->save();
                     }
-                    $select_topic->num = $select_topic->num + 1;
-                    $select_topic->save();
-                }
-                if ($user_topic) {
-                    if (($user_topic['is_pass'] != 1) && ($data['is_pass'] == 1)) {
-                        $user_topic->is_pass = 1;
+                    //保存普通场记录
+                    $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->find();
+                    if ($user_topic) {
+                        if (($user_topic['is_pass'] != 1) && ($data['is_pass'] == 1)) {
+                            $user_topic->is_pass = 1;
+                            $user_topic->save();
+                        }
+                    } else {
+                        $user_topic              = new UserTopicModel();
+                        $user_topic->user_id     = $data['user_id'];
+                        $user_topic->topic_id    = $data['topic_id'];
+                        $user_topic->create_date = date('ymd');
+                        $user_topic->create_time = time();
+                        if ($data['is_pass'] == 1) {
+                            $user_topic->is_pass = 1;
+                        }
                         $user_topic->save();
                     }
-                } else {
-                    $user_topic              = new UserTopicModel();
-                    $user_topic->user_id     = $data['user_id'];
-                    $user_topic->topic_id    = $data['topic_id'];
-                    $user_topic->create_date = date('ymd');
-                    $user_topic->create_time = time();
-                    if ($data['is_pass'] == 1) {
-                        $user_topic->is_pass = 1;
-                    }
-                    $user_topic->save();
-                }
 
-                //保存用户普通场记录
-                $user_topic_word                = new UserTopicWordModel();
-                $user_topic_word->user_id       = $data['user_id'];
-                $user_topic_word->topic_id      = $data['topic_id'];
-                $user_topic_word->topic_word_id = $data['topic_word_id'];
-                $user_topic_word->user_select   = $data['user_select'];
-                $user_topic_word->create_date   = date('ymd');
-                $user_topic_word->create_time   = time();
-                $user_topic_word->save();
+                    //保存用户普通场记录
+                    $user_topic_word                = new UserTopicWordModel();
+                    $user_topic_word->user_id       = $data['user_id'];
+                    $user_topic_word->topic_id      = $data['topic_id'];
+                    $user_topic_word->topic_word_id = $data['topic_word_id'];
+                    $user_topic_word->user_select   = $data['user_select'];
+                    $user_topic_word->create_date   = date('ymd');
+                    $user_topic_word->create_time   = time();
+                    $user_topic_word->save();
 
-                //答案
-                $answer = UserTopicWordCountModel::where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->find();
-                if ($answer) {
-                    if ($data['user_select'] == 1) {
-                        $answer->left_option = $answer->left_option + 1;
+                    //答案
+                    $answer = UserTopicWordCountModel::where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->find();
+                    if ($answer) {
+                        if ($data['user_select'] == 1) {
+                            $answer->left_option = $answer->left_option + 1;
+                        } else {
+                            $answer->right_option = $answer->right_option + 1;
+                        }
+                        if ($answer->left_option > $answer->right_option) {
+                            $answer->most_select = 1;
+                        } else {
+                            $answer->most_select = 2;
+                        }
+                        $answer->save();
                     } else {
-                        $answer->right_option = $answer->right_option + 1;
+                        $answer                = new UserTopicWordCountModel();
+                        $answer->topic_id      = $data['topic_id'];
+                        $answer->topic_word_id = $data['topic_word_id'];
+                        if ($data['user_select'] == 1) {
+                            $answer->left_option  = 1;
+                            $answer->right_option = 0;
+                        } else {
+                            $answer->left_option  = 0;
+                            $answer->right_option = 1;
+                        }
+                        if ($answer->left_option > $answer->right_option) {
+                            $answer->most_select = 1;
+                        } else {
+                            $answer->most_select = 2;
+                        }
+                        $answer->save();
                     }
-                    if ($answer->left_option > $answer->right_option) {
-                        $answer->most_select = 1;
+
+                    $configService = new ConfigService();
+                    $config_data   = $configService->getAll();
+                    //消耗金币
+                    $default_consume_gold = $this->getConfigValue($config_data, 'default_consume_gold');
+                    $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
+                    if ($data['user_select'] == $answer['most_select']) {
+                        $get_gold_one = $this->getConfigValue($config_data, 'get_gold_one');
                     } else {
-                        $answer->most_select = 2;
+                        $get_gold_one = 0;
                     }
-                    $answer->save();
-                } else {
-                    $answer                = new UserTopicWordCountModel();
-                    $answer->topic_id      = $data['topic_id'];
-                    $answer->topic_word_id = $data['topic_word_id'];
-                    if ($data['user_select'] == 1) {
-                        $answer->left_option  = 1;
-                        $answer->right_option = 0;
+                    //修改金币
+                    $user_obj->gold = $user_obj->gold + ($get_gold_one - $default_consume_gold);
+                    $user_obj->save();
+                    //总参与人数
+                    $participants_num = $answer->left_option + $answer->right_option;
+
+                    //添加选项基数
+                    $default_option_base   = $this->getConfigValue($config_data, 'default_option_base');
+                    $default_bottom_option = $this->getConfigValue($config_data, 'default_bottom_option');
+                    if ($participants_num <= $default_bottom_option) {
+                        $left_option  = $answer->left_option + $default_option_base[0];
+                        $right_option = $answer->right_option + $default_option_base[1];
                     } else {
-                        $answer->left_option  = 0;
-                        $answer->right_option = 1;
+                        $left_option  = $answer->left_option;
+                        $right_option = $answer->right_option;
                     }
-                    if ($answer->left_option > $answer->right_option) {
-                        $answer->most_select = 1;
-                    } else {
-                        $answer->most_select = 2;
-                    }
-                    $answer->save();
-                }
 
-                $configService = new ConfigService();
-                $config_data   = $configService->getAll();
-                //消耗金币
-                $default_consume_gold = $this->getConfigValue($config_data, 'default_consume_gold');
-                $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
-                if ($data['user_select'] == $answer['most_select']) {
-                    $get_gold_one = $this->getConfigValue($config_data, 'get_gold_one');
+                    Db::commit();
+
+                    return [
+                        'status' => 1,
+                        'msg'    => 'ok',
+                        'left'   => $left_option,
+                        'right'  => $right_option,
+                        'gold'   => $get_gold_one,
+                    ];
                 } else {
-                    $get_gold_one = 0;
+                    return [
+                        'status' => 0,
+                        'msg'    => '已答过此题',
+                    ];
                 }
-                //修改金币
-                $user_obj->gold = $user_obj->gold + ($get_gold_one - $default_consume_gold);
-                $user_obj->save();
-
-                //添加选项基数
-                $default_option_base   = $this->getConfigValue($config_data, 'default_option_base');
-                $default_bottom_option = $this->getConfigValue($config_data, 'default_bottom_option');
-                if ($answer->left_option < $default_bottom_option) {
-                    $left_option  = $answer->left_option + $default_option_base[0];
-                    $right_option = $answer->right_option + $default_option_base[1];
-                } else {
-                    $left_option  = $answer->left_option;
-                    $right_option = $answer->right_option;
-                }
-
-                Db::commit();
-
-                return [
-                    'left'  => $left_option,
-                    'right' => $right_option,
-                    'gold'  => $get_gold_one,
-                ];
-
             } catch (\Exception $e) {
                 Db::rollback();
             }

@@ -3,13 +3,13 @@
 namespace app\qmxz\controller\api\v1_0_1;
 
 use app\qmxz\service\v1_0_1\Special as SpecialService;
+use controller\BasicController;
 use think\facade\Request;
 
 /**
  * 整点场接口控制器类
  */
-class Special//extends BasicController
-
+class Special extends BasicController
 {
 
     /**
@@ -49,28 +49,12 @@ class Special//extends BasicController
      */
     public function submitAnswer()
     {
-        require_params('user_id', 'special_id', 'special_word_id', 'user_select');
+        require_params('user_id', 'special_id', 'special_word_id', 'user_select', 'is_pass');
         $data = Request::param();
 
         //提交问题
         $specialService = new SpecialService();
         $result         = $specialService->submitAnswer($data);
-
-        return result(200, 'ok', $result);
-    }
-
-    /**
-     * 通关请求接口
-     * @return boolean
-     */
-    public function passAnswer()
-    {
-        require_params('user_id', 'special_id');
-        $data = Request::param();
-
-        //通关请求
-        $specialService = new SpecialService();
-        $result         = $specialService->passAnswer($data);
 
         return result(200, 'ok', $result);
     }
