@@ -3,25 +3,26 @@
 return [
 
     // 加密设置
-    'app_secret'       => 'QKTWuxzM5EfkeQhi',
-    'word_secret'      => '',
-    'str_secret'       => '',
+    'app_secret'   => 'QKTWuxzM5EfkeQhi',
+    'word_secret'  => '',
+    'str_secret'   => '',
 
     // 微信设置
-    'wx_appid'         => 'wxbe7091bfd1ddf7e9',
-    'wx_secret'        => '1e9a6cfb36ba76972655e718718a200b',
-    'wx_login_url'     => "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
+    'wx_appid'     => 'wxb22df5347915b0aa',
+    'wx_secret'    => '2f2c49f504048edf1673dcc49bf21077',
+    'wx_login_url' => "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
 
     //'exception_handle' => '\\exception\\ExceptionHandle', //自定义异常捕获类
 
-    'ad_url'           => 'https://ad.ali-yun.wang',
+    'ad_url'       => 'https://ad.ali-yun.wang',
 //    'ad_url'=>'http://gg.com:8083',
 
-    'topic_key'        => 'qmxz:829fc:topic',
-    'topic_word_key'   => 'qmxz:829fc:topicword',
-    'select_topic_key' => 'qmxz:829fc:selecttopic',
+    'goods_info'   => 'qmxz:goods_info',
+    'config_key'   => 'qmxz:config_info',
 
-    'goods_info' => 'qmxz:goods_info',
-    'config_key' => 'qmxz:config_info',
+    //异常系统接入参数
+    'system_title' => '全民选择',
+    'system_sign'  => 'qmxz.comqmxz',
+    'system_url'   => 'http://log.zxmn2018.com/logs/api/v1/exceptionlog/writeExceptionlog',
 
 ];

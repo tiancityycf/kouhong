@@ -25,7 +25,7 @@ use think\Db;
 function p($data, $force = false, $file = null)
 {
     is_null($file) && $file = env('runtime_path') . date('Ymd') . '.txt';
-    $str = (is_string($data) ? $data : (is_array($data) || is_object($data)) ? print_r($data, true) : var_export($data, true)) . PHP_EOL;
+    $str                    = (is_string($data) ? $data : (is_array($data) || is_object($data)) ? print_r($data, true) : var_export($data, true)) . PHP_EOL;
     $force ? file_put_contents($file, $str) : file_put_contents($file, $str, FILE_APPEND);
 }
 
@@ -109,7 +109,6 @@ function local_image($url)
     return \service\FileService::download($url)['url'];
 }
 
-
 /**
  * 统一校验参数
  * @param  string ...$params
@@ -119,7 +118,7 @@ function require_params(...$params)
 {
     foreach ($params as $param) {
         if (!Request::has($param)) {
-            echo json_encode(['code' => 500,'msg' => '缺少必要的参数'], JSON_UNESCAPED_UNICODE);exit();
+            echo json_encode(['code' => 500, 'msg' => '缺少必要的参数'], JSON_UNESCAPED_UNICODE);exit();
         }
     }
 }
@@ -135,7 +134,7 @@ function result($code = 200, $msg = 'ok', $data = [])
 {
     return json([
         'code' => $code,
-        'msg' => $msg,
+        'msg'  => $msg,
         'data' => $data,
     ]);
 }
@@ -169,25 +168,66 @@ function str_decode($str)
     return base64_decode($str);
 }
 
-
-function sendCmd($url,$data)
+/**
+ * 发送POST请求
+ * @param  string $url  请求路径
+ * @param  array $data 请求参数
+ * @return [type]       [description]
+ */
+function sendCmd($url, $data)
 {
-    $curl = curl_init(); // 启动一个CURL会话      
-    curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址                  
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检测    
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2); // 从证书中检查SSL加密算法是否存在      
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Expect:')); //解决数据包大不能提交     
-    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1); // 使用自动跳转      
-    curl_setopt($curl, CURLOPT_AUTOREFERER, 1); // 自动设置Referer      
-    curl_setopt($curl, CURLOPT_POST, 1); // 发送一个常规的Post请求      
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $data); // Post提交的数据包      
-    curl_setopt($curl, CURLOPT_TIMEOUT, 30); // 设置超时限制防止死循     
-    curl_setopt($curl, CURLOPT_HEADER, 0); // 显示返回的Header区域内容      
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // 获取的信息以文件流的形式返回 
-    $tmpInfo = curl_exec($curl); // 执行操作      
-    if (curl_errno($curl)) {      
-        echo 'Errno'.curl_error($curl);      
-    }      
-    curl_close($curl); // 关键CURL会话      
-    return $tmpInfo; // 返回数据      
+    $curl = curl_init(); // 启动一个CURL会话
+    curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
+    curl_setopt($curl, CURLOPT_POST, 1); // 发送一个常规的Post请求
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data); // Post提交的数据包
+    curl_setopt($curl, CURLOPT_TIMEOUT, 1); // 设置超时限制防止死循
+    curl_setopt($curl, CURLOPT_HEADER, 0); // 显示返回的Header区域内容
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // 获取的信息以文件流的形式返回
+    $tmpInfo = curl_exec($curl); // 执行操作
+    if (curl_errno($curl)) {
+        echo 'Errno' . curl_error($curl);
+    }
+    curl_close($curl); // 关键CURL会话
+    return $tmpInfo; // 返回数据
+}
+/**
+ * 保存系统异常日志到异常日志系统
+ * @param  array $sendData 异常参数
+ * @return [type]           [description]
+ */
+function slg($type, $msg)
+{
+    $err_arr = ['emergency', 'alert', 'critical', 'error'];
+    if (in_array($type, $err_arr)) {
+        $send_url = config('system_url');
+        $sendData = [
+            'type'        => 2,
+            'title'       => config('system_title'),
+            'system_sign' => config('system_sign'),
+            'log_type'    => $type,
+            'msg'         => $msg,
+        ];
+        sendCmd($send_url, $sendData);
+    }
+}
+
+/**
+ * 保存接口异常信息到异常日志系统
+ * @param  object $e      try...catch...返回对象
+ * @param  string $remark 备注信息
+ * @return [type]         [description]
+ */
+function lg($e, $remark = '')
+{
+    $send_url = config('system_url');
+    $sendData = [
+        'type'        => 1,
+        'title'       => config('system_title'),
+        'system_sign' => config('system_sign'),
+        'code'        => $e->getCode(),
+        'error_msg'   => $e->getMessage(),
+        'path'        => $e->getFile() . ':' . $e->getLine(),
+        'remark'      => $remark,
+    ];
+    sendCmd($send_url, $sendData);
 }
