@@ -31,7 +31,7 @@ class Task extends BasicController {
         $openid = Request::param('openid');
         $list = $model->getTaskList();
         $day = date("Ymd");
-        $issend = Db::name("task_log")->where(['openid' => $openid, 'day' => $day])->column('type,openid,gold,day');
+        $issend = Db::name("task_log")->where(['openid' => $openid, 'day' => $day])->column('type_id,openid,gold,day');
         $usermodel = new UserRecord();
         $userinfo = $usermodel->get(['openid' => $openid]);
         $regmodel = new UserRegister();
@@ -50,10 +50,11 @@ class Task extends BasicController {
             }
             //判断今日邀请好友数量2
             if ($val['id'] == 3) {
-                $invite_number = $invitemodel->count(['openid' => $openid, 'create_time' => ['between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59']]]);
+                $invite_number = $invitemodel->where(['openid' => $openid])->where('create_time' ,'between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->count();
                 $list[$key]['invite_number'] = $invite_number;
             }
         }
+        return result('200', "ok", $list);
     }
 
     //记录分享奖励
@@ -61,7 +62,7 @@ class Task extends BasicController {
         $openid = Request::param('openid');
         $model = new TaskModel();
         $data = $model->sendTask($openid, 2);
-        return json_encode($data);
+        return result('200', "ok", $data);
     }
 
     //普通场押宝
@@ -69,7 +70,7 @@ class Task extends BasicController {
         $openid = Request::param('openid');
         $model = new TaskModel();
         $data = $model->sendTask($openid, 4);
-        return json_encode($data);
+        return result('200', "ok", $data);
     }
 
     //整点挑战赛
@@ -85,7 +86,7 @@ class Task extends BasicController {
         $model = new UserRegister();
         $openid = Request::param('openid');
         $data = $model->remark($openid);
-        return json_encode($data);
+       return result('200', "ok", $data);
     }
 
     //记录邀请
@@ -101,7 +102,7 @@ class Task extends BasicController {
         if ($invite_number == $this->task_invite_number && $data['code']==0) {
             $task->sendTask($from_user, 3);
         }
-        return json_encode($data);
+       return result('200', "ok", $data);
     }
 
 }
