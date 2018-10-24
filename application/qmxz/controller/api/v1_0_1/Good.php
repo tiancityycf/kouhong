@@ -136,5 +136,25 @@ class Good
         return result(200, '0k', $arr);
 
     }
+
+
+    /**
+     * 查询用户金币兑换商品的日志信息
+     * @return json
+     */
+    public function logs()
+    {
+        //前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/good/logs.html?user_id=1;
+        require_params('user_id');
+        $user_id = Request::param('user_id');
+
+        $result = Db::name('exchange_log')->alias('e')->join(['t_goods'=>'g'],'e.good_id=g.id')->field('e.*,g.img,g.title')->where('user_id',$user_id)->select();
+        
+        foreach ($result as $key => $value) {
+            $result[$key]['create_time'] = date('Y-m-d',$value['create_time']);
+        }
+        
+        return result(200, '0k', $result);
+    }
 	
 }

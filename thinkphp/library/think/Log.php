@@ -137,6 +137,8 @@ class Log implements LoggerInterface
             $this->save();
         }
 
+        slg($type, $msg);
+
         return $this;
     }
 
