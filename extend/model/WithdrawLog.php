@@ -34,9 +34,9 @@ class WithdrawLog extends Model
             $query->whereBetweenTime('create_time', "{$start_create_time}", "{$end_create_time}");
         }
 
-        if (!isset($params['status']) && empty($params['user_id']) && empty($params['trade_no']) && empty($params['create_time'])) {
-            $query->where('status', '<>', 1);
-        }
+        // if (!isset($params['status']) && empty($params['user_id']) && empty($params['trade_no']) && empty($params['create_time'])) {
+        //     $query->where('status', '<>', 1);
+        // }
 
         $query->order('id', 'desc');
 

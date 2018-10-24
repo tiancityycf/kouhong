@@ -55,7 +55,6 @@
             <th class='text-left nowrap'>提现金额</th>
             <th class='text-left nowrap'>提现时间</th>
             <th class='text-left nowrap'>状态</th>
-            <th class='text-left nowrap'>操作</th>
     	</tr>
     	</thead>
     	<tbody>
@@ -82,12 +81,6 @@
                 <span class="color-red">支付失败</span>
                 <?php } ?>
             </td>
-            <td>
-                <?php if ($vo['status'] != 1 &&  auth("$classuri/pay")) { ?>
-                <a data-update="{$vo.id}" data-field='status' data-value='1' class="layui-btn" data-action='{:url("$classuri/pay")}'>确认支付</a>
-                <?php } ?>
-            </td>
-            
         </tr>
     	<!--{/foreach}-->
     	</tbody>
