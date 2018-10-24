@@ -12,16 +12,29 @@
 return [
     // 数据库类型
     'type'            => 'mysql',
-   // 服务器地址
-    'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
+   // // 服务器地址
+   //  'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
+   //  // 数据库名
+   //  'database'        => 'dbqmxz',
+   //  // 用户名
+   //  'username'        => 'root',
+   //  // 密码
+   //  'password'        => '!$AERGERGEFYU!@#',
+   //  // 端口
+   //  'hostport'        => '62072',
+        
+        // 服务器地址
+    'hostname'        => '127.0.0.1',
     // 数据库名
     'database'        => 'dbqmxz',
     // 用户名
     'username'        => 'root',
     // 密码
-    'password'        => '!$AERGERGEFYU!@#',
+    'password'        => 'root',
     // 端口
-    'hostport'        => '62072',
+    'hostport'        => '',
+
+
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数
