@@ -3,13 +3,13 @@
 namespace app\qmxz\controller\api\v1_0_1;
 
 use app\qmxz\service\v1_0_1\Topic as TopicService;
+use controller\BasicController;
 use think\facade\Request;
 
 /**
  * 普通场接口控制器类
  */
-class Topic//extends BasicController
-
+class Topic extends BasicController
 {
     /**
      * 检测金币是否不足接口
@@ -71,7 +71,7 @@ class Topic//extends BasicController
      */
     public function submitAnswer()
     {
-        require_params('user_id', 'topic_id', 'topic_word_id', 'user_select','is_pass');
+        require_params('user_id', 'topic_id', 'topic_word_id', 'user_select', 'is_pass');
         $data = Request::param();
 
         //提交问题
