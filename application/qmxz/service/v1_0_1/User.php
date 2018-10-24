@@ -25,7 +25,7 @@ class User
         //强制通过
         //$data['openid'] = 1;
         //$data['session_key'] = 'test';
-
+       
         $result = [];
         if (isset($data['openid'])) {
             $user = UserModel::where('openid', $data['openid'])->find();

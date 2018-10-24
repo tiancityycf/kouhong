@@ -107,7 +107,7 @@ class Order extends BasicAdmin
           $xlsName = "订单表";
           $xlsCell = array(
             array('id','订单序号'),
-            array('user_id','玩家userid'),
+            array('openid','玩家openid'),
             array('good_id','商品ID'),
             array('title','商品名称'),
             array('nickname','收件人名称'),
@@ -118,7 +118,7 @@ class Order extends BasicAdmin
             array('create_time','创建时间'),
          );
 
-          $xlsData = Db::name('exchange_log')->alias('e')->join(['t_address'=>'a'],'e.address_id=a.id')->join(['t_goods'=>'g'],'e.good_id=g.id')->field('e.id,e.user_id,e.good_id,e.status,e.create_time,g.title,a.nickname,a.phone,a.addr,a.region')->order('id desc')->select();
+          $xlsData = Db::name('exchange_log')->alias('e')->join(['t_address'=>'a'],'e.address_id=a.id')->join(['t_goods'=>'g'],'e.good_id=g.id')->field('e.id,e.good_id,e.status,e.create_time,g.title,a.openid,a.nickname,a.phone,a.addr,a.region')->order('id desc')->select();
           //dump($xlsData);die;
 
             foreach ($xlsData as $k => $v)
