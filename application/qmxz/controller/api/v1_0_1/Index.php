@@ -23,8 +23,8 @@ class Index extends BasicController
 		require_params('user_id');
 		$data = Request::param();
 
-		$indexService = new IndexService();
-		$result = $indexService->index($data, $this->configData);
+		$indexService = new IndexService($this->configData);
+		$result = $indexService->index($data);
 
 		return result(200, 'ok', $result);
 	}

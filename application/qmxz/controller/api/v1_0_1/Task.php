@@ -25,6 +25,11 @@ class Task extends BasicController {
 
     //任务邀请好友数量
     protected $task_invite_number = 2;
+    
+    protected  function __construct() {
+        parent::__construct();
+        $this->task_invite_number=$this->configData['task_invite_number'];
+    }
 
     public function center() {
         $model = new TaskModel();
@@ -51,6 +56,7 @@ class Task extends BasicController {
             //判断今日邀请好友数量2
             if ($val['id'] == 3) {
                 $invite_number = $invitemodel->where(['openid' => $openid])->where('create_time' ,'between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->count();
+                $list[$key]['task_invite_number'] = $this->task_invite_number;
                 $list[$key]['invite_number'] = $invite_number;
             }
         }
