@@ -6,6 +6,7 @@ use app\qmxz\model\SelectTopic as SelectTopicModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicWord as TopicWordModel;
+use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserTopic as UserTopicModel;
@@ -96,7 +97,7 @@ class Topic
     {
         try {
             $list            = SelectTopicModel::select();
-            $user_topic_list = UserTopicModel::where('user_id', $userId)->column('topic_id');
+            $user_topic_list = UserTopicModel::where('user_id', $userId)->where('is_pass', 1)->column('topic_id');
             $config_data     = $this->configData;
             if (!empty($list)) {
                 foreach ($list as $key => $value) {
@@ -158,7 +159,18 @@ class Topic
     public function commentList($data)
     {
         try {
-            return UserTopicWordCommentModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->select();
+            $list      = UserTopicWordCommentModel::where('topic_id', $data['topic_id'])->order('create_time desc')->select();
+            $user_info = UserModel::where('id', 11)->find();
+            if ($list) {
+                foreach ($list as $key => $value) {
+                    $user_info              = UserModel::where('id', $value['user_id'])->find();
+                    $list[$key]['nickname'] = $user_info['nickname'];
+                    $list[$key]['avatar']   = $user_info['avatar'];
+                }
+            } else {
+                $list = [];
+            }
+            return $list;
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
