@@ -433,7 +433,7 @@ class Special
                             $k         = empty($code_list) ? -1 : array_rand($code_list);
                             $code      = $k == -1 ? 0 : $code_list[$k];
                         } else {
-                            $code_list = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->where('use_type', 2)->column('code');
+                            $code_list = UserSpecialRedeemcodeModel::where('special_id', 0)->where('use_type', 2)->column('code');
                             $k         = empty($code_list) ? -1 : array_rand($code_list);
                             $code      = $k == -1 ? 0 : $code_list[$k];
                         }
@@ -449,7 +449,7 @@ class Special
                     //从机器中抽
                     case '2':
                         //获取中奖码列表
-                        $code_list = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->where('use_type', 2)->column('code');
+                        $code_list = UserSpecialRedeemcodeModel::where('special_id', 0)->where('use_type', 2)->column('code');
                         $k         = empty($code_list) ? -1 : array_rand($code_list);
                         $code      = $k == -1 ? 0 : $code_list[$k];
                         break;
