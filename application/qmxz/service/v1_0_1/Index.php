@@ -12,13 +12,11 @@ use app\qmxz\service\Config as ConfigService;
  */
 class Index
 {
-	private function getConfigValue($data, $key)
-    {
-        return isset($data[$key]) ? $data[$key] : '';
-    }
 
-	public function index($data)
+	public function index($data, $configData)
 	{
 		$user_id = $data['user_id'];
+
+		print_r($configData);
 	}
 }

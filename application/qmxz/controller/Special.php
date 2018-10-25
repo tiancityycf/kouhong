@@ -5,6 +5,7 @@ namespace app\qmxz\controller;
 use controller\BasicAdmin;
 use think\Db;
 use app\qmxz\model\Special as SpecialModel;
+use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
 
 //整点场控制器类
 class Special extends BasicAdmin
@@ -34,7 +35,7 @@ class Special extends BasicAdmin
         		$this->error('数据保存失败, 请稍候再试!');
         	}
         }
-
+        $this->prize_list();
         return  $this->fetch('form', ['vo' => $data]);
     }
 
@@ -54,6 +55,7 @@ class Special extends BasicAdmin
             }
         }
         $vo->display_time = date('Y-m-d H:i:s', $vo->display_time);
+        $this->prize_list();
         return  $this->fetch('form', ['vo' => $vo->getdata()]);
     }
 
@@ -69,5 +71,12 @@ class Special extends BasicAdmin
     	}
 
     	$this->error("删除失败，请稍候再试！");
+    }
+
+    protected function prize_list()
+    {
+        $data = SpecialPrizeModel::column('title', 'id');
+
+        $this->assign('prize_list', $data);
     }
 }
