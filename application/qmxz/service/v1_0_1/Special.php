@@ -58,6 +58,9 @@ class Special
                     if ($value['num'] < $default_bottom_option) {
                         $special_arr[$key]['num'] = $value['num'] + $default_option_base[0] + $default_option_base[1];
                     }
+                    $prize_info                      = SpecialPrizeModel::get($value['prize_id']);
+                    $special_arr[$key]['prize_name'] = $prize_info['name'];
+                    $special_arr[$key]['prize_img']  = $prize_info['img'];
                 }
             }
             return $special_arr;
