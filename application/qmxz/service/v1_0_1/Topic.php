@@ -3,16 +3,15 @@
 namespace app\qmxz\service\v1_0_1;
 
 use app\qmxz\model\SelectTopic as SelectTopicModel;
+use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicWord as TopicWordModel;
-use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
+use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserTopic as UserTopicModel;
 use app\qmxz\model\UserTopicWord as UserTopicWordModel;
-use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserTopicWordComment as UserTopicWordCommentModel;
 use app\qmxz\model\UserTopicWordCount as UserTopicWordCountModel;
-use app\qmxz\service\Config as ConfigService;
 use think\Db;
 
 /**
@@ -20,10 +19,11 @@ use think\Db;
  */
 class Topic
 {
+    protected $configData;
 
-    private function getConfigValue($data, $key)
+    public function __construct($configData)
     {
-        return isset($data[$key]) ? $data[$key] : '';
+        $this->configData = $configData;
     }
 
     /**
@@ -34,9 +34,9 @@ class Topic
     public function checkGold($data)
     {
         try {
-            $configService = new ConfigService();
-            $config_data   = $configService->getAll();
-            $user_obj      = UserRecordModel::where('user_id', $data['user_id'])->find();
+
+            $config_data = $this->configData;
+            $user_obj    = UserRecordModel::where('user_id', $data['user_id'])->find();
             if (!$user_obj) {
                 return [
                     'status' => 2,
@@ -45,11 +45,11 @@ class Topic
             }
             if ($data['type'] == 1) {
                 //普通场
-                $topic_count = TopicWordModel::where('topic_id', $data['topic_id'])->count();
-                $user_topic_count = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->count();
-                $user_topic_count = isset($user_topic_count) ? $user_topic_count : 0;
-                $default_consume_gold = $this->getConfigValue($config_data, 'default_consume_gold');
-                $need_gold = $default_consume_gold * ($topic_count - $user_topic_count);
+                $topic_count          = TopicWordModel::where('topic_id', $data['topic_id'])->count();
+                $user_topic_count     = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->count();
+                $user_topic_count     = isset($user_topic_count) ? $user_topic_count : 0;
+                $default_consume_gold = $config_data['default_consume_gold'];
+                $need_gold            = $default_consume_gold * ($topic_count - $user_topic_count);
                 if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
@@ -57,11 +57,11 @@ class Topic
                 }
             } else {
                 //整点场
-                $special_count = SpecialWordModel::where('special_id', $data['topic_id'])->count();
-                $user_special_count = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['topic_id'])->count();
-                $user_special_count = isset($user_special_count) ? $user_special_count : 0;
-                $timing_consume_gold = $this->getConfigValue($config_data, 'timing_consume_gold');
-                $need_gold = $timing_consume_gold * ($special_count - $user_special_count);
+                $special_count       = SpecialWordModel::where('special_id', $data['topic_id'])->count();
+                $user_special_count  = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['topic_id'])->count();
+                $user_special_count  = isset($user_special_count) ? $user_special_count : 0;
+                $timing_consume_gold = $config_data['timing_consume_gold'];
+                $need_gold           = $timing_consume_gold * ($special_count - $user_special_count);
                 if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
@@ -97,8 +97,7 @@ class Topic
         try {
             $list            = SelectTopicModel::select();
             $user_topic_list = UserTopicModel::where('user_id', $userId)->column('topic_id');
-            $configService   = new ConfigService();
-            $config_data     = $configService->getAll();
+            $config_data     = $this->configData;
             if (!empty($list)) {
                 foreach ($list as $key => $value) {
                     $topic_arr           = TopicModel::get($value['topic_id']);
@@ -111,8 +110,8 @@ class Topic
                         $list[$key]['is_pass'] = 0;
                     }
                     //添加选项基数
-                    $default_option_base   = $this->getConfigValue($config_data, 'default_option_base');
-                    $default_bottom_option = $this->getConfigValue($config_data, 'default_bottom_option');
+                    $default_option_base   = $config_data['default_option_base'];
+                    $default_bottom_option = $config_data['default_bottom_option'];
                     if ($value['num'] < $default_bottom_option) {
                         $list[$key]['num'] = $value['num'] + $default_option_base[0] + $default_option_base[1];
                     }
@@ -254,13 +253,12 @@ class Topic
                         $answer->save();
                     }
 
-                    $configService = new ConfigService();
-                    $config_data   = $configService->getAll();
+                    $config_data = $this->configData;
                     //消耗金币
-                    $default_consume_gold = $this->getConfigValue($config_data, 'default_consume_gold');
+                    $default_consume_gold = $config_data['default_consume_gold'];
                     $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
                     if ($data['user_select'] == $answer['most_select']) {
-                        $get_gold_one = $this->getConfigValue($config_data, 'get_gold_one');
+                        $get_gold_one = $config_data['get_gold_one'];
                     } else {
                         $get_gold_one = 0;
                     }
@@ -271,8 +269,8 @@ class Topic
                     $participants_num = $answer->left_option + $answer->right_option;
 
                     //添加选项基数
-                    $default_option_base   = $this->getConfigValue($config_data, 'default_option_base');
-                    $default_bottom_option = $this->getConfigValue($config_data, 'default_bottom_option');
+                    $default_option_base   = $config_data['default_option_base'];
+                    $default_bottom_option = $config_data['default_bottom_option'];
                     if ($participants_num <= $default_bottom_option) {
                         $left_option  = $answer->left_option + $default_option_base[0];
                         $right_option = $answer->right_option + $default_option_base[1];

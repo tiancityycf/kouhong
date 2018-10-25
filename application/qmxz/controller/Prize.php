@@ -25,17 +25,17 @@ class Prize extends BasicAdmin
 
         $result = parent::_list($db, true, false, false);
         $this->assign('title', $this->title);
-        return $this->fetch('qmxz@prize/index', $result);
+        return $this->fetch('index', $result);
     }
 
     public function add()
     {
-        return $this->_form($this->table, 'qmxz@prize/form');
+        return $this->_form($this->table, 'form');
     }
 
     public function edit()
     {
-        return $this->_form($this->table, 'qmxz@prize/form');
+        return $this->_form($this->table, 'form');
     }
 
     /**

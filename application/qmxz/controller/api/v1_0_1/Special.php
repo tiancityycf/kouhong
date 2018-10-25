@@ -21,7 +21,7 @@ class Special extends BasicController
         require_params('user_id');
         $userId = Request::param('user_id');
 
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->specialList($userId);
 
         return result(200, 'ok', $result);
@@ -36,7 +36,7 @@ class Special extends BasicController
         require_params('user_id', 'special_id');
         $data = Request::param();
 
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->deductGold($data);
 
         return result(200, 'ok', $result);
@@ -52,7 +52,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //问题列表
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->questionList($data);
 
         return result(200, 'ok', $result);
@@ -68,7 +68,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //每题提交问题答案接口
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->submitAnswer($data);
 
         return result(200, 'ok', $result);
@@ -84,7 +84,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //整点场答题接口
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->answerResult($data);
 
         return result(200, 'ok', $result);
@@ -100,7 +100,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //整点场抽奖页信息
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->prizePage($data);
 
         return result(200, 'ok', $result);
@@ -116,7 +116,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //整点场抽奖页抽奖
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->luckDraw($data);
 
         return result(200, 'ok', $result);
@@ -132,7 +132,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //使用兑换码兑奖
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->cashPrize($data);
 
         return result(200, 'ok', $result);

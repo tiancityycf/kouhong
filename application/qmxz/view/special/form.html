@@ -18,6 +18,21 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">奖品选择</label>
+        <div class="layui-input-block">
+                <select id="prize_id" name="prize_id" lay-verify="required" class="layui-select" lay-search>
+                    <option value="">- 请选择 -</option>
+                    <!--{foreach $prize_list as $key=>$st}-->
+                    <!--{if isset($vo['prize_id']) AND $vo.prize_id eq $key}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">显示时间</label>
         <div class="layui-input-block">
             <input name="display_time" id='display_time' value="{$vo.display_time|default=''}" placeholder="请选择时间" class="layui-input">

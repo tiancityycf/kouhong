@@ -20,7 +20,7 @@ class Topic extends BasicController
         require_params('user_id', 'type', 'topic_id');
         $data = Request::param();
 
-        $topicService = new TopicService();
+        $topicService = new TopicService($this->configData);
         $result       = $topicService->checkGold($data);
 
         return result(200, 'ok', $result);
@@ -35,7 +35,7 @@ class Topic extends BasicController
         require_params('user_id');
         $userId = Request::param('user_id');
 
-        $topicService = new TopicService();
+        $topicService = new TopicService($this->configData);
         $result       = $topicService->topicList($userId);
 
         return result(200, 'ok', $result);
@@ -51,7 +51,7 @@ class Topic extends BasicController
         $data = Request::param();
 
         //问题列表
-        $topicService  = new TopicService();
+        $topicService  = new TopicService($this->configData);
         $question_list = $topicService->questionList($data);
 
         //评论列表
@@ -75,7 +75,7 @@ class Topic extends BasicController
         $data = Request::param();
 
         //提交问题
-        $topicService = new TopicService();
+        $topicService = new TopicService($this->configData);
         $result       = $topicService->submitAnswer($data);
 
         return result(200, 'ok', $result);
@@ -91,7 +91,7 @@ class Topic extends BasicController
         $data = Request::param();
 
         //提交评论
-        $topicService = new TopicService();
+        $topicService = new TopicService($this->configData);
         $result       = $topicService->submitComment($data);
 
         return result(200, 'ok', $result);

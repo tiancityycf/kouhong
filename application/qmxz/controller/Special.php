@@ -18,7 +18,14 @@ class Special extends BasicAdmin
 
         $db = $db->search($get);
 
-       	return parent::_list($db);
+       	$result = parent::_list($db, true, false, false);
+        
+        foreach ($result['list'] as $key => $value) {
+            $prize_info = Db::name('special_prize')->find($value['prize_id']);
+            $result['list'][$key]['prize_name'] = $prize_info['name'];
+            $result['list'][$key]['prize_img'] = $prize_info['img'];
+        }
+        return $this->fetch('index', $result);
     }
 
     public function add()
@@ -75,8 +82,7 @@ class Special extends BasicAdmin
 
     protected function prize_list()
     {
-        $data = SpecialPrizeModel::column('title', 'id');
-
+        $data = SpecialPrizeModel::where('status',1)->column('name', 'id');
         $this->assign('prize_list', $data);
     }
 }

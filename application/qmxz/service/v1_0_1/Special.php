@@ -11,7 +11,6 @@ use app\qmxz\model\UserSpecialPrize as UserSpecialPrizeModel;
 use app\qmxz\model\UserSpecialRedeemcode as UserSpecialRedeemcodeModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
-use app\qmxz\service\Config as ConfigService;
 use think\Db;
 
 /**
@@ -19,10 +18,11 @@ use think\Db;
  */
 class Special
 {
+    protected $configData;
 
-    private function getConfigValue($data, $key)
+    public function __construct($configData)
     {
-        return isset($data[$key]) ? $data[$key] : '';
+        $this->configData = $configData;
     }
 
     /**
@@ -36,9 +36,10 @@ class Special
             $list              = SpecialModel::select();
             $user_special_list = UserSpecialModel::where('user_id', $userId)->where('is_pass', 1)->column('special_id');
             $special_arr       = [];
-            $configService     = new ConfigService();
-            $config_data       = $configService->getAll();
-            $answer_time_limit = $this->getConfigValue($config_data, 'answer_time_limit');
+
+            $config_data = $this->configData;
+
+            $answer_time_limit = $config_data['answer_time_limit'];
             if (!empty($list)) {
                 foreach ($list as $key => $value) {
                     $time_end          = $value['display_time'] + ($answer_time_limit - 20) * 60;
@@ -51,8 +52,8 @@ class Special
                         $special_arr[$key]['remaining_time'] = $time_end - time();
                     }
                     //添加选项基数
-                    $default_option_base   = $this->getConfigValue($config_data, 'default_option_base');
-                    $default_bottom_option = $this->getConfigValue($config_data, 'default_bottom_option');
+                    $default_option_base   = $config_data['default_option_base'];
+                    $default_bottom_option = $config_data['default_bottom_option'];
                     if ($value['num'] < $default_bottom_option) {
                         $special_arr[$key]['num'] = $value['num'] + $default_option_base[0] + $default_option_base[1];
                     }
@@ -101,7 +102,7 @@ class Special
                     $special_count       = SpecialWordModel::where('special_id', $data['special_id'])->count();
                     $user_special_count  = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->count();
                     $user_special_count  = isset($user_special_count) ? $user_special_count : 0;
-                    $timing_consume_gold = $this->getConfigValue($config_data, 'timing_consume_gold');
+                    $timing_consume_gold = $config_data['timing_consume_gold'];
                     $need_gold           = $timing_consume_gold * ($special_count - $user_special_count);
                     $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
                     $user_record->gold   = $user_record->gold - $need_gold;
@@ -150,9 +151,9 @@ class Special
                 ];
             } else {
                 //结束时间
-                $configService     = new ConfigService();
-                $config_data       = $configService->getAll();
-                $answer_time_limit = $this->getConfigValue($config_data, 'answer_time_limit');
+
+                $config_data       = $this->configData;
+                $answer_time_limit = $config_data['answer_time_limit'];
                 $time_end          = $display_time + ($answer_time_limit - 10) * 60 - time();
                 $time_end          = $time_end > 0 ? $time_end : 0;
 
@@ -281,16 +282,16 @@ class Special
     public function answerResult($data)
     {
         try {
-            $display_time      = SpecialModel::where('id', $data['special_id'])->value('display_time');
-            $configService     = new ConfigService();
-            $config_data       = $configService->getAll();
-            $answer_time_limit = $this->getConfigValue($config_data, 'answer_time_limit');
+            $display_time = SpecialModel::where('id', $data['special_id'])->value('display_time');
+
+            $config_data       = $this->configData;
+            $answer_time_limit = $config_data['answer_time_limit'];
             $end_time          = $display_time + ($answer_time_limit - 10) * 60;
 
             $special_word = SpecialWordModel::where('special_id', $data['special_id'])->select();
             ///添加选项基数
-            $default_option_base   = $this->getConfigValue($config_data, 'default_option_base');
-            $default_bottom_option = $this->getConfigValue($config_data, 'default_bottom_option');
+            $default_option_base   = $config_data['default_option_base'];
+            $default_bottom_option = $config_data['default_bottom_option'];
             foreach ($special_word as $key => $value) {
                 //判断参与人数是否加基数
                 $user_special_word_count = UserSpecialWordCountModel::where('special_id', $value['special_id'])->where('special_word_id', $value['id'])->find();
@@ -382,9 +383,9 @@ class Special
             //获奖列表
             $prize_list = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->field('logo')->select();
             //结束时间
-            $configService     = new ConfigService();
-            $config_data       = $configService->getAll();
-            $answer_time_limit = $this->getConfigValue($config_data, 'answer_time_limit');
+
+            $config_data       = $this->configData;
+            $answer_time_limit = $config_data['answer_time_limit'];
             $display_time      = SpecialModel::where('id', $data['special_id'])->value('display_time');
             $time_end          = $display_time + ($answer_time_limit - 10) * 60 - time();
             $time_end          = $time_end > 0 ? $time_end : 0;
@@ -410,7 +411,8 @@ class Special
             $code = UserSpecialPrizeModel::where('special_id', $data['special_id'])->value('code');
             if (!$code) {
                 //获取后台抽奖方式
-                $luck_draw_value = ConfigService::get('luck_draw_value');
+                $config_data     = $this->configData;
+                $luck_draw_value = $config_data['luck_draw_value'];
                 $list            = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->select();
                 switch ($luck_draw_value) {
                     //混合抽
@@ -447,6 +449,7 @@ class Special
                 // 开启事务
                 Db::startTrans();
                 try {
+                    //保存中奖纪录
                     $user_special_prize = new UserSpecialPrizeModel();
                     foreach ($list as $key => $value) {
                         if ($code == $value['code']) {
@@ -454,9 +457,11 @@ class Special
                             $user_special_prize->special_id = $value['special_id'];
                             $user_special_prize->code       = $value['code'];
                             $user_special_prize->use_type   = $value['use_type'];
+                            $user_special_prize->prize_id   = SpecialModel::where('id', $data['special_id'])->value('prize_id');
                             $user_special_prize->save();
                         }
                     }
+
                     Db::commit();
                 } catch (\Exception $e) {
                     Db::rollback();
