@@ -111,6 +111,7 @@ class Special
                     $special_count       = SpecialWordModel::where('special_id', $data['special_id'])->count();
                     $user_special_count  = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->count();
                     $user_special_count  = isset($user_special_count) ? $user_special_count : 0;
+                    $config_data         = $this->configData;
                     $timing_consume_gold = $config_data['timing_consume_gold'];
                     $need_gold           = $timing_consume_gold * ($special_count - $user_special_count);
                     $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
@@ -356,6 +357,25 @@ class Special
                     $user_special_redeemcode->save();
                 }
 
+                //生成一条机器人数据
+                $rebot_code = UserSpecialRedeemcodeModel::where('user_id', 10000)->where('special_id', $data['special_id'])->value('code');
+                if (!isset($rebot_code)) {
+                    $code1                            = date('ymd', $display_time) . uniqid();
+                    $user_special_redeemcode          = new UserSpecialRedeemcodeModel();
+                    $user_special_redeemcode->user_id = 10000;
+                    for ($i = 1; $i < 10000; $i++) {
+                        $rebot_logo = UserModel::where('id', rand(1, 20))->value('avatar');
+                        if ($rebot_logo) {
+                            break;
+                        }
+                    }
+                    $user_special_redeemcode->logo       = $rebot_logo;
+                    $user_special_redeemcode->special_id = $data['special_id'];
+                    $user_special_redeemcode->code       = $code1;
+                    $user_special_redeemcode->use_type   = 2;
+                    $user_special_redeemcode->save();
+                }
+
                 return [
                     'remaining_time' => $remaining_time,
                     'is_end'         => 1,
@@ -389,6 +409,7 @@ class Special
         try {
             //用户兑换码
             $user_code = UserSpecialRedeemcodeModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->value('code');
+            $user_code = isset($user_code) ? $user_code : 0;
             //获奖列表
             $prize_list = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->field('logo')->select();
             //结束时间
@@ -423,6 +444,7 @@ class Special
                 $config_data     = $this->configData;
                 $luck_draw_value = $config_data['luck_draw_value'];
                 $list            = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->select();
+                $display_time    = SpecialModel::where('id', $data['special_id'])->value('display_time');
                 switch ($luck_draw_value) {
                     //混合抽
                     case '0':
@@ -433,7 +455,7 @@ class Special
                             $k         = empty($code_list) ? -1 : array_rand($code_list);
                             $code      = $k == -1 ? 0 : $code_list[$k];
                         } else {
-                            $code_list = UserSpecialRedeemcodeModel::where('special_id', 0)->where('use_type', 2)->column('code');
+                            $code_list = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->where('use_type', 2)->column('code');
                             $k         = empty($code_list) ? -1 : array_rand($code_list);
                             $code      = $k == -1 ? 0 : $code_list[$k];
                         }
@@ -449,7 +471,7 @@ class Special
                     //从机器中抽
                     case '2':
                         //获取中奖码列表
-                        $code_list = UserSpecialRedeemcodeModel::where('special_id', 0)->where('use_type', 2)->column('code');
+                        $code_list = UserSpecialRedeemcodeModel::where('special_id', $data['special_id'])->where('use_type', 2)->column('code');
                         $k         = empty($code_list) ? -1 : array_rand($code_list);
                         $code      = $k == -1 ? 0 : $code_list[$k];
                         break;
