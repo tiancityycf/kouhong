@@ -26,7 +26,7 @@ class Task extends BasicController {
     //任务邀请好友数量
     protected $task_invite_number = 2;
     
-    protected  function __construct() {
+    public function __construct() {
         parent::__construct();
         $this->task_invite_number=$this->configData['task_invite_number'];
     }
