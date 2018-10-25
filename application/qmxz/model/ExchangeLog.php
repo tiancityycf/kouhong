@@ -27,7 +27,7 @@ class ExchangeLog extends Model
 
 
         if (isset($params['openid']) && $params['openid'] !== '') {
-            $query->whereLike('e.openid', "%{$params['openid']}%");
+            $query->whereLike('u.openid', "%{$params['openid']}%");
         }
 
         if (isset($params['status']) && $params['status'] !== '') {
