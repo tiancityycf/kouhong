@@ -49,8 +49,13 @@ class Special
                         $special_arr[$key]['is_pass']        = 1;
                         $special_arr[$key]['remaining_time'] = 0;
                     } else {
-                        $special_arr[$key]['is_pass']        = 0;
-                        $special_arr[$key]['remaining_time'] = $time_end - time();
+                        $special_arr[$key]['is_pass'] = 0;
+                        if ($value['display_time'] <= time()) {
+                            $special_arr[$key]['remaining_time'] = $time_end - time();
+                        } else {
+                            $special_arr[$key]['remaining_time'] = ($answer_time_limit - 20) * 60;
+                        }
+
                     }
                     //添加选项基数
                     $default_option_base   = $config_data['default_option_base'];
