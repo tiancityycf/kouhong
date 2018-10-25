@@ -25,7 +25,7 @@ class Task extends Model {
      * 获取任务列表
      */
     public function getTaskList() {
-        $list = $this->db('task')->field('id,title,des,gold,img_url,status,express')->select();
+        $list = $this->db('task')->field('id,title,des,gold,img_url,status,express,btn_type,btn_text')->select();
         return $list;
     }
 

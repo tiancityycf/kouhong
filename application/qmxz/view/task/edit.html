@@ -11,6 +11,23 @@
             <input type="text" autofocus name="des" required="required" value='{$vo.des}' pattern="" title="" placeholder="请输入任务描述" class="layui-input" style="width: 55%;">
         </div>
     </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">按钮类型</label>
+        <div class="layui-input-inline">
+            <select name='btn_type' class='layui-select' lay-search="">
+                <option value=''> - 请选择 -</option>
+
+                <option value='1' {if condition="$vo.btn_type == 1"} selected="selected" {/if}> - 普通按钮 - </option>
+                <option value='2' {if condition="$vo.btn_type == 2"} selected="selected" {/if}> - 分享按钮 - </option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">按钮名称</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="btn_text" required="required" value='{$vo.btn_text}' pattern="" title="" placeholder="请输入按钮名称" class="layui-input" style="width: 55%;">
+        </div>
+    </div>
     	<div class="layui-form-item">
         <label class="layui-form-label">奖励金币</label>
         <div class="layui-input-block">
