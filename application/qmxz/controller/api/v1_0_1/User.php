@@ -3,7 +3,7 @@
 namespace app\qmxz\controller\api\v1_0_1;
 
 use think\facade\Request;
-
+use think\Db;
 use app\qmxz\service\v1_0_1\User as UserService;
 use app\qmxz\model\User as UserModel;
 use controller\BasicController;
@@ -19,9 +19,16 @@ class User extends BasicController
 	 */
 	public function index()
 	{
-		require_params('openid', 'encryptedData', 'iv');
+		require_params('openid');
         $data = Request::param();
-        $result = [];
+
+		$user_info = Db::name('user_record')->field('avatar,nickname,gold')->where('openid',$data['openid'])->find();
+
+        $config_data = $this->configData;
+
+        $result['config'] = $config_data;
+        $result['user_info'] =  $user_info;
+        dump($result);die;
         return result(200, 'ok', $result);
 	}
 
@@ -34,10 +41,9 @@ class User extends BasicController
 		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
 		require_params('code');
 		$code = Request::param('code');
-		$from_type = Request::param('from_type') ? Request::param('from_type') : 0;
-
+	
 		$userService = new UserService();
-		$result = $userService->login($code, $from_type);
+		$result = $userService->login($code);
 
 		return result(200, 'ok', $result);
 	}
