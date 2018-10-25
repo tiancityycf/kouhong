@@ -3,9 +3,15 @@
 namespace app\qmxz\service\v1_0_1;
 
 use think\Db;
+use think\facade\Cache;
 use think\facade\Config;
 use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
+use model\WithdrawLog as WithdrawLogModel;
+
+use zhise\HttpClient;
+use api_data_service\Notify as NotifyService;
+use app\qmxz\service\Config as ConfigService;
 
 /**
  * 用户服务类
@@ -51,10 +57,17 @@ class User
                     $user->session_key = $data['session_key'];
                     $user->save();
 
+                    //新用户初始化金币的值
+                    $config = Cache::get(config('config_key'));
+                    $init_gold = $config['init_gold']['value'];
+                    if(!isset($init_gold)){
+                        $init_gold = ConfigService::get('init_gold');
+                    }
+
                     $userRecord = new UserRecordModel();
                     $userRecord->user_id = $user->id;
                     $userRecord->openid = $data['openid'];
-                    $userRecord->gold = 500;
+                    $userRecord->gold = $init_gold;
                     $userRecord->last_login = $time;
                     if ($from_type == 1) {
                         $userRecord->user_status = 2;
@@ -119,5 +132,78 @@ class User
             Db::rollback();
             throw new \Exception("系统繁忙");
         }
+    }
+
+
+     /**
+     * 取现
+     * @param  array $data 请求数据
+     * @return boolean
+     */
+    public function withdraw($data)
+    {
+        // 开启事务
+        Db::startTrans();
+        try {
+            $userRecord = UserRecordModel::where('user_id', $data['user_id'])->lock(true)->find();
+
+            //新用户初始化金币的值
+            $config = Cache::get(config('config_key'));
+            $withdraw_limit = $config['withdraw_limit']['value'];
+
+            if ($userRecord['money'] < $withdraw_limit) {
+                return ['status' => 0, 'msg' => '您的余额不足以提现'];
+            }
+
+            if ($data['amount'] > 0 && $userRecord->money >= $data['amount']) {
+                $params = [
+                    'appid' => Config::get('wx_appid'),
+                    'user_id' => $data['user_id'],
+                    'open_id' => '',
+                    'amount' => $data['amount'],
+                ];
+                
+                $params['sign'] = NotifyService::generateSign($params);
+                
+                $result = HttpClient::post(Config::get('withdraw_url'), $params);
+      
+
+                if ($result['status'] === 200 && $result['data']['data']['trade_no']) {
+                    $userRecord->money -= $data['amount'];
+                    $userRecord->save();
+
+                    WithdrawLogModel::create([
+                        'trade_no' => $result['data']['data']['trade_no'],
+                        'user_id' => $data['user_id'],
+                        'amount' => $data['amount'],
+                        'create_time' => time(),
+                        'status' => 0, // 提现中
+                    ]);
+
+                    Db::commit();
+
+                    return ['status' => 1, 'msg' => '提现申请成功', 'trade_no' => $result['data']['data']['trade_no']];
+                    
+                }
+            }
+            return ['status' => 0];
+        } catch (\Exception $e) {
+            Db::rollback();
+            trace($e->getMessage(),'error');
+            throw new \Exception('系统繁忙');
+        }
+
+        
+    }
+
+    /**
+     * 获取提现记录
+     * @param  integer $userId 用户id
+     * @return array
+     */
+    public function getWithdrawList($userId)
+    {
+        $tradeLogModel = new WithdrawLogModel();
+        return $tradeLogModel->getWithdrawList($userId);
     }
 }

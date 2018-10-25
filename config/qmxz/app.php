@@ -25,4 +25,10 @@ return [
     'system_sign'  => 'qmxz.comqmxz',
     'system_url'   => 'http://log.zxmn2018.com/logs/api/v1/exceptionlog/writeExceptionlog',
 
+    // 提现设置
+    'withdraw_url' => 'http://wxpay.wudee.cc/api/v1/withdraw_record/create_order', // 获取交易号URL
+
+    //提现加密密钥
+    'withdraw_secret' => 'cVCM47ZDqD',
+
 ];
