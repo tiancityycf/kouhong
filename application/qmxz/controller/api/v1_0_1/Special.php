@@ -138,4 +138,20 @@ class Special extends BasicController
         return result(200, 'ok', $result);
     }
 
+    /**
+     * 获取用户获奖纪录
+     * @return boolean
+     */
+    public function userPrize()
+    {
+        require_params('user_id');
+        $userId = Request::param('user_id');
+
+        //获取用户获奖纪录
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->userPrize($userId);
+
+        return result(200, 'ok', $result);
+    }
+
 }

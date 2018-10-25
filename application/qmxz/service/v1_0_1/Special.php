@@ -3,6 +3,7 @@
 namespace app\qmxz\service\v1_0_1;
 
 use app\qmxz\model\Special as SpecialModel;
+use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
@@ -524,6 +525,32 @@ class Special
                 'msg'    => 'ok',
             ];
 
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 获取用户获奖纪录
+     * @param  array $userId 用户id
+     * @return [type]       [description]
+     */
+    public function userPrize($userId)
+    {
+        try {
+            $info       = UserSpecialPrizeModel::where('user_id', $userId)->find();
+            $prize_info = SpecialPrizeModel::get($info['prize_id']);
+            if ($info) {
+                $info['prize_name'] = $prize_info['name'];
+                $info['prize_img']  = $prize_info['img'];
+            } else {
+                $info = [];
+            }
+
+            return [
+                'info' => $info,
+            ];
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
