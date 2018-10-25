@@ -28,6 +28,21 @@ class Special extends BasicController
     }
 
     /**
+     * 进入答题页扣除金币接口
+     * @return boolean
+     */
+    public function deductGold()
+    {
+        require_params('user_id', 'special_id');
+        $data = Request::param();
+
+        $specialService = new SpecialService();
+        $result         = $specialService->deductGold($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
      * 问题列表接口
      * @return boolean
      */
@@ -52,7 +67,7 @@ class Special extends BasicController
         require_params('user_id', 'special_id', 'special_word_id', 'user_select', 'is_pass');
         $data = Request::param();
 
-        //提交问题
+        //每题提交问题答案接口
         $specialService = new SpecialService();
         $result         = $specialService->submitAnswer($data);
 
@@ -68,9 +83,57 @@ class Special extends BasicController
         require_params('user_id', 'special_id');
         $data = Request::param();
 
-        //通关请求
+        //整点场答题接口
         $specialService = new SpecialService();
         $result         = $specialService->answerResult($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 整点场抽奖页信息
+     * @return boolean
+     */
+    public function prizePage()
+    {
+        require_params('user_id', 'special_id');
+        $data = Request::param();
+
+        //整点场抽奖页信息
+        $specialService = new SpecialService();
+        $result         = $specialService->prizePage($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 整点场抽奖页抽奖
+     * @return boolean
+     */
+    public function luckDraw()
+    {
+        require_params('user_id', 'special_id');
+        $data = Request::param();
+
+        //整点场抽奖页抽奖
+        $specialService = new SpecialService();
+        $result         = $specialService->luckDraw($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 使用兑换码兑奖
+     * @return boolean
+     */
+    public function cashPrize()
+    {
+        require_params('user_id', 'code');
+        $data = Request::param();
+
+        //使用兑换码兑奖
+        $specialService = new SpecialService();
+        $result         = $specialService->cashPrize($data);
 
         return result(200, 'ok', $result);
     }
