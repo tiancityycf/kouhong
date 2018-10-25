@@ -19,11 +19,12 @@ class Index extends BasicController
 	 */
 	public function index()
 	{
+		//echo "<pre>"; print_r($this->configData);exit();
 		require_params('user_id');
 		$data = Request::param();
 
 		$indexService = new IndexService();
-		$result = $indexService->index($data);
+		$result = $indexService->index($data, $this->configData);
 
 		return result(200, 'ok', $result);
 	}
