@@ -5,9 +5,11 @@ namespace app\qmxz\service\v1_0_1;
 use app\qmxz\model\SelectTopic as SelectTopicModel;
 use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicWord as TopicWordModel;
+use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
 use app\qmxz\model\UserTopic as UserTopicModel;
 use app\qmxz\model\UserTopicWord as UserTopicWordModel;
+use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserTopicWordComment as UserTopicWordCommentModel;
 use app\qmxz\model\UserTopicWordCount as UserTopicWordCountModel;
 use app\qmxz\service\Config as ConfigService;
@@ -43,16 +45,24 @@ class Topic
             }
             if ($data['type'] == 1) {
                 //普通场
-                $default_gold_limit = $this->getConfigValue($config_data, 'default_gold_limit');
-                if ($default_gold_limit <= $user_obj->gold) {
+                $topic_count = TopicWordModel::where('topic_id', $data['topic_id'])->count();
+                $user_topic_count = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->count();
+                $user_topic_count = isset($user_topic_count) ? $user_topic_count : 0;
+                $default_consume_gold = $this->getConfigValue($config_data, 'default_consume_gold');
+                $need_gold = $default_consume_gold * ($topic_count - $user_topic_count);
+                if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
                     $is_enough = false;
                 }
             } else {
                 //整点场
-                $timing_gold_limit = $this->getConfigValue($config_data, 'timing_gold_limit');
-                if ($timing_gold_limit <= $user_obj->gold) {
+                $special_count = SpecialWordModel::where('special_id', $data['topic_id'])->count();
+                $user_special_count = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['topic_id'])->count();
+                $user_special_count = isset($user_special_count) ? $user_special_count : 0;
+                $timing_consume_gold = $this->getConfigValue($config_data, 'timing_consume_gold');
+                $need_gold = $timing_consume_gold * ($special_count - $user_special_count);
+                if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
                     $is_enough = false;

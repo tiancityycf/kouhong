@@ -17,7 +17,7 @@ class Topic extends BasicController
      */
     public function checkGold()
     {
-        require_params('user_id', 'type');
+        require_params('user_id', 'type', 'topic_id');
         $data = Request::param();
 
         $topicService = new TopicService();

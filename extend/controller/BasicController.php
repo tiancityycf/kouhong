@@ -5,24 +5,23 @@ namespace controller;
 use think\Controller;
 use think\facade\Request;
 use think\facade\Config;
+use app\qmxz\service\Config as ConfigService;
 
 /**
  * 基础控制器类
  */
 class BasicController extends Controller
 {
+	protected $configData = [];
 	/**
 	 * 初始化
 	 * @return void
 	 */
 	protected function initialize()
 	{
-		// 校验平台参数
-		//require_params('sign', 'timestamp');
-		//暂时去掉签名验证
-//		if (!preg_match('/\/user\/update$/i',Request::path()) && !$this->validSign(Request::param())) {
-//			echo json_encode(['code' => 500,'msg' => '非法请求'], JSON_UNESCAPED_UNICODE);exit();
-//		}
+		$configService = new ConfigService();
+        $config_data   = $configService->getAll();
+		$this->configData = $config_data;
 	}
 
 	/**
