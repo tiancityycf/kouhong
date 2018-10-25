@@ -28,7 +28,7 @@ class User extends BasicController
 
         $result['config'] = $config_data;
         $result['user_info'] =  $user_info;
-        dump($result);die;
+     
         return result(200, 'ok', $result);
 	}
 
