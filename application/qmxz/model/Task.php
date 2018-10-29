@@ -10,6 +10,7 @@ namespace app\qmxz\model;
 
 use think\Model;
 use think\Exception;
+use think\Db;
 
 /**
  * Description of Task
@@ -19,7 +20,7 @@ use think\Exception;
 class Task extends Model {
 
     protected $gold_field = 'gold';
-    protected $total_gold_field = 'total_gold';
+    //protected $total_gold_field = 'total_gold';
 
     /**
      * 获取任务列表
@@ -36,7 +37,7 @@ class Task extends Model {
      */
     public function sendTask($openid, $task_id) {
 
-        $info = $this->db('task')->where(['id' => $task_id])->field('id,title,des,gold,img_url,status')->find();
+        $info = $this->db('task')->where(['id' => $task_id])->find();
         if (!$info) {
             return ['status' => 0, 'info' => '没有找到相关配置'];
         }
@@ -44,24 +45,27 @@ class Task extends Model {
             return ['status' => 0, 'info' => '奖励配置已关闭'];
         }
         $day = date("Ymd");
+        //express为0时为每日可完成任务
         if($info['express']==0){
-           $issend = $this->db('task_log')->where(['openid' => $openid, 'day' => $day])->find(); 
+           
+          $issend = Db::name('task_log')->where(['openid' => $openid, 'day' => $day,'type_id' => $task_id])->find();
+        //express为1时为只可完成一次的任务
         }else if($info['express']==1){
-           $issend = $this->db('task_log')->where(['openid' => $openid])->find(); 
+           $issend = Db::name('task_log')->where(['openid' => $openid])->find(); 
         }
         if ($issend) {
             return ['status' => 0, 'info' => '您已经领取过该奖励了'];
         }
         try {
+
             $data['openid'] = $openid;
             $data['day'] = $day;
             $data['create_time'] = time();
             $data['gold'] = $info['gold'];
             $data['type_id'] = $task_id;
-            $inid = $this->db('task_log')->insertGetId($data);
+            $inid = Db::name('task_log')->insertGetId($data);
             if ($inid) {
-                $this->db('user')->setInc($this->gold_field, $info['gold']);
-                $this->db('user')->setInc($this->total_gold_field, $info['gold']);
+                Db::name('user_record')->where('openid',$openid)->setInc($this->gold_field, $info['gold']);
                 return ['status'=>200,'info'=>'操作成功','data'=>$info['gold']];
             }else{
                 return ['status'=>0,'info'=>'操作失败','data'=>0];
