@@ -68,7 +68,7 @@ class Good
         //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/exchange_good.html?user_id=1&id=2&address_id=8;
         require_params('user_id','id','address_id'); //id值good_id address_id为地址id
         $data = Request::param();
-        
+
         $GoodsModel = new GoodsModel();
 
         $goodsInfo = $GoodsModel->field('id,stock,price')->where('id',$data['id'])->find();
@@ -148,7 +148,7 @@ class Good
         require_params('user_id');
         $user_id = Request::param('user_id');
 
-        $result = Db::name('exchange_log')->alias('e')->join(['t_goods'=>'g'],'e.good_id=g.id')->field('e.*,g.img,g.title')->where('user_id',$user_id)->select();
+        $result = Db::name('exchange_log')->alias('e')->join(['t_goods'=>'g'],'e.good_id=g.id')->field('e.*,g.img,g.title')->where('user_id',$user_id)->order('id desc')->select();
         
         foreach ($result as $key => $value) {
             $result[$key]['create_time'] = date('Y-m-d',$value['create_time']);
