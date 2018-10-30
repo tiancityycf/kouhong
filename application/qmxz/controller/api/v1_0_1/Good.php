@@ -38,7 +38,7 @@ class Good
 	 */
 	public function good_detail()
 	{
-		//前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/good_detail.html?id=40&user_id=9;
+		//前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/good_detail.html?id=40;
 		require_params('id');  //id指的是good_id
 		$good_id = Request::param('id');
 
