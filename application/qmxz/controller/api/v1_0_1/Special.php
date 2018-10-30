@@ -53,7 +53,19 @@ class Special extends BasicController
 
         //问题列表
         $specialService = new SpecialService($this->configData);
-        $result         = $specialService->questionList($data);
+        $question_list  = $specialService->questionList($data);
+
+        //评论列表
+        $comment_list = $specialService->commentList($data);
+
+        //整点场押宝消耗
+        $timing_consume_gold = $specialService->timing_consume_gold();
+
+        $result = [
+            'timing_consume_gold' => $timing_consume_gold,
+            'question_list'       => $question_list,
+            'comment_list'        => $comment_list,
+        ];
 
         return result(200, 'ok', $result);
     }
@@ -86,6 +98,22 @@ class Special extends BasicController
         //整点场答题接口
         $specialService = new SpecialService($this->configData);
         $result         = $specialService->answerResult($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 用户提交评论接口
+     * @return boolean
+     */
+    public function submitComment()
+    {
+        require_params('user_id', 'special_id', 'special_word_id', 'user_comment');
+        $data = Request::param();
+
+        //提交评论
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->submitComment($data);
 
         return result(200, 'ok', $result);
     }
@@ -150,6 +178,22 @@ class Special extends BasicController
         //获取用户获奖纪录
         $specialService = new SpecialService($this->configData);
         $result         = $specialService->userPrize($userId);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 获取用户周纪录
+     * @return boolean
+     */
+    public function userWeekRecord()
+    {
+        require_params('user_id');
+        $userId = Request::param('user_id');
+
+        //获取用户周纪录
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->userWeekRecord($userId);
 
         return result(200, 'ok', $result);
     }

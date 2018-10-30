@@ -27,12 +27,27 @@ class Topic extends BasicController
     }
 
     /**
+     * 分类接口
+     * @return boolean
+     */
+    public function topicCate()
+    {
+        require_params('user_id');
+        $userId = Request::param('user_id');
+
+        $topicService = new TopicService($this->configData);
+        $result       = $topicService->topicCate($userId);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
      * 列表接口
      * @return boolean
      */
     public function topicList()
     {
-        require_params('user_id');
+        require_params('cate_id','user_id');
         $userId = Request::param('user_id');
 
         $topicService = new TopicService($this->configData);
@@ -57,9 +72,13 @@ class Topic extends BasicController
         //评论列表
         $comment_list = $topicService->commentList($data);
 
+        //普通场亚宝消耗
+        $default_consume_gold = $topicService->defaultConsumeGold();
+
         $result = [
-            'question_list' => $question_list,
-            'comment_list'  => $comment_list,
+            'default_consume_gold' => $default_consume_gold,
+            'question_list'        => $question_list,
+            'comment_list'         => $comment_list,
         ];
 
         return result(200, 'ok', $result);
@@ -74,9 +93,21 @@ class Topic extends BasicController
         require_params('user_id', 'topic_id', 'topic_word_id', 'user_select', 'is_pass');
         $data = Request::param();
 
-        //提交问题
         $topicService = new TopicService($this->configData);
-        $result       = $topicService->submitAnswer($data);
+        //问题相关
+        $question_info = $topicService->getQuestion($data);
+
+        //提交问题
+        $answer_result = $topicService->submitAnswer($data);
+
+        //评论列表
+        $comment_list = $topicService->commentList($data);
+
+        $result = [
+            'question_info' => $question_info,
+            'answer_result' => $answer_result,
+            'comment_list'  => $comment_list,
+        ];
 
         return result(200, 'ok', $result);
     }

@@ -2,6 +2,7 @@
 namespace app\qmxz\controller;
 
 use app\qmxz\model\Topic as TopicModel;
+use app\qmxz\model\TopicCate as TopicCateModel;
 use controller\BasicAdmin;
 
 class Topic extends BasicAdmin
@@ -19,7 +20,7 @@ class Topic extends BasicAdmin
         list($get, $db) = [$this->request->get(), new TopicModel()];
 
         $db = $db->search($get);
-
+        $this->topic_cate();
         return parent::_list($db);
     }
 
@@ -35,7 +36,7 @@ class Topic extends BasicAdmin
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
-
+        $this->topic_cate();
         return $this->fetch('form', ['vo' => $data]);
     }
 
@@ -54,6 +55,7 @@ class Topic extends BasicAdmin
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
+        $this->topic_cate();
         return $this->fetch('form', ['vo' => $vo->toArray()]);
     }
 
@@ -70,16 +72,10 @@ class Topic extends BasicAdmin
         $this->error("删除失败，请稍候再试！");
     }
 
-    // protected function redisSave()
-    // {
-    //     $redis = Cache::init();
+    protected function topic_cate()
+    {
+        $data = TopicCateModel::column('title', 'id');
 
-    //     $topic_list = TopicModel::select();
-    //     if (Cache::set(config('topic_key'), $topic_list)) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-
-    // }
+        $this->assign('topic_cate', $data);
+    }
 }

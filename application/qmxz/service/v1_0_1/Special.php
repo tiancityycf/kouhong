@@ -11,6 +11,7 @@ use app\qmxz\model\UserSpecial as UserSpecialModel;
 use app\qmxz\model\UserSpecialPrize as UserSpecialPrizeModel;
 use app\qmxz\model\UserSpecialRedeemcode as UserSpecialRedeemcodeModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
+use app\qmxz\model\UserSpecialWordComment as UserSpecialWordCommentModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
 use think\Db;
 
@@ -34,17 +35,19 @@ class Special
     public function specialList($userId)
     {
         try {
-            $list              = SpecialModel::select();
+            $start             = strtotime(date('Y-m-d 00:00:00'));
+            $end               = strtotime(date('Y-m-d 23:59:59'));
+            $list              = SpecialModel::where('display_time', 'between', [$start, $end])->order('display_time')->select();
             $user_special_list = UserSpecialModel::where('user_id', $userId)->where('is_pass', 1)->column('special_id');
             $special_arr       = [];
-
-            $config_data = $this->configData;
-
+            $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
             if (!empty($list)) {
                 foreach ($list as $key => $value) {
-                    $time_end          = $value['display_time'] + ($answer_time_limit - 20) * 60;
-                    $special_arr[$key] = $value;
+                    $list[$key]['start_time'] = date('H:i', $value['display_time']);
+                    $list[$key]['des']        = date('H:i', $value['display_time']) . '-' . date('H:i', $value['display_time'] + $answer_time_limit * 60);
+                    $time_end                 = $value['display_time'] + ($answer_time_limit - 20) * 60;
+                    $special_arr[$key]        = $value;
                     if (in_array($value['id'], $user_special_list) || ($time_end < time())) {
                         $special_arr[$key]['is_pass']        = 1;
                         $special_arr[$key]['remaining_time'] = 0;
@@ -66,6 +69,20 @@ class Special
                     $prize_info                      = SpecialPrizeModel::get($value['prize_id']);
                     $special_arr[$key]['prize_name'] = $prize_info['name'];
                     $special_arr[$key]['prize_img']  = $prize_info['img'];
+                }
+                foreach ($list as $key => $value) {
+                    if ($value['display_time'] <= time()) {
+                        $list[$key]['is_end'] = 1;
+                    } else {
+                        $list[$key]['is_end'] = 0;
+                    }
+                }
+                foreach ($list as $key => $value) {
+                    if ($value['display_time'] > time()) {
+                        $list[$key]['next']       = 1;
+                        $list[$key]['next_start'] = $value['display_time'] - time();
+                        break;
+                    }
                 }
             }
             return $special_arr;
@@ -170,25 +187,124 @@ class Special
                 $list              = SpecialWordModel::where('special_id', $data['special_id'])->select();
                 $user_special_word = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->column('special_word_id');
                 if ($list) {
-                    foreach ($list as $key => $value) {
-                        if (in_array($value['id'], $user_special_word)) {
-                            $list[$key]['is_pass'] = 1;
-                        } else {
-                            $list[$key]['is_pass'] = 0;
+                    if (count($list) <= 10) {
+                        foreach ($list as $key => $value) {
+                            if (in_array($value['id'], $user_special_word)) {
+                                $list[$key]['is_pass'] = 1;
+                            } else {
+                                $list[$key]['is_pass'] = 0;
+                            }
+                            $list[$key]['options'] = json_decode($value['options']);
                         }
+                        $special_arr = $list;
+                    } else {
+                        $topic_ids = [];
+                        foreach ($list as $key => $value) {
+                            $topic_ids[] = $key;
+                        }
+                        $rand_arr  = array_rand($topic_ids, 10);
+                        $topic_arr = [];
+                        foreach ($rand_arr as $key => $value) {
+                            $topic_arr[] = $list[$value];
+                        }
+                        foreach ($topic_arr as $key => $value) {
+                            $topic_arr[$key]['options'] = json_decode($value['options']);
+                        }
+                        $special_arr = $topic_arr;
                     }
+
                 }
                 return [
                     'status'         => 1,
                     'msg'            => 'ok',
                     'remaining_time' => $time_end,
-                    'list'           => $list,
+                    'list'           => $special_arr,
                 ];
             }
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
         }
+    }
+
+    /**
+     * 获取普通场评论列表
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function commentList($data)
+    {
+        try {
+            if (isset($data['special_word_id'])) {
+                $list = UserSpecialWordCommentModel::where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->order('create_time desc')->select();
+            } else {
+                $list = UserSpecialWordCommentModel::where('special_id', $data['special_id'])->order('create_time desc')->select();
+            }
+            $user_info = UserModel::where('id', 11)->find();
+            if ($list) {
+                foreach ($list as $key => $value) {
+                    $user_info              = UserModel::where('id', $value['user_id'])->find();
+                    $list[$key]['nickname'] = $user_info['nickname'];
+                    $list[$key]['avatar']   = $user_info['avatar'];
+                }
+            } else {
+                $list = [];
+            }
+            return $list;
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 用户提交评论接口
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function submitComment($data)
+    {
+        try {
+            // 开启事务
+            Db::startTrans();
+            try {
+                $comment_obj                  = new UserSpecialWordCommentModel();
+                $comment_obj->user_id         = $data['user_id'];
+                $comment_obj->special_id      = $data['special_id'];
+                $comment_obj->special_word_id = $data['special_word_id'];
+                $comment_obj->user_comment    = $data['user_comment'];
+                $comment_obj->create_date     = date('ymd');
+                $comment_obj->create_time     = time();
+                $comment_obj->save();
+                Db::commit();
+                return [
+                    'status' => 1,
+                    'msg'    => 'ok',
+                ];
+            } catch (\Exception $e) {
+                Db::rollback();
+                return [
+                    'status' => 0,
+                    'msg'    => 'fail',
+                ];
+            }
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 整点场亚宝消耗
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function timing_consume_gold()
+    {
+        //普通场亚宝消耗
+        $config_data = $this->configData;
+        //消耗金币
+        return $config_data['timing_consume_gold'];
     }
 
     /**
@@ -303,22 +419,55 @@ class Special
             $default_option_base   = $config_data['default_option_base'];
             $default_bottom_option = $config_data['default_bottom_option'];
             foreach ($special_word as $key => $value) {
+                $special_word[$key]['options'] = json_decode($value['options']);
                 //判断参与人数是否加基数
                 $user_special_word_count = UserSpecialWordCountModel::where('special_id', $value['special_id'])->where('special_word_id', $value['id'])->find();
-                $participants_num        = $user_special_word_count['left_option'] + $user_special_word_count['right_option'];
+                $participants_num        = $user_special_word_count['option1'] + $user_special_word_count['option2'] + $user_special_word_count['option3'] + $user_special_word_count['option4'];
                 if ($participants_num <= $default_bottom_option) {
-                    $special_word[$key]['left_option_num']  = $user_special_word_count['left_option'] + $default_option_base[0];
-                    $special_word[$key]['right_option_num'] = $user_special_word_count['right_option'] + $default_option_base[1];
+                    $option1_num = $user_special_word_count['option1'] + $default_option_base[0];
+                    $option2_num = $user_special_word_count['option2'] + $default_option_base[1];
+                    $option3_num = $user_special_word_count['option3'] + $default_option_base[2];
+                    $option4_num = $user_special_word_count['option4'] + $default_option_base[3];
                 } else {
-                    $special_word[$key]['left_option_num']  = $user_special_word_count['left_option'];
-                    $special_word[$key]['right_option_num'] = $user_special_word_count['right_option'];
+                    $option1_num = $user_special_word_count['option1'];
+                    $option2_num = $user_special_word_count['option2'];
+                    $option3_num = $user_special_word_count['option3'];
+                    $option4_num = $user_special_word_count['option4'];
                 }
-                //得到大多数选项
-                if ($special_word[$key]['left_option_num'] >= $special_word[$key]['right_option_num']) {
-                    $special_word[$key]['most_select'] = 1;
-                } else {
-                    $special_word[$key]['most_select'] = 2;
+
+                //判断选项个数
+                $question_options       = SpecialWordModel::where('special_id', $data['special_id'])->where('id', $value['id'])->value('options');
+                $question_options_count = count(json_decode($question_options));
+                switch ($question_options_count) {
+                    case '1':
+                        $options = [$option1_num];
+                        break;
+
+                    case '2':
+                        $options = [$option1_num, $option2_num];
+                        break;
+
+                    case '3':
+                        $options = [$option1_num, $option2_num, $option3_num];
+                        break;
+
+                    case '4':
+                        $options = [$option1_num, $option2_num, $option3_num, $option4_num];
+                        break;
                 }
+                $special_word[$key]['options_num'] = $options;
+                //获取值最多选项
+                $max_arr = [$option1_num, $option2_num, $option3_num, $option4_num];
+                $max_k   = 1;
+                $max_v   = 0;
+                foreach ($max_arr as $k => $v) {
+                    if ($max_v <= $v) {
+                        $max_v = $v;
+                        $max_k = $k + 1;
+                    }
+                }
+                $special_word[$key]['most_select'] = $max_k;
+
                 //用户选项
                 $user_select                       = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $value['special_id'])->where('special_word_id', $value['id'])->value('user_select');
                 $special_word[$key]['user_select'] = isset($user_select) ? $user_select : 0;
@@ -581,6 +730,51 @@ class Special
             return [
                 'info' => $info,
             ];
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 获取用户周纪录
+     * @param  array $userId 用户id
+     * @return [type]       [description]
+     */
+    public function userWeekRecord($userId)
+    {
+        try {
+            $user_special      = UserSpecialModel::where('user_id', $userId)->select();
+            $config_data       = $this->configData;
+            $answer_time_limit = $config_data['answer_time_limit'];
+            foreach ($user_special as $key => $value) {
+                $special_info                        = SpecialModel::where('id', $value['special_id'])->field('title,display_time')->find();
+                $display_time                        = $special_info['display_time'];
+                $special_title                       = $special_info['title'];
+                $user_special[$key]['special_title'] = $special_title;
+                $end_time                            = $display_time + $answer_time_limit * 60;
+                if ($end_time > time()) {
+                    $user_special[$key]['is_end'] = 0;
+                } else {
+                    $user_special[$key]['is_end'] = 1;
+                }
+                $user_special_word = UserSpecialWordModel::where('user_id', $value['user_id'])->where('special_id', $value['special_id'])->select();
+                $is_correct        = 0;
+                foreach ($user_special_word as $k => $v) {
+                    $most_select = UserSpecialWordCountModel::where('special_id', $v['special_id'])->where('special_word_id', $v['special_word_id'])->value('most_select');
+                    if ($v['user_select'] == $most_select) {
+                        $is_correct = 1;
+                    } else {
+                        $is_correct = 0;
+                    }
+                }
+                if ($is_correct == 1) {
+                    $user_special[$key]['is_correct'] = 1;
+                } else {
+                    $user_special[$key]['is_correct'] = 0;
+                }
+            }
+            return $user_special;
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
