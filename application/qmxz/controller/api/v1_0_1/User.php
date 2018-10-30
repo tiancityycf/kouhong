@@ -7,6 +7,7 @@ use think\Db;
 use app\qmxz\service\v1_0_1\User as UserService;
 use app\qmxz\model\User as UserModel;
 use controller\BasicController;
+use app\qmxz\service\v1_0_1\Index as IndexService;
 
 /**
  * 用户控制器类
@@ -23,11 +24,14 @@ class User extends BasicController
         $data = Request::param();
 
 		$user_info = Db::name('user_record')->field('avatar,nickname,gold')->where('openid',$data['openid'])->find();
+		$result['user_info'] =  $user_info;
+
+		$indexService = new IndexService();
+		$result['hot_goods'] = $indexService->hot_goods();
 
         $config_data = $this->configData;
-
         $result['config'] = $config_data;
-        $result['user_info'] =  $user_info;
+        dump($result);die;
         return result(200, 'ok', $result);
 	}
 
