@@ -31,7 +31,7 @@ class User extends BasicController
 
         $config_data = $this->configData;
         $result['config'] = $config_data;
-        dump($result);die;
+
         return result(200, 'ok', $result);
 	}
 

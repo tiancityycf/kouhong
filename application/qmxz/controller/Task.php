@@ -27,7 +27,7 @@ class Task extends BasicAdmin {
         $this->assign('get', $get);
         $result = parent::_list($db, true, false, false);
         $this->assign('title', $this->title);
-        return $this->fetch('Task/index', $result);
+        return $this->fetch('index', $result);
     }
     
     public function add(){

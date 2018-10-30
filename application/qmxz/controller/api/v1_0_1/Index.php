@@ -49,8 +49,36 @@ class Index extends BasicController
                 $result['rules'][$key]['content'][] = $contents;
             };
         }
-        $result['common_problems'] = $this->configData['common_problems'];
-        
+
+        $common_problems = $this->configData['common_problems'];
+
+        foreach ($common_problems as $k2 => $v2) {
+            list($result['common_problems'][$k2]['title'],$problems) = explode('|', $v2); 
+            if(strpos($problems,'&')){
+                 $result['common_problems'][$k2]['content'] = explode('&',$problems);
+                 $result['common_problems'][$k2]['id'] =  $k2+1;
+            }else{
+
+                $result['common_problems'][$k2]['content'][] = $problems;
+                $result['common_problems'][$k2]['id'] =  $k2+1;
+            };
+        }
+
+
+        $result['common_problems_banner'] = $this->configData['common_promble_banner'];
+
         return result(200, 'ok', $result);
     }
+
+    /**
+     * 玩家金币排行接口
+     * @return boolean
+     */
+     public function rank()
+    {
+        $rank_nums = $this->configData['rank_nums'] ? $this->configData['rank_nums'] : 5;
+        $rankers = Db::name('user_record')->field('avatar,nickname,gold')->order('gold desc')->limit($rank_nums)->select();
+        return result(200, 'ok', $rankers);
+    }
+
 }
