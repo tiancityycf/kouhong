@@ -801,4 +801,50 @@ class Special
         }
     }
 
+    /**
+     * 消耗金币重新答题
+     * @param  array $userId 用户id
+     * @return [type]       [description]
+     */
+    public function reAswer($userId)
+    {
+        try {
+            //重答需消耗金币
+            $config_data           = $this->configData;
+            $reanswer_consume_gold = $config_data['reanswer_consume_gold'];
+            $user_record           = UserRecordModel::where('user_id', $userId)->find();
+            if ($user_record->gold >= $reanswer_consume_gold) {
+                // 开启事务
+                Db::startTrans();
+                try {
+                    $user_record->gold = $user_record->gold - $reanswer_consume_gold;
+                    $user_record->save();
+                    Db::commit();
+                    return [
+                        'status' => 1,
+                        'msg'    => 'ok',
+                        'data'   => '',
+                    ];
+
+                } catch (\Exception $e) {
+                    Db::rollback();
+                    return [
+                        'status' => 0,
+                        'msg'    => 'fail',
+                        'data'   => '',
+                    ];
+                }
+            } else {
+                return [
+                    'status' => 0,
+                    'msg'    => '金币不够',
+                    'data'   => '',
+                ];
+            }
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
 }

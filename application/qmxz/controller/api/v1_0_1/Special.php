@@ -202,4 +202,20 @@ class Special extends BasicController
         return result(200, 'ok', $result);
     }
 
+    /**
+     * 消耗金币重新答题
+     * @return boolean
+     */
+    public function reAswer()
+    {
+        require_params('user_id');
+        $userId = Request::param('user_id');
+
+        //消耗金币重新答题
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->reAswer($userId);
+
+        return result(200, 'ok', $result);
+    }
+
 }
