@@ -26,6 +26,7 @@ class Special extends BasicAdmin
             $result['list'][$key]['prize_img']  = $prize_info['img'];
             $result['list'][$key]['banners']    = json_decode($value['banners']);
         }
+        $this->assign('title',$this->title);
         return $this->fetch('index', $result);
     }
 
