@@ -183,17 +183,17 @@ class Special extends BasicController
     }
 
     /**
-     * 获取用户周纪录
+     * 获取用户整点场纪录
      * @return boolean
      */
-    public function userWeekRecord()
+    public function userSpecialRecord()
     {
         require_params('user_id');
         $userId = Request::param('user_id');
 
-        //获取用户周纪录
+        //获取用户整点场纪录
         $specialService = new SpecialService($this->configData);
-        $result         = $specialService->userWeekRecord($userId);
+        $result         = $specialService->userSpecialRecord($userId);
 
         return result(200, 'ok', $result);
     }

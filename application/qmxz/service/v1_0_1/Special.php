@@ -737,14 +737,22 @@ class Special
     }
 
     /**
-     * 获取用户周纪录
+     * 获取用户整点场纪录
      * @param  array $userId 用户id
      * @return [type]       [description]
      */
-    public function userWeekRecord($userId)
+    public function userSpecialRecord($userId)
     {
         try {
-            $user_special      = UserSpecialModel::where('user_id', $userId)->select();
+            if (isset($data['is_week']) && $data['is_week'] == 1) {
+                //周纪录
+                $start        = strtotime(date('Y-m-d 00:00:00', strtotime('-1 week')));
+                $end          = strtotime(date('Y-m-d 23:59:59'));
+                $user_special = UserSpecialModel::where('user_id', $userId)->where('create_time', 'between', [$start, $end])->select();
+            } else {
+                //个人纪录
+                $user_special = UserSpecialModel::where('user_id', $userId)->select();
+            }
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
             foreach ($user_special as $key => $value) {
