@@ -61,7 +61,11 @@ class Special extends BasicController
         //整点场押宝消耗
         $timing_consume_gold = $specialService->timing_consume_gold();
 
+        //整点场轮播图
+        $banners = $specialService->specialBanners($data);
+
         $result = [
+            'banners'             => $banners,
             'timing_consume_gold' => $timing_consume_gold,
             'question_list'       => $question_list,
             'comment_list'        => $comment_list,

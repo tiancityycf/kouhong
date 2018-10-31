@@ -163,6 +163,18 @@ class Special
     }
 
     /**
+     * 整点场轮播图
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function specialBanners($data)
+    {
+        $banners     = SpecialModel::where('id', $data['special_id'])->value('banners');
+        $banners_arr = json_decode($banners);
+        return $banners_arr;
+    }
+
+    /**
      * 获取问题列表
      * @param  array $data 接收参数
      * @return [type]       [description]
@@ -179,7 +191,6 @@ class Special
                 ];
             } else {
                 //结束时间
-
                 $config_data       = $this->configData;
                 $answer_time_limit = $config_data['answer_time_limit'];
                 $time_end          = $display_time + ($answer_time_limit - 10) * 60 - time();
