@@ -26,6 +26,7 @@ class SpecialWord extends BasicAdmin
     {
         $data = $this->request->post();
         if ($data) {
+            $data['options'] = json_encode($data['options'], JSON_UNESCAPED_UNICODE);
         	$model = new SpecialWordModel();
         	$data['create_time'] = time();
         	
@@ -46,6 +47,7 @@ class SpecialWord extends BasicAdmin
         $vo = SpecialWordModel::get($get_data['id']);
         $post_data = $this->request->post();
         if ($post_data) {
+            $post_data['options'] = json_encode($post_data['options'], JSON_UNESCAPED_UNICODE);
         	if ($vo->save($post_data) !== false) {
         	    $this->success('恭喜, 数据保存成功!', '');
             } else {
@@ -53,7 +55,7 @@ class SpecialWord extends BasicAdmin
             }
         }
         $this->special_list();
-        return  $this->fetch('form', ['vo' => $vo->getdata()]);
+        return  $this->fetch('edit', ['vo' => $vo->getdata()]);
     }
 
     //删除

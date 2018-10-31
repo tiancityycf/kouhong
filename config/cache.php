@@ -16,7 +16,7 @@
 return [
     'expire' => 0,
     'prefix' => '',
-    'path'   => '',
+    'path'   => 'qmxz',
     'host'	=>	'127.0.0.1',
     'type'   => 'redis',
 ];

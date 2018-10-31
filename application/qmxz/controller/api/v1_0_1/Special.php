@@ -21,7 +21,7 @@ class Special extends BasicController
         require_params('user_id');
         $userId = Request::param('user_id');
 
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->specialList($userId);
 
         return result(200, 'ok', $result);
@@ -36,7 +36,7 @@ class Special extends BasicController
         require_params('user_id', 'special_id');
         $data = Request::param();
 
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->deductGold($data);
 
         return result(200, 'ok', $result);
@@ -52,8 +52,24 @@ class Special extends BasicController
         $data = Request::param();
 
         //问题列表
-        $specialService = new SpecialService();
-        $result         = $specialService->questionList($data);
+        $specialService = new SpecialService($this->configData);
+        $question_list  = $specialService->questionList($data);
+
+        //评论列表
+        $comment_list = $specialService->commentList($data);
+
+        //整点场押宝消耗
+        $timing_consume_gold = $specialService->timing_consume_gold();
+
+        //整点场轮播图
+        $banners = $specialService->specialBanners($data);
+
+        $result = [
+            'banners'             => $banners,
+            'timing_consume_gold' => $timing_consume_gold,
+            'question_list'       => $question_list,
+            'comment_list'        => $comment_list,
+        ];
 
         return result(200, 'ok', $result);
     }
@@ -68,7 +84,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //每题提交问题答案接口
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->submitAnswer($data);
 
         return result(200, 'ok', $result);
@@ -84,8 +100,24 @@ class Special extends BasicController
         $data = Request::param();
 
         //整点场答题接口
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->answerResult($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 用户提交评论接口
+     * @return boolean
+     */
+    public function submitComment()
+    {
+        require_params('user_id', 'special_id', 'special_word_id', 'user_comment');
+        $data = Request::param();
+
+        //提交评论
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->submitComment($data);
 
         return result(200, 'ok', $result);
     }
@@ -100,7 +132,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //整点场抽奖页信息
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->prizePage($data);
 
         return result(200, 'ok', $result);
@@ -116,7 +148,7 @@ class Special extends BasicController
         $data = Request::param();
 
         //整点场抽奖页抽奖
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->luckDraw($data);
 
         return result(200, 'ok', $result);
@@ -132,8 +164,56 @@ class Special extends BasicController
         $data = Request::param();
 
         //使用兑换码兑奖
-        $specialService = new SpecialService();
+        $specialService = new SpecialService($this->configData);
         $result         = $specialService->cashPrize($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 获取用户获奖纪录
+     * @return boolean
+     */
+    public function userPrize()
+    {
+        require_params('user_id');
+        $userId = Request::param('user_id');
+
+        //获取用户获奖纪录
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->userPrize($userId);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 获取用户整点场纪录
+     * @return boolean
+     */
+    public function userSpecialRecord()
+    {
+        require_params('user_id');
+        $userId = Request::param('user_id');
+
+        //获取用户整点场纪录
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->userSpecialRecord($userId);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 重新答题
+     * @return boolean
+     */
+    public function reAswer()
+    {
+        require_params('user_id', 'type');
+        $data = Request::param();
+
+        //重新答题
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->reAswer($data);
 
         return result(200, 'ok', $result);
     }

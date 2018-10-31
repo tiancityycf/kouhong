@@ -2,11 +2,11 @@
 
     <!--{empty name='vo'}-->
 
-        <p class="help-block text-center well" style="width: 100%;">没 有 收 货 地 址 记 录 哦 ！</p>
+        <p class="help-block text-center well" style="width: 100%; margin-left: 10px;">没 有 收 货 地 址 记 录 哦 ！</p>
 
     <!--{else}-->
         <!-- {foreach $vo as $key=>$st}-->
-    	<div class="layui-form-item">
+    	<div class="layui-form-item" style="margin-left: 60px;">
             <label class="layui-form-label">收货地址信息：</label>
                 <table class="layui-table" lay-skin="line">
                     <thead>
@@ -18,7 +18,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>
+                        <td style="width: 50%">
                            {$st.region}
                         </td>
                         <td>

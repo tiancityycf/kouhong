@@ -5,10 +5,28 @@
             <input type="text" autofocus name="title" required="required" value='' pattern="" title="" placeholder="请输入任务名称" class="layui-input" style="width: 55%;">
         </div>
     </div>
+    
 	<div class="layui-form-item">
         <label class="layui-form-label">任务描述</label>
         <div class="layui-input-block">
             <input type="text" autofocus name="des" required="required" value='' pattern="" title="" placeholder="请输入任务描述" class="layui-input" style="width: 55%;">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">按钮类型</label>
+        <div class="layui-input-inline">
+            <select name='btn_type' class='layui-select' lay-search="">
+                <option value=''> - 请选择 -</option>
+
+                <option value='1'> - 普通按钮 - </option>
+                <option value='2'> - 分享按钮 - </option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">按钮名称</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="btn_text" required="required" value='' pattern="" title="" placeholder="请输入按钮名称" class="layui-input" style="width: 55%;">
         </div>
     </div>
     	<div class="layui-form-item">
@@ -40,7 +58,7 @@
         
     </div>
 
-       <div class="layui-form-item layui-inline">
+    <div class="layui-form-item layui-inline">
         <label class="layui-form-label">奖励类型</label>
         <div class="layui-input-inline">
             <select name='express' class='layui-select' lay-search="">

@@ -22,6 +22,7 @@
             <th class='text-left nowrap'>任务ID</th>
             <th class='text-left nowrap'>任务名称</th>
             <th class='text-left nowrap'>描述</th>
+            <th class='text-left nowrap'>按钮</th>
             <th class='text-left nowrap'>获得金币</th>
             <th class='text-left nowrap'>领取类型</th>
             <th class='text-left nowrap'>图标</th>
@@ -42,6 +43,15 @@
 
             <td class='text-left nowrap'>
               {$vo.des}
+            </td>
+
+            <td class='text-left nowrap'>
+              {if condition="$vo.btn_type == 1"}
+               <span style='color: green'>普通按钮</span>
+               {else /}
+               <span style='color: red'>分享按钮</span>
+               {/if}----
+               {$vo.btn_text}
             </td>
 
             <td class='text-left nowrap'>

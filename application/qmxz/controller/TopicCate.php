@@ -1,27 +1,25 @@
 <?php
 namespace app\qmxz\controller;
 
-use app\qmxz\model\Topic as TopicModel;
-use app\qmxz\model\TopicWord as TopicWordModel;
+use app\qmxz\model\TopicCate as TopicCateModel;
 use controller\BasicAdmin;
 
-class TopicWord extends BasicAdmin
+class TopicCate extends BasicAdmin
 {
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'topic_word';
+    public $table = 'topic_cate';
 
     public function index()
     {
-        $this->title = '话题题目';
+        $this->title = '话题分类';
 
-        list($get, $db) = [$this->request->get(), new TopicWordModel()];
+        list($get, $db) = [$this->request->get(), new TopicCateModel()];
 
         $db = $db->search($get);
 
-        $this->topic_list();
         return parent::_list($db);
     }
 
@@ -30,8 +28,7 @@ class TopicWord extends BasicAdmin
         $data = $this->request->post();
         if ($data) {
             $data['create_time'] = time();
-            $data['options'] = json_encode($data['options'], JSON_UNESCAPED_UNICODE);
-            $model               = new TopicWordModel();
+            $model               = new TopicCateModel();
             if ($model->save($data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
@@ -39,7 +36,6 @@ class TopicWord extends BasicAdmin
             }
         }
 
-        $this->topic_list();
         return $this->fetch('form', ['vo' => $data]);
     }
 
@@ -47,53 +43,30 @@ class TopicWord extends BasicAdmin
     {
         $get_data = $this->request->get();
 
-        $vo = TopicWordModel::get($get_data['id']);
+        $vo = TopicCateModel::get($get_data['id']);
 
         $post_data = $this->request->post();
 
         if ($post_data) {
-            $post_data['options'] = json_encode($post_data['options'], JSON_UNESCAPED_UNICODE);
             if ($vo->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
-
-        $this->topic_list();
-        return $this->fetch('edit', ['vo' => $vo->toArray()]);
+        return $this->fetch('form', ['vo' => $vo->toArray()]);
     }
 
     public function del()
     {
         $data = $this->request->post();
         if ($data) {
-            $model = TopicWordModel::get($data['id']);
+            $model = TopicCateModel::get($data['id']);
             if ($model->delete() !== false) {
                 $this->success("删除成功！", '');
             }
         }
 
         $this->error("删除失败，请稍候再试！");
-    }
-
-    // protected function redisSave()
-    // {
-    //     $redis = Cache::init();
-
-    //     $topic_list = TopicWordModel::select();
-    //     if (Cache::set(config('topic_word_key'), $topic_list)) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-
-    // }
-
-    protected function topic_list()
-    {
-        $data = TopicModel::column('title', 'id');
-
-        $this->assign('topic_list', $data);
     }
 }

@@ -48,9 +48,11 @@ class Config extends BasicAdmin
     public function index()
     {
         if ($this->request->isGet()) {
+
             return $this->fetch('', ['title' => $this->title]);
         }
         if ($this->request->isPost()) {
+
             foreach ($this->request->post() as $key => $vo) {
                 sysconf($key, $vo);
             }

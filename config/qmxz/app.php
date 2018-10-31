@@ -1,7 +1,6 @@
 <?php
 //配置文件
 return [
-
     // 加密设置
     'app_secret'   => 'QKTWuxzM5EfkeQhi',
     'word_secret'  => '',

@@ -73,7 +73,7 @@ class Order extends BasicAdmin
         $cellNum = count($expCellName);
         $dataNum = count($expTableData);
 
-        require '/../vendor/PHPExcel/PHPExcel.php';
+        require '../vendor/PHPExcel/PHPExcel.php';
         $objPHPExcel = new \PHPExcel();
     
         //vendor("PHPExcel.PHPExcel");

@@ -1,10 +1,45 @@
 <form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
-    <div class="layui-form-item">
-        <label class="layui-form-label">话题</label>
+	<div class="layui-form-item">
+        <label class="layui-form-label">整点场标题</label>
         <div class="layui-input-block">
-                <select name="topic_id" class="layui-select" style="width: 75%;">
-                    <!--{foreach topic_list as $key=>$st}-->
-                    <!--{if (!isset($vo['topic_id']) AND $key eq 1) OR (isset($vo['topic_id']) AND $vo.topic_id eq $key)}-->
+            <input type="text" autofocus name="title" required="required" value='{$vo.title|default=""}' pattern="" title="整点场标题" placeholder="整点场标题" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="des" value='{$vo.des|default=""}' required="required" pattern="" title="描述" placeholder="描述" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图片地址</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="img" value='{$vo.img|default=""}' required="required" pattern="" title="图片地址" placeholder="图片地址" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" id="test">
+        <label class="layui-form-label">轮播图</label>
+        <div class="layui-input-block ">
+            <?php $banners =  json_decode($vo['banners']); ?>
+            {foreach $banners as $k=>$v}
+            <div class="layui-row arr">
+                <div class="layui-col-md9">
+                    <input type="text" autofocus name="banners[]" required="required" value="{$v|default=''}" pattern="" title="" placeholder="请输入图片地址" class="layui-input">
+                </div>
+                <div class="layui-col-md3">
+                    <button class="layui-btn add" style="margin-left: 10px;">添加</button>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">奖品选择</label>
+        <div class="layui-input-block">
+                <select id="prize_id" name="prize_id" lay-verify="required" class="layui-select" lay-search>
+                    <option value="">- 请选择 -</option>
+                    <!--{foreach $prize_list as $key=>$st}-->
+                    <!--{if isset($vo['prize_id']) AND $vo.prize_id eq $key}-->
                     <option selected value="{$key}">- {$st} -</option>
                     <!--{else}-->
                     <option value="{$key}">- {$st} -</option>
@@ -14,39 +49,21 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">标题</label>
+        <label class="layui-form-label">显示时间</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="title" required="required" value='{$vo.title|default=""}' pattern="" title="标题" placeholder="标题" class="layui-input">
+            <input name="display_time" id='display_time' value="{$vo.display_time|default=''}" placeholder="请选择时间" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
-        <div class="layui-input-block">
-            <input type="text" autofocus name="des" required="required" value='{$vo.des|default=""}' pattern="" title="描述" placeholder="描述" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item" id="test">
-        <label class="layui-form-label">选项</label>
-        <div class="layui-input-block ">
-            <div id="string">
-                <input type="text" autofocus name="value" required="required" value='' pattern="" title="" placeholder="请输入选项值" class="layui-input" style="width: 75%;">
-            </div>
-            <div class="layui-row arr">
-                <div class="layui-col-md9">
-                    <input type="text" autofocus name="options[]" required="required" value='' pattern="" title="" placeholder="请输入选项值" class="layui-input">
-                </div>
-                <div class="layui-col-md3">
-                    <button class="layui-btn add" style="margin-left: 10px;">添加</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div class="layui-form-item text-center">
         {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
-    <script>window.form.render();</script>
+    <script>
+        window.form.render();
+        window.laydate.render({range: false, elem: '#display_time', type: 'datetime'});
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('.layui-form-select').css('width', '75%');
@@ -83,7 +100,7 @@
         $("#test").on('click', '.add', function(){
             var html = '<div class="layui-row arr">';
             html += '<div class="layui-col-md9" style="margin-top:5px;">';
-            html += '<input type="text" autofocus name="options[]" required="required" value="" pattern="" title="" placeholder="请输入选项值" class="layui-input">';
+            html += '<input type="text" autofocus name="banners[]" required="required" value="" pattern="" title="" placeholder="请输入图片地址" class="layui-input">';
             html += '</div><div class="layui-col-md3" style="margin-top:5px;">';
             //html += '<button class="layui-btn add" style="margin-left: 10px;">添加</button>';
             html += '<button class="layui-btn del layui-btn-danger" style="margin-left: 10px;">删除</button>';

@@ -33,31 +33,52 @@ class InviteUser extends Model{
             return ['code' => 10032, 'data' => '', 'message' => '该账号已被邀请'];
         } else {
             $invite_config = $this->getInviteConfig();
+
             //最后邀请的人
             $liststep = $this->getLastStep($from_user);
             $step = $liststep ? $liststep + 1 : 1;
-            //$give_gold = $this->config_cache['invite_user_give_gold'];
+
             $data['openid'] = $from_user;
             $data['invite_user'] = $openid;
             $data['create_time'] = date('Y-m-d H:i:s');
-            $data['gold'] = $invite_config[$step]['gold'] ? $invite_config[$step]['gold'] : 0;
-            $data['money'] = $invite_config[$step]['money'] ? $invite_config[$step]['money'] : 0;
-            $data['create_time'] = date('Y-m-d H:i:s');
+            $data['give_time'] = date('Y-m-d H:i:s');
             $data['is_give'] = 0;
             $data['step'] = isset($invite_config[$step]['gold']) ? $step : 0;
+
+            $config_count = count($invite_config);//获取配置项的数量
+            if($step > $config_count){
+                //当玩家邀请人数已经超过了每日邀请的上限后触发
+                return ['code' => 10050, 'data' => '', 'message' => '邀请人数已达到今日上限'];
+            }else{
+                //$give_gold = $this->config_cache['invite_user_give_gold'];
+                $data['gold'] = $invite_config[$step]['gold'] ? $invite_config[$step]['gold'] : 0;
+                $data['money'] = $invite_config[$step]['money'] ? $invite_config[$step]['money'] : 0;
+            }
+            
+
             $status = $this->save($data);
+            if ($status) {
+                return ['code' => 0, 'data' => '', 'message' => '邀请记录成功'];
+            }else{
+                return ['code' => 10032, 'data' => '', 'message' => '邀请记录失败'];
+            }
+            
+            /*
             $id=$this->getData('id');
             if ($status && $id) {
                 return $this->give($from_user, $id);
             } else {
                 return ['code' => 10033, 'data' => '', 'message' => '邀请记录失败'];
             }
+            */
+            
         }
     }
 
     //赠送金币和红包
     public function give($openid, $id) {
         $data = $this->get(["openid" => $openid, 'id' => $id]);
+        dump($data);die;
         if (!$data) {
             return ['code' => 10034, 'data' => '', 'message' => '邀请记录不存在'];
         }

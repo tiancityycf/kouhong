@@ -1,27 +1,12 @@
 <form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">分类</label>
+	<div class="layui-form-item">
+        <label class="layui-form-label">礼物名称</label>
         <div class="layui-input-block">
-                <select name="cate_id" class="layui-select" style="width: 75%;">
-                    <!--{foreach topic_cate as $key=>$st}-->
-                    <!--{if (!isset($vo['cate_id']) AND $key eq 1) OR (isset($vo['cate_id']) AND $vo.cate_id eq $key)}-->
-                    <option selected value="{$key}">- {$st} -</option>
-                    <!--{else}-->
-                    <option value="{$key}">- {$st} -</option>
-                    <!--{/if}-->
-                    <!--{/foreach}-->
-                </select>
+            <input type="text" autofocus name="name" required="required" value='{$vo.name|default=""}' pattern="" title="请输入礼物名称" placeholder="请输入礼物名称" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">标题</label>
-        <div class="layui-input-block">
-            <input type="text" autofocus name="title" required="required" value='{$vo.title|default=""}' pattern="" title="标题" placeholder="标题" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">上传图片</label>
+        <label class="layui-form-label">图片</label>
         <div class="layui-input-block">
             <div class="layui-row">
                 <div class="layui-col-md6">
@@ -37,20 +22,22 @@
                 </div>
             </div>
         </div>
-        
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
+        <label class="layui-form-label">状态</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="des" required="required" value='{$vo.des|default=""}' pattern="" title="描述" placeholder="描述" class="layui-input">
+                <select id="status" name="status" class="layui-select">
+                	<!--{foreach [1=>'启用',0=>'禁用'] as $key=>$st}-->
+                	<!--{if (!isset($vo['status']) AND $key eq 1) OR (isset($vo['status']) AND $vo.status eq $key)}-->
+                	<option selected value="{$key}">- {$st} -</option>
+	                <!--{else}-->
+	                <option value="{$key}">- {$st} -</option>
+	                <!--{/if}-->
+                	<!--{/foreach}-->
+                </select>
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">额外信息</label>
-        <div class="layui-input-block">
-            <input type="text" autofocus name="remark" required="required" value='{$vo.remark|default=""}' pattern="" title="额外信息" placeholder="额外信息" class="layui-input">
-        </div>
-    </div>
+
     <div class="layui-form-item text-center">
         {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
         <button class="layui-btn" type='submit'>保存数据</button>
@@ -70,15 +57,15 @@
                 ,done: function(res){
                     if(res.code == 1){
                         $("#path").val(res.path);
-                        // $("#size").val(res.size);
-                        // $("#type").val(res.type);
+                        $("#size").val(res.size);
+                        $("#type").val(res.type);
                         $("#img").attr('src', res.path);
-                        layer.msg('图片已经上传到网宿云存储', {icon: 6});
+                        layui.alert('图片已经上传到网宿云存储', {icon: 6});
 
                     }else if(res.code == 0){
-                        layer.msg(res.msg);
+                        layui.alert(res.msg);
                     }else{
-                        layer.msg(res.error_msg);
+                        layui.alert(res.error_msg);
                     }
                 }
             });
