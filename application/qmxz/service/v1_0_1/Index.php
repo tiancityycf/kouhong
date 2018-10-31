@@ -21,6 +21,6 @@ class Index
 
 	public function index($data)
 	{
-		echo "<pre>"; print_r($this->configData);exit();
+		return $this->configData;
 	}
 }
