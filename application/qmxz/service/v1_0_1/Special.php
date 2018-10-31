@@ -69,6 +69,7 @@ class Special
                     $prize_info                      = SpecialPrizeModel::get($value['prize_id']);
                     $special_arr[$key]['prize_name'] = $prize_info['name'];
                     $special_arr[$key]['prize_img']  = $prize_info['img'];
+                    $special_arr[$key]['banners']    = json_decode($value['banners']);
                 }
                 foreach ($list as $key => $value) {
                     if ($value['display_time'] <= time()) {
