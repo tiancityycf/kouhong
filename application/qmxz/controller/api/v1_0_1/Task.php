@@ -76,8 +76,16 @@ class Task extends BasicController {
                $is_play_special = Db::name('user_special')->where(['user_id' => $user_id, 'create_date' => date('ymd')])->find();
                $list[$key]['is_give'] = $is_play_special ? 1 : 0;
             }
+
+            //反悔卡
+            if ($val['id'] == 6) {
+                //反悔卡每日获取数量与邀请好友数量一致
+               $list[$key]['regret_times'] = Db::name("regret_card")->where(['openid' => $openid])->where('add_date',date('ymd'))->value('times');
+               $list[$key]['task_regret_times'] = $this->task_invite_number;
+            }
+         
         }
-        
+
         return result('200', "ok", $list);
     }
 
@@ -134,8 +142,11 @@ class Task extends BasicController {
         $invite_number = $model->getInviteDayCount($openid, date('Y-m-d'));
         if ($invite_number == $this->task_invite_number && $data['code']==0) {
             $task->sendTask($openid, 3);
+            //增加完成反悔卡的任务日志
+            $task->sendTask($openid, 6);
         }
        return result('200', "ok", $data);
     }
+
 
 }
