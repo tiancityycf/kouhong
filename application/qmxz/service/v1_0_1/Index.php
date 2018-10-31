@@ -12,19 +12,7 @@ use app\qmxz\service\Config as ConfigService;
  */
 class Index
 {
-	protected $configData;
-	/*
-    public function __construct($configData)
-    {
-        $this->configData = $configData;
-    }
 
-	public function index($data)
-	{
-
-		echo "<pre>"; print_r($this->configData);exit();
-	}
-	*/
 	public function hot_goods(){
 		//筛选最火热的四件兑换商品的SQL: 
 		//SELECT good_id,count(*) as nums FROM `dbqmxz`.`t_exchange_log` GROUP BY good_id ORDER BY nums desc LIMIT 4

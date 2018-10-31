@@ -61,7 +61,11 @@ class Special extends BasicController
         //整点场押宝消耗
         $timing_consume_gold = $specialService->timing_consume_gold();
 
+        //整点场轮播图
+        $banners = $specialService->specialBanners($data);
+
         $result = [
+            'banners'             => $banners,
             'timing_consume_gold' => $timing_consume_gold,
             'question_list'       => $question_list,
             'comment_list'        => $comment_list,
@@ -97,7 +101,22 @@ class Special extends BasicController
 
         //整点场答题接口
         $specialService = new SpecialService($this->configData);
-        $result         = $specialService->answerResult($data);
+        $answer_result  = $specialService->answerResult($data);
+
+        //评论列表
+        $comment_list = $specialService->commentList($data);
+
+        //整点场押宝消耗
+        $timing_consume_gold = $specialService->timing_consume_gold();
+
+        //整点场轮播图
+        $banners = $specialService->specialBanners($data);
+
+        $result = [
+            'banners'       => $banners,
+            'answer_result' => $answer_result,
+            'comment_list'  => $comment_list,
+        ];
 
         return result(200, 'ok', $result);
     }
@@ -183,17 +202,46 @@ class Special extends BasicController
     }
 
     /**
-     * 获取用户周纪录
+     * 获取用户整点场纪录
      * @return boolean
      */
-    public function userWeekRecord()
+    public function userSpecialRecord()
     {
         require_params('user_id');
         $userId = Request::param('user_id');
 
-        //获取用户周纪录
+        //获取用户整点场纪录
         $specialService = new SpecialService($this->configData);
-        $result         = $specialService->userWeekRecord($userId);
+        $result         = $specialService->userSpecialRecord($userId);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 重新答题
+     * @return boolean
+     */
+    public function reAswer()
+    {
+        require_params('user_id', 'type');
+        $data = Request::param();
+
+        //重新答题
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->reAswer($data);
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 随机生成当天整点场
+     * @return boolean
+     */
+    public function randGetSpecial()
+    {
+        //随机生成当天整点场
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->randGetSpecial();
 
         return result(200, 'ok', $result);
     }

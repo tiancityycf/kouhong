@@ -37,7 +37,6 @@
             <!-- <th class='text-left nowrap'>图标地址</th> -->
             <th class='text-left nowrap'>轮播图</th>
             <th class='text-left nowrap'>奖品</th>
-            <th class='text-left nowrap'>显示时间</th>
             <th class='text-left nowrap'>创建时间</th>
     	</tr>
     	</thead>
@@ -79,9 +78,6 @@
             <td class='text-left nowrap'>
                 <div>{$vo.prize_name}</div>
                 <img id="prize_img" data-tips-image style="height:auto;max-height:50px;min-width:50px" src='{$vo.prize_img}' />
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.display_time|date='Y-m-d H:i'}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_time|date='Y-m-d H:i:s'}
