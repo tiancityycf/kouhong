@@ -366,28 +366,60 @@ class Special
                     $answer = UserSpecialWordCountModel::where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->find();
                     if ($answer) {
                         if ($data['user_select'] == 1) {
-                            $answer->left_option = $answer->left_option + 1;
-                        } else {
-                            $answer->right_option = $answer->right_option + 1;
+                            $answer->option1 = $answer->option1 + 1;
                         }
-                        if ($answer->left_option > $answer->right_option) {
-                            $answer->most_select = 1;
-                        } else {
-                            $answer->most_select = 2;
+                        if ($data['user_select'] == 2) {
+                            $answer->option2 = $answer->option2 + 1;
                         }
+                        if ($data['user_select'] == 3) {
+                            $answer->option3 = $answer->option3 + 1;
+                        }
+                        if ($data['user_select'] == 4) {
+                            $answer->option4 = $answer->option4 + 1;
+                        }
+                        //获取值最多选项
+                        $max_arr = [$answer->option1, $answer->option2, $answer->option3, $answer->option4];
+                        $max_k   = 1;
+                        $max_v   = 0;
+                        foreach ($max_arr as $k => $v) {
+                            if ($max_v <= $v) {
+                                $max_v = $v;
+                                $max_k = $k + 1;
+                            }
+                        }
+                        $answer->most_select = $max_k;
                         $answer->save();
                     } else {
                         $answer                  = new UserSpecialWordCountModel();
                         $answer->special_id      = $data['special_id'];
                         $answer->special_word_id = $data['special_word_id'];
                         if ($data['user_select'] == 1) {
-                            $answer->left_option  = 1;
-                            $answer->right_option = 0;
-                            $answer->most_select  = 1;
-                        } else {
-                            $answer->left_option  = 0;
-                            $answer->right_option = 1;
-                            $answer->most_select  = 2;
+                            $answer->option1     = 1;
+                            $answer->option2     = 0;
+                            $answer->option3     = 0;
+                            $answer->option4     = 0;
+                            $answer->most_select = 1;
+                        }
+                        if ($data['user_select'] == 2) {
+                            $answer->option1     = 0;
+                            $answer->option2     = 1;
+                            $answer->option3     = 0;
+                            $answer->option4     = 0;
+                            $answer->most_select = 2;
+                        }
+                        if ($data['user_select'] == 3) {
+                            $answer->option1     = 0;
+                            $answer->option2     = 0;
+                            $answer->option3     = 1;
+                            $answer->option4     = 0;
+                            $answer->most_select = 3;
+                        }
+                        if ($data['user_select'] == 4) {
+                            $answer->option1     = 0;
+                            $answer->option2     = 0;
+                            $answer->option3     = 0;
+                            $answer->option4     = 1;
+                            $answer->most_select = 4;
                         }
                         $answer->save();
                     }
@@ -802,45 +834,51 @@ class Special
     }
 
     /**
-     * 消耗金币重新答题
-     * @param  array $userId 用户id
+     * 重新答题
+     * @param  array $data 接收参数
      * @return [type]       [description]
      */
-    public function reAswer($userId)
+    public function reAswer($data)
     {
         try {
-            //重答需消耗金币
-            $config_data           = $this->configData;
-            $reanswer_consume_gold = $config_data['reanswer_consume_gold'];
-            $user_record           = UserRecordModel::where('user_id', $userId)->find();
-            if ($user_record->gold >= $reanswer_consume_gold) {
-                // 开启事务
-                Db::startTrans();
-                try {
-                    $user_record->gold = $user_record->gold - $reanswer_consume_gold;
-                    $user_record->save();
-                    Db::commit();
-                    return [
-                        'status' => 1,
-                        'msg'    => 'ok',
-                        'data'   => '',
-                    ];
+            if ($data['type'] == 1) {
+                //消耗金币重新答题
+                //重答需消耗金币
+                $config_data           = $this->configData;
+                $reanswer_consume_gold = $config_data['reanswer_consume_gold'];
+                $user_record           = UserRecordModel::where('user_id', $data['user_id'])->find();
+                if ($user_record->gold >= $reanswer_consume_gold) {
+                    // 开启事务
+                    Db::startTrans();
+                    try {
+                        $user_record->gold = $user_record->gold - $reanswer_consume_gold;
+                        $user_record->save();
+                        Db::commit();
+                        return [
+                            'status' => 1,
+                            'msg'    => 'ok',
+                            'data'   => '',
+                        ];
 
-                } catch (\Exception $e) {
-                    Db::rollback();
+                    } catch (\Exception $e) {
+                        Db::rollback();
+                        return [
+                            'status' => 0,
+                            'msg'    => 'fail',
+                            'data'   => '',
+                        ];
+                    }
+                } else {
                     return [
                         'status' => 0,
-                        'msg'    => 'fail',
+                        'msg'    => '金币不够',
                         'data'   => '',
                     ];
                 }
-            } else {
-                return [
-                    'status' => 0,
-                    'msg'    => '金币不够',
-                    'data'   => '',
-                ];
+            } else if ($data['type'] == 2) {
+                //消耗返回卡重新答题
             }
+
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");

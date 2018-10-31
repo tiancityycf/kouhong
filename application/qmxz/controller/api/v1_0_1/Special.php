@@ -203,17 +203,17 @@ class Special extends BasicController
     }
 
     /**
-     * 消耗金币重新答题
+     * 重新答题
      * @return boolean
      */
     public function reAswer()
     {
-        require_params('user_id');
-        $userId = Request::param('user_id');
+        require_params('user_id', 'type');
+        $data = Request::param();
 
-        //消耗金币重新答题
+        //重新答题
         $specialService = new SpecialService($this->configData);
-        $result         = $specialService->reAswer($userId);
+        $result         = $specialService->reAswer($data);
 
         return result(200, 'ok', $result);
     }
