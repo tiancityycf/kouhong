@@ -848,16 +848,24 @@ class Special
             }
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
+            //过期时长
+            $special_over_time = $config_data['special_over_time'];
             foreach ($user_special as $key => $value) {
                 $special_info                        = SpecialModel::where('id', $value['special_id'])->field('title,display_time')->find();
                 $display_time                        = $special_info['display_time'];
                 $special_title                       = $special_info['title'];
                 $user_special[$key]['special_title'] = $special_title;
                 $end_time                            = $display_time + $answer_time_limit * 60;
+                $over_time = $end_time + $special_over_time * 60;
                 if ($end_time > time()) {
                     $user_special[$key]['is_end'] = 0;
                 } else {
                     $user_special[$key]['is_end'] = 1;
+                }
+                if ($over_time > time()) {
+                    $user_special[$key]['is_over'] = 0;
+                } else {
+                    $user_special[$key]['is_over'] = 1;
                 }
                 $user_special_word = UserSpecialWordModel::where('user_id', $value['user_id'])->where('special_id', $value['special_id'])->select();
                 $is_correct        = 0;
