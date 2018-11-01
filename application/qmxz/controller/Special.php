@@ -4,12 +4,26 @@ namespace app\qmxz\controller;
 
 use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
+use app\qmxz\validate\Special as SpecialValidate;
 use controller\BasicAdmin;
 use think\Db;
 
 //整点场控制器类
 class Special extends BasicAdmin
 {
+
+    //字段验证
+    protected function checkData($data)
+    {
+        $validate = new SpecialValidate();
+
+        if (!$validate->check($data)) {
+            $this->error($validate->getError());
+        }
+
+        return true;
+    }
+
     public function index()
     {
         $this->title = '整点场管理';
@@ -39,7 +53,7 @@ class Special extends BasicAdmin
             $data['display_time'] = strtotime($data['display_time']);
             $data['create_time']  = time();
 
-            if ($model->save($data) != false) {
+            if ($this->checkData($data) === true && $model->save($data) != false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -59,7 +73,7 @@ class Special extends BasicAdmin
             $post_data['banners']      = json_encode($post_data['banners'], JSON_UNESCAPED_UNICODE);
             $post_data['display_time'] = strtotime($post_data['display_time']);
 
-            if ($vo->save($post_data) !== false) {
+            if ($this->checkData($post_data) === true && $vo->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');

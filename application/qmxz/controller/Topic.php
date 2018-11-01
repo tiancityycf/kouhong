@@ -3,6 +3,7 @@ namespace app\qmxz\controller;
 
 use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicCate as TopicCateModel;
+use app\qmxz\validate\Topic as TopicValidate;
 use controller\BasicAdmin;
 
 class Topic extends BasicAdmin
@@ -12,6 +13,18 @@ class Topic extends BasicAdmin
      * @var string
      */
     public $table = 'topic';
+
+    //字段验证
+    protected function checkData($data)
+    {
+        $validate = new TopicValidate();
+
+        if (!$validate->check($data)) {
+            $this->error($validate->getError());
+        }
+
+        return true;
+    }
 
     public function index()
     {
@@ -30,7 +43,7 @@ class Topic extends BasicAdmin
         if ($data) {
             $data['create_time'] = time();
             $model               = new TopicModel();
-            if ($model->save($data) !== false) {
+            if ($this->checkData($data) === true && $model->save($data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -49,7 +62,7 @@ class Topic extends BasicAdmin
         $post_data = $this->request->post();
 
         if ($post_data) {
-            if ($vo->save($post_data) !== false) {
+            if ($this->checkData($post_data) === true && $vo->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');

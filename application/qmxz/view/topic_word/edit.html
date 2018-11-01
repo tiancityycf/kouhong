@@ -3,6 +3,7 @@
         <label class="layui-form-label">话题</label>
         <div class="layui-input-block">
                 <select name="topic_id" class="layui-select" style="width: 75%;">
+                    <option value="">- 请选择 -</option>
                     <!--{foreach topic_list as $key=>$st}-->
                     <!--{if (!isset($vo['topic_id']) AND $key eq 1) OR (isset($vo['topic_id']) AND $vo.topic_id eq $key)}-->
                     <option selected value="{$key}">- {$st} -</option>

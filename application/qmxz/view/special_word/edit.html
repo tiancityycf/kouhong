@@ -2,7 +2,7 @@
 	<div class="layui-form-item">
         <label class="layui-form-label">整点场选择</label>
         <div class="layui-input-block">
-                <select id="special_id" name="special_id" lay-verify="required" class="layui-select" lay-search>
+                <select id="special_id" name="special_id" lay-verify="required"  class="layui-select" lay-search>
                 	<option value="">- 请选择 -</option>
                 	<!--{foreach $special_list as $key=>$st}-->
                 	<!--{if isset($vo['special_id']) AND $vo.special_id eq $key}-->
@@ -51,18 +51,18 @@
     </div>
     <script>window.form.render();</script>
     <script type="text/javascript">
-        $(document).ready(function(){
-            $('.layui-form-select').css('width', '75%');
-            var type = $("#type option:selected").val();
+        // $(document).ready(function(){
+        //     $('.layui-form-select').css('width', '75%');
+        //     var type = $("#type option:selected").val();
 
-            if(type == 1){
-                $(".arr").hide();
-                $(".arr").find('input').removeAttr('required');
-            }else{
-                $("#string").hide();
-                $("#string").find('input').removeAttr('required');
-            }
-        });
+        //     if(type == 1){
+        //         $(".arr").hide();
+        //         $(".arr").find('input').removeAttr('required');
+        //     }else{
+        //         $("#string").hide();
+        //         $("#string").find('input').removeAttr('required');
+        //     }
+        // });
 
         layui.use('form', function(){
             var form = layui.form;

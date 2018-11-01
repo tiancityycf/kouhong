@@ -557,18 +557,14 @@ class Special
                 }
 
                 //生成一条机器人数据
-                $rebot_code = UserSpecialRedeemcodeModel::where('user_id', 10000)->where('special_id', $data['special_id'])->value('code');
+                $rebot_rand_arr = $config_data['rebot_rand_arr'];
+                $rebot_id       = rand($rebot_rand_arr[0], $rebot_rand_arr[1]);
+                $rebot_code     = UserSpecialRedeemcodeModel::where('user_id', $rebot_id)->where('special_id', $data['special_id'])->value('code');
                 if (!isset($rebot_code)) {
-                    $code1                            = date('ymd', $display_time) . uniqid();
-                    $user_special_redeemcode          = new UserSpecialRedeemcodeModel();
-                    $user_special_redeemcode->user_id = 10000;
-                    for ($i = 1; $i < 10000; $i++) {
-                        $rebot_logo = UserModel::where('id', rand(1, 20))->value('avatar');
-                        if ($rebot_logo) {
-                            break;
-                        }
-                    }
-                    $user_special_redeemcode->logo       = $rebot_logo;
+                    $code1                               = date('ymd', $display_time) . uniqid();
+                    $user_special_redeemcode             = new UserSpecialRedeemcodeModel();
+                    $user_special_redeemcode->user_id    = $rebot_id;
+                    $user_special_redeemcode->logo       = UserModel::where('id', $rebot_id)->value('avatar');
                     $user_special_redeemcode->special_id = $data['special_id'];
                     $user_special_redeemcode->code       = $code1;
                     $user_special_redeemcode->use_type   = 2;
@@ -615,10 +611,23 @@ class Special
 
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
-            $display_time      = SpecialModel::where('id', $data['special_id'])->value('display_time');
+            $special_info      = SpecialModel::where('id', $data['special_id'])->find();
+            $display_time      = $special_info['display_time'];
             $time_end          = $display_time + ($answer_time_limit - 10) * 60 - time();
             $time_end          = $time_end > 0 ? $time_end : 0;
+
+            //奖品信息
+            $special_prize = SpecialPrizeModel::where('id', $special_info['prize_id'])->field('name,img')->find();
+
+            //场次信息
+            $special_name = $special_info['title'];
+            $special_time = date('Y-m-d H:i', $special_info['display_time']);
             return [
+                'prize_info'     => $special_prize,
+                'special_info'   => [
+                    'special_name' => $special_name,
+                    'special_time' => $special_time,
+                ],
                 'user_code'      => $user_code,
                 'remaining_time' => $time_end,
                 'prize_list'     => $prize_list,
@@ -637,8 +646,8 @@ class Special
     public function luckDraw($data)
     {
         try {
-            $code = UserSpecialPrizeModel::where('special_id', $data['special_id'])->value('code');
-            if (!$code) {
+            $prize_info = UserSpecialPrizeModel::where('special_id', $data['special_id'])->field('code,user_id')->find();
+            if (!$prize_info) {
                 //获取后台抽奖方式
                 $config_data     = $this->configData;
                 $luck_draw_value = $config_data['luck_draw_value'];
@@ -689,6 +698,11 @@ class Special
                             $user_special_prize->use_type   = $value['use_type'];
                             $user_special_prize->prize_id   = SpecialModel::where('id', $data['special_id'])->value('prize_id');
                             $user_special_prize->save();
+
+                            $prize_user_id = $value['user_id'];
+                            break;
+                        } else {
+                            continue;
                         }
                     }
 
@@ -696,10 +710,15 @@ class Special
                 } catch (\Exception $e) {
                     Db::rollback();
                 }
+            } else {
+                $code          = $prize_info['code'];
+                $prize_user_id = $prize_info['user_id'];
             }
+            //获取中奖用户信息
+            $prize_user_info = UserModel::where('id', $prize_user_id)->field('id,nickname')->find();
 
             return [
-                'code' => $code,
+                'prize_user_info' => $prize_user_info,
             ];
         } catch (Exception $e) {
             lg($e);

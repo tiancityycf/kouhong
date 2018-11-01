@@ -5,11 +5,25 @@ namespace app\qmxz\controller;
 use controller\BasicAdmin;
 use think\Db;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
+use app\qmxz\validate\SpecialWord as SpecialWordValidate;
 use app\qmxz\model\Special as SpecialModel;
 
 //整点场下面的题目控制器类
 class SpecialWord extends BasicAdmin
 {
+
+    //字段验证
+    protected function checkData($data)
+    {
+        $validate = new SpecialWordValidate();
+
+        if (!$validate->check($data)) {
+            $this->error($validate->getError());
+        }
+
+        return true;
+    }
+    
 	public function index()
     {
     	$this->title = '整点场题目管理';
@@ -30,7 +44,7 @@ class SpecialWord extends BasicAdmin
         	$model = new SpecialWordModel();
         	$data['create_time'] = time();
         	
-        	if ($model->save($data) != false) {
+        	if ($this->checkData($data) === true && $model->save($data) != false) {
         		$this->success('恭喜, 数据保存成功!', '');
         	} else {
         		$this->error('数据保存失败, 请稍候再试!');
@@ -48,7 +62,7 @@ class SpecialWord extends BasicAdmin
         $post_data = $this->request->post();
         if ($post_data) {
             $post_data['options'] = json_encode($post_data['options'], JSON_UNESCAPED_UNICODE);
-        	if ($vo->save($post_data) !== false) {
+        	if ($this->checkData($post_data) === true && $vo->save($post_data) !== false) {
         	    $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');

@@ -4,12 +4,26 @@ namespace app\qmxz\controller;
 
 use app\qmxz\model\SpecialWarehouse as SpecialWarehouseModel;
 use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
+use app\qmxz\validate\SpecialWarehouse as SpecialWarehouseValidate;
 use controller\BasicAdmin;
 use think\Db;
 
 //整点场库控制器类
 class SpecialWarehouse extends BasicAdmin
 {
+
+    //字段验证
+    protected function checkData($data)
+    {
+        $validate = new SpecialWarehouseValidate();
+
+        if (!$validate->check($data)) {
+            $this->error($validate->getError());
+        }
+
+        return true;
+    }
+    
     public function index()
     {
         $this->title = '整点场库';
@@ -38,7 +52,7 @@ class SpecialWarehouse extends BasicAdmin
             $model                = new SpecialWarehouseModel();
             $data['create_time']  = time();
 
-            if ($model->save($data) != false) {
+            if ($this->checkData($data) === true && $model->save($data) != false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -57,7 +71,7 @@ class SpecialWarehouse extends BasicAdmin
         if ($post_data) {
             $post_data['banners']      = json_encode($post_data['banners'], JSON_UNESCAPED_UNICODE);
 
-            if ($vo->save($post_data) !== false) {
+            if ($this->checkData($post_data) === true && $vo->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
