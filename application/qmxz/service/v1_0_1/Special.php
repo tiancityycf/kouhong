@@ -48,7 +48,7 @@ class Special
                 foreach ($list as $key => $value) {
                     $list[$key]['start_time'] = date('H:i', $value['display_time']);
                     $list[$key]['des']        = date('H:i', $value['display_time']) . '-' . date('H:i', $value['display_time'] + $answer_time_limit * 60);
-                    $time_end                 = $value['display_time'] + ($answer_time_limit - 10) * 60;
+                    $time_end                 = $value['display_time'] + $answer_time_limit * 60;
                     $special_arr[$key]        = $value;
                     if (in_array($value['id'], $user_special_list)) {
                         $special_arr[$key]['is_pass'] = 1;
@@ -68,7 +68,7 @@ class Special
                             }
                             // $special_arr[$key]['remaining_time'] = $time_end - time();
                         } else {
-                            $special_arr[$key]['remaining_time'] = ($answer_time_limit - 10) * 60;
+                            $special_arr[$key]['remaining_time'] = $answer_time_limit * 60;
                         }
 
                     }
