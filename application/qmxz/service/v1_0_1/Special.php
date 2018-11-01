@@ -446,7 +446,7 @@ class Special
                         }
                         $answer->save();
                     }
-                }else{
+                } else {
                     $user_special_word->user_select = $data['user_select'];
                     $user_special_word->save();
                 }
@@ -735,7 +735,11 @@ class Special
                 $prize_user_id = $prize_info['user_id'];
             }
             //获取中奖用户信息
-            $prize_user_info = UserModel::where('id', $prize_user_id)->field('id,nickname')->find();
+            if (isset($prize_id)) {
+                $prize_user_info = UserModel::where('id', $prize_user_id)->field('id,nickname')->find();
+            } else {
+                $prize_user_info = [];
+            }
 
             return [
                 'prize_user_info' => $prize_user_info,
