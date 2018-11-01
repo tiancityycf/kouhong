@@ -62,6 +62,9 @@ class Special
                         }
 
                     }
+
+                    // $special_arr[$key]['dday'] = date('Y-m-d H:i:s', $value['display_time']);
+
                     //添加选项基数
                     $default_option_base   = $config_data['default_option_base'];
                     $default_bottom_option = $config_data['default_bottom_option'];
@@ -74,13 +77,17 @@ class Special
                     $special_arr[$key]['banners']    = json_decode($value['banners']);
                 }
                 foreach ($list as $key => $value) {
-                    if ($value['display_time'] <= time()) {
+                    if (($value['display_time'] + ($answer_time_limit - 10) * 60) <= time()) {
                         $list[$key]['is_end'] = 1;
                     } else {
                         $list[$key]['is_end'] = 0;
                     }
                 }
                 foreach ($list as $key => $value) {
+                    if($value['display_time'] < time() && ($value['remaining_time'] > 0)){
+                        $list[$key]['curr']       = 1;
+                        // $list[$key]['curr_start'] = $value['display_time'] - time();
+                    }
                     if ($value['display_time'] > time()) {
                         $list[$key]['next']       = 1;
                         $list[$key]['next_start'] = $value['display_time'] - time();
