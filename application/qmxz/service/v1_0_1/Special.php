@@ -212,7 +212,7 @@ class Special
                 //结束时间
                 $config_data       = $this->configData;
                 $answer_time_limit = $config_data['answer_time_limit'];
-                $time_end          = $display_time + ($answer_time_limit - 10) * 60 - time();
+                $time_end          = $display_time + $answer_time_limit * 60 - time();
                 $time_end          = $time_end > 0 ? $time_end : 0;
 
                 $list              = SpecialWordModel::where('special_id', $data['special_id'])->select();
