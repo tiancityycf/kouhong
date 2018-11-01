@@ -77,14 +77,14 @@ class Special
                     $special_arr[$key]['banners']    = json_decode($value['banners']);
                 }
                 foreach ($list as $key => $value) {
-                    if (($value['display_time'] + ($answer_time_limit - 10) * 60) <= time()) {
+                    if (($value['display_time'] + $answer_time_limit * 60) <= time()) {
                         $list[$key]['is_end'] = 1;
                     } else {
                         $list[$key]['is_end'] = 0;
                     }
                 }
                 foreach ($list as $key => $value) {
-                    if($value['display_time'] < time() && ($value['remaining_time'] > 0)){
+                    if($value['display_time'] < time() && ($list[$key]['is_end'] == 0)){
                         $list[$key]['curr']       = 1;
                         // $list[$key]['curr_start'] = $value['display_time'] - time();
                     }
