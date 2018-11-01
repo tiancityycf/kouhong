@@ -244,13 +244,8 @@ class Topic
         try {
             $info = TopicWordModel::where('topic_id', $data['topic_id'])->where('id', $data['topic_word_id'])->find();
             if ($info) {
-                $info['options'] = json_decode($info['options']);
-                $user_select     = UserTopicWordModel::where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->where('user_id', $data['user_id'])->value('user_select');
-                if (isset($user_select)) {
-                    $info['user_select'] = $user_select;
-                } else {
-                    $info['user_select'] = 0;
-                }
+                $info['options']     = json_decode($info['options']);
+                $info['user_select'] = $data['user_select'];
             }
 
             return $info;
