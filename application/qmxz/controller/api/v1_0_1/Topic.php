@@ -127,4 +127,20 @@ class Topic extends BasicController
 
         return result(200, 'ok', $result);
     }
+
+    /**
+     * 获取用户话题答题结果
+     * @return boolean
+     */
+    public function userTopicResult()
+    {
+        require_params('user_id', 'topic_id');
+        $data = Request::param();
+
+        //获取用户话题答题结果
+        $topicService = new TopicService($this->configData);
+        $result       = $topicService->userTopicResult($data);
+
+        return result(200, 'ok', $result);
+    }
 }

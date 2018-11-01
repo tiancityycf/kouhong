@@ -13,6 +13,7 @@ use app\qmxz\model\UserTopic as UserTopicModel;
 use app\qmxz\model\UserTopicWord as UserTopicWordModel;
 use app\qmxz\model\UserTopicWordComment as UserTopicWordCommentModel;
 use app\qmxz\model\UserTopicWordCount as UserTopicWordCountModel;
+use app\qmxz\model\UserTopicWordRecord as UserTopicWordRecordModel;
 use think\Db;
 
 /**
@@ -428,6 +429,30 @@ class Topic
                         $options = [$option1, $option2, $option3, $option4];
                         break;
                 }
+
+                //保存用户答对答错情况记录
+                $user_topic_word_record = UserTopicWordRecordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->find();
+                if ($user_topic_word_record) {
+                    if ($data['user_select'] == $answer->most_select) {
+                        $user_topic_word_record->is_correct = 1;
+                    } else {
+                        $user_topic_word_record->is_correct = 0;
+                    }
+                    $user_topic_word_record->save();
+                } else {
+                    $user_topic_word_record                = new UserTopicWordRecordModel();
+                    $user_topic_word_record->user_id       = $data['user_id'];
+                    $user_topic_word_record->topic_id      = $data['topic_id'];
+                    $user_topic_word_record->topic_word_id = $data['topic_word_id'];
+                    $user_topic_word_record->dday          = date('Ymd');
+                    if ($data['user_select'] == $answer->most_select) {
+                        $user_topic_word_record->is_correct = 1;
+                    } else {
+                        $user_topic_word_record->is_correct = 0;
+                    }
+                    $user_topic_word_record->save();
+                }
+
                 return [
                     'status'      => 1,
                     'msg'         => 'ok',
@@ -481,6 +506,44 @@ class Topic
                     'msg'    => 'fail',
                 ];
             }
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 获取用户话题答题结果
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function userTopicResult($data)
+    {
+        try {
+            $user_topic_word_record = UserTopicWordRecordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->select();
+            if (count($user_topic_word_record) > 0) {
+                $all_num     = 0;
+                $correct_num = 0;
+                $error_num   = 0;
+                foreach ($user_topic_word_record as $key => $value) {
+                    $all_num++;
+                    if ($value['is_correct'] == 1) {
+                        $correct_num++;
+                    } else {
+                        $error_num++;
+                    }
+                }
+            } else {
+                $all_num     = 0;
+                $correct_num = 0;
+                $error_num   = 0;
+            }
+
+            return [
+                'all_num'     => $all_num,
+                'correct_num' => $correct_num,
+                'error_num'   => $error_num,
+            ];
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
