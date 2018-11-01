@@ -633,7 +633,7 @@ class Special
             $answer_time_limit = $config_data['answer_time_limit'];
             $special_info      = SpecialModel::where('id', $data['special_id'])->find();
             $display_time      = $special_info['display_time'];
-            $time_end          = $display_time + ($answer_time_limit - 10) * 60 - time();
+            $time_end          = $display_time + $answer_time_limit * 60 - time();
             $time_end          = $time_end > 0 ? $time_end : 0;
 
             //奖品信息
