@@ -853,7 +853,7 @@ class Special
                 $display_time                        = $special_info['display_time'];
                 $special_title                       = $special_info['title'];
                 $user_special[$key]['special_title'] = $special_title;
-                $end_time                            = $display_time + $answer_time_limit * 60;
+                $end_time                            = $display_time + ($answer_time_limit - 10) * 60;
                 if ($end_time > time()) {
                     $user_special[$key]['is_end'] = 0;
                 } else {
