@@ -631,9 +631,10 @@ class Special
 
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
+            $special_over_time = $config_data['special_over_time'];
             $special_info      = SpecialModel::where('id', $data['special_id'])->find();
             $display_time      = $special_info['display_time'];
-            $time_end          = $display_time + $answer_time_limit * 60 - time();
+            $time_end          = $display_time + $answer_time_limit * 60 + $special_over_time * 60 - time();
             $time_end          = $time_end > 0 ? $time_end : 0;
 
             //奖品信息
@@ -856,7 +857,7 @@ class Special
                 $special_title                       = $special_info['title'];
                 $user_special[$key]['special_title'] = $special_title;
                 $end_time                            = $display_time + $answer_time_limit * 60;
-                $over_time = $end_time + $special_over_time * 60;
+                $over_time                           = $end_time + $special_over_time * 60;
                 if ($end_time > time()) {
                     $user_special[$key]['is_end'] = 0;
                 } else {
