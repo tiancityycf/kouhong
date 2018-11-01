@@ -482,7 +482,7 @@ class Special
 
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
-            $end_time          = $display_time + ($answer_time_limit - 10) * 60;
+            $end_time          = $display_time + $answer_time_limit * 60;
 
             $special_word = SpecialWordModel::where('special_id', $data['special_id'])->select();
             ///添加选项基数
