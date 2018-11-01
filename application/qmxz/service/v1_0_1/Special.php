@@ -216,7 +216,7 @@ class Special
                                 $list[$key]['is_pass'] = 0;
                             }
                             $list[$key]['options']     = json_decode($value['options']);
-                            $user_select               = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $value['id'])->value('special_word_id');
+                            $user_select               = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $value['id'])->value('user_select');
                             $list[$key]['user_select'] = isset($user_select) ? $user_select : 0;
                         }
                         $special_arr = $list;
@@ -232,7 +232,7 @@ class Special
                         }
                         foreach ($topic_arr as $key => $value) {
                             $topic_arr[$key]['options']     = json_decode($value['options']);
-                            $user_select                    = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $value['id'])->value('special_word_id');
+                            $user_select                    = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $value['id'])->value('user_select');
                             $topic_arr[$key]['user_select'] = isset($user_select) ? $user_select : 0;
                         }
                         $special_arr = $topic_arr;
