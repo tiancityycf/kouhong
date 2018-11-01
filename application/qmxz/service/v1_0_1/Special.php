@@ -50,13 +50,23 @@ class Special
                     $list[$key]['des']        = date('H:i', $value['display_time']) . '-' . date('H:i', $value['display_time'] + $answer_time_limit * 60);
                     $time_end                 = $value['display_time'] + ($answer_time_limit - 10) * 60;
                     $special_arr[$key]        = $value;
-                    if (in_array($value['id'], $user_special_list) || ($time_end < time())) {
-                        $special_arr[$key]['is_pass']        = 1;
-                        $special_arr[$key]['remaining_time'] = 0;
+                    if (in_array($value['id'], $user_special_list)) {
+                        $special_arr[$key]['is_pass'] = 1;
+                        if ($time_end < time()) {
+                            $special_arr[$key]['remaining_time'] = 0;
+                        } else {
+                            $special_arr[$key]['remaining_time'] = $time_end - time();
+                        }
+
                     } else {
                         $special_arr[$key]['is_pass'] = 0;
                         if ($value['display_time'] <= time()) {
-                            $special_arr[$key]['remaining_time'] = $time_end - time();
+                            if ($time_end < time()) {
+                                $special_arr[$key]['remaining_time'] = 0;
+                            } else {
+                                $special_arr[$key]['remaining_time'] = $time_end - time();
+                            }
+                            // $special_arr[$key]['remaining_time'] = $time_end - time();
                         } else {
                             $special_arr[$key]['remaining_time'] = ($answer_time_limit - 10) * 60;
                         }
@@ -84,8 +94,8 @@ class Special
                     }
                 }
                 foreach ($list as $key => $value) {
-                    if($value['display_time'] < time() && ($list[$key]['is_end'] == 0)){
-                        $list[$key]['curr']       = 1;
+                    if ($value['display_time'] < time() && ($list[$key]['is_end'] == 0)) {
+                        $list[$key]['curr'] = 1;
                         // $list[$key]['curr_start'] = $value['display_time'] - time();
                     }
                     if ($value['display_time'] > time()) {
