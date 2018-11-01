@@ -57,7 +57,10 @@ class InviteUser extends Model{
             
 
             $status = $this->save($data);
-            if ($status) {
+
+            $res = $this->remarkRegretCard($from_user);
+            
+            if ($status && $res) {
                 return ['code' => 0, 'data' => '', 'message' => '邀请记录成功'];
             }else{
                 return ['code' => 10032, 'data' => '', 'message' => '邀请记录失败'];
@@ -108,7 +111,7 @@ class InviteUser extends Model{
     }
     //获取最后的邀请人
     public function getLastStep($openid) {
-        $list = Db::name("InviteUser")->connect($this->connection)->where(['openid' => $openid])->max('step');
+        $list = Db::name("InviteUser")->connect($this->connection)->where(['openid' => $openid])->where('create_time' ,'between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->max('step');
         return $list;
     }
 
@@ -122,6 +125,28 @@ class InviteUser extends Model{
         $count= Db::name("InviteUser")->connect($this->connection)->where(['openid' => $openid])->where('create_time','between', [$day . ' 00:00:00',$day . ' 23:59:59'])->count();
 
          return $count;
+    }
+
+    //记录反悔卡
+    public function remarkRegretCard($openid) {
+        $is_exist = Db::name("regret_card")->where(['openid' => $openid])->where('add_date',date('ymd'))->find();
+        if($is_exist){
+            //更新反悔卡
+             $res = Db::name('regret_card')->where(['openid' => $openid])->setInc('times');
+        }else{
+
+             //记录反悔卡表
+            $regret_card_data = [
+                    'openid' =>  $openid,
+                    'add_date' => date('ymd'),
+                    'times' => 1,
+                    'create_time' => time()
+            ];
+
+            $res = Db::name('regret_card')->insert($regret_card_data);
+        }
+        
+        return $res;
     }
 
 }

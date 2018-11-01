@@ -23,6 +23,12 @@ class Index
 		}
 		$hot_good_ids = substr($hot_good_ids, 0, -1);
 		$hot_goods = Db::name('goods')->field('id,title, img, stock, price')->whereIn('id',$hot_good_ids)->select();
+
+
+		foreach ($hot_goods as $k2 => $v2) {
+                $hot_goods[$k2]['imgs'] = Db::name('good_imgs')->where('product_id',$v2['id'])->select();
+        }
+        
 		return $hot_goods;
 	}
 }
