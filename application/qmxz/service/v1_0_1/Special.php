@@ -446,6 +446,9 @@ class Special
                         }
                         $answer->save();
                     }
+                }else{
+                    $user_special_word->user_select = $data['user_select'];
+                    $user_special_word->save();
                 }
                 Db::commit();
 
