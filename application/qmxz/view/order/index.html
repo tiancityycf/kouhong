@@ -73,7 +73,7 @@
                 {$vo.id}
             </td>
             <td class='text-left nowrap'>
-                <img src="{$vo.avatar}"> 
+                <img id="img" data-tips-image style="height:auto;max-height:50px;min-width:50px" src='{$vo.avatar}' />
             </td>
             <td class='text-left nowrap'>
                 {$vo.openid}
@@ -82,9 +82,8 @@
                 {$vo.title}
             </td>
             <td class='text-left nowrap'>
-                <img src="{$vo.img}"> 
+                <img id="img" data-tips-image style="height:auto;max-height:50px;min-width:50px" src='{$vo.img}' />
             </td>
-       
             <td class='text-left nowrap'>
                 {$vo.region}——{$vo.addr}
             </td>
