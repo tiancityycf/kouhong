@@ -814,17 +814,32 @@ class Special
     public function userPrize($userId)
     {
         try {
-            $info       = UserSpecialPrizeModel::where('user_id', $userId)->find();
-            $prize_info = SpecialPrizeModel::get($info['prize_id']);
-            if ($info) {
-                $info['prize_name'] = $prize_info['name'];
-                $info['prize_img']  = $prize_info['img'];
+            $prize_list       = UserSpecialPrizeModel::where('user_id', $userId)->select();
+            
+            if (count($prize_list) > 0) {
+                foreach ($prize_list as $key => $value) {
+                    $prize_info = SpecialPrizeModel::get($value['prize_id']);
+                    $prize_list[$key]['prize_name'] = $prize_info['name'];
+                    $prize_list[$key]['prize_img']  = $prize_info['img'];
+
+                    //判断是否有默认地址
+                    $openid = UserModel::where('id', $value['user_id'])->value('openid');
+                    $address_info = AddressModel::where('openid', $openid)->where('status', 1)->find();
+                    if($address_info){
+                        $prize_list[$key]['is_deal']  = 1;
+                    }else{
+                        $prize_list[$key]['is_deal']  = 0;
+                    }
+                }
+                
             } else {
-                $info = [];
+                $prize_list = [];
             }
 
+
+
             return [
-                'info' => $info,
+                'prize_list' => $prize_list,
             ];
         } catch (Exception $e) {
             lg($e);
@@ -884,15 +899,6 @@ class Special
                     $user_special[$key]['is_correct'] = 1;
                 } else {
                     $user_special[$key]['is_correct'] = 0;
-                }
-
-                //判断是否有默认地址
-                $openid = UserModel::where('id', $value['user_id'])->value('openid');
-                $address_info = AddressModel::where('openid', $openid)->where('status', 1)->find();
-                if($address_info){
-                    $user_special[$key]['is_deal'] = 1;
-                }else{
-                    $user_special[$key]['is_deal'] = 0;
                 }
             }
             return $user_special;
