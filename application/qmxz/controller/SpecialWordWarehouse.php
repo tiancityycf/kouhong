@@ -2,8 +2,8 @@
 
 namespace app\qmxz\controller;
 
-use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\SpecialWordWarehouse as SpecialWordWarehouseModel;
+use app\qmxz\model\SpecialWarehouse as SpecialWarehouseModel;
 use app\qmxz\validate\SpecialWordWarehouse as SpecialWordWarehouseValidate;
 use controller\BasicAdmin;
 
@@ -31,6 +31,7 @@ class SpecialWordWarehouse extends BasicAdmin
 
         $db = $db->search($get);
 
+        $this->special_warehouse_list();
         return parent::_list($db);
     }
 
@@ -48,6 +49,7 @@ class SpecialWordWarehouse extends BasicAdmin
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
+        $this->special_warehouse_list();
         return $this->fetch('form', ['vo' => $data]);
     }
 
@@ -65,6 +67,7 @@ class SpecialWordWarehouse extends BasicAdmin
                 $this->error('数据保存失败, 请稍候再试!');
             }
         }
+        $this->special_warehouse_list();
         return $this->fetch('edit', ['vo' => $vo->getdata()]);
     }
 
@@ -80,5 +83,12 @@ class SpecialWordWarehouse extends BasicAdmin
         }
 
         $this->error("删除失败，请稍候再试！");
+    }
+
+    protected function special_warehouse_list()
+    {
+        $data = SpecialWarehouseModel::column('title', 'id');
+
+        $this->assign('special_warehouse_list', $data);
     }
 }

@@ -17,6 +17,10 @@ class SpecialWordWarehouse extends Model
             (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
         }
 
+        foreach (['special_warehouse_id'] as $key) {
+            (isset($params[$key]) && $params[$key] !== '') && $query->where($key, "{$params[$key]}");
+        }
+
         $query->order('id desc');
 
         return $query;

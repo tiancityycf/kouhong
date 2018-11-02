@@ -11,6 +11,21 @@
 </div>
 <div class="layui-form-item layui-inline" style="margin-left: 30px;">
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">整点场</label>
+        <div class="layui-input-inline">
+            <select name='special_warehouse_id' class='layui-select' lay-verify="required" lay-search="">
+                <option value=''> - 所有整点场 -</option>
+                <!--{foreach $special_warehouse_list as $k => $v}-->
+                <!--{if $Think.get.special_warehouse_id == $k}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
 	<div class="layui-form-item layui-inline">
         <label class="layui-form-label">题目名字搜索</label>
         <div class="layui-input-inline">
@@ -31,6 +46,7 @@
 		<tr>
             <th class='text-left nowrap'>操作</th>
             <th class='text-left nowrap'>主键</th>
+            <th class='text-left nowrap'>整点场</th>
             <th class='text-left nowrap'>标题</th>
             <th class='text-left nowrap'>描述</th>
             <th class='text-left nowrap'>选项</th>
@@ -53,6 +69,9 @@
             </td>
             <td class='text-left nowrap'>
                 {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                <?php echo isset($special_warehouse_list[$vo['special_warehouse_id']]) ? $special_warehouse_list[$vo['special_warehouse_id']] : '已过期场次'; ?>
             </td>
             <td class='text-left nowrap'>
                 {$vo.title}

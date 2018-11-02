@@ -7,6 +7,7 @@ use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
 use app\qmxz\model\SpecialWarehouse as SpecialWarehouseModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
+use app\qmxz\model\SpecialWordWarehouse as SpecialWordWarehouseModel;
 use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
 use app\qmxz\model\UserSpecial as UserSpecialModel;
@@ -736,7 +737,7 @@ class Special
                 $prize_user_id = $prize_info['user_id'];
             }
             //获取中奖用户信息
-            if (isset($prize_id)) {
+            if (isset($prize_user_id)) {
                 $prize_user_info = UserModel::where('id', $prize_user_id)->field('id,nickname')->find();
             } else {
                 $prize_user_info = [];
@@ -1027,23 +1028,47 @@ class Special
                         } else {
                             $special[] = $special_house[$special_rand_arr];
                         }
-                        $saveData = [];
+                        
                         $today    = date('Y-m-d');
-                        foreach ($special as $key => $value) {
-                            $saveData[$key]['title']        = $value['title'];
-                            $saveData[$key]['des']          = $value['des'];
-                            $saveData[$key]['img']          = $value['img'];
-                            $saveData[$key]['banners']      = $value['banners'];
-                            $saveData[$key]['prize_id']     = $value['prize_id'];
-                            $saveData[$key]['display_time'] = strtotime(date('Y-m-d ' . $need_times_arr[$key] . ':00:00'));
-                            $saveData[$key]['create_time']  = time();
-                        }
+
                         // 开启事务
                         Db::startTrans();
                         try {
-                            $special_obj = new SpecialModel();
-                            $special_obj->saveAll($saveData);
-                            Db::commit();
+                            //保存场次
+                            foreach ($special as $key => $value) {
+                                $saveData = [];
+                                $saveData['title']        = $value['title'];
+                                $saveData['des']          = $value['des'];
+                                $saveData['img']          = $value['img'];
+                                $saveData['banners']      = $value['banners'];
+                                $saveData['prize_id']     = $value['prize_id'];
+                                $saveData['display_time'] = strtotime(date('Y-m-d ' . $need_times_arr[$key] . ':00:00'));
+                                $saveData[$key]['create_time']  = time();
+                                $special_obj = new SpecialModel();
+                                $special_obj->save($saveData);
+                                Db::commit();
+
+                                //保存题目
+                                $special_warehouse_id   = $value['id'];
+                                $special_word_warehouse = SpecialWordWarehouseModel::where('special_warehouse_id', $special_warehouse_id)->select();
+                                if (count($special_word_warehouse) > 0) {
+                                    $special_question_num = $config_data['special_question_num'];
+                                    $special_word_arr     = array_rand($special_word_warehouse, $special_question_num);
+                                    if (count($special_word_arr) > 0) {
+                                        foreach ($special_word_arr as $k => $v) {
+                                            $special_word_obj = new SpecialWordModel();
+                                            $special_word_obj->special_id = $special_obj->id;
+                                            $special_word_obj->title = $v['title'];
+                                            $special_word_obj->des = $v['des'];
+                                            $special_word_obj->options = $v['options'];
+                                            $special_word_obj->create_time = time();
+                                            $special_word_obj->save();
+                                            Db::commit();
+                                        }
+                                    }
+
+                                }
+                            }
                             return [
                                 'status' => 1,
                                 'msg'    => 'ok',
