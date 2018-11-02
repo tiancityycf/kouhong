@@ -16,6 +16,7 @@ use app\qmxz\model\UserSpecialRedeemcode as UserSpecialRedeemcodeModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserSpecialWordComment as UserSpecialWordCommentModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
+use app\qmxz\model\Address as AddressModel;
 use think\Db;
 
 /**
@@ -883,6 +884,15 @@ class Special
                     $user_special[$key]['is_correct'] = 1;
                 } else {
                     $user_special[$key]['is_correct'] = 0;
+                }
+
+                //判断是否有默认地址
+                $openid = UserModel::where('id', $value['user_id'])->value('openid');
+                $address_info = AddressModel::where('openid', $openid)->where('status', 1)->find();
+                if($address_info){
+                    $user_special[$key]['is_deal'] = 1;
+                }else{
+                    $user_special[$key]['is_deal'] = 0;
                 }
             }
             return $user_special;
