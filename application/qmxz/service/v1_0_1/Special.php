@@ -2,6 +2,7 @@
 
 namespace app\qmxz\service\v1_0_1;
 
+use app\qmxz\model\Address as AddressModel;
 use app\qmxz\model\RegretCard as RegretCardModel;
 use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
@@ -16,7 +17,6 @@ use app\qmxz\model\UserSpecialRedeemcode as UserSpecialRedeemcodeModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserSpecialWordComment as UserSpecialWordCommentModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
-use app\qmxz\model\Address as AddressModel;
 use think\Db;
 
 /**
@@ -814,29 +814,27 @@ class Special
     public function userPrize($userId)
     {
         try {
-            $prize_list       = UserSpecialPrizeModel::where('user_id', $userId)->select();
-            
+            $prize_list = UserSpecialPrizeModel::where('user_id', $userId)->select();
+
             if (count($prize_list) > 0) {
                 foreach ($prize_list as $key => $value) {
-                    $prize_info = SpecialPrizeModel::get($value['prize_id']);
+                    $prize_info                     = SpecialPrizeModel::get($value['prize_id']);
                     $prize_list[$key]['prize_name'] = $prize_info['name'];
                     $prize_list[$key]['prize_img']  = $prize_info['img'];
 
                     //判断是否有默认地址
-                    $openid = UserModel::where('id', $value['user_id'])->value('openid');
+                    $openid       = UserModel::where('id', $value['user_id'])->value('openid');
                     $address_info = AddressModel::where('openid', $openid)->where('status', 1)->find();
-                    if($address_info){
-                        $prize_list[$key]['is_deal']  = 1;
-                    }else{
-                        $prize_list[$key]['is_deal']  = 0;
+                    if ($address_info) {
+                        $prize_list[$key]['is_deal'] = 1;
+                    } else {
+                        $prize_list[$key]['is_deal'] = 0;
                     }
                 }
-                
+
             } else {
                 $prize_list = [];
             }
-
-
 
             return [
                 'prize_list' => $prize_list,
@@ -1052,24 +1050,35 @@ class Special
                         try {
                             //保存场次
                             foreach ($special as $key => $value) {
-                                $saveData                      = [];
-                                $saveData['title']             = $value['title'];
-                                $saveData['des']               = $value['des'];
-                                $saveData['img']               = $value['img'];
-                                $saveData['banners']           = $value['banners'];
-                                $saveData['prize_id']          = $value['prize_id'];
-                                $saveData['display_time']      = strtotime(date('Y-m-d ' . $need_times_arr[$key] . ':00:00'));
-                                $saveData[$key]['create_time'] = time();
-                                $special_obj                   = new SpecialModel();
-                                $special_obj->save($saveData);
-                                Db::commit();
+                                $special_obj               = new SpecialModel();
+                                $special_obj->title        = $value['title'];
+                                $special_obj->des          = $value['des'];
+                                $special_obj->img          = $value['img'];
+                                $special_obj->banners      = $value['banners'];
+                                $special_obj->prize_id     = $value['prize_id'];
+                                $special_obj->display_time = strtotime(date('Y-m-d ' . $need_times_arr[$key] . ':00:00'));
+                                $special_obj->create_time  = time();
+
+                                $special_obj->save();
 
                                 //保存题目
                                 $special_warehouse_id   = $value['id'];
                                 $special_word_warehouse = SpecialWordWarehouseModel::where('special_warehouse_id', $special_warehouse_id)->select();
                                 if (count($special_word_warehouse) > 0) {
                                     $special_question_num = $config_data['special_question_num'];
-                                    $special_word_arr     = array_rand($special_word_warehouse, $special_question_num);
+                                    $arr                  = [];
+                                    foreach ($special_word_warehouse as $key => $value) {
+                                        $arr[] = $value['id'];
+                                    }
+                                    $rand_keys        = array_rand($arr, 2);
+                                    $special_word_arr = [];
+                                    if (is_array($rand_keys)) {
+                                        foreach ($rand_keys as $key => $value) {
+                                            $special_word_arr[] = $special_word_warehouse[$value];
+                                        }
+                                    } else {
+                                        $special_word_arr[] = $special_word_warehouse[$rand_keys];
+                                    }
                                     if (count($special_word_arr) > 0) {
                                         foreach ($special_word_arr as $k => $v) {
                                             $special_word_obj              = new SpecialWordModel();
@@ -1079,12 +1088,12 @@ class Special
                                             $special_word_obj->options     = $v['options'];
                                             $special_word_obj->create_time = time();
                                             $special_word_obj->save();
-                                            Db::commit();
                                         }
                                     }
 
                                 }
                             }
+                            Db::commit();
                             return [
                                 'status' => 1,
                                 'msg'    => 'ok',
@@ -1119,24 +1128,35 @@ class Special
                 try {
                     //保存场次
                     foreach ($special as $key => $value) {
-                        $saveData                      = [];
-                        $saveData['title']             = $value['title'];
-                        $saveData['des']               = $value['des'];
-                        $saveData['img']               = $value['img'];
-                        $saveData['banners']           = $value['banners'];
-                        $saveData['prize_id']          = $value['prize_id'];
-                        $saveData['display_time']      = strtotime(date('Y-m-d ' . $need_times_arr[$key] . ':00:00'));
-                        $saveData[$key]['create_time'] = time();
-                        $special_obj                   = new SpecialModel();
-                        $special_obj->save($saveData);
-                        Db::commit();
+                        $special_obj               = new SpecialModel();
+                        $special_obj->title        = $value['title'];
+                        $special_obj->des          = $value['des'];
+                        $special_obj->img          = $value['img'];
+                        $special_obj->banners      = $value['banners'];
+                        $special_obj->prize_id     = $value['prize_id'];
+                        $special_obj->display_time = strtotime(date('Y-m-d ' . $special_rand_arr[$key] . ':00:00'));
+                        $special_obj->create_time  = time();
+
+                        $special_obj->save();
 
                         //保存题目
                         $special_warehouse_id   = $value['id'];
                         $special_word_warehouse = SpecialWordWarehouseModel::where('special_warehouse_id', $special_warehouse_id)->select();
                         if (count($special_word_warehouse) > 0) {
                             $special_question_num = $config_data['special_question_num'];
-                            $special_word_arr     = array_rand($special_word_warehouse, $special_question_num);
+                            $arr                  = [];
+                            foreach ($special_word_warehouse as $key => $value) {
+                                $arr[] = $value['id'];
+                            }
+                            $rand_keys        = array_rand($arr, 2);
+                            $special_word_arr = [];
+                            if (is_array($rand_keys)) {
+                                foreach ($rand_keys as $key => $value) {
+                                    $special_word_arr[] = $special_word_warehouse[$value];
+                                }
+                            } else {
+                                $special_word_arr[] = $special_word_warehouse[$rand_keys];
+                            }
                             if (count($special_word_arr) > 0) {
                                 foreach ($special_word_arr as $k => $v) {
                                     $special_word_obj              = new SpecialWordModel();
@@ -1146,12 +1166,12 @@ class Special
                                     $special_word_obj->options     = $v['options'];
                                     $special_word_obj->create_time = time();
                                     $special_word_obj->save();
-                                    Db::commit();
                                 }
                             }
 
                         }
                     }
+                    Db::commit();
                     return [
                         'status' => 1,
                         'msg'    => 'ok',
