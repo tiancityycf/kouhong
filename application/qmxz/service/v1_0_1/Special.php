@@ -1070,7 +1070,7 @@ class Special
                                     foreach ($special_word_warehouse as $key => $value) {
                                         $arr[] = $value['id'];
                                     }
-                                    $rand_keys        = array_rand($arr, 2);
+                                    $rand_keys        = array_rand($arr, $special_question_num);
                                     $special_word_arr = [];
                                     if (is_array($rand_keys)) {
                                         foreach ($rand_keys as $key => $value) {
@@ -1148,7 +1148,7 @@ class Special
                             foreach ($special_word_warehouse as $key => $value) {
                                 $arr[] = $value['id'];
                             }
-                            $rand_keys        = array_rand($arr, 2);
+                            $rand_keys        = array_rand($arr, $special_question_num);
                             $special_word_arr = [];
                             if (is_array($rand_keys)) {
                                 foreach ($rand_keys as $key => $value) {
