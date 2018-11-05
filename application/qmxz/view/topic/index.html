@@ -15,7 +15,7 @@
 <div class="layui-form-item layui-inline">
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 	<div class="layui-form-item layui-inline">
-        <label class="layui-form-label">ID搜索</label>
+        <label class="layui-form-label">ID</label>
         <div class="layui-input-inline">
             <input name="id" value="{$Think.get.id|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
         </div>
@@ -122,5 +122,6 @@
     </table>
     {if isset($page)}<p>{$page|raw}</p>{/if}
     <!--{/empty}-->
+    <script>window.form.render();</script>
 </form>
 {/block}

@@ -25,7 +25,7 @@ class SpecialWord extends BasicAdmin
 
     public function index()
     {
-        $this->title = '整点场题目管理';
+        $this->title = '整点题目';
 
         list($get, $db) = [$this->request->get(), new SpecialWordModel()];
 

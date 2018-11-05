@@ -16,7 +16,7 @@ class Prize extends BasicAdmin
 
     public function index()
     {
-        $this->title = '礼物配置';
+        $this->title = '奖品列表';
 
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['name'] as $key) {

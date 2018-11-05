@@ -26,7 +26,7 @@ class Special extends BasicAdmin
 
     public function index()
     {
-        $this->title = '整点场管理';
+        $this->title = '整点场次';
 
         list($get, $db) = [$this->request->get(), new SpecialModel()];
 

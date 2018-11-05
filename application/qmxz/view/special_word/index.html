@@ -12,7 +12,7 @@
 <div class="layui-form-item layui-inline" style="margin-left: 30px;">
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">整点场</label>
+        <label class="layui-form-label">场次</label>
         <div class="layui-input-inline">
             <select name='special_id' class='layui-select' lay-verify="required" lay-search="">
                 <option value=''> - 所有整点场 -</option>
@@ -27,7 +27,7 @@
         </div>
     </div>
 	<div class="layui-form-item layui-inline">
-        <label class="layui-form-label">题目名字搜索</label>
+        <label class="layui-form-label">标题</label>
         <div class="layui-input-inline">
             <input name="title" value="{$Think.get.title|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
         </div>

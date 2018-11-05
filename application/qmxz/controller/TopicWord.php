@@ -28,7 +28,7 @@ class TopicWord extends BasicAdmin
 
     public function index()
     {
-        $this->title = '话题题目';
+        $this->title = '普通题目';
 
         list($get, $db) = [$this->request->get(), new TopicWordModel()];
 

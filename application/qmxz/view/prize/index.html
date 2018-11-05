@@ -14,7 +14,7 @@
 <div class="layui-form-item layui-inline" style="margin-left: 30px;">
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 	<div class="layui-form-item layui-inline">
-        <label class="layui-form-label">奖品搜索</label>
+        <label class="layui-form-label">奖品名称</label>
         <div class="layui-input-inline">
             <input name="name" value="{$Think.get.name|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
         </div>
@@ -34,7 +34,7 @@
     	<tr>
             <th class='text-left nowrap'>操作</th>
             <th class='text-left nowrap'>ID</th>
-            <th class='text-left nowrap'>奖品名字</th>
+            <th class='text-left nowrap'>奖品名称</th>
             <th class='text-left nowrap'>图片展示</th>
             <th class='text-left nowrap'>图片地址</th>
             <th class='text-left nowrap'>状态</th>

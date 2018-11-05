@@ -28,7 +28,7 @@ class Topic extends BasicAdmin
 
     public function index()
     {
-        $this->title = '话题记录';
+        $this->title = '普通列表';
 
         list($get, $db) = [$this->request->get(), new TopicModel()];
 

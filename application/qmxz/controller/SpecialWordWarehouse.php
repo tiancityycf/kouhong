@@ -25,7 +25,7 @@ class SpecialWordWarehouse extends BasicAdmin
 
     public function index()
     {
-        $this->title = '整点场题库';
+        $this->title = '整点题库';
 
         list($get, $db) = [$this->request->get(), new SpecialWordWarehouseModel()];
 

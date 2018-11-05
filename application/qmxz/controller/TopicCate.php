@@ -14,7 +14,7 @@ class TopicCate extends BasicAdmin
 
     public function index()
     {
-        $this->title = '话题分类';
+        $this->title = '普通分类';
 
         list($get, $db) = [$this->request->get(), new TopicCateModel()];
 
