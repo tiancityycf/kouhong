@@ -18,6 +18,12 @@
         </div>
     </div>
     <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline" style="width: 265px;">
+            <input name="create_time" id='create_time' value="{$Think.get.create_time|default=''}" placeholder="请选择提现时间" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 </form>
@@ -92,6 +98,9 @@
     </table>
     {if isset($page)}<p>{$page|raw}</p>{/if}
     <!--{/empty}-->
-    <script>window.form.render();</script>
+    <script>
+        window.form.render();
+        window.laydate.render({range: true, elem: '#create_time', type: 'datetime'});
+    </script>
 </form>
 {/block}
