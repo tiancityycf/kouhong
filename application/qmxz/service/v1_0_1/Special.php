@@ -1002,7 +1002,7 @@ class Special
             //整点场次时间配置
             $config_data       = $this->configData;
             $special_times_arr = $config_data['special_times_arr'];
-            if (count($special_list) != 0) {
+            if (count($special_list) > 0) {
                 //已存在
                 $special_count = count($special_list);
                 if ($special_count >= count($special_times_arr)) {
@@ -1028,6 +1028,7 @@ class Special
                         foreach ($times_arr_diff as $key => $value) {
                             $need_times_arr[] = $value;
                         }
+                        
                         $special_house = SpecialWarehouseModel::select();
                         $special_arr   = [];
                         foreach ($special_house as $key => $value) {
@@ -1134,7 +1135,7 @@ class Special
                         $special_obj->img          = $value['img'];
                         $special_obj->banners      = $value['banners'];
                         $special_obj->prize_id     = $value['prize_id'];
-                        $special_obj->display_time = strtotime(date('Y-m-d ' . $special_rand_arr[$key] . ':00:00'));
+                        $special_obj->display_time = strtotime(date('Y-m-d ' . $special_times_arr[$key] . ':00:00'));
                         $special_obj->create_time  = time();
 
                         $special_obj->save();
