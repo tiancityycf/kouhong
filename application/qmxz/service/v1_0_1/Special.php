@@ -46,6 +46,7 @@ class Special
             $special_arr       = [];
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
+            $special_rule      = $config_data['special_rule'];
             if (!empty($list)) {
                 foreach ($list as $key => $value) {
                     $list[$key]['start_time'] = date('H:i', $value['display_time']);
@@ -83,10 +84,11 @@ class Special
                     if ($value['num'] < $default_bottom_option) {
                         $special_arr[$key]['num'] = $value['num'] + $default_option_base[0] + $default_option_base[1];
                     }
-                    $prize_info                      = SpecialPrizeModel::get($value['prize_id']);
-                    $special_arr[$key]['prize_name'] = $prize_info['name'];
-                    $special_arr[$key]['prize_img']  = $prize_info['img'];
-                    $special_arr[$key]['banners']    = json_decode($value['banners']);
+                    $prize_info                        = SpecialPrizeModel::get($value['prize_id']);
+                    $special_arr[$key]['prize_name']   = $prize_info['name'];
+                    $special_arr[$key]['prize_img']    = $prize_info['img'];
+                    $special_arr[$key]['banners']      = json_decode($value['banners']);
+                    $special_arr[$key]['special_rule'] = $special_rule;
                 }
                 foreach ($list as $key => $value) {
                     if (($value['display_time'] + $answer_time_limit * 60) <= time()) {
@@ -1028,7 +1030,7 @@ class Special
                         foreach ($times_arr_diff as $key => $value) {
                             $need_times_arr[] = $value;
                         }
-                        
+
                         $special_house = SpecialWarehouseModel::select();
                         $special_arr   = [];
                         foreach ($special_house as $key => $value) {
