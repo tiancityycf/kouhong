@@ -23,6 +23,8 @@ class Prize extends BasicAdmin
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
         }
 
+        $db->order('id desc');
+
         $result = parent::_list($db, true, false, false);
         $this->assign('title', $this->title);
         return $this->fetch('index', $result);
