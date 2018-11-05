@@ -86,7 +86,15 @@ class Task extends BasicController {
          
         }
 
-        return result('200', "ok", $list);
+        //签到列表
+        $sign_list = Db::name('user_register_config')->select();
+
+        $res = [
+            'sign_list' => $sign_list,
+            'list' => $list
+        ];
+
+        return result('200', "ok", $res);
     }
 
     //记录分享奖励
