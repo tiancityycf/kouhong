@@ -109,12 +109,13 @@ class Topic
      * @param  array $userId 用户id
      * @return [type]       [description]
      */
-    public function topicList($userId)
+    public function topicList($data)
     {
         try {
             // $list            = SelectTopicModel::select();
-            $list            = TopicModel::select();
-            $user_topic_list = UserTopicModel::where('user_id', $userId)->where('is_pass', 1)->column('topic_id');
+            $data['cate_id'] = 4;
+            $list            = TopicModel::where('cate_id', $data['cate_id'])->select();
+            $user_topic_list = UserTopicModel::where('user_id', $data['user_id'])->where('is_pass', 1)->column('topic_id');
             $config_data     = $this->configData;
             if (!empty($list)) {
                 foreach ($list as $key => $value) {

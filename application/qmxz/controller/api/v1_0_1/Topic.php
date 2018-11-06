@@ -47,11 +47,11 @@ class Topic extends BasicController
      */
     public function topicList()
     {
-        require_params('cate_id','user_id');
-        $userId = Request::param('user_id');
+        require_params('user_id');
+        $data = Request::param();
 
         $topicService = new TopicService($this->configData);
-        $result       = $topicService->topicList($userId);
+        $result       = $topicService->topicList($data);
 
         return result(200, 'ok', $result);
     }
