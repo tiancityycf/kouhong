@@ -83,6 +83,10 @@
                 {/if}
                 <span class="text-explode">|</span>
                 <a data-title="添加图片集" data-modal='{:url("$classuri/add_pics")}?id={$vo.id}'>产品图片集</a>
+                {if auth("$classuri/goods_details")}
+                <span class="text-explode">|</span>
+                <a data-title="添加" data-modal='{:url("$classuri/goods_details")}?id={$vo.id}'>商品详情</a>
+                {/if}
             </td>
             <td class='text-left nowrap'>
                 {$vo.id}

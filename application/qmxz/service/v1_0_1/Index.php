@@ -27,6 +27,7 @@ class Index
 
 		foreach ($hot_goods as $k2 => $v2) {
                 $hot_goods[$k2]['imgs'] = Db::name('good_imgs')->where('product_id',$v2['id'])->select();
+                $hot_goods[$k2]['good_details'] = Db::name('good_details')->where('product_id',$v2['id'])->select();
         }
         
 		return $hot_goods;

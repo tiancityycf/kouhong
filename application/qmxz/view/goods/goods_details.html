@@ -1,0 +1,93 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post" style="overflow-y:scroll; height:400px;">
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">上传图片</label>
+        <div class="layui-input-block">
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <input type="text" autofocus id="path" name="img" required="required" value='{$vo.path|default=""}' pattern="" title="图片地址" placeholder="图片地址" class="layui-input">
+                </div>
+                <div class="layui-col-md3">
+                    <div class="layui-upload" style="margin-left: 20px;">
+                        <button type="button" class="layui-btn" id="test1">上传图片</button>
+                    </div>
+                </div>
+                <div class="layui-col-md3">
+                    <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.path|default=""}' />
+                </div>
+
+            </div>
+            
+        </div>
+
+        
+    </div>
+
+   <!--{foreach $vo as $k=>$v}-->
+   <div style="margin:30px 40px 20px 50px; float:left;">
+    <img style="height:150px;margin-right:20px;" src="{$v.img}"><button type="button" class='del layui-btn layui-btn-danger' value="{$v.id}" >删除</button>
+   </div>
+   <!--{/foreach}-->
+	<div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消</button>
+    </div>
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+        
+        layui.use('upload', function(){
+            var $ = layui.jquery
+            ,upload = layui.upload;
+
+            var uploadInst = upload.render({
+                elem: '#test1' //绑定元素
+                ,url: '/admin/img/upload' //上传接口
+                ,method: 'post'
+                ,exts : 'jpg|png|gif'
+                ,done: function(res){
+                    if(res.code == 1){
+                        $("#path").val(res.path);
+                        $("#size").val(res.size);
+                        $("#type").val(res.type);
+                        $("#img").attr('src', res.path);
+                        layer.msg('图片已经上传到网宿云存储', {icon: 6});
+
+                    }else if(res.code == 0){
+                        layer.msg(res.msg);
+                    }else{
+                        layer.msg(res.error_msg);
+                    }
+                }
+            });
+        });
+
+        $(function() {
+             //console.log($('.del').length);
+             $('.del').click(function(){
+                  var productId = $(this).val();
+                 
+                  $.get("/qmxz/goods/del_good_details_pic?productId="+productId, function(result){
+                         if(result == 'success'){
+
+                            alert('删除图片成功');
+
+
+                         }else if(result == 'fail'){
+
+                            alert('删除图片失败');
+
+                         }else{
+
+                            alert('异常');
+
+                         }
+                        window.location.reload();
+                });    
+            });
+        });
+
+
+
+    </script>
+</form>

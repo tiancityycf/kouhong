@@ -10,6 +10,7 @@ use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserTopic as UserTopicModel;
+use app\qmxz\model\UserTopicSmallLabel as UserTopicSmallLabelModel;
 use app\qmxz\model\UserTopicWord as UserTopicWordModel;
 use app\qmxz\model\UserTopicWordComment as UserTopicWordCommentModel;
 use app\qmxz\model\UserTopicWordCount as UserTopicWordCountModel;
@@ -137,6 +138,9 @@ class Topic
                     if ($value['num'] < $default_bottom_option) {
                         $list[$key]['num'] = $value['num'] + $default_option_base[0] + $default_option_base[1];
                     }
+                    //小标签
+                    $small_label               = UserTopicSmallLabelModel::where('topic_id', $value['id'])->where('user_id', $data['user_id'])->order('correct_num desc')->value('small_label');
+                    $list[$key]['small_label'] = isset($small_label) ? $small_label : '暂无';
                 }
             }
             return $list;
@@ -447,6 +451,32 @@ class Topic
                         $user_topic_word_record->is_correct = 0;
                     }
                     $user_topic_word_record->save();
+                }
+
+                //保存用户小标签记录
+                $small_label            = TopicWordModel::where('topic_id', $data['topic_id'])->where('id', $data['topic_word_id'])->value('small_label');
+                $user_topic_small_label = UserTopicSmallLabelModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->where('small_label', $small_label)->find();
+                if ($user_topic_small_label) {
+                    if ($user_topic_word_record->is_correct == 1) {
+                        $user_topic_small_label->correct_num = $user_topic_small_label->correct_num + 1;
+                    } else {
+                        $user_topic_small_label->error_num = $user_topic_small_label->error_num + 1;
+                    }
+                    $user_topic_small_label->correct_num->save();
+                } else {
+                    $user_topic_small_label                = new UserTopicSmallLabelModel();
+                    $user_topic_small_label->user_id       = $data['user_id'];
+                    $user_topic_small_label->topic_id      = $data['topic_id'];
+                    $user_topic_small_label->topic_word_id = $data['topic_word_id'];
+                    $user_topic_small_label->small_label   = $small_label;
+                    if ($user_topic_word_record->is_correct == 1) {
+                        $user_topic_small_label->correct_num = 1;
+                        $user_topic_small_label->error_num   = 0;
+                    } else {
+                        $user_topic_small_label->correct_num = 0;
+                        $user_topic_small_label->error_num   = 1;
+                    }
+                    $user_topic_small_label->save();
                 }
 
                 return [

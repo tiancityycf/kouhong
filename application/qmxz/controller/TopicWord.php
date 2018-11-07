@@ -5,6 +5,7 @@ use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicWord as TopicWordModel;
 use app\qmxz\validate\TopicWord as TopicWordValidate;
 use controller\BasicAdmin;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class TopicWord extends BasicAdmin
 {
@@ -38,12 +39,71 @@ class TopicWord extends BasicAdmin
         return parent::_list($db);
     }
 
+    public function upload()
+    {
+        $file = request()->file('file');
+
+        if (!$file) {
+            return json_encode(['code' => 0, 'msg' => '请先选择要上传的表格']);
+        }
+
+        $info = $file->validate(['ext' => 'xlsx']);
+        if ($info) {
+            $file_info   = $file->getInfo();
+            $reader      = new Xlsx();
+            $spreadsheet = $reader->load($file_info['tmp_name']);
+
+            $data = $spreadsheet->getActiveSheet()->toArray();
+
+            $tmp_data = ['topic_id', 'small_label', 'title', 'des', 'options1', 'options2', 'options3', 'options4'];
+
+            $first_data = $data[0];
+            if ($tmp_data != $first_data) {
+                return json_encode(['code' => 0, 'msg' => '表头和字段对不上！']);
+            }
+
+            unset($data[0]);
+
+            //$word_arr = $this->getWordArr();
+
+            $arr = array_chunk($data, 1000);
+
+            $i = 0;
+            $j = 0;
+
+            $topic_word_arr = $arr[0];
+            $saveData       = [];
+            foreach ($topic_word_arr as $key => $value) {
+                $i++;
+                $options = [];
+                foreach ($value as $k => $v) {
+                    if (in_array($k, [4, 5, 6, 7])) {
+                        if ($v) {
+                            $options[] = $v;
+                        }
+                    } else {
+                        $saveData[$key][$tmp_data[$k]] = $v;
+                    }
+                }
+                $saveData[$key]['options']     = json_encode($options, JSON_UNESCAPED_UNICODE);
+                $saveData[$key]['create_time'] = time();
+            }
+            $j = count($saveData);
+            $topic_word_model = new TopicWordModel();
+            $topic_word_model->saveAll($saveData);
+
+            return json_encode(['code' => 1, 'msg' => '数据保存成功<font color="green">' . $i . '</font>条，<font color="red">' . $j . '</font>条数据为空或者已经存在']);
+        } else {
+            return json_encode(['code' => 0, 'msg' => '上传文件格式错误']);
+        }
+    }
+
     public function add()
     {
         $data = $this->request->post();
         if ($data) {
             $data['create_time'] = time();
-            $data['options'] = json_encode($data['options'], JSON_UNESCAPED_UNICODE);
+            $data['options']     = json_encode($data['options'], JSON_UNESCAPED_UNICODE);
             $model               = new TopicWordModel();
             if ($this->checkData($data) === true && $model->save($data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
