@@ -5,9 +5,42 @@
 {/block}
 {block name="content"}
 <div class="layui-form-item layui-inline">
+    <div class="layui-form-item layui-inline">
+        <a href="/static/excel/template_special_word_warehouse.xlsx">表格模板</a>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button type="button" class="layui-btn layui-btn-sm layui-bg-blue" id="test1">
+            <i class="layui-icon">&#xe67c;</i>批量导入
+        </button>
+    </div>
     <!--{if auth("$classuri/add")}-->
     <button data-modal='{:url("$classuri/add")}' data-title="添加" class='layui-btn layui-btn-sm'>添加</button>
     <!--{/if}-->
+    <script>
+    layui.use('upload', function(){
+      var upload = layui.upload;
+       
+      //执行实例
+      var uploadInst = upload.render({
+        elem: '#test1' //绑定元素
+        ,url: '/qmxz/special_word_warehouse/upload' //上传接口
+        ,method: 'post'
+        ,exts : 'xlsx'
+        ,done: function(res){
+            if(res.code == 1){
+                layer.alert(res.msg, {title: '<i class="layui-icon">&#xe60b;</i>提示',}, function(index, item){
+                    location.reload();
+                });
+            }else{
+                layer.alert(res.msg);
+            }
+        }
+        ,error: function(){
+          //请求异常回调
+        }
+      });
+    });
+    </script>
 </div>
 <div class="layui-form-item layui-inline" style="margin-left: 30px;">
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
