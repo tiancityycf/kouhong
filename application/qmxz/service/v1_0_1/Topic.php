@@ -462,7 +462,7 @@ class Topic
                     } else {
                         $user_topic_small_label->error_num = $user_topic_small_label->error_num + 1;
                     }
-                    $user_topic_small_label->correct_num->save();
+                    $user_topic_small_label->save();
                 } else {
                     $user_topic_small_label                = new UserTopicSmallLabelModel();
                     $user_topic_small_label->user_id       = $data['user_id'];
