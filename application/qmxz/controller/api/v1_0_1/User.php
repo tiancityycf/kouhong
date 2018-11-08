@@ -26,6 +26,11 @@ class User extends BasicController
 		$user_info = Db::name('user_record')->field('avatar,nickname,gold')->where('openid',$data['openid'])->find();
 		$result['user_info'] =  $user_info;
 
+		//是否跳转小程序
+		$config_data = $this->configData;
+		$is_jump = $config_data['is_jump'];
+		$result['is_jump'] = $is_jump;
+
 		$indexService = new IndexService();
 		$result['hot_goods'] = $indexService->hot_goods();
 
