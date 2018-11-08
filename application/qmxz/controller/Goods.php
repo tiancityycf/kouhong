@@ -117,7 +117,8 @@ class Goods extends BasicAdmin
         $good_cates = Db::name('good_cates')->where(['status' => 1])->order('order desc')->select();
 
         foreach ($good_cates as $k => $v) {
-            $arr = Db::name('good_cates')->alias('a')->join(['t_goods' => 'b'], 'a.id=b.cate')->where(['b.status' => 1, 'onsale' => 1, 'a.id' => $v['id']])->order('b.order desc')->column('b.id, a.cate_name, b.title, b.img, b.stock, b.price', 'a.id');
+            // $arr = Db::name('good_cates')->alias('a')->join(['t_goods' => 'b'], 'a.id=b.cate')->where(['b.status' => 1, 'onsale' => 1, 'a.id' => $v['id']])->order('b.order desc')->column('b.id, a.cate_name, b.title, b.img, b.stock, b.price', 'a.id');
+            $arr = Db::name('good_cates')->alias('a')->join(['t_goods' => 'b'], 'a.id=b.cate')->where(['b.status' => 1, 'a.id' => $v['id']])->order('b.order desc')->column('b.id, a.cate_name, b.title, b.img, b.stock, b.price', 'a.id');
 
             foreach ($arr as $k2 => $v2) {
                 $arr[$k2]['imgs']         = Db::name('good_imgs')->where('product_id', $v2['id'])->select();
