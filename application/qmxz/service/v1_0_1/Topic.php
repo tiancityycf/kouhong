@@ -53,7 +53,8 @@ class Topic
                 $user_topic_count     = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->count();
                 $user_topic_count     = isset($user_topic_count) ? $user_topic_count : 0;
                 $default_consume_gold = $config_data['default_consume_gold'];
-                $need_gold            = $default_consume_gold * ($topic_count - $user_topic_count);
+                // $need_gold            = $default_consume_gold * ($topic_count - $user_topic_count);
+                $need_gold            = $default_consume_gold;
                 if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
@@ -65,7 +66,8 @@ class Topic
                 $user_special_count  = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['topic_id'])->count();
                 $user_special_count  = isset($user_special_count) ? $user_special_count : 0;
                 $timing_consume_gold = $config_data['timing_consume_gold'];
-                $need_gold           = $timing_consume_gold * ($special_count - $user_special_count);
+                // $need_gold           = $timing_consume_gold * ($special_count - $user_special_count);
+                $need_gold           = $timing_consume_gold;
                 if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
