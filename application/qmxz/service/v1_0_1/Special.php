@@ -936,6 +936,7 @@ class Special
             foreach ($user_special as $key => $value) {
                 $special_info                        = SpecialModel::where('id', $value['special_id'])->field('title,display_time')->find();
                 $display_time                        = $special_info['display_time'];
+                $user_special[$key]['start_time']    = date('H:i', $display_time);
                 $special_title                       = $special_info['title'];
                 $user_special[$key]['special_title'] = $special_title;
                 $end_time                            = $display_time + $answer_time_limit * 60;
