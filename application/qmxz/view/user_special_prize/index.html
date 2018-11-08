@@ -22,11 +22,14 @@
         <label class="layui-form-label">订单状态</label>
         <div class="layui-input-inline">
             <select name='status' class='layui-select' lay-search="">
-                <option selected="selected" value=''> - 所有状态 -</option>
-
-                <option value='1'> - 已发货 - </option>
-
-                <option value='0'> - 未发货 - </option>
+                <option value=''> - 所有状态 -</option>
+                <!--{foreach [0 => '未发货', 1=> '已发货'] as $k => $v}-->
+                <!--{if($Think.get.status != '' && $Think.get.status == $k)}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
             </select>
         </div>
     </div>

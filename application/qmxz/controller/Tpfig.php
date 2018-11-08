@@ -20,7 +20,7 @@ class Tpfig extends BasicAdmin
     	$this->title = '配置管理';
 
     	list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['name'] as $key) {
+        foreach (['name','index'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
         }
         

@@ -10,8 +10,9 @@
         <label class="layui-form-label">支付状态</label>
         <div class="layui-input-inline">
             <select name='status' class='layui-select' lay-search="">
+                <option value=''> - 全部 -</option>
                 <!--{foreach [0 => '未支付', 1 => '已支付'] as $k => $v}-->
-                <!--{if (isset($get['status']) and $get['status'] == $k) or (!isset($get['status'])  and $k == 0) }-->
+                <!--{if (isset($get['status']) and $get['status'] == $k) }-->
                 <option selected="selected" value='{$k}'> - {$v} - </option>
                 <!--{else}-->
                 <option value='{$k}'> - {$v} - </option>
@@ -35,7 +36,7 @@
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">提现时间</label>
         <div class="layui-input-inline" style="width: 265px;">
-            <input name="create_time" id='create_time' value="{$Think.get.create_time|default=''}" placeholder="请选择提现时间" class="layui-input">
+            <input name="create_time"  autocomplete="off" id='create_time' value="{$Think.get.create_time|default=''}" placeholder="请选择提现时间" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
