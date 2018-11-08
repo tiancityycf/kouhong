@@ -29,6 +29,10 @@ class Goods extends Model
             $query->where('onsale', $params['onsale']);
         }
 
+        if (isset($params['is_index']) && $params['is_index'] !== '') {
+            $query->where('is_index', $params['is_index']);
+        }
+
         if (isset($params['price']) && $params['price'] !== '') {
             $query->where('price', '>=', $params['price']);
             $query->order('price desc');

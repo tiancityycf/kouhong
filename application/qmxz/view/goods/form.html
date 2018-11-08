@@ -59,12 +59,27 @@
         <div style="width: 35%;" class="layui-input-block">
                 <select  name="onsale" class="layui-select">
                 	<!--{foreach [1=>'推荐',0=>'不推荐'] as $key=>$st}-->
-                	<!--{if (!isset($vo['status']) AND $key eq 1) OR (isset($vo['status']) AND $vo.status eq $key)}-->
+                	<!--{if (!isset($vo['onsale']) AND $key eq 1) OR (isset($vo['onsale']) AND $vo.onsale eq $key)}-->
                 	<option selected value="{$key}">- {$st} -</option>
 	                <!--{else}-->
 	                <option value="{$key}">- {$st} -</option>
 	                <!--{/if}-->
                 	<!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否首页</label>
+        <div style="width: 35%;" class="layui-input-block">
+                <select  name="is_index" class="layui-select">
+                    <!--{foreach [0 => '否', 1=> '是'] as $key=>$st}-->
+                    <!--{if (!isset($vo['is_index']) AND $key eq 0) OR (isset($vo['is_index']) AND $vo.is_index eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
                 </select>
         </div>
     </div>

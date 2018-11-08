@@ -68,6 +68,21 @@
         </div>
     </div>
     <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">是否首页</label>
+        <div class="layui-input-inline">
+            <select name='is_index' class='layui-select' lay-search="">
+                <option value=''> - 所有 -</option>
+                <!--{foreach [0 => '否', 1=> '是'] as $k => $v}-->
+                <!--{if($Think.get.is_index != '' && $Think.get.is_index == $k)}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 </form>
@@ -89,6 +104,7 @@
             <th class='text-left nowrap'>所属分类</th>
             <th class='text-left nowrap'>合作方</th>
             <th class='text-left nowrap'>排序</th>
+            <th class='text-left nowrap'>首页</th>
             <th class='text-left nowrap'>商品状态</th>
             
     	</tr>
@@ -137,7 +153,13 @@
             <td class='text-left nowrap'>
                 {$vo.order}
             </td>
-
+            <td class='text-left nowrap'>
+                 {if condition="$vo.is_index == 1"}
+                 <span style="color:green">是</span>
+                 {else}
+                 <span style="color:red">否</span> 
+                 {/if}
+            </td>
             <td class='text-left nowrap'>
                  {if condition="$vo.status == 1"}
                  <span style="color:green">启用</span>
