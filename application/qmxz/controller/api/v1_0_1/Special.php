@@ -64,8 +64,16 @@ class Special extends BasicController
         //整点场轮播图
         $banners = $specialService->specialBanners($data);
 
+        //反悔卡信息
+        $regret_card_info = $specialService->regret_card_info($data);
+
+        //输入框提示语
+        $input_text = $specialService->input_text();
+
         $result = [
+            'input_text'          => $input_text,
             'banners'             => $banners,
+            'regret_card_info'    => $regret_card_info,
             'timing_consume_gold' => $timing_consume_gold,
             'question_list'       => $question_list,
             'comment_list'        => $comment_list,

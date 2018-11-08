@@ -75,8 +75,12 @@ class Topic extends BasicController
         //普通场亚宝消耗
         $default_consume_gold = $topicService->defaultConsumeGold();
 
+        //反悔卡信息
+        // $regret_card_info = $topicService->regret_card_info($data);
+
         $result = [
             'default_consume_gold' => $default_consume_gold,
+            // 'regret_card_info'     => $regret_card_info,
             'question_list'        => $question_list,
             'comment_list'         => $comment_list,
         ];

@@ -267,6 +267,48 @@ class Special
     }
 
     /**
+     * 反悔卡信息
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function regret_card_info($data)
+    {
+        try {
+            $config_data     = $this->configData;
+            $regret_card_arr = $config_data['regret_card_arr'];
+            $rand_k          = array_rand($regret_card_arr);
+            //反悔说明
+            $regret_card_text = $regret_card_arr[$rand_k];
+            //用户反悔卡数量
+            $openid       = UserModel::where('id', $data['user_id'])->value('openid');
+            $regret_times = RegretCardModel::where('openid', $openid)->where('add_date', date('ymd'))->value('times');
+            $regret_times = isset($regret_times) ? $regret_times : 0;
+            return [
+                'regret_card_text' => $regret_card_text,
+                'regret_times'     => $regret_times,
+            ];
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 输入框提示语
+     * @return [type]       [description]
+     */
+    public function input_text()
+    {
+        //普通场亚宝消耗
+        $config_data   = $this->configData;
+        $input_tip_arr = $config_data['input_tip_arr'];
+        $rand_k        = array_rand($input_tip_arr);
+        $input_text    = $input_tip_arr[$rand_k];
+        //消耗金币
+        return $input_text;
+    }
+
+    /**
      * 获取普通场评论列表
      * @param  array $data 接收参数
      * @return [type]       [description]
@@ -595,19 +637,42 @@ class Special
                     $user_special_redeemcode->save();
                 }
 
+                //随机正确错误提示语
+                //正确提示语
+                $special_correct_arr = $config_data['special_correct_arr'];
+                $c_k                 = array_rand($special_correct_arr);
+                $correct_tip         = $special_correct_arr[$c_k];
+                //错误提示语
+                $special_error_arr = $config_data['special_error_arr'];
+                $e_k               = array_rand($special_error_arr);
+                $error_tip         = $special_error_arr[$e_k];
+
                 return [
                     'remaining_time' => $remaining_time,
                     'is_end'         => 1,
                     'total_num'      => count($special_word),
                     'correct_num'    => $correct_num,
+                    'correct_tip'    => $correct_tip,
+                    'error_tip'      => $error_tip,
                     'code'           => $code,
                     'list'           => $special_word,
                 ];
             } else {
+                //随机正确错误提示语
+                //正确提示语
+                $special_correct_arr = $config_data['special_correct_arr'];
+                $c_k                 = array_rand($special_correct_arr);
+                $correct_tip         = $special_correct_arr[$c_k];
+                //错误提示语
+                $special_error_arr = $config_data['special_error_arr'];
+                $e_k               = array_rand($special_error_arr);
+                $error_tip         = $special_error_arr[$e_k];
                 return [
                     'remaining_time' => $remaining_time,
                     'is_end'         => 1,
                     'total_num'      => count($special_word),
+                    'correct_tip'    => $correct_tip,
+                    'error_tip'      => $error_tip,
                     'correct_num'    => $correct_num,
                     'list'           => $special_word,
                 ];

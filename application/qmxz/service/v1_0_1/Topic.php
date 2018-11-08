@@ -2,6 +2,7 @@
 
 namespace app\qmxz\service\v1_0_1;
 
+use app\qmxz\model\RegretCard as RegretCardModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicCate as TopicCateModel;
@@ -190,6 +191,33 @@ class Topic
             } else {
                 return [];
             }
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 反悔卡信息
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function regret_card_info($data)
+    {
+        try {
+            $config_data     = $this->configData;
+            $regret_card_arr = $config_data['regret_card_arr'];
+            $rand_k          = array_rand($regret_card_arr);
+            //反悔说明
+            $regret_card_text = $regret_card_arr[$rand_k];
+            //用户反悔卡数量
+            $openid       = UserModel::where('id', $data['user_id'])->value('openid');
+            $regret_times = RegretCardModel::where('openid', $openid)->where('add_date', date('ymd'))->value('times');
+            $regret_times = isset($regret_times) ? $regret_times : 0;
+            return [
+                'regret_card_text' => $regret_card_text,
+                'regret_times'     => $regret_times,
+            ];
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
@@ -489,11 +517,17 @@ class Topic
                 $e_k             = array_rand($topic_error_arr);
                 $error_tip       = $topic_error_arr[$e_k];
 
+                //随机输入提示语
+                $input_tip_arr = $config_data['input_tip_arr'];
+                $i_k           = array_rand($input_tip_arr);
+                $input_tip     = $input_tip_arr[$i_k];
+
                 return [
                     'status'      => 1,
                     'msg'         => 'ok',
                     'correct_tip' => $correct_tip,
                     'error_tip'   => $error_tip,
+                    'input_tip'   => $input_tip,
                     'most_select' => $answer->most_select,
                     'options'     => $options,
                     'gold'        => $get_gold_one,
