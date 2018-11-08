@@ -49,6 +49,21 @@
         </div>
     </div>
     <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">合作方</label>
+        <div class="layui-input-inline">
+            <select name='is_partner' class='layui-select' lay-search="">
+                <option value=''> - 所有状态 -</option>
+                <!--{foreach [1 => '非合作方', 2=> '是合作方'] as $k => $v}-->
+                <!--{if $Think.get.is_partner == $k}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 </form>
@@ -68,6 +83,7 @@
             <th class='text-left nowrap'>库存量</th>
             <th class='text-left nowrap'>所需金币</th>
             <th class='text-left nowrap'>所属分类</th>
+            <th class='text-left nowrap'>合作方</th>
             <th class='text-left nowrap'>排序</th>
             <th class='text-left nowrap'>商品状态</th>
             
@@ -106,6 +122,13 @@
             </td>
             <td class='text-left nowrap'>
                 {$vo.cate_name}
+            </td>
+            <td class='text-left nowrap'>
+                 {if condition="$vo.is_partner == 1"}
+                 <span style="color:green">否</span>
+                 {else}
+                 <span style="color:red">是</span> 
+                 {/if}
             </td>
             <td class='text-left nowrap'>
                 {$vo.order}

@@ -74,7 +74,20 @@
             <input type="text" autofocus name="order" required="required" value={$vo.order} pattern="" title="" placeholder="排序" class="layui-input" style="width: 75%;">
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否合作方</label>
+        <div style="width: 35%;" class="layui-input-block">
+                <select  name="is_partner" class="layui-select">
+                    <!--{foreach [1 => '非合作方', 2=> '是合作方'] as $key=>$st}-->
+                    <!--{if (!isset($vo['is_partner']) AND $key eq 1) OR (isset($vo['is_partner']) AND $vo.is_partner eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">是否启用</label>
         <div style="width: 35%;" class="layui-input-block">

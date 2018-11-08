@@ -34,6 +34,10 @@ class Goods extends Model
             $query->order('price desc');
         }
 
+        if (isset($params['is_partner']) && $params['is_partner'] !== '') {
+            $query->where('is_partner', $params['is_partner']);
+        }
+
         $query->order('id desc');
 
         return $query;
