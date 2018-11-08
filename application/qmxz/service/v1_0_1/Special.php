@@ -859,10 +859,10 @@ class Special
                 //周纪录
                 $start        = strtotime(date('Y-m-d 00:00:00', strtotime('-1 week')));
                 $end          = strtotime(date('Y-m-d 23:59:59'));
-                $user_special = UserSpecialModel::where('user_id', $userId)->where('create_time', 'between', [$start, $end])->select();
+                $user_special = UserSpecialModel::where('user_id', $userId)->where('create_time', 'between', [$start, $end])->order('create_time desc')->select();
             } else {
                 //个人纪录
-                $user_special = UserSpecialModel::where('user_id', $userId)->select();
+                $user_special = UserSpecialModel::where('user_id', $userId)->order('create_time desc')->select();
             }
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
