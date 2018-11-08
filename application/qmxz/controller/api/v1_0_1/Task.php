@@ -159,7 +159,7 @@ class Task extends BasicController
         //分享人openid
         $openid        = Request::param('openid');
         $model         = new InviteUser();
-        $data          = $model->remark($from_user, $openid);
+        $data          = $model->remark($openid, $from_user);
         $invite_number = $model->getInviteDayCount($openid, date('Y-m-d'));
         if ($invite_number == $this->task_invite_number && $data['code'] == 0) {
             $task->sendTask($openid, 3);
