@@ -479,9 +479,21 @@ class Topic
                     $user_topic_small_label->save();
                 }
 
+                //随机提示语
+                //正确提示语
+                $topic_correct_arr = $config_data['topic_correct_arr'];
+                $c_k               = array_rand($topic_correct_arr);
+                $correct_tip       = $topic_correct_arr[$c_k];
+                //错误提示语
+                $topic_error_arr = $config_data['topic_error_arr'];
+                $e_k             = array_rand($topic_error_arr);
+                $error_tip       = $topic_error_arr[$e_k];
+
                 return [
                     'status'      => 1,
                     'msg'         => 'ok',
+                    'correct_tip' => $correct_tip,
+                    'error_tip'   => $error_tip,
                     'most_select' => $answer->most_select,
                     'options'     => $options,
                     'gold'        => $get_gold_one,
