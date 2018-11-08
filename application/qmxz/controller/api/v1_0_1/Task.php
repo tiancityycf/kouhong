@@ -83,7 +83,8 @@ class Task extends BasicController
             //反悔卡
             if ($val['id'] == 6) {
                 //反悔卡每日获取数量与邀请好友数量一致
-                $list[$key]['regret_times']      = Db::name("regret_card")->where(['openid' => $openid])->where('add_date', date('ymd'))->value('times');
+                $regret_times                    = Db::name("regret_card")->where(['openid' => $openid])->where('add_date', date('ymd'))->value('times');
+                $list[$key]['regret_times']      = isset($regret_times) ? $regret_times : 0;
                 $list[$key]['task_regret_times'] = $this->task_invite_number;
             }
 
