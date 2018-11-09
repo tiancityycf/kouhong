@@ -181,6 +181,8 @@ class TopicWord extends BasicAdmin
 
         try {
             $topic_word = TopicWordModel::select();
+            $loop_str = Db::name('config')->where('status', 1)->where('index', 'loop_arr')->value('value');
+            $loop_arr = json_decode($loop_str);
             foreach ($topic_word as $key => $value) {
                 if ($key % 100 == 0) {
                     sleep(1);
@@ -196,16 +198,16 @@ class TopicWord extends BasicAdmin
 
                         if ($options_num > 0) {
                             if (isset($options_arr[0]) && $options_arr[0] != '') {
-                                $user_topic_word_count->option1 = $user_topic_word_count->option1 + rand(0, 200);
+                                $user_topic_word_count->option1 = $user_topic_word_count->option1 + rand($loop_arr[0], $loop_arr[1]);
                             }
                             if (isset($options_arr[1]) && $options_arr[1] != '') {
-                                $user_topic_word_count->option2 = $user_topic_word_count->option2 + rand(0, 200);
+                                $user_topic_word_count->option2 = $user_topic_word_count->option2 + rand($loop_arr[0], $loop_arr[1]);
                             }
                             if (isset($options_arr[2]) && $options_arr[2] != '') {
-                                $user_topic_word_count->option3 = $user_topic_word_count->option3 + rand(0, 200);
+                                $user_topic_word_count->option3 = $user_topic_word_count->option3 + rand($loop_arr[0], $loop_arr[1]);
                             }
                             if (isset($options_arr[3]) && $options_arr[3] != '') {
-                                $user_topic_word_count->option4 = $user_topic_word_count->option4 + rand(0, 200);
+                                $user_topic_word_count->option4 = $user_topic_word_count->option4 + rand($loop_arr[0], $loop_arr[1]);
                             }
                         }
                         //获取值最多选项
@@ -238,28 +240,28 @@ class TopicWord extends BasicAdmin
                         $max_arr     = [];
                         if ($options_num > 0) {
                             if ($options_num == 1) {
-                                $user_topic_word_count->option1 = rand(0, 200);
+                                $user_topic_word_count->option1 = rand($loop_arr[0], $loop_arr[1]);
                                 $user_topic_word_count->option2 = 0;
                                 $user_topic_word_count->option3 = 0;
                                 $user_topic_word_count->option4 = 0;
                             }
                             if ($options_num == 2) {
-                                $user_topic_word_count->option1 = rand(0, 200);
-                                $user_topic_word_count->option2 = rand(0, 200);
+                                $user_topic_word_count->option1 = rand($loop_arr[0], $loop_arr[1]);
+                                $user_topic_word_count->option2 = rand($loop_arr[0], $loop_arr[1]);
                                 $user_topic_word_count->option3 = 0;
                                 $user_topic_word_count->option4 = 0;
                             }
                             if ($options_num == 3) {
-                                $user_topic_word_count->option1 = rand(0, 200);
-                                $user_topic_word_count->option2 = rand(0, 200);
-                                $user_topic_word_count->option3 = rand(0, 200);
+                                $user_topic_word_count->option1 = rand($loop_arr[0], $loop_arr[1]);
+                                $user_topic_word_count->option2 = rand($loop_arr[0], $loop_arr[1]);
+                                $user_topic_word_count->option3 = rand($loop_arr[0], $loop_arr[1]);
                                 $user_topic_word_count->option4 = 0;
                             }
                             if ($options_num == 4) {
-                                $user_topic_word_count->option1 = rand(0, 200);
-                                $user_topic_word_count->option2 = rand(0, 200);
-                                $user_topic_word_count->option3 = rand(0, 200);
-                                $user_topic_word_count->option4 = rand(0, 200);
+                                $user_topic_word_count->option1 = rand($loop_arr[0], $loop_arr[1]);
+                                $user_topic_word_count->option2 = rand($loop_arr[0], $loop_arr[1]);
+                                $user_topic_word_count->option3 = rand($loop_arr[0], $loop_arr[1]);
+                                $user_topic_word_count->option4 = rand($loop_arr[0], $loop_arr[1]);
                             }
                         }
                         //获取值最多选项
