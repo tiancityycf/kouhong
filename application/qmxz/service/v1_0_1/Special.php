@@ -610,6 +610,12 @@ class Special
             }
             //答对多少题
             if ($correct_num >= count($special_word)) {
+                //答对加金币
+                $timing_correct_gold = $config_data['timing_correct_gold'];
+                $user_record = UserRecordModel::where('user_id', $data['user_id'])->find();
+                $user_record->gold = $user_record->gold + $timing_correct_gold;
+                $user_record->save();
+
                 //生成兑换码
                 $code = UserSpecialRedeemcodeModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->value('code');
                 if (!isset($code)) {
