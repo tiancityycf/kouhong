@@ -26,6 +26,12 @@
     <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
+    <div class="layui-form-item layui-inline">
+        <a data-open="{:request()->url()}&day=-1" class="layui-btn">昨天</a>
+        <a data-open="{:request()->url()}&day=1" class="layui-btn">今天</a>
+        <a data-open="{:request()->url()}&day=2" class="layui-btn">明天</a>
+        <a data-open="{:request()->url()}&day=3" class="layui-btn">后天</a>
+    </div>
 </form>
 </div>
 <form onsubmit="return false;" data-auto="true" method="post">
@@ -39,7 +45,7 @@
             <th class='text-left nowrap'>主键</th>
             <th class='text-left nowrap'>标题</th>
             <th class='text-left nowrap'>描述</th>
-            <th class='text-left nowrap'>图标展示</th>
+            <!-- <th class='text-left nowrap'>图标展示</th> -->
             <!-- <th class='text-left nowrap'>图标地址</th> -->
             <th class='text-left nowrap'>轮播图</th>
             <th class='text-left nowrap'>奖品</th>
@@ -70,9 +76,9 @@
             <td class='text-left nowrap'>
                 {$vo.des}
             </td>
-            <td class='text-left nowrap'>
+            <!-- <td class='text-left nowrap'>
                 <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.img}' />
-            </td>
+            </td> -->
             <!-- <td class='text-left nowrap'>
                 {$vo.img}
             </td> -->
