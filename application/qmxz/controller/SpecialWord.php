@@ -88,7 +88,7 @@ class SpecialWord extends BasicAdmin
     protected function special_list()
     {
         $start = strtotime(date('Y-m-d 00:00:00'));
-        $end   = strtotime(date('Y-m-d 23:59:59'));
+        $end   = strtotime(date('Y-m-d 23:59:59', strtotime('+2 day')));
         $data  = SpecialModel::where('display_time', 'between', [$start, $end])->column('title', 'id');
 
         $this->assign('special_list', $data);

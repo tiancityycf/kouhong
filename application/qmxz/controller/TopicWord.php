@@ -3,9 +3,11 @@ namespace app\qmxz\controller;
 
 use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicWord as TopicWordModel;
+use app\qmxz\model\UserTopicWordCount as UserTopicWordCountModel;
 use app\qmxz\validate\TopicWord as TopicWordValidate;
 use controller\BasicAdmin;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use think\Db;
 
 class TopicWord extends BasicAdmin
 {
@@ -88,7 +90,7 @@ class TopicWord extends BasicAdmin
                 $saveData[$key]['options']     = json_encode($options, JSON_UNESCAPED_UNICODE);
                 $saveData[$key]['create_time'] = time();
             }
-            $j = count($saveData);
+            $j                = count($saveData);
             $topic_word_model = new TopicWordModel();
             $topic_word_model->saveAll($saveData);
 
@@ -168,5 +170,82 @@ class TopicWord extends BasicAdmin
         $data = TopicModel::column('title', 'id');
 
         $this->assign('topic_list', $data);
+    }
+
+    /**
+     * 循环加基数
+     * @return [type] [description]
+     */
+    public function loopAddBase()
+    {
+
+        // 开启事务
+        Db::startTrans();
+        try {
+            $topic_word = TopicWordModel::select();
+            foreach ($topic_word as $key => $value) {
+                if ($key % 100 == 0) {
+                    sleep(1);
+                }
+                //判断数据是否存在
+                $user_topic_word_count = UserTopicWordCountModel::where('topic_id', $value['topic_id'])->where('topic_word_id', $value['id'])->find();
+                if ($user_topic_word_count) {
+                    $options_arr = json_decode($value['options']);
+                    $options_num = count($options_arr);
+                    $max_arr     = [];
+                    if ($options_num > 0) {
+                        for ($i = 1; $i <= $options_num; $i++) {
+                            $user_topic_word_count->option . $i = $user_topic_word_count->option . $i + rand(0, 200);
+                            $max_arr[]                          = $user_topic_word_count->option . $i;
+                        }
+                    }
+                    //获取值最多选项
+                    $max_k = 1;
+                    $max_v = 0;
+                    foreach ($max_arr as $k => $v) {
+                        if ($max_v <= $v) {
+                            $max_v = $v;
+                            $max_k = $k + 1;
+                        }
+                    }
+                    $user_topic_word_count->most_select = $max_k;
+                    $user_topic_word_count->save();
+                } else {
+                    $user_topic_word_count                = new UserTopicWordCountModel();
+                    $user_topic_word_count->topic_id      = $value['topic_id'];
+                    $user_topic_word_count->topic_word_id = $value['id'];
+
+                    $options_arr = json_decode($value['options']);
+                    $options_num = count($options_arr);
+                    $max_arr     = [];
+                    if ($options_num > 0) {
+                        for ($i = 1; $i <= $options_num; $i++) {
+                            $user_topic_word_count->option . $i = rand(0, 200);
+                            $max_arr[]                          = $user_topic_word_count->option . $i;
+                        }
+                    }
+                    //获取值最多选项
+                    $max_k = 1;
+                    $max_v = 0;
+                    foreach ($max_arr as $k => $v) {
+                        if ($max_v <= $v) {
+                            $max_v = $v;
+                            $max_k = $k + 1;
+                        }
+                    }
+                    $user_topic_word_count->most_select = $max_k;
+                    $user_topic_word_count->save();
+                }
+
+            }
+            Db::commit();
+            return [
+                'status' => 1,
+                'msg'    => 'ok',
+            ];
+        } catch (\Exception $e) {
+            lg($e);
+            Db::rollback();
+        }
     }
 }
