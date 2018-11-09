@@ -120,7 +120,11 @@ class Special extends BasicController
         //整点场轮播图
         $banners = $specialService->specialBanners($data);
 
+        //评论提示语
+        $input_text = $specialService->input_text($data);
+
         $result = [
+            'input_text'    => $input_text,
             'banners'       => $banners,
             'answer_result' => $answer_result,
             'comment_list'  => $comment_list,
