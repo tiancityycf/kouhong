@@ -1,6 +1,7 @@
 <?php
 
 namespace app\qmxz\service\v1_0_1;
+use app\qmxz\model\User as UserModel;
 
 use think\Db;
 
@@ -47,6 +48,20 @@ class Index
         //分享文案
         $config_data = $this->configData;
         $share_text_arr = $config_data['share_text_arr'];
-        dump($share_text_arr);exit;
+        if(!empty($share_text_arr)){
+            $user_info = UserModel::where('openid', $data['openid'])->find();
+            $now_time = date('Y-m-d H:i:s');
+            $rep = ['{name}','{time}'];
+            $rep_arr = [$user_info['nickname'], $now_time];
+            foreach ($share_text_arr as $key => $value) {
+                $share_text_arr[$key] = str_replace($rep, $rep_arr, $value);
+            }
+        }
+        //分享图片
+        $share_img_arr = $config_data['share_img_arr'];
+        return [
+            'share_text_arr' => $share_text_arr,
+            'share_img_arr' => $share_img_arr
+        ];
     }
 }

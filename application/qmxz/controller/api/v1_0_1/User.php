@@ -38,8 +38,8 @@ class User extends BasicController
         $result['config'] = $config_data;
 
         //获取分享信息
-        // $share_info = $indexService->getShareInfo($data);
-        // $result['share_info'] = $share_info;
+        $share_info = $indexService->getShareInfo($data);
+        $result['share_info'] = $share_info;
 
         return result(200, 'ok', $result);
 	}
