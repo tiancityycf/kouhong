@@ -179,8 +179,6 @@ class TopicWord extends BasicAdmin
     public function loopAddBase()
     {
 
-        // 开启事务
-        Db::startTrans();
         try {
             $topic_word = TopicWordModel::select();
             foreach ($topic_word as $key => $value) {
@@ -190,62 +188,106 @@ class TopicWord extends BasicAdmin
                 //判断数据是否存在
                 $user_topic_word_count = UserTopicWordCountModel::where('topic_id', $value['topic_id'])->where('topic_word_id', $value['id'])->find();
                 if ($user_topic_word_count) {
-                    $options_arr = json_decode($value['options']);
-                    $options_num = count($options_arr);
-                    $max_arr     = [];
-                    if ($options_num > 0) {
-                        for ($i = 1; $i <= $options_num; $i++) {
-                            $user_topic_word_count->option . $i = $user_topic_word_count->option . $i + rand(0, 200);
-                            $max_arr[]                          = $user_topic_word_count->option . $i;
-                        }
-                    }
-                    //获取值最多选项
-                    $max_k = 1;
-                    $max_v = 0;
-                    foreach ($max_arr as $k => $v) {
-                        if ($max_v <= $v) {
-                            $max_v = $v;
-                            $max_k = $k + 1;
-                        }
-                    }
-                    $user_topic_word_count->most_select = $max_k;
-                    $user_topic_word_count->save();
-                } else {
-                    $user_topic_word_count                = new UserTopicWordCountModel();
-                    $user_topic_word_count->topic_id      = $value['topic_id'];
-                    $user_topic_word_count->topic_word_id = $value['id'];
+                    // 开启事务
+                    Db::startTrans();
+                    try {
+                        $options_arr = json_decode($value['options']);
+                        $options_num = count($options_arr);
 
-                    $options_arr = json_decode($value['options']);
-                    $options_num = count($options_arr);
-                    $max_arr     = [];
-                    if ($options_num > 0) {
-                        for ($i = 1; $i <= $options_num; $i++) {
-                            $user_topic_word_count->option . $i = rand(0, 200);
-                            $max_arr[]                          = $user_topic_word_count->option . $i;
+                        if ($options_num > 0) {
+                            if (isset($options_arr[0]) && $options_arr[0] != '') {
+                                $user_topic_word_count->option1 = $user_topic_word_count->option1 + rand(0, 200);
+                            }
+                            if (isset($options_arr[1]) && $options_arr[1] != '') {
+                                $user_topic_word_count->option2 = $user_topic_word_count->option2 + rand(0, 200);
+                            }
+                            if (isset($options_arr[2]) && $options_arr[2] != '') {
+                                $user_topic_word_count->option3 = $user_topic_word_count->option3 + rand(0, 200);
+                            }
+                            if (isset($options_arr[3]) && $options_arr[3] != '') {
+                                $user_topic_word_count->option4 = $user_topic_word_count->option4 + rand(0, 200);
+                            }
                         }
-                    }
-                    //获取值最多选项
-                    $max_k = 1;
-                    $max_v = 0;
-                    foreach ($max_arr as $k => $v) {
-                        if ($max_v <= $v) {
-                            $max_v = $v;
-                            $max_k = $k + 1;
+                        //获取值最多选项
+                        $max_arr = [$user_topic_word_count->option1, $user_topic_word_count->option2, $user_topic_word_count->option3, $user_topic_word_count->option4];
+                        $max_k   = 1;
+                        $max_v   = 0;
+                        foreach ($max_arr as $k => $v) {
+                            if ($max_v <= $v) {
+                                $max_v = $v;
+                                $max_k = $k + 1;
+                            }
                         }
+                        $user_topic_word_count->most_select = $max_k;
+                        $user_topic_word_count->save();
+                        Db::commit();
+                    } catch (\Exception $e) {
+                        lg($e);
+                        Db::rollback();
                     }
-                    $user_topic_word_count->most_select = $max_k;
-                    $user_topic_word_count->save();
+                } else {
+                    // 开启事务
+                    Db::startTrans();
+                    try {
+                        $user_topic_word_count                = new UserTopicWordCountModel();
+                        $user_topic_word_count->topic_id      = $value['topic_id'];
+                        $user_topic_word_count->topic_word_id = $value['id'];
+
+                        $options_arr = json_decode($value['options']);
+                        $options_num = count($options_arr);
+                        $max_arr     = [];
+                        if ($options_num > 0) {
+                            if ($options_num == 1) {
+                                $user_topic_word_count->option1 = rand(0, 200);
+                                $user_topic_word_count->option2 = 0;
+                                $user_topic_word_count->option3 = 0;
+                                $user_topic_word_count->option4 = 0;
+                            }
+                            if ($options_num == 2) {
+                                $user_topic_word_count->option1 = rand(0, 200);
+                                $user_topic_word_count->option2 = rand(0, 200);
+                                $user_topic_word_count->option3 = 0;
+                                $user_topic_word_count->option4 = 0;
+                            }
+                            if ($options_num == 3) {
+                                $user_topic_word_count->option1 = rand(0, 200);
+                                $user_topic_word_count->option2 = rand(0, 200);
+                                $user_topic_word_count->option3 = rand(0, 200);
+                                $user_topic_word_count->option4 = 0;
+                            }
+                            if ($options_num == 4) {
+                                $user_topic_word_count->option1 = rand(0, 200);
+                                $user_topic_word_count->option2 = rand(0, 200);
+                                $user_topic_word_count->option3 = rand(0, 200);
+                                $user_topic_word_count->option4 = rand(0, 200);
+                            }
+                        }
+                        //获取值最多选项
+                        $max_arr = [$user_topic_word_count->option1, $user_topic_word_count->option2, $user_topic_word_count->option3, $user_topic_word_count->option4];
+                        $max_k   = 1;
+                        $max_v   = 0;
+                        foreach ($max_arr as $k => $v) {
+                            if ($max_v <= $v) {
+                                $max_v = $v;
+                                $max_k = $k + 1;
+                            }
+                        }
+                        $user_topic_word_count->most_select = $max_k;
+                        $user_topic_word_count->save();
+                        Db::commit();
+                    } catch (\Exception $e) {
+                        lg($e);
+                        Db::rollback();
+                    }
                 }
 
             }
-            Db::commit();
             return [
                 'status' => 1,
                 'msg'    => 'ok',
             ];
         } catch (\Exception $e) {
             lg($e);
-            Db::rollback();
         }
     }
 }
