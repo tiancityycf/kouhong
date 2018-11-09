@@ -20,7 +20,7 @@ class Topic extends Model
             (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
         }
 
-        $query->order('id desc');
+        $query->order('order desc');
 
         return $query;
     }
