@@ -423,12 +423,13 @@ class Topic
                 $default_consume_gold = $config_data['default_consume_gold'];
                 $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
                 if ((int) $data['user_select'] == $answer['most_select']) {
-                    $get_gold_one = $config_data['get_gold_one'];
+                    $get_gold_one   = $config_data['get_gold_one'];
+                    $user_obj->gold = $user_obj->gold - $default_consume_gold + $get_gold_one;
                 } else {
-                    $get_gold_one = 0;
+                    $topic_error_consume_gold = $config_data['topic_error_consume_gold'];
+                    $user_obj->gold           = $user_obj->gold - $default_consume_gold - $topic_error_consume_gold;
                 }
                 //修改金币
-                $user_obj->gold = $user_obj->gold + ($get_gold_one - $default_consume_gold);
                 $user_obj->save();
                 //总参与人数
                 $participants_num = $answer->option1 + $answer->option2 + $answer->option3 + $answer->option4;

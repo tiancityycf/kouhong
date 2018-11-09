@@ -9,6 +9,12 @@ use think\Db;
  */
 class Index
 {
+    protected $configData;
+
+    public function __construct($configData=[])
+    {
+        $this->configData = $configData;
+    }
 
     public function hot_goods()
     {
@@ -30,5 +36,17 @@ class Index
         }
 
         return $hot_goods;
+    }
+
+    /**
+     * 获取分享配置信息
+     * @param  [type] $data [description]
+     * @return [type]       [description]
+     */
+    public function getShareInfo($data){
+        //分享文案
+        $config_data = $this->configData;
+        $share_text_arr = $config_data['share_text_arr'];
+        dump($share_text_arr);exit;
     }
 }
