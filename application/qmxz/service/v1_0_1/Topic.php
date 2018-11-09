@@ -371,6 +371,7 @@ class Topic
                     if ((int) $data['user_select'] == 4) {
                         $answer->option4 = $answer->option4 + 1;
                     }
+
                     //获取值最多选项
                     $max_arr = [$answer->option1, $answer->option2, $answer->option3, $answer->option4];
                     $max_k   = 1;
@@ -417,11 +418,11 @@ class Topic
                     }
                     $answer->save();
                 }
-
                 $config_data = $this->configData;
                 //消耗金币
                 $default_consume_gold = $config_data['default_consume_gold'];
                 $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
+                $get_gold_one = 0;
                 if ((int) $data['user_select'] == $answer['most_select']) {
                     $get_gold_one   = $config_data['get_gold_one'];
                     $user_obj->gold = $user_obj->gold - $default_consume_gold + $get_gold_one;
@@ -448,8 +449,6 @@ class Topic
                     $option3 = $answer->option3;
                     $option4 = $answer->option4;
                 }
-
-                Db::commit();
                 //判断选项个数
                 $question_options       = TopicWordModel::where('topic_id', $data['topic_id'])->where('id', $data['topic_word_id'])->value('options');
                 $question_options_count = count(json_decode($question_options));
@@ -536,7 +535,7 @@ class Topic
                 $input_tip_arr = $config_data['input_tip_arr'];
                 $i_k           = array_rand($input_tip_arr);
                 $input_tip     = $input_tip_arr[$i_k];
-
+                Db::commit();
                 return [
                     'status'      => 1,
                     'msg'         => 'ok',
@@ -545,16 +544,14 @@ class Topic
                     'input_tip'   => $input_tip,
                     'most_select' => $answer->most_select,
                     'options'     => $options,
-                    'gold'        => $get_gold_one,
+                    'gold'        => $get_gold_one
                 ];
-                // } else {
-                //     return [
-                //         'status' => 0,
-                //         'msg'    => '已答过此题',
-                //     ];
-                // }
             } catch (\Exception $e) {
                 Db::rollback();
+                return [
+                    'status' => 0,
+                    'msg'    => '系统错误',
+                ];
             }
         } catch (Exception $e) {
             lg($e);
