@@ -1,6 +1,6 @@
 <?php
 
-namespace api_data_service\v1_0_11;
+namespace app\qmxz\service\v1_0_1;
 
 use app\qmxz\model\SendLog;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
@@ -30,6 +30,7 @@ class Notice
     public function sendTemplateMsg($data)
     {
         try {
+
             //获取access_token
             if (Cache::has('access_token')) {
                 $access_token = Cache::get('access_token');
@@ -42,6 +43,7 @@ class Notice
                 $access_expires_in = $access_token_data['expires_in'] - 10;
                 Cache::set('access_token', $access_token, $access_expires_in);
             }
+
             //抓取https数据url
             $send_template_url = sprintf(Config::get('send_template_url'), $access_token);
             //模板ID
@@ -62,10 +64,15 @@ class Notice
             $time    = date("Y-m-d H:i:s");
             //答对人数
             $user_special_word_count = UserSpecialWordCountModel::where('special_id', $data['special_id'])->where('special_word_id')->find();
-            $num_arr                 = [$user_special_word_count['option1'], $user_special_word_count['option2'], $user_special_word_count['option3'], $user_special_word_count['option4']];
-            $num                     = $num_arr[$user_special_word_count['most_select'] - 1];
+            $num1 = isset($user_special_word_count['option1']) ? $user_special_word_count['option1'] : 0;
+            $num2 = isset($user_special_word_count['option2']) ? $user_special_word_count['option2'] : 0;
+            $num3 = isset($user_special_word_count['option3']) ? $user_special_word_count['option3'] : 0;
+            $num4 = isset($user_special_word_count['option4']) ? $user_special_word_count['option4'] : 0;
+            $num_arr                 = [$num1, $num2, $num3, $num4];
+            $most_k = isset($user_special_word_count['most_select']) ? $user_special_word_count['most_select'] : 1;
+            $num                     = $num_arr[$most_k - 1];
             //题目名称
-            $question = SpecialWordModel::where('special_id', $data['special_id'])->where('id', $data['special_word_id'])->value('title');
+            $question = SpecialWordModel::where('special_id', $data['special_id'])->where('id', $data['id'])->value('title');
             foreach ($content as $key => $value) {
                 if (strpos($value['value'], '{time}') !== false) {
                     $content[$key]['value'] = str_replace('{time}', $time, $content[$key]['value']);
