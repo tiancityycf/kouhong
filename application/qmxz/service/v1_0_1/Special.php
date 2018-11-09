@@ -401,7 +401,7 @@ class Special
             Db::startTrans();
             try {
                 //保存普通场记录
-                $user_special = UserSpecialModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->find();
+                $user_special = UserSpecialModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('create_date', date('ymd'))->find();
                 if ($user_special) {
                     if (($user_special['is_pass'] != 1) && ($data['is_pass'] == 1)) {
                         $user_special->is_pass = 1;

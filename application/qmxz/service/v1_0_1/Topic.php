@@ -328,7 +328,7 @@ class Topic
                     $select_topic->save();
                 }
                 //保存普通场记录
-                $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->find();
+                $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('create_date',date('ymd'))->find();
                 if ($user_topic) {
                     if (($user_topic['is_pass'] != 1) && ($data['is_pass'] == 1)) {
                         $user_topic->is_pass = 1;

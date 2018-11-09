@@ -70,7 +70,6 @@ class Task extends BasicController
             }
             //普通场押宝
             if ($val['id'] == 4) {
-
                 $is_play_topic         = Db::name('user_topic')->where(['user_id' => $user_id, 'create_date' => date('ymd')])->find();
                 $list[$key]['is_give'] = $is_play_topic ? 1 : 0;
             }
