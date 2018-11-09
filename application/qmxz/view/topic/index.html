@@ -69,6 +69,7 @@
             <th class='text-left nowrap'>额外信息</th>
             <th class='text-left nowrap'>图片展示</th>
             <th class='text-left nowrap'>图片地址</th>
+            <th class='text-left nowrap'>排序</th>
             <th class='text-left nowrap'>时间</th>
             
     	</tr>
@@ -111,6 +112,9 @@
             </td>
             <td class='text-left nowrap'>
                 {$vo.img}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.order}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_time|date='Y-m-d H:i:s'}

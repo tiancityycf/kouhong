@@ -52,6 +52,12 @@
             <input type="text" autofocus name="remark" required="required" value='{$vo.remark|default=""}' pattern="" title="额外信息" placeholder="额外信息" class="layui-input">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="num" autofocus name="order" required="required" value='{$vo.order|default=""}' pattern="" title="排序" placeholder="排序" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item text-center">
         {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
         <button class="layui-btn" type='submit'>保存数据</button>
