@@ -1120,7 +1120,8 @@ class Special
                             //保存场次
                             foreach ($special as $key => $value) {
                                 $special_obj               = new SpecialModel();
-                                $special_obj->title        = $value['title'];
+                                // $special_obj->title        = $value['title'];
+                                $special_obj->title        = date('Ymd '.$need_times_arr[$key].':00').'场';
                                 $special_obj->des          = $value['des'];
                                 $special_obj->img          = $value['img'];
                                 $special_obj->banners      = $value['banners'];
@@ -1198,7 +1199,8 @@ class Special
                     //保存场次
                     foreach ($special as $key => $value) {
                         $special_obj               = new SpecialModel();
-                        $special_obj->title        = $value['title'];
+                        // $special_obj->title        = $value['title'];
+                        $special_obj->title        = date('Ymd '.$special_times_arr[$key].':00').'场';
                         $special_obj->des          = $value['des'];
                         $special_obj->img          = $value['img'];
                         $special_obj->banners      = $value['banners'];
