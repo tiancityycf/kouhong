@@ -52,7 +52,7 @@ class Topic
                 $get_gold_one           = $config_data['get_gold_one'];
                 $user_correct_num       = UserTopicWordRecordModel::where('user_id', $data['user_id'])->where('is_correct', 1)->where('dday', date('Ymd'))->count();
                 isset($user_correct_num) ? $user_correct_num : 0;
-                if(($get_gold_one * $user_correct_num) >= $topic_daily_limit_gold){
+                if (($get_gold_one * $user_correct_num) >= $topic_daily_limit_gold) {
                     return [
                         'status' => 2,
                         'msg'    => '今日普通场已达获得金币上限，请明日再来~',
