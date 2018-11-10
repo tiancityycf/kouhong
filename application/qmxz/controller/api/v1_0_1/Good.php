@@ -3,9 +3,7 @@
 namespace app\qmxz\controller\api\v1_0_1;
 
 use think\facade\Request;
-
 use think\Db;
-
 use think\facade\Config;
 use think\facade\Cache;
 
@@ -162,5 +160,5 @@ class Good extends BasicController
         
         return result(200, '0k', $result);
     }
-	
+
 }
