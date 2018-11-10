@@ -104,6 +104,7 @@
             <th class='text-left nowrap'>所属分类</th>
             <th class='text-left nowrap'>合作方</th>
             <th class='text-left nowrap'>Appid</th>
+            <th class='text-left nowrap'>跳转路径</th>
             <th class='text-left nowrap'>排序</th>
             <th class='text-left nowrap'>首页</th>
             <th class='text-left nowrap'>商品状态</th>
@@ -153,6 +154,9 @@
             </td>
             <td class='text-left nowrap'>
                 {$vo.partner_appid|default="暂无"}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.jump_route|default="暂无"}
             </td>
             <td class='text-left nowrap'>
                 {$vo.order}
