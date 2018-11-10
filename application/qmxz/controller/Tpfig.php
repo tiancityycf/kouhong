@@ -76,7 +76,6 @@ class Tpfig extends BasicAdmin
                 $arr['value'] = json_encode($post_data['value_arr'], JSON_UNESCAPED_UNICODE);
             }
             $arr['status'] = $post_data['status'];
-
             if (Db::name($this->table)->where(['id' => $get_data['id']])->update($arr) !== false && $this->redisSave()) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
