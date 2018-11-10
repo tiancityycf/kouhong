@@ -30,4 +30,10 @@ return [
     //提现加密密钥
     'withdraw_secret' => 'cVCM47ZDqD',
 
+    //微信access_token获取接口
+    'get_access_url'       => 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s',
+
+    //发送模板消息url
+    'send_template_url'    => 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=%s',
+
 ];

@@ -2,13 +2,12 @@
 
 namespace app\qmxz\service\v1_0_1;
 
-use app\qmxz\model\SpecialWord as SpecialWordModel;
+use app\qmxz\model\RegretCard as RegretCardModel;
 use app\qmxz\model\Topic as TopicModel;
 use app\qmxz\model\TopicCate as TopicCateModel;
 use app\qmxz\model\TopicWord as TopicWordModel;
 use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
-use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserTopic as UserTopicModel;
 use app\qmxz\model\UserTopicSmallLabel as UserTopicSmallLabelModel;
 use app\qmxz\model\UserTopicWord as UserTopicWordModel;
@@ -48,11 +47,24 @@ class Topic
             }
             if ($data['type'] == 1) {
                 //普通场
-                $topic_count          = TopicWordModel::where('topic_id', $data['topic_id'])->count();
-                $user_topic_count     = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->count();
-                $user_topic_count     = isset($user_topic_count) ? $user_topic_count : 0;
+                //检查是否达到今日获得金币上限
+                $topic_daily_limit_gold = $config_data['topic_daily_limit_gold'];
+                $get_gold_one           = $config_data['get_gold_one'];
+                $user_correct_num       = UserTopicWordRecordModel::where('user_id', $data['user_id'])->where('is_correct', 1)->where('dday', date('Ymd'))->count();
+                isset($user_correct_num) ? $user_correct_num : 0;
+                if (($get_gold_one * $user_correct_num) >= $topic_daily_limit_gold) {
+                    return [
+                        'status' => 2,
+                        'msg'    => '今日普通场已达获得金币上限，请明日再来~',
+                    ];
+                }
+
+                // $topic_count          = TopicWordModel::where('topic_id', $data['topic_id'])->count();
+                // $user_topic_count     = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->count();
+                // $user_topic_count     = isset($user_topic_count) ? $user_topic_count : 0;
                 $default_consume_gold = $config_data['default_consume_gold'];
-                $need_gold            = $default_consume_gold * ($topic_count - $user_topic_count);
+                // $need_gold            = $default_consume_gold * ($topic_count - $user_topic_count);
+                $need_gold = $default_consume_gold;
                 if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
@@ -60,11 +72,12 @@ class Topic
                 }
             } else {
                 //整点场
-                $special_count       = SpecialWordModel::where('special_id', $data['topic_id'])->count();
-                $user_special_count  = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['topic_id'])->count();
-                $user_special_count  = isset($user_special_count) ? $user_special_count : 0;
+                // $special_count       = SpecialWordModel::where('special_id', $data['topic_id'])->count();
+                // $user_special_count  = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['topic_id'])->count();
+                // $user_special_count  = isset($user_special_count) ? $user_special_count : 0;
                 $timing_consume_gold = $config_data['timing_consume_gold'];
-                $need_gold           = $timing_consume_gold * ($special_count - $user_special_count);
+                // $need_gold           = $timing_consume_gold * ($special_count - $user_special_count);
+                $need_gold = $timing_consume_gold;
                 if ($need_gold <= $user_obj->gold) {
                     $is_enough = true;
                 } else {
@@ -115,7 +128,7 @@ class Topic
         try {
             // $list            = SelectTopicModel::select();
             $data['cate_id'] = 4;
-            $list            = TopicModel::where('cate_id', $data['cate_id'])->select();
+            $list            = TopicModel::where('cate_id', $data['cate_id'])->order('order desc')->select();
             $user_topic_list = UserTopicModel::where('user_id', $data['user_id'])->where('is_pass', 1)->column('topic_id');
             $config_data     = $this->configData;
             if (!empty($list)) {
@@ -190,6 +203,33 @@ class Topic
             } else {
                 return [];
             }
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 反悔卡信息
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function regret_card_info($data)
+    {
+        try {
+            $config_data     = $this->configData;
+            $regret_card_arr = $config_data['regret_card_arr'];
+            $rand_k          = array_rand($regret_card_arr);
+            //反悔说明
+            $regret_card_text = $regret_card_arr[$rand_k];
+            //用户反悔卡数量
+            $openid       = UserModel::where('id', $data['user_id'])->value('openid');
+            $regret_times = RegretCardModel::where('openid', $openid)->where('add_date', date('ymd'))->value('times');
+            $regret_times = isset($regret_times) ? $regret_times : 0;
+            return [
+                'regret_card_text' => $regret_card_text,
+                'regret_times'     => $regret_times,
+            ];
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
@@ -288,7 +328,7 @@ class Topic
                     $select_topic->save();
                 }
                 //保存普通场记录
-                $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->find();
+                $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('create_date',date('ymd'))->find();
                 if ($user_topic) {
                     if (($user_topic['is_pass'] != 1) && ($data['is_pass'] == 1)) {
                         $user_topic->is_pass = 1;
@@ -311,7 +351,7 @@ class Topic
                 $user_topic_word->user_id       = $data['user_id'];
                 $user_topic_word->topic_id      = $data['topic_id'];
                 $user_topic_word->topic_word_id = $data['topic_word_id'];
-                $user_topic_word->user_select   = $data['user_select'];
+                $user_topic_word->user_select   = (int) $data['user_select'];
                 $user_topic_word->create_date   = date('ymd');
                 $user_topic_word->create_time   = time();
                 $user_topic_word->save();
@@ -319,18 +359,19 @@ class Topic
                 //答案
                 $answer = UserTopicWordCountModel::where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->find();
                 if ($answer) {
-                    if ($data['user_select'] == 1) {
+                    if ((int) $data['user_select'] == 1) {
                         $answer->option1 = $answer->option1 + 1;
                     }
-                    if ($data['user_select'] == 2) {
+                    if ((int) $data['user_select'] == 2) {
                         $answer->option2 = $answer->option2 + 1;
                     }
-                    if ($data['user_select'] == 3) {
+                    if ((int) $data['user_select'] == 3) {
                         $answer->option3 = $answer->option3 + 1;
                     }
-                    if ($data['user_select'] == 4) {
+                    if ((int) $data['user_select'] == 4) {
                         $answer->option4 = $answer->option4 + 1;
                     }
+
                     //获取值最多选项
                     $max_arr = [$answer->option1, $answer->option2, $answer->option3, $answer->option4];
                     $max_k   = 1;
@@ -347,28 +388,28 @@ class Topic
                     $answer                = new UserTopicWordCountModel();
                     $answer->topic_id      = $data['topic_id'];
                     $answer->topic_word_id = $data['topic_word_id'];
-                    if ($data['user_select'] == 1) {
+                    if ((int) $data['user_select'] == 1) {
                         $answer->option1     = 1;
                         $answer->option2     = 0;
                         $answer->option3     = 0;
                         $answer->option4     = 0;
                         $answer->most_select = 1;
                     }
-                    if ($data['user_select'] == 2) {
+                    if ((int) $data['user_select'] == 2) {
                         $answer->option1     = 0;
                         $answer->option2     = 1;
                         $answer->option3     = 0;
                         $answer->option4     = 0;
                         $answer->most_select = 2;
                     }
-                    if ($data['user_select'] == 3) {
+                    if ((int) $data['user_select'] == 3) {
                         $answer->option1     = 0;
                         $answer->option2     = 0;
                         $answer->option3     = 1;
                         $answer->option4     = 0;
                         $answer->most_select = 3;
                     }
-                    if ($data['user_select'] == 4) {
+                    if ((int) $data['user_select'] == 4) {
                         $answer->option1     = 0;
                         $answer->option2     = 0;
                         $answer->option3     = 0;
@@ -377,18 +418,19 @@ class Topic
                     }
                     $answer->save();
                 }
-
                 $config_data = $this->configData;
                 //消耗金币
                 $default_consume_gold = $config_data['default_consume_gold'];
                 $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
-                if ($data['user_select'] == $answer['most_select']) {
-                    $get_gold_one = $config_data['get_gold_one'];
+                $get_gold_one = 0;
+                if ((int) $data['user_select'] == $answer['most_select']) {
+                    $get_gold_one   = $config_data['get_gold_one'];
+                    $user_obj->gold = $user_obj->gold - $default_consume_gold + $get_gold_one;
                 } else {
-                    $get_gold_one = 0;
+                    $topic_error_consume_gold = $config_data['topic_error_consume_gold'];
+                    $user_obj->gold           = $user_obj->gold - $default_consume_gold - $topic_error_consume_gold;
                 }
                 //修改金币
-                $user_obj->gold = $user_obj->gold + ($get_gold_one - $default_consume_gold);
                 $user_obj->save();
                 //总参与人数
                 $participants_num = $answer->option1 + $answer->option2 + $answer->option3 + $answer->option4;
@@ -407,8 +449,6 @@ class Topic
                     $option3 = $answer->option3;
                     $option4 = $answer->option4;
                 }
-
-                Db::commit();
                 //判断选项个数
                 $question_options       = TopicWordModel::where('topic_id', $data['topic_id'])->where('id', $data['topic_word_id'])->value('options');
                 $question_options_count = count(json_decode($question_options));
@@ -433,7 +473,8 @@ class Topic
                 //保存用户答对答错情况记录
                 $user_topic_word_record = UserTopicWordRecordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->find();
                 if ($user_topic_word_record) {
-                    if ($data['user_select'] == $answer->most_select) {
+                    $user_topic_word_record->user_select = (int) $data['user_select'];
+                    if ((int) $data['user_select'] == $answer->most_select) {
                         $user_topic_word_record->is_correct = 1;
                     } else {
                         $user_topic_word_record->is_correct = 0;
@@ -444,8 +485,9 @@ class Topic
                     $user_topic_word_record->user_id       = $data['user_id'];
                     $user_topic_word_record->topic_id      = $data['topic_id'];
                     $user_topic_word_record->topic_word_id = $data['topic_word_id'];
+                    $user_topic_word_record->user_select   = (int) $data['user_select'];
                     $user_topic_word_record->dday          = date('Ymd');
-                    if ($data['user_select'] == $answer->most_select) {
+                    if ((int) $data['user_select'] == $answer->most_select) {
                         $user_topic_word_record->is_correct = 1;
                     } else {
                         $user_topic_word_record->is_correct = 0;
@@ -489,23 +531,27 @@ class Topic
                 $e_k             = array_rand($topic_error_arr);
                 $error_tip       = $topic_error_arr[$e_k];
 
+                //随机输入提示语
+                $input_tip_arr = $config_data['input_tip_arr'];
+                $i_k           = array_rand($input_tip_arr);
+                $input_tip     = $input_tip_arr[$i_k];
+                Db::commit();
                 return [
                     'status'      => 1,
                     'msg'         => 'ok',
                     'correct_tip' => $correct_tip,
                     'error_tip'   => $error_tip,
+                    'input_tip'   => $input_tip,
                     'most_select' => $answer->most_select,
                     'options'     => $options,
-                    'gold'        => $get_gold_one,
+                    'gold'        => $get_gold_one
                 ];
-                // } else {
-                //     return [
-                //         'status' => 0,
-                //         'msg'    => '已答过此题',
-                //     ];
-                // }
             } catch (\Exception $e) {
                 Db::rollback();
+                return [
+                    'status' => 0,
+                    'msg'    => '系统错误',
+                ];
             }
         } catch (Exception $e) {
             lg($e);

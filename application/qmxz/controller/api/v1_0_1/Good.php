@@ -8,10 +8,11 @@ use think\facade\Config;
 use think\facade\Cache;
 
 use app\qmxz\model\Goods as GoodsModel;
+use controller\BasicController;
 /**
  * 商品详情页控制器类
  */
-class Good
+class Good extends BasicController
 {
 
     /**
@@ -24,6 +25,11 @@ class Good
         //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/index.html;
         $goods_info = Cache::get(config('goods_info'));
         $config = Cache::get(config('config_key'));
+
+        //是否跳转小程序
+        $config_data = $this->configData;
+        $is_jump = $config_data['is_jump'];
+        $arr['is_jump'] = $is_jump;
 
         $arr['banners'] = json_decode($config['good_banners']['value']);
         $arr['good_info'] = $goods_info;

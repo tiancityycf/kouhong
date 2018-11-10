@@ -9,6 +9,7 @@ use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
 use app\qmxz\model\SpecialWarehouse as SpecialWarehouseModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\SpecialWordWarehouse as SpecialWordWarehouseModel;
+use app\qmxz\model\TemplateInfo as TemplateInfoModel;
 use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
 use app\qmxz\model\UserSpecial as UserSpecialModel;
@@ -267,6 +268,48 @@ class Special
     }
 
     /**
+     * 反悔卡信息
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function regret_card_info($data)
+    {
+        try {
+            $config_data     = $this->configData;
+            $regret_card_arr = $config_data['regret_card_arr'];
+            $rand_k          = array_rand($regret_card_arr);
+            //反悔说明
+            $regret_card_text = $regret_card_arr[$rand_k];
+            //用户反悔卡数量
+            $openid       = UserModel::where('id', $data['user_id'])->value('openid');
+            $regret_times = RegretCardModel::where('openid', $openid)->where('add_date', date('ymd'))->value('times');
+            $regret_times = isset($regret_times) ? $regret_times : 0;
+            return [
+                'regret_card_text' => $regret_card_text,
+                'regret_times'     => $regret_times,
+            ];
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 输入框提示语
+     * @return [type]       [description]
+     */
+    public function input_text()
+    {
+        //普通场亚宝消耗
+        $config_data   = $this->configData;
+        $input_tip_arr = $config_data['input_tip_arr'];
+        $rand_k        = array_rand($input_tip_arr);
+        $input_text    = $input_tip_arr[$rand_k];
+        //消耗金币
+        return $input_text;
+    }
+
+    /**
      * 获取普通场评论列表
      * @param  array $data 接收参数
      * @return [type]       [description]
@@ -359,7 +402,7 @@ class Special
             Db::startTrans();
             try {
                 //保存普通场记录
-                $user_special = UserSpecialModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->find();
+                $user_special = UserSpecialModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('create_date', date('ymd'))->find();
                 if ($user_special) {
                     if (($user_special['is_pass'] != 1) && ($data['is_pass'] == 1)) {
                         $user_special->is_pass = 1;
@@ -568,6 +611,12 @@ class Special
             }
             //答对多少题
             if ($correct_num >= count($special_word)) {
+                //答对加金币
+                $timing_correct_gold = $config_data['timing_correct_gold'];
+                $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
+                $user_record->gold   = $user_record->gold + $timing_correct_gold;
+                $user_record->save();
+
                 //生成兑换码
                 $code = UserSpecialRedeemcodeModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->value('code');
                 if (!isset($code)) {
@@ -595,19 +644,42 @@ class Special
                     $user_special_redeemcode->save();
                 }
 
+                //随机正确错误提示语
+                //正确提示语
+                $special_correct_arr = $config_data['special_correct_arr'];
+                $c_k                 = array_rand($special_correct_arr);
+                $correct_tip         = $special_correct_arr[$c_k];
+                //错误提示语
+                $special_error_arr = $config_data['special_error_arr'];
+                $e_k               = array_rand($special_error_arr);
+                $error_tip         = $special_error_arr[$e_k];
+
                 return [
                     'remaining_time' => $remaining_time,
                     'is_end'         => 1,
                     'total_num'      => count($special_word),
                     'correct_num'    => $correct_num,
+                    'correct_tip'    => $correct_tip,
+                    'error_tip'      => $error_tip,
                     'code'           => $code,
                     'list'           => $special_word,
                 ];
             } else {
+                //随机正确错误提示语
+                //正确提示语
+                $special_correct_arr = $config_data['special_correct_arr'];
+                $c_k                 = array_rand($special_correct_arr);
+                $correct_tip         = $special_correct_arr[$c_k];
+                //错误提示语
+                $special_error_arr = $config_data['special_error_arr'];
+                $e_k               = array_rand($special_error_arr);
+                $error_tip         = $special_error_arr[$e_k];
                 return [
                     'remaining_time' => $remaining_time,
                     'is_end'         => 1,
                     'total_num'      => count($special_word),
+                    'correct_tip'    => $correct_tip,
+                    'error_tip'      => $error_tip,
                     'correct_num'    => $correct_num,
                     'list'           => $special_word,
                 ];
@@ -871,6 +943,7 @@ class Special
             foreach ($user_special as $key => $value) {
                 $special_info                        = SpecialModel::where('id', $value['special_id'])->field('title,display_time')->find();
                 $display_time                        = $special_info['display_time'];
+                $user_special[$key]['start_time']    = date('H:i', $display_time);
                 $special_title                       = $special_info['title'];
                 $user_special[$key]['special_title'] = $special_title;
                 $end_time                            = $display_time + $answer_time_limit * 60;
@@ -1053,8 +1126,9 @@ class Special
                         try {
                             //保存场次
                             foreach ($special as $key => $value) {
-                                $special_obj               = new SpecialModel();
-                                $special_obj->title        = $value['title'];
+                                $special_obj = new SpecialModel();
+                                // $special_obj->title        = $value['title'];
+                                $special_obj->title        = date('Ymd ' . $need_times_arr[$key] . ':00') . '场';
                                 $special_obj->des          = $value['des'];
                                 $special_obj->img          = $value['img'];
                                 $special_obj->banners      = $value['banners'];
@@ -1131,8 +1205,9 @@ class Special
                 try {
                     //保存场次
                     foreach ($special as $key => $value) {
-                        $special_obj               = new SpecialModel();
-                        $special_obj->title        = $value['title'];
+                        $special_obj = new SpecialModel();
+                        // $special_obj->title        = $value['title'];
+                        $special_obj->title        = date('Ymd ' . $special_times_arr[$key] . ':00') . '场';
                         $special_obj->des          = $value['des'];
                         $special_obj->img          = $value['img'];
                         $special_obj->banners      = $value['banners'];
@@ -1188,6 +1263,50 @@ class Special
                         'data'   => '',
                     ];
                 }
+            }
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 保存模板消息参数
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function saveTemplateInfo($data)
+    {
+        try {
+            // 开启事务
+            Db::startTrans();
+            try {
+                $template_info = TemplateInfoModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->where('dday', date('Ymd'))->find();
+                if ($template_info) {
+                    $template_info->page    = $data['page'];
+                    $template_info->form_id = $data['form_id'];
+                    $template_info->save();
+                } else {
+                    $template_info                  = new TemplateInfoModel();
+                    $template_info->user_id         = $data['user_id'];
+                    $template_info->special_id      = $data['special_id'];
+                    $template_info->special_word_id = $data['special_word_id'];
+                    $template_info->page            = $data['page'];
+                    $template_info->form_id         = $data['form_id'];
+                    $template_info->dday            = date('Ymd');
+                    $template_info->save();
+                }
+                Db::commit();
+                return [
+                    'status' => 1,
+                    'msg'    => 'ok',
+                ];
+            } catch (\Exception $e) {
+                Db::rollback();
+                return [
+                    'status' => 0,
+                    'msg'    => 'fail',
+                ];
             }
         } catch (Exception $e) {
             lg($e);

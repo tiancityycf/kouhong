@@ -69,6 +69,19 @@
     </div>
 
     <div class="layui-form-item">
+        <label class="layui-form-label">是否首页</label>
+        <div style="width: 35%;" class="layui-input-block">
+                <select  name="is_index" class="layui-select">
+                    <!--{foreach [0 => '否', 1=> '是'] as $key=>$st}-->
+                    
+                    <option {if condition="$vo.is_index == $key"}selected{/if} value="{$key}">- {$st} -</option>
+        
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
         <label class="layui-form-label">排序</label>
         <div class="layui-input-block">
             <input type="text" autofocus name="order" required="required" value={$vo.order} pattern="" title="" placeholder="排序" class="layui-input" style="width: 75%;">
@@ -86,6 +99,18 @@
                     <!--{/if}-->
                     <!--{/foreach}-->
                 </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">Appid</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="partner_appid" value="{$vo.partner_appid}" pattern="" title="" placeholder="合作伙伴小程序Appid" class="layui-input" style="width: 75%;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">跳转路劲</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="jump_route" value="{$vo.jump_route}" pattern="" title="" placeholder="跳转路劲" class="layui-input" style="width: 75%;">
         </div>
     </div>
     <div class="layui-form-item">

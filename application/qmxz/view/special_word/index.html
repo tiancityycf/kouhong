@@ -35,6 +35,9 @@
     <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
+    <div class="layui-form-item layui-inline">
+        <a onclick="loopAddBase(this)" class="layui-btn">循环加基数</a>
+    </div>
 </form>
 </div>
 <form onsubmit="return false;" data-auto="true" method="post">
@@ -92,5 +95,25 @@
     {if isset($page)}<p>{$page|raw}</p>{/if}
     <!--{/empty}-->
     <script>window.form.render();</script>
+    <script>
+        function loopAddBase(e){
+            console.log('loopAddBase')
+            $.ajax({
+                url: '/qmxz/special_word/loopAddBase',
+                type: 'get',
+                dataType: 'json',
+                data: {},
+                success: function(res){
+                    if(res.status == 1){
+                        layer.msg('success', {icon: 6});
+                    }
+                },
+                error: function(){
+                    console.log('fail');
+                    layer.msg('fail', {icon: 5});
+                }
+            })
+        }
+    </script>
 </form>
 {/block}

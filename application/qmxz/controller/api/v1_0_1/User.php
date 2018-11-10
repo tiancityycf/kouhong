@@ -26,11 +26,20 @@ class User extends BasicController
 		$user_info = Db::name('user_record')->field('avatar,nickname,gold')->where('openid',$data['openid'])->find();
 		$result['user_info'] =  $user_info;
 
-		$indexService = new IndexService();
+		//是否跳转小程序
+		$config_data = $this->configData;
+		$is_jump = $config_data['is_jump'];
+		$result['is_jump'] = $is_jump;
+
+		$indexService = new IndexService($this->configData);
 		$result['hot_goods'] = $indexService->hot_goods();
 
         $config_data = $this->configData;
         $result['config'] = $config_data;
+
+        //获取分享信息
+        $share_info = $indexService->getShareInfo($data);
+        $result['share_info'] = $share_info;
 
         return result(200, 'ok', $result);
 	}

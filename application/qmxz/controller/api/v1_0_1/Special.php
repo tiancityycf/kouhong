@@ -64,8 +64,16 @@ class Special extends BasicController
         //整点场轮播图
         $banners = $specialService->specialBanners($data);
 
+        //反悔卡信息
+        $regret_card_info = $specialService->regret_card_info($data);
+
+        //输入框提示语
+        $input_text = $specialService->input_text();
+
         $result = [
+            'input_text'          => $input_text,
             'banners'             => $banners,
+            'regret_card_info'    => $regret_card_info,
             'timing_consume_gold' => $timing_consume_gold,
             'question_list'       => $question_list,
             'comment_list'        => $comment_list,
@@ -112,7 +120,11 @@ class Special extends BasicController
         //整点场轮播图
         $banners = $specialService->specialBanners($data);
 
+        //评论提示语
+        $input_text = $specialService->input_text($data);
+
         $result = [
+            'input_text'    => $input_text,
             'banners'       => $banners,
             'answer_result' => $answer_result,
             'comment_list'  => $comment_list,
@@ -242,6 +254,22 @@ class Special extends BasicController
         //随机生成当天整点场
         $specialService = new SpecialService($this->configData);
         $result         = $specialService->randGetSpecial();
+
+        return result(200, 'ok', $result);
+    }
+
+    /**
+     * 保存模板消息参数
+     * @return boolean
+     */
+    public function saveTemplateInfo()
+    {
+        require_params('special_word_id', 'special_id', 'user_id', 'page', 'form_id');
+        $data = Request::param();
+
+        //保存模板消息参数
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->saveTemplateInfo($data);
 
         return result(200, 'ok', $result);
     }

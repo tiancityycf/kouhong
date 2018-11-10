@@ -5,22 +5,20 @@ namespace app\qmxz\model;
 use think\Model;
 
 /**
- * 话题记录模型类
+ * 模板消息模型类
  */
-class Topic extends Model
+class TemplateMsg extends Model
 {
+    public $table = 't_template_msg';
 
-    public $table = 't_topic';
-	
     public function search($params)
     {
         $query = self::buildQuery();
-
-        foreach (['id','title','des','cate_id'] as $key) {
+        foreach (['id', 'template_id', 'title'] as $key) {
             (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
         }
 
-        $query->order('order desc');
+        $query->order('id desc');
 
         return $query;
     }
