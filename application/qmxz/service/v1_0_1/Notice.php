@@ -63,8 +63,10 @@ class Notice
             }
             $content = unserialize($template_info['content']);
             $time    = date("Y-m-d H:i:s");
+            
+            $special_word_id = SpecialWordModel::where('special_id', $data['special_id'])->value('id');
             //答对人数
-            $user_special_word_count = UserSpecialWordCountModel::where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->find();
+            $user_special_word_count = UserSpecialWordCountModel::where('special_id', $data['special_id'])->where('special_word_id', $special_word_id)->find();
             $num1                    = isset($user_special_word_count['option1']) ? $user_special_word_count['option1'] : 0;
             $num2                    = isset($user_special_word_count['option2']) ? $user_special_word_count['option2'] : 0;
             $num3                    = isset($user_special_word_count['option3']) ? $user_special_word_count['option3'] : 0;
