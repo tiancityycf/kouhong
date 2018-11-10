@@ -110,8 +110,8 @@ class TemplateMsg extends BasicAdmin
                 $template_arr1[$key][$k]['title'] = $tmp_name[$m][$k];
                 $template_arr1[$key][$k]['name']  = $v;
                 if ($id) {
-                    $template_arr1[$key][$k]['color'] = $content_arr1[$k]['color'];
-                    $template_arr1[$key][$k]['value'] = $content_arr1[$k]['value'];
+                    $template_arr1[$key][$k]['color'] = isset($content_arr1[$k]['color']) ? $content_arr1[$k]['color'] : '';
+                    $template_arr1[$key][$k]['value'] = isset($content_arr1[$k]['value']) ? $content_arr1[$k]['value'] : '';
                 } else {
                     $template_arr1[$key][$k]['color'] = '';
                     $template_arr1[$key][$k]['value'] = '';

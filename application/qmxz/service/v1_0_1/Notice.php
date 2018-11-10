@@ -3,6 +3,7 @@
 namespace app\qmxz\service\v1_0_1;
 
 use app\qmxz\model\SendLog;
+use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\TemplateMsg as TemplateMsgModel;
 use app\qmxz\model\User;
@@ -64,15 +65,17 @@ class Notice
             $time    = date("Y-m-d H:i:s");
             //答对人数
             $user_special_word_count = UserSpecialWordCountModel::where('special_id', $data['special_id'])->where('special_word_id')->find();
-            $num1 = isset($user_special_word_count['option1']) ? $user_special_word_count['option1'] : 0;
-            $num2 = isset($user_special_word_count['option2']) ? $user_special_word_count['option2'] : 0;
-            $num3 = isset($user_special_word_count['option3']) ? $user_special_word_count['option3'] : 0;
-            $num4 = isset($user_special_word_count['option4']) ? $user_special_word_count['option4'] : 0;
+            $num1                    = isset($user_special_word_count['option1']) ? $user_special_word_count['option1'] : 0;
+            $num2                    = isset($user_special_word_count['option2']) ? $user_special_word_count['option2'] : 0;
+            $num3                    = isset($user_special_word_count['option3']) ? $user_special_word_count['option3'] : 0;
+            $num4                    = isset($user_special_word_count['option4']) ? $user_special_word_count['option4'] : 0;
             $num_arr                 = [$num1, $num2, $num3, $num4];
-            $most_k = isset($user_special_word_count['most_select']) ? $user_special_word_count['most_select'] : 1;
+            $most_k                  = isset($user_special_word_count['most_select']) ? $user_special_word_count['most_select'] : 1;
             $num                     = $num_arr[$most_k - 1];
             //题目名称
             $question = SpecialWordModel::where('special_id', $data['special_id'])->where('id', $data['id'])->value('title');
+            //场次
+            $special = SpecialModel::where('id', $data['special_id'])->value('title');
             foreach ($content as $key => $value) {
                 if (strpos($value['value'], '{time}') !== false) {
                     $content[$key]['value'] = str_replace('{time}', $time, $content[$key]['value']);
@@ -85,6 +88,9 @@ class Notice
                 }
                 if (strpos($value['value'], '{question}') !== false) {
                     $content[$key]['value'] = str_replace('{question}', $question, $content[$key]['value']);
+                }
+                if (strpos($value['value'], '{special}') !== false) {
+                    $content[$key]['value'] = str_replace('{special}', $special, $content[$key]['value']);
                 }
             }
             $openid   = User::where('id', $data['user_id'])->value('openid');
