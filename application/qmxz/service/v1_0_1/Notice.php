@@ -95,6 +95,7 @@ class Notice
                 }
             }
             $openid   = User::where('id', $data['user_id'])->value('openid');
+            $data['page'] = $data['page'].'?special_id='.$data['special_id'];
             $postData = [
                 "touser"           => $openid,
                 "template_id"      => $template_id,
