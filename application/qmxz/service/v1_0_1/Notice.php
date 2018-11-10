@@ -31,7 +31,6 @@ class Notice
     public function sendTemplateMsg($data)
     {
         try {
-
             //获取access_token
             if (Cache::has('access_token')) {
                 $access_token = Cache::get('access_token');

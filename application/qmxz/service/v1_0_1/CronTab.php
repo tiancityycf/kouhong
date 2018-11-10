@@ -75,6 +75,10 @@ class CronTab
                 }
             }
         }
+        return [
+            'status'=>1,
+            'msg'=>'ok'
+        ];
 
     }
 }
