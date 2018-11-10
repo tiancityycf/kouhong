@@ -129,7 +129,7 @@ class Topic
             // $list            = SelectTopicModel::select();
             $data['cate_id'] = 4;
             $list            = TopicModel::where('cate_id', $data['cate_id'])->order('order desc')->select();
-            $user_topic_list = UserTopicModel::where('user_id', $data['user_id'])->where('is_pass', 1)->column('topic_id');
+            $user_topic_list = UserTopicModel::where('user_id', $data['user_id'])->where('is_pass', 1)->where('create_date', date('ymd'))->column('topic_id');
             $config_data     = $this->configData;
             if (!empty($list)) {
                 foreach ($list as $key => $value) {
@@ -172,7 +172,7 @@ class Topic
     {
         try {
             $topic_word      = TopicWordModel::where('topic_id', $data['topic_id'])->select();
-            $user_topic_word = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->column('topic_word_id');
+            $user_topic_word = UserTopicWordModel::where('user_id', $data['user_id'])->where('create_date', date('ymd'))->where('topic_id', $data['topic_id'])->column('topic_word_id');
             if ($topic_word) {
                 if (count($topic_word) <= 10) {
                     foreach ($topic_word as $key => $value) {
@@ -317,18 +317,18 @@ class Topic
                 //添加普通场参与人数
                 if ($data['is_pass'] == 1) {
                     // $select_topic = SelectTopicModel::where('topic_id', $data['topic_id'])->find();
-                    $select_topic = TopicModel::where('id', $data['topic_id'])->find();
-                    if (!$select_topic) {
+                    $topic = TopicModel::where('id', $data['topic_id'])->find();
+                    if (!$topic) {
                         return [
                             'status' => 0,
                             'msg'    => '不存在该话题',
                         ];
                     }
-                    $select_topic->num = $select_topic->num + 1;
-                    $select_topic->save();
+                    $topic->num = $topic->num + 1;
+                    $topic->save();
                 }
                 //保存普通场记录
-                $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('create_date',date('ymd'))->find();
+                $user_topic = UserTopicModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('create_date', date('ymd'))->find();
                 if ($user_topic) {
                     if (($user_topic['is_pass'] != 1) && ($data['is_pass'] == 1)) {
                         $user_topic->is_pass = 1;
@@ -347,14 +347,21 @@ class Topic
                 }
 
                 //保存用户普通场记录
-                $user_topic_word                = new UserTopicWordModel();
-                $user_topic_word->user_id       = $data['user_id'];
-                $user_topic_word->topic_id      = $data['topic_id'];
-                $user_topic_word->topic_word_id = $data['topic_word_id'];
-                $user_topic_word->user_select   = (int) $data['user_select'];
-                $user_topic_word->create_date   = date('ymd');
-                $user_topic_word->create_time   = time();
-                $user_topic_word->save();
+                $user_topic_word = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->where('create_date', date('ymd'))->find();
+                if ($user_topic_word) {
+                    $user_topic_word->user_select = (int) $data['user_select'];
+                    $user_topic_word->create_time = time();
+                    $user_topic_word->save();
+                } else {
+                    $user_topic_word                = new UserTopicWordModel();
+                    $user_topic_word->user_id       = $data['user_id'];
+                    $user_topic_word->topic_id      = $data['topic_id'];
+                    $user_topic_word->topic_word_id = $data['topic_word_id'];
+                    $user_topic_word->user_select   = (int) $data['user_select'];
+                    $user_topic_word->create_date   = date('ymd');
+                    $user_topic_word->create_time   = time();
+                    $user_topic_word->save();
+                }
 
                 //答案
                 $answer = UserTopicWordCountModel::where('topic_id', $data['topic_id'])->where('topic_word_id', $data['topic_word_id'])->find();
@@ -422,7 +429,7 @@ class Topic
                 //消耗金币
                 $default_consume_gold = $config_data['default_consume_gold'];
                 $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
-                $get_gold_one = 0;
+                $get_gold_one         = 0;
                 if ((int) $data['user_select'] == $answer['most_select']) {
                     $get_gold_one   = $config_data['get_gold_one'];
                     $user_obj->gold = $user_obj->gold - $default_consume_gold + $get_gold_one;
@@ -544,7 +551,7 @@ class Topic
                     'input_tip'   => $input_tip,
                     'most_select' => $answer->most_select,
                     'options'     => $options,
-                    'gold'        => $get_gold_one
+                    'gold'        => $get_gold_one,
                 ];
             } catch (\Exception $e) {
                 Db::rollback();

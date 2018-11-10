@@ -43,7 +43,7 @@ class Special
             $start             = strtotime(date('Y-m-d 00:00:00'));
             $end               = strtotime(date('Y-m-d 23:59:59'));
             $list              = SpecialModel::where('display_time', 'between', [$start, $end])->order('display_time')->select();
-            $user_special_list = UserSpecialModel::where('user_id', $userId)->where('is_pass', 1)->column('special_id');
+            $user_special_list = UserSpecialModel::where('user_id', $userId)->where('create_date', date('ymd'))->where('is_pass', 1)->column('special_id');
             $special_arr       = [];
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
@@ -221,7 +221,7 @@ class Special
                 $time_end          = $time_end > 0 ? $time_end : 0;
 
                 $list              = SpecialWordModel::where('special_id', $data['special_id'])->select();
-                $user_special_word = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->column('special_word_id');
+                $user_special_word = UserSpecialWordModel::where('user_id', $data['user_id'])->where('create_date', date('ymd'))->where('special_id', $data['special_id'])->column('special_word_id');
                 if ($list) {
                     if (count($list) <= 10) {
                         foreach ($list as $key => $value) {
@@ -421,7 +421,7 @@ class Special
                 }
 
                 //保存用户记录
-                $user_special_word = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->find();
+                $user_special_word = UserSpecialWordModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('create_date', date('ymd'))->where('special_word_id', $data['special_word_id'])->find();
                 if (!$user_special_word) {
                     $user_special_word                  = new UserSpecialWordModel();
                     $user_special_word->user_id         = $data['user_id'];
@@ -495,6 +495,7 @@ class Special
                     }
                 } else {
                     $user_special_word->user_select = $data['user_select'];
+                    $user_special_word->create_time = time();
                     $user_special_word->save();
                 }
                 Db::commit();
