@@ -36,4 +36,7 @@ return [
     //发送模板消息url
     'send_template_url'    => 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=%s',
 
+    //发送模板消息接口
+    'send_url' => "https://qmxz.wqop2018.com/qmxz/api/v1_0_1/Notice/sendTemplateMsg.html?id=%s&user_id=%s&page=%s&form_id=%s&special_id=%s",
+
 ];
