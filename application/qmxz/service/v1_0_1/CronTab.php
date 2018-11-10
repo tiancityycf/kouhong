@@ -6,6 +6,7 @@ use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\TemplateInfo as TemplateInfoModel;
 use app\qmxz\model\TemplateRecord as TemplateRecordModel;
 use think\facade\Config;
+use think\Db;
 
 /**
  * 脚本服务类
