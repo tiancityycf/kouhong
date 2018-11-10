@@ -207,7 +207,10 @@
         
 
         var value = <?php echo json_encode(json_decode($vo['value'])); ?>;
-        window.num = value.length + 2;
+        var type = $("#type option:selected").val();
+        if(type == 2){
+            window.num = value.length + 2;
+        }
         $("#test").on('click', '.add', function(){
             var html = '<div class="layui-row arr">';
             html += '<div class="layui-col-md6" style="margin-top:4px;">';
