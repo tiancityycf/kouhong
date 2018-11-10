@@ -128,7 +128,7 @@ class Topic
         try {
             // $list            = SelectTopicModel::select();
             $data['cate_id'] = 4;
-            $list            = TopicModel::where('cate_id', $data['cate_id'])->order('order desc')->select();
+            $list            = TopicModel::where('cate_id', $data['cate_id'])->where('status', 1)->order('order desc')->select();
             $user_topic_list = UserTopicModel::where('user_id', $data['user_id'])->where('is_pass', 1)->where('create_date', date('ymd'))->column('topic_id');
             $config_data     = $this->configData;
             if (!empty($list)) {

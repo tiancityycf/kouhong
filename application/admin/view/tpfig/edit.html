@@ -207,9 +207,12 @@
         
 
         var value = <?php echo json_encode(json_decode($vo['value'])); ?>;
+        var type = <?php echo json_encode(json_decode($vo['type'])); ?>;
         var type = $("#type option:selected").val();
         if(type == 2){
             window.num = value.length + 2;
+        }else{
+            window.num = 3;
         }
         $("#test").on('click', '.add', function(){
             var html = '<div class="layui-row arr">';
@@ -241,7 +244,6 @@
                         if(res.code == 1){
                             $(test).parent('div').parent('div').prev('div').find('input').val(res.path);
                             layer.msg('图片已经上传到网宿云存储', {icon: 6});
-
                         }else if(res.code == 0){
                             layer.msg(res.msg);
                         }else{

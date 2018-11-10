@@ -16,7 +16,7 @@ class Topic extends Model
     {
         $query = self::buildQuery();
 
-        foreach (['id','title','des','cate_id'] as $key) {
+        foreach (['id','title','des','cate_id', 'status'] as $key) {
             (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
         }
 

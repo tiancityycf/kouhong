@@ -72,6 +72,44 @@ class Topic extends BasicAdmin
         return $this->fetch('form', ['vo' => $vo->toArray()]);
     }
 
+    /**
+     * 禁用
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function forbid()
+    {
+        $data = $this->request->post();
+        if ($data) {
+            $model         = TopicModel::get($data['id']);
+            $model->status = 0;
+            if ($model->save() !== false) {
+                $this->success("禁用成功！", '');
+            }
+        }
+
+        $this->error("禁用失败，请稍候再试！");
+    }
+
+    /**
+     * 启用
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function resume()
+    {
+        $data = $this->request->post();
+        if ($data) {
+            $model         = TopicModel::get($data['id']);
+            $model->status = 1;
+            if ($model->save() !== false) {
+                $this->success("启用成功！", '');
+            }
+        }
+
+        $this->error("启用失败，请稍候再试！");
+    }
+
     public function del()
     {
         $data = $this->request->post();
