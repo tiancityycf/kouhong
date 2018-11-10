@@ -41,7 +41,7 @@ class Task extends Model {
         if (!$info) {
             return ['status' => 0, 'info' => '没有找到相关配置'];
         }
-        if (!$info['status']==0) {
+        if ($info['status']==0) {
             return ['status' => 0, 'info' => '奖励配置已关闭'];
         }
         $day = date("Ymd");

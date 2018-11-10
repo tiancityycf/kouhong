@@ -258,4 +258,20 @@ class Special extends BasicController
         return result(200, 'ok', $result);
     }
 
+    /**
+     * 保存模板消息参数
+     * @return boolean
+     */
+    public function saveTemplateInfo()
+    {
+        require_params('special_word_id', 'special_id', 'user_id', 'page', 'form_id');
+        $data = Request::param();
+
+        //保存模板消息参数
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->saveTemplateInfo($data);
+
+        return result(200, 'ok', $result);
+    }
+
 }

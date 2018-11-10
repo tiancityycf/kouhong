@@ -9,6 +9,7 @@ use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
 use app\qmxz\model\SpecialWarehouse as SpecialWarehouseModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
 use app\qmxz\model\SpecialWordWarehouse as SpecialWordWarehouseModel;
+use app\qmxz\model\TemplateInfo as TemplateInfoModel;
 use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserRecord as UserRecordModel;
 use app\qmxz\model\UserSpecial as UserSpecialModel;
@@ -612,8 +613,8 @@ class Special
             if ($correct_num >= count($special_word)) {
                 //答对加金币
                 $timing_correct_gold = $config_data['timing_correct_gold'];
-                $user_record = UserRecordModel::where('user_id', $data['user_id'])->find();
-                $user_record->gold = $user_record->gold + $timing_correct_gold;
+                $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
+                $user_record->gold   = $user_record->gold + $timing_correct_gold;
                 $user_record->save();
 
                 //生成兑换码
@@ -1125,9 +1126,9 @@ class Special
                         try {
                             //保存场次
                             foreach ($special as $key => $value) {
-                                $special_obj               = new SpecialModel();
+                                $special_obj = new SpecialModel();
                                 // $special_obj->title        = $value['title'];
-                                $special_obj->title        = date('Ymd '.$need_times_arr[$key].':00').'场';
+                                $special_obj->title        = date('Ymd ' . $need_times_arr[$key] . ':00') . '场';
                                 $special_obj->des          = $value['des'];
                                 $special_obj->img          = $value['img'];
                                 $special_obj->banners      = $value['banners'];
@@ -1204,9 +1205,9 @@ class Special
                 try {
                     //保存场次
                     foreach ($special as $key => $value) {
-                        $special_obj               = new SpecialModel();
+                        $special_obj = new SpecialModel();
                         // $special_obj->title        = $value['title'];
-                        $special_obj->title        = date('Ymd '.$special_times_arr[$key].':00').'场';
+                        $special_obj->title        = date('Ymd ' . $special_times_arr[$key] . ':00') . '场';
                         $special_obj->des          = $value['des'];
                         $special_obj->img          = $value['img'];
                         $special_obj->banners      = $value['banners'];
@@ -1262,6 +1263,50 @@ class Special
                         'data'   => '',
                     ];
                 }
+            }
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
+    /**
+     * 保存模板消息参数
+     * @param  array $data 接收参数
+     * @return [type]       [description]
+     */
+    public function saveTemplateInfo($data)
+    {
+        try {
+            // 开启事务
+            Db::startTrans();
+            try {
+                $template_info = TemplateInfoModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->where('dday', date('Ymd'))->find();
+                if ($template_info) {
+                    $template_info->page    = $data['page'];
+                    $template_info->form_id = $data['form_id'];
+                    $template_info->save();
+                } else {
+                    $template_info                  = new TemplateInfoModel();
+                    $template_info->user_id         = $data['user_id'];
+                    $template_info->special_id      = $data['special_id'];
+                    $template_info->special_word_id = $data['special_word_id'];
+                    $template_info->page            = $data['page'];
+                    $template_info->form_id         = $data['form_id'];
+                    $template_info->dday            = date('Ymd');
+                    $template_info->save();
+                }
+                Db::commit();
+                return [
+                    'status' => 1,
+                    'msg'    => 'ok',
+                ];
+            } catch (\Exception $e) {
+                Db::rollback();
+                return [
+                    'status' => 0,
+                    'msg'    => 'fail',
+                ];
             }
         } catch (Exception $e) {
             lg($e);
