@@ -38,6 +38,9 @@ class CronTab
                     continue;
                 } else {
                     foreach ($template_info as $k => $v) {
+                        if ($k % 100 == 0) {
+                            sleep(1);
+                        }
                         //判断是否已发送过模板消息
                         $template_record = TemplateRecordModel::where('user_id', $v['user_id'])->where('special_id', $value['id'])->where('dday', date('Ymd'))->find();
                         if ($template_record) {
@@ -46,6 +49,26 @@ class CronTab
                             //发送模板消息
                             $send_url = Config::get('send_url');
                             $data     = json_decode(file_get_contents(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])), true);
+                            if ($data['data']['code'] == 200) {
+                                // 开启事务
+                                Db::startTrans();
+                                try {
+                                    //保存发送记录
+                                    $template_record             = new TemplateRecordModel();
+                                    $template_record->user_id    = $v['user_id'];
+                                    $template_record->special_id = $v['special_id'];
+                                    $template_record->dday       = date('Ymd');
+                                    $template_record->save();
+
+                                    //访问结果页
+                                    $special_result_url = Config::get('special_result_url');
+                                    $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v['user_id'], $v['special_id'])), true);
+                                    Db::commit();
+                                } catch (\Exception $e) {
+                                    Db::rollback();
+                                    throw new \Exception("系统繁忙");
+                                }
+                            }
                         }
                     }
                 }

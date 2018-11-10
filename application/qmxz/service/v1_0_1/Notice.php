@@ -109,6 +109,7 @@ class Notice
             $sendLog->save();
             return $send_template_data;
         } catch (\Exception $e) {
+            lg($e);
             throw new \Exception("系统繁忙");
         }
     }

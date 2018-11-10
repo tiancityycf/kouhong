@@ -39,4 +39,7 @@ return [
     //发送模板消息接口
     'send_url' => "https://qmxz.wqop2018.com/qmxz/api/v1_0_1/Notice/sendTemplateMsg.html?id=%s&user_id=%s&page=%s&form_id=%s&special_id=%s",
 
+    //整点场答题结果接口
+    'special_result_url' => "https://qmxz.wqop2018.com/qmxz/api/v1_0_1/special/answerResult.html?user_id=%s&special_id=%s",
+
 ];
