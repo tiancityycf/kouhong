@@ -1283,6 +1283,12 @@ class Special
             Db::startTrans();
             try {
                 $template_info = TemplateInfoModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->where('dday', date('Ymd'))->find();
+                if (strpos($data['page'], '?') !== false) {
+                    $data['page'] = str_replace('?', '%3F', $data['page']);
+                }
+                if (strpos($data['page'], '&') !== false) {
+                    $data['page'] = str_replace('&', '%26', $data['page']);
+                }
                 if ($template_info) {
                     $template_info->page    = $data['page'];
                     $template_info->form_id = $data['form_id'];
