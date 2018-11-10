@@ -1,5 +1,4 @@
 <?php
-
 namespace app\qmxz\service\v1_0_1;
 
 use app\qmxz\model\Special as SpecialModel;
@@ -22,6 +21,7 @@ class CronTab
 
     public function sendNotice()
     {
+        set_time_limit(0);
         //答题时长
         $config_data       = $this->configData;
         $answer_time_limit = $config_data['answer_time_limit'];
@@ -49,7 +49,7 @@ class CronTab
                         } else {
                             //发送模板消息
                             $send_url = Config::get('send_url');
-                            $data     = json_decode(file_get_contents(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])), true);
+                            $data     = json_decode(file_get_contents(sprintf($send_url, $v['special_word_id'], $v['user_id'], urlencode($v['page']), $v['form_id'], $v['special_id'])), true);
                             if ($data['data']['errcode'] == 0) {
                                 // 开启事务
                                 Db::startTrans();
