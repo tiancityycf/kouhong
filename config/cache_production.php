@@ -16,8 +16,8 @@
 return [
     'type'   => 'redis',
     'expire' => 0,
-    //'prefix' => 'qmxz',
     'prefix' => '',
     'path'=> 'qmxz',
-    'host'=>'127.0.0.1',
+    'host'=>'172.16.1.96',
+    'password'=>'zhise666',
 ];
