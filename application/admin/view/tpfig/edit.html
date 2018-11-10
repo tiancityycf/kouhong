@@ -129,7 +129,7 @@
                         var kk = parseInt(i) + 2;
                         var html = '<div class="layui-row arr">';
                             html += '<div class="layui-col-md6" style="margin-top:4px;">';
-                            html += '<input type="text" autofocus name="value_arr[]" required="required" value="'+ value[i] +'" pattern="" title="图片地址" placeholder="图片地址" class="layui-input">';
+                            html += '<input type="text" autofocus name="value_arr[]" required="required" value="'+ value[i] +'" pattern="" title="" placeholder="请输入配置值(数组)，点击添加按钮添加下一个值" class="layui-input">';
                             html += '</div>';
                             html += '<div class="layui-col-md3" style="width: inherit;margin-top:4px;">';
                             html +='<div class="layui-upload" style="margin-left: 20px;">';
@@ -214,7 +214,7 @@
         $("#test").on('click', '.add', function(){
             var html = '<div class="layui-row arr">';
             html += '<div class="layui-col-md6" style="margin-top:4px;">';
-            html += '<input type="text" autofocus name="value[]" required="required" value="" pattern="" title="图片地址" placeholder="图片地址" class="layui-input">';
+            html += '<input type="text" autofocus name="value[]" required="required" value="" pattern="" title="" placeholder="请输入配置值(数组)，点击添加按钮添加下一个值" class="layui-input">';
             html += '</div>';
             html += '<div class="layui-col-md3" style="width: inherit;margin-top:4px;">';
             html +='<div class="layui-upload" style="margin-left: 20px;">';
