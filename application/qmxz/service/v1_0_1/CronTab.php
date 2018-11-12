@@ -110,8 +110,8 @@ class CronTab
             $template_info_key = Config::get('template_info_key');
             //初始化
             $redis         = new Redis(Config::get('redis_config'));
-            $template_list = json_decode($redis->get($template_info_key));
-            // dump($template_list);exit;
+            $template_list = $redis->get($template_info_key);
+            dump($template_list);exit;
             if (empty($template_list)) {
                 continue;
             } else {

@@ -1394,7 +1394,7 @@ class Special
             $template_list     = [];
             $template_list[]   = $save_data;
             // dump($template_list);exit;
-            $redis->set($template_info_key, json_encode($template_list));
+            $redis->set($template_info_key, $template_list);
             // $redis->set($template_info_key, null);
             return [
                 'status' => 1,
