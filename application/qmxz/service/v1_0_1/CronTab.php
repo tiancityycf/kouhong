@@ -137,12 +137,14 @@ class CronTab
                         $send_url = Config::get('send_url');
 
                         try {
-                            $data = json_decode(file_get_contents(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)), true);
+                            // $data = json_decode(file_get_contents(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)), true);
+                            $data = json_decode(sendCmd(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)));
 
                             if ($data['data']['errcode'] == 0) {
                                 //访问结果页
                                 $special_result_url = Config::get('special_result_url');
-                                $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v->user_id, $v->special_id)), true);
+                                // $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v->user_id, $v->special_id)), true);
+                                $result_data        = json_decode(sendCmd(sprintf($special_result_url, $v->user_id, $v->special_id)));
 
                                 // 开启事务
                                 Db::startTrans();

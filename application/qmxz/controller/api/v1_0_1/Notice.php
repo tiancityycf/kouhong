@@ -31,7 +31,6 @@ class Notice extends BasicController
 	{
         require_params('id', 'special_id', 'user_id', 'page', 'form_id');
         $data = Request::param();
-
         $template = new NoticeService($this->configData);
         $result = $template->sendTemplateMsg($data);
 
