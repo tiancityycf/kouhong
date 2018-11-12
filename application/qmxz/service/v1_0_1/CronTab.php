@@ -4,8 +4,8 @@ namespace app\qmxz\service\v1_0_1;
 use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\TemplateInfo as TemplateInfoModel;
 use app\qmxz\model\TemplateRecord as TemplateRecordModel;
-use think\facade\Config;
 use think\Db;
+use think\facade\Config;
 
 /**
  * 脚本服务类
@@ -34,11 +34,11 @@ class CronTab
                 continue;
             } else {
                 //获取场次参与人数id
-                $template_info = TemplateInfoModel::where('special_id', $value['id'])->where('dday', date('Ymd'))->select();
-                if (empty($template_info)) {
+                $template_list = TemplateInfoModel::where('special_id', $value['id'])->where('dday', date('Ymd'))->where('status', 0)->select();
+                if (empty($template_list)) {
                     continue;
                 } else {
-                    foreach ($template_info as $k => $v) {
+                    foreach ($template_list as $k => $v) {
                         if ($k % 100 == 0) {
                             sleep(1);
                         }
@@ -54,6 +54,11 @@ class CronTab
                                 // 开启事务
                                 Db::startTrans();
                                 try {
+                                    //修改发送状态
+                                    $template_info         = TemplateInfoModel::where('special_id', $value['id'])->where('user_id', $v['user_id'])->where('dday', date('Ymd'))->where('special_word_id', $v['special_word_id'])->where('status', 0)->find();
+                                    $template_info->status = 1;
+                                    $template_info->save();
+
                                     //保存发送记录
                                     $template_record             = new TemplateRecordModel();
                                     $template_record->user_id    = $v['user_id'];
@@ -76,8 +81,8 @@ class CronTab
             }
         }
         return [
-            'status'=>1,
-            'msg'=>'ok'
+            'status' => 1,
+            'msg'    => 'ok',
         ];
 
     }
