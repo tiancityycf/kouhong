@@ -283,7 +283,7 @@ class Special extends BasicController
         $data = Request::param();
         //清空redis
         $specialService = new SpecialService($this->configData);
-        $result         = $specialService->clearRedis();
+        $result         = $specialService->clearRedis($data);
 
         return result(200, 'ok', $result);
     }
