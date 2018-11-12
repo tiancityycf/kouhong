@@ -1348,6 +1348,10 @@ class Special
                 if($start){
                     $data['page']  = substr($data['page'], 0, $start);
                 }
+                $sec = strpos($data['page'],"/");
+                if($sec === 0){
+                    $data['page'] = ltrim($data['page'], '/');
+                }
                 if ($template_info) {
                     $template_info->page    = $data['page'];
                     $template_info->form_id = $data['form_id'];
