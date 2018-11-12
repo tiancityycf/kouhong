@@ -19,8 +19,8 @@ use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserSpecialWordComment as UserSpecialWordCommentModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
 use think\cache\driver\Redis;
-use think\facade\Config;
 use think\Db;
+use think\facade\Config;
 
 /**
  * 整点场服务类
@@ -1327,26 +1327,54 @@ class Special
     public function saveTemplateInfo($data)
     {
         try {
-            $save_data = [];
-            $special_info = SpecialModel::where('id', $data['special_id'])->find();
+            // 开启事务
+            Db::startTrans();
+            try {
+                //保存参数信息
+                $template_info = TemplateInfoModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->where('dday', date('Ymd'))->find();
+                if ($template_info) {
+                    $template_info->page    = $data['page'];
+                    $template_info->form_id = $data['form_id'];
+                    $template_info->save();
+                } else {
+                    $template_info                  = new TemplateInfoModel();
+                    $template_info->user_id         = $data['user_id'];
+                    $template_info->special_id      = $data['special_id'];
+                    $template_info->special_word_id = $data['special_word_id'];
+                    $template_info->page            = $data['page'];
+                    $template_info->form_id         = $data['form_id'];
+                    $template_info->dday            = date('Ymd');
+                    $template_info->save();
+                }
+                Db::commit();
+            } catch (\Exception $e) {
+                Db::rollback();
+            }
+
+            $save_data                    = [];
+            $special_info                 = SpecialModel::where('id', $data['special_id'])->find();
             $save_data['special_word_id'] = $data['special_word_id'];
-            $save_data['special_id'] = $data['special_id'];
-            $save_data['user_id'] = $data['user_id'];
-            $save_data['page'] = $data['page'];
-            $save_data['form_id'] = $data['form_id'];
-            $save_data['display_time'] = $special_info['display_time'];
+            $save_data['special_id']      = $data['special_id'];
+            $save_data['user_id']         = $data['user_id'];
+            $save_data['page']            = $data['page'];
+            $save_data['form_id']         = $data['form_id'];
+            $save_data['display_time']    = $special_info['display_time'];
             //答题时长
-            $config_data = $this->configData;
+            $config_data                    = $this->configData;
             $save_data['answer_time_limit'] = $config_data['answer_time_limit'];
             //初始化
-            $redis                            = new Redis(Config::get('redis_config'));
+            $redis = new Redis(Config::get('redis_config'));
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
-            $template_list = [];
-            $template_list[] = $save_data;
+            $template_list     = [];
+            $template_list[]   = $save_data;
             // dump($template_list);exit;
             $redis->set($template_info_key, $template_list);
             // $redis->set($template_info_key, null);
+            return [
+                'status' => 1,
+                'msg'    => 'ok',
+            ];
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
@@ -1361,7 +1389,7 @@ class Special
     {
         try {
             //初始化
-            $redis                            = new Redis(Config::get('redis_config'));
+            $redis = new Redis(Config::get('redis_config'));
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
             $redis->set($template_info_key, null);
