@@ -23,6 +23,9 @@ class CronTab
     {
         set_time_limit(0);
         while (true) {
+            if(time() >= strtotime(date('Y-m-d 23:00:00'))){
+                break;
+            }
             //答题时长
             $config_data       = $this->configData;
             $answer_time_limit = $config_data['answer_time_limit'];
