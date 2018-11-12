@@ -106,7 +106,7 @@ class Notice
             ];
             $postData             = json_encode($postData);
             $send_template_data   = json_decode(sendCmd($send_template_url, $postData));
-            if($send_template_data->errcode != 0){
+            if($send_template_data->errcode > 0){
                 $sendLog              = new SendLog();
                 $sendLog->touser      = $openid;
                 $sendLog->template_id = $template_id;

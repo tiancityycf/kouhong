@@ -18,6 +18,7 @@ use app\qmxz\model\UserSpecialRedeemcode as UserSpecialRedeemcodeModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserSpecialWordComment as UserSpecialWordCommentModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
+use app\qmxz\model\SpecialGoldModel as SpecialGoldModelModel;
 use think\cache\driver\Redis;
 use think\Db;
 use think\facade\Config;
@@ -615,10 +616,22 @@ class Special
             //答对多少题
             if ($correct_num >= count($special_word)) {
                 //答对加金币
-                $timing_correct_gold = $config_data['timing_correct_gold'];
-                $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
-                $user_record->gold   = $user_record->gold + $timing_correct_gold;
-                $user_record->save();
+                $special_gold = SpecialGoldModel::where('special_id', $data['special_id'])->where('user_id', $data['user_id'])->find();
+                if(!$special_gold){
+                    $timing_correct_gold = $config_data['timing_correct_gold'];
+                    //保存获奖信息
+                    $special_gold = new SpecialGoldModel();
+                    $special_gold->user_id = $data['user_id'];
+                    $special_gold->special_id = $data['special_id'];
+                    $special_gold->gold = $timing_correct_gold;
+                    $special_gold->dday = date('Ymd');
+                    $special_gold->save();
+                    
+                    $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
+                    $user_record->gold   = $user_record->gold + $timing_correct_gold;
+                    $user_record->save();
+                }
+                
 
                 //生成兑换码
                 $code = UserSpecialRedeemcodeModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->value('code');
@@ -1387,14 +1400,18 @@ class Special
      * 清空redis
      * @return [type]       [description]
      */
-    public function clearRedis()
+    public function clearRedis($data)
     {
         try {
             //初始化
             $redis = new Redis(Config::get('redis_config'));
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
-            $redis->set($template_info_key, null);
+            if($data['test'] == 1){
+                dump($redis->get($template_info_key));
+            }else{
+                $redis->set($template_info_key, null);
+            }
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
