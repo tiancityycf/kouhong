@@ -137,6 +137,10 @@ class CronTab
                         $send_url = Config::get('send_url');
 
                         try {
+                            $start = strpos($v->page,"/");
+                            if($start === 0){
+                                $$v->page = ltrim($v->page, '/');
+                            }
                             $data = json_decode(file_get_contents(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)), true);
 
                             if ($data['data']['errcode'] == 0) {
