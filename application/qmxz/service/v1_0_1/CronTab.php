@@ -115,16 +115,25 @@ class CronTab
             if (empty($template_list)) {
                 continue;
             } else {
-
+                if (!is_array($template_list)) {
+                    return [
+                        'status' => 0,
+                        'msg'    => '不是一个数组',
+                    ];
+                    break;
+                }
                 foreach ($template_list as $k => $v) {
                     $end_time = $v['display_time'] + $v['answer_time_limit'] * 60;
+
                     if ($end_time > time()) {
                         continue;
                     } else {
                         //发送模板消息
                         $send_url = Config::get('send_url');
+
                         try {
                             $data = json_decode(file_get_contents(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])), true);
+
                             if ($data['data']['errcode'] == 0) {
                                 //访问结果页
                                 $special_result_url = Config::get('special_result_url');
@@ -159,5 +168,9 @@ class CronTab
             }
 
         }
+        return [
+            'status' => 1,
+            'msg'    => 'ok',
+        ];
     }
 }

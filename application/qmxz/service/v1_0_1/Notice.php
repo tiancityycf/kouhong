@@ -106,15 +106,15 @@ class Notice
             ];
             $postData             = json_encode($postData);
             $send_template_data   = json_decode(sendCmd($send_template_url, $postData));
-            if($send_template_data->errcode > 0){
+            if($send_template_data['errcode'] > 0){
                 $sendLog              = new SendLog();
                 $sendLog->touser      = $openid;
                 $sendLog->template_id = $template_id;
                 $sendLog->page        = $data['page'];
                 $sendLog->form_id     = $data['form_id'];
                 $sendLog->content     = $template_info['content'];
-                $sendLog->errcode     = $send_template_data->errcode;
-                $sendLog->errmsg      = $send_template_data->errmsg;
+                $sendLog->errcode     = $send_template_data['errcode'];
+                $sendLog->errmsg      = $send_template_data['errmsg'];
                 $sendLog->save();
             }
             return $send_template_data;
