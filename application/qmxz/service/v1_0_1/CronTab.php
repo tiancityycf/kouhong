@@ -100,6 +100,7 @@ class CronTab
      */
     public function redisSendNotice()
     {
+
         set_time_limit(0);
         while (true) {
             if (time() >= strtotime(date('Y-m-d 23:00:00'))) {
@@ -110,10 +111,11 @@ class CronTab
             $template_info_key = Config::get('template_info_key');
             //初始化
             $redis         = new Redis(Config::get('redis_config'));
-            $template_list = json_decode($redis->get($template_info_key));
+            $template_list = $redis->get($template_info_key);
             if (empty($template_list)) {
                 continue;
             } else {
+
                 foreach ($template_list as $k => $v) {
                     $end_time = $v['display_time'] + $v['answer_time_limit'] * 60;
                     if ($end_time > time()) {
