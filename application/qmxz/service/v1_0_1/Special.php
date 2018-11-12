@@ -18,7 +18,7 @@ use app\qmxz\model\UserSpecialRedeemcode as UserSpecialRedeemcodeModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserSpecialWordComment as UserSpecialWordCommentModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
-use app\qmxz\model\SpecialGoldModel as SpecialGoldModelModel;
+use app\qmxz\model\SpecialGold as SpecialGoldModel;
 use think\cache\driver\Redis;
 use think\Db;
 use think\facade\Config;
