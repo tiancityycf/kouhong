@@ -21,6 +21,8 @@ class UserSpecialPrize extends Model
             (isset($params[$key]) && $params[$key] !== '') && $query->where($key, $params[$key]);
         }
 
+        $query->where('use_type', 1);
+
         $query->order('id desc');
 
         return $query;
