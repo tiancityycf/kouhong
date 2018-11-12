@@ -12,7 +12,10 @@ class CronTab extends BasicController
 {
 	public function sendNotice(){
 		$cron_tab = new CronTabService($this->configData);
-		$result = $cron_tab->sendNotice();
+		//从数据库中发送模板消息
+		// $result = $cron_tab->sendNotice();
+		//从缓存中发送模板消息
+		$result = $cron_tab->redisSendNotice();
 
 		return result(200, 'ok', $result);
 	}

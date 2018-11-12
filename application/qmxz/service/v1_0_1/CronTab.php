@@ -4,6 +4,7 @@ namespace app\qmxz\service\v1_0_1;
 use app\qmxz\model\Special as SpecialModel;
 use app\qmxz\model\TemplateInfo as TemplateInfoModel;
 use app\qmxz\model\TemplateRecord as TemplateRecordModel;
+use think\cache\driver\Redis;
 use think\Db;
 use think\facade\Config;
 
@@ -23,7 +24,7 @@ class CronTab
     {
         set_time_limit(0);
         while (true) {
-            if(time() >= strtotime(date('Y-m-d 23:00:00'))){
+            if (time() >= strtotime(date('Y-m-d 23:00:00'))) {
                 break;
             }
             //答题时长
@@ -90,6 +91,71 @@ class CronTab
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 从缓存中发送模板消息
+     * @return [type] [description]
+     */
+    public function redisSendNotice()
+    {
+        set_time_limit(0);
+        while (true) {
+            if (time() >= strtotime(date('Y-m-d 23:00:00'))) {
+                break;
+            }
+            //获取模板消息队列
+            //模板消息key值
+            $template_info_key = Config::get('template_info_key');
+            //初始化
+            $redis         = new Redis(Config::get('redis_config'));
+            $template_list = json_decode($redis->get($template_info_key));
+            if (empty($template_list)) {
+                continue;
+            } else {
+                foreach ($template_list as $k => $v) {
+                    $end_time = $v['display_time'] + $v['answer_time_limit'] * 60;
+                    if ($end_time > time()) {
+                        continue;
+                    } else {
+                        //发送模板消息
+                        $send_url = Config::get('send_url');
+                        try {
+                            $data = json_decode(file_get_contents(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])), true);
+                            if ($data['data']['errcode'] == 0) {
+                                //访问结果页
+                                $special_result_url = Config::get('special_result_url');
+                                $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v['user_id'], $v['special_id'])), true);
+
+                                // 开启事务
+                                Db::startTrans();
+                                try {
+                                    //保存发送记录
+                                    $template_record             = new TemplateRecordModel();
+                                    $template_record->user_id    = $v['user_id'];
+                                    $template_record->special_id = $v['special_id'];
+                                    $template_record->dday       = date('Ymd');
+                                    $template_record->save();
+
+                                    //删除记录
+                                    unset($template_list[$k]);
+
+                                    Db::commit();
+                                } catch (\Exception $e) {
+                                    lg($e);
+                                    Db::rollback();
+                                    throw new \Exception("系统繁忙");
+                                }
+                            }
+                        } catch (Exception $e) {
+                            lg($e);
+                            continue;
+                        }
+                    }
+                }
+            }
+
         }
     }
 }
