@@ -274,4 +274,17 @@ class Special extends BasicController
         return result(200, 'ok', $result);
     }
 
+    /**
+     * 清空redis
+     * @return boolean
+     */
+    public function clearRedis()
+    {
+        //清空redis
+        $specialService = new SpecialService($this->configData);
+        $result         = $specialService->clearRedis();
+
+        return result(200, 'ok', $result);
+    }
+
 }

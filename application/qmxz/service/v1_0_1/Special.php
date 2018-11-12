@@ -1353,4 +1353,22 @@ class Special
         }
     }
 
+    /**
+     * 清空redis
+     * @return [type]       [description]
+     */
+    public function clearRedis()
+    {
+        try {
+            //初始化
+            $redis                            = new Redis(Config::get('redis_config'));
+            //模板消息key值
+            $template_info_key = Config::get('template_info_key');
+            $redis->set($template_info_key, null);
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+    }
+
 }
