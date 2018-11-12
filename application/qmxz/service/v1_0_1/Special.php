@@ -1367,16 +1367,8 @@ class Special
 
             // $save_data                    = [];
             $special_info = SpecialModel::where('id', $data['special_id'])->find();
-            // $save_data['special_word_id'] = $data['special_word_id'];
-            // $save_data['special_id']      = $data['special_id'];
-            // $save_data['user_id']         = $data['user_id'];
-            // $save_data['page']            = $data['page'];
-            // $save_data['form_id']         = $data['form_id'];
-            // $save_data['display_time']    = $special_info['display_time'];
             //答题时长
             $config_data = $this->configData;
-            // $save_data['answer_time_limit'] = $config_data['answer_time_limit'];
-
             $save_data = array(
                 'special_word_id'   => $data['special_word_id'],
                 'special_id'        => $data['special_id'],
@@ -1391,11 +1383,14 @@ class Special
             $redis = new Redis(Config::get('redis_config'));
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
-            $template_list     = [];
-            $template_list[]   = $save_data;
-            // dump($template_list);exit;
-            $redis->set($template_info_key, $template_list);
-            // $redis->set($template_info_key, null);
+            if ($redis->has($template_info_key)) {
+                $template_list   = json_decode($redis->get($template_info_key));
+                $template_list[] = $save_data;
+                $redis->set($template_info_key, json_encode($template_list));
+            } else {
+                $template_list[] = $save_data;
+                $redis->set($template_info_key, json_encode($template_list));
+            }
             return [
                 'status' => 1,
                 'msg'    => 'ok',
