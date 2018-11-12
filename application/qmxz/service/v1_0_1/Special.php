@@ -1345,7 +1345,9 @@ class Special
                 //保存参数信息
                 $template_info = TemplateInfoModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->where('dday', date('Ymd'))->find();
                 $start         = strpos($data['page'], "?");
-                $data['page']  = substr($data['page'], 0, $start);
+                if($start){
+                    $data['page']  = substr($data['page'], 0, $start);
+                }
                 if ($template_info) {
                     $template_info->page    = $data['page'];
                     $template_info->form_id = $data['form_id'];
@@ -1378,7 +1380,6 @@ class Special
                 'display_time'      => $special_info['display_time'],
                 'answer_time_limit' => $config_data['answer_time_limit'],
             );
-
             //初始化
             $redis = new Redis(Config::get('redis_config'));
             //模板消息key值

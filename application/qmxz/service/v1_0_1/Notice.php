@@ -96,7 +96,7 @@ class Notice
             }
             $openid   = User::where('id', $data['user_id'])->value('openid');
             $start = strpos($data['page'],"/");
-            if($start == 0){
+            if($start === 0){
                 $data['page'] = ltrim($data['page'], '/');
             }
             $data['page'] = $data['page'].'?special_id='.$data['special_id'];
