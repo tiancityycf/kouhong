@@ -5,6 +5,7 @@ namespace app\qmxz\service\v1_0_1;
 use app\qmxz\model\Address as AddressModel;
 use app\qmxz\model\RegretCard as RegretCardModel;
 use app\qmxz\model\Special as SpecialModel;
+use app\qmxz\model\SpecialGold as SpecialGoldModel;
 use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
 use app\qmxz\model\SpecialWarehouse as SpecialWarehouseModel;
 use app\qmxz\model\SpecialWord as SpecialWordModel;
@@ -18,7 +19,6 @@ use app\qmxz\model\UserSpecialRedeemcode as UserSpecialRedeemcodeModel;
 use app\qmxz\model\UserSpecialWord as UserSpecialWordModel;
 use app\qmxz\model\UserSpecialWordComment as UserSpecialWordCommentModel;
 use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
-use app\qmxz\model\SpecialGold as SpecialGoldModel;
 use think\cache\driver\Redis;
 use think\Db;
 use think\facade\Config;
@@ -617,21 +617,20 @@ class Special
             if ($correct_num >= count($special_word)) {
                 //答对加金币
                 $special_gold = SpecialGoldModel::where('special_id', $data['special_id'])->where('user_id', $data['user_id'])->find();
-                if(!$special_gold){
+                if (!$special_gold) {
                     $timing_correct_gold = $config_data['timing_correct_gold'];
                     //保存获奖信息
-                    $special_gold = new SpecialGoldModel();
-                    $special_gold->user_id = $data['user_id'];
+                    $special_gold             = new SpecialGoldModel();
+                    $special_gold->user_id    = $data['user_id'];
                     $special_gold->special_id = $data['special_id'];
-                    $special_gold->gold = $timing_correct_gold;
-                    $special_gold->dday = date('Ymd');
+                    $special_gold->gold       = $timing_correct_gold;
+                    $special_gold->dday       = date('Ymd');
                     $special_gold->save();
-                    
-                    $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
-                    $user_record->gold   = $user_record->gold + $timing_correct_gold;
+
+                    $user_record       = UserRecordModel::where('user_id', $data['user_id'])->find();
+                    $user_record->gold = $user_record->gold + $timing_correct_gold;
                     $user_record->save();
                 }
-                
 
                 //生成兑换码
                 $code = UserSpecialRedeemcodeModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->value('code');
@@ -1345,8 +1344,8 @@ class Special
             try {
                 //保存参数信息
                 $template_info = TemplateInfoModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->where('dday', date('Ymd'))->find();
-                $start = strpos($data['page'],"?");
-                $data['page'] = substr($data['page'],0,$start);
+                $start         = strpos($data['page'], "?");
+                $data['page']  = substr($data['page'], 0, $start);
                 if ($template_info) {
                     $template_info->page    = $data['page'];
                     $template_info->form_id = $data['form_id'];
@@ -1366,17 +1365,28 @@ class Special
                 Db::rollback();
             }
 
-            $save_data                    = [];
-            $special_info                 = SpecialModel::where('id', $data['special_id'])->find();
-            $save_data['special_word_id'] = $data['special_word_id'];
-            $save_data['special_id']      = $data['special_id'];
-            $save_data['user_id']         = $data['user_id'];
-            $save_data['page']            = $data['page'];
-            $save_data['form_id']         = $data['form_id'];
-            $save_data['display_time']    = $special_info['display_time'];
+            // $save_data                    = [];
+            $special_info = SpecialModel::where('id', $data['special_id'])->find();
+            // $save_data['special_word_id'] = $data['special_word_id'];
+            // $save_data['special_id']      = $data['special_id'];
+            // $save_data['user_id']         = $data['user_id'];
+            // $save_data['page']            = $data['page'];
+            // $save_data['form_id']         = $data['form_id'];
+            // $save_data['display_time']    = $special_info['display_time'];
             //答题时长
-            $config_data                    = $this->configData;
-            $save_data['answer_time_limit'] = $config_data['answer_time_limit'];
+            $config_data = $this->configData;
+            // $save_data['answer_time_limit'] = $config_data['answer_time_limit'];
+
+            $save_data = array(
+                'special_word_id'   => $data['special_word_id'],
+                'special_id'        => $data['special_id'],
+                'user_id'           => $data['user_id'],
+                'page'              => $data['page'],
+                'form_id'           => $data['form_id'],
+                'display_time'      => $special_info['display_time'],
+                'answer_time_limit' => $config_data['answer_time_limit'],
+            );
+
             //初始化
             $redis = new Redis(Config::get('redis_config'));
             //模板消息key值
@@ -1384,7 +1394,7 @@ class Special
             $template_list     = [];
             $template_list[]   = $save_data;
             // dump($template_list);exit;
-            $redis->set($template_info_key, $template_list);
+            $redis->set($template_info_key, json_encode($template_list));
             // $redis->set($template_info_key, null);
             return [
                 'status' => 1,
@@ -1407,9 +1417,9 @@ class Special
             $redis = new Redis(Config::get('redis_config'));
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
-            if($data['test'] == 1){
+            if (isset($data['test']) && $data['test'] == 1) {
                 dump($redis->get($template_info_key));
-            }else{
+            } else {
                 $redis->set($template_info_key, null);
             }
         } catch (Exception $e) {
