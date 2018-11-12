@@ -128,7 +128,7 @@ class CronTab
                     // break;
                 }
                 foreach ($template_list as $k => $v) {
-                    $end_time = $v['display_time'] + $v['answer_time_limit'] * 60;
+                    $end_time = $v->display_time + $v->answer_time_limit * 60;
 
                     if ($end_time > time()) {
                         continue;
@@ -137,20 +137,20 @@ class CronTab
                         $send_url = Config::get('send_url');
 
                         try {
-                            $data = json_decode(file_get_contents(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])), true);
+                            $data = json_decode(file_get_contents(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)), true);
 
                             if ($data['data']['errcode'] == 0) {
                                 //访问结果页
                                 $special_result_url = Config::get('special_result_url');
-                                $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v['user_id'], $v['special_id'])), true);
+                                $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v->user_id, $v->special_id)), true);
 
                                 // 开启事务
                                 Db::startTrans();
                                 try {
                                     //保存发送记录
                                     $template_record             = new TemplateRecordModel();
-                                    $template_record->user_id    = $v['user_id'];
-                                    $template_record->special_id = $v['special_id'];
+                                    $template_record->user_id    = $v->user_id;
+                                    $template_record->special_id = $v->special_id;
                                     $template_record->dday       = date('Ymd');
                                     $template_record->save();
 
