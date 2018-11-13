@@ -1411,8 +1411,8 @@ class Special
                     $data['page'] = ltrim($data['page'], '/');
                 }
                 if ($template_info) {
-                    $template_info->page    = $data['page'];
-                    if($data['form_id'] != ''){
+                    $template_info->page = $data['page'];
+                    if ($data['form_id'] != '') {
                         $template_info->form_id = $data['form_id'];
                     }
                     $template_info->save();
@@ -1430,21 +1430,19 @@ class Special
             } catch (\Exception $e) {
                 Db::rollback();
             }
-
-            // $save_data                    = [];
             $special_info = SpecialModel::where('id', $data['special_id'])->find();
             //答题时长
             $config_data = $this->configData;
             $save_data   = array(
-                'special_word_id'   => (int)$data['special_word_id'],
-                'special_id'        => (int)$data['special_id'],
-                'user_id'           => (int)$data['user_id'],
-                'page'              => (string)$data['page'],
-                'form_id'           => (string)$data['form_id'],
-                'display_time'      => (int)$special_info['display_time'],
-                'answer_time_limit' => (int)$config_data['answer_time_limit'],
+                'special_word_id'   => (int) $data['special_word_id'],
+                'special_id'        => (int) $data['special_id'],
+                'user_id'           => (int) $data['user_id'],
+                'page'              => (string) $data['page'],
+                'form_id'           => (string) $data['form_id'],
+                'display_time'      => (int) $special_info['display_time'],
+                'answer_time_limit' => (int) $config_data['answer_time_limit'],
             );
-            $is_has            = 0;
+            $is_has = 0;
             if ($redis->has($template_info_key)) {
                 $template_list = $redis->get($template_info_key);
                 foreach ($template_list as $key => $value) {
@@ -1486,9 +1484,12 @@ class Special
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
             if (isset($data['test']) && $data['test'] == 1) {
-                dump($redis->get($template_info_key));
+                return $redis->get($template_info_key);
             } else {
                 $redis->set($template_info_key, null);
+                return [
+                    'data' => '',
+                ];
             }
         } catch (Exception $e) {
             lg($e);
