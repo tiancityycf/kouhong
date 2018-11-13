@@ -1384,17 +1384,20 @@ class Special
                 'display_time'      => $special_info['display_time'],
                 'answer_time_limit' => $config_data['answer_time_limit'],
             );
+            // $template_list[] = $save_data;
+            // dump($template_list);exit;
             //初始化
             $redis = new Redis(Config::get('redis_config'));
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
             if ($redis->has($template_info_key)) {
-                $template_list   = json_decode($redis->get($template_info_key));
+                $template_list   = $redis->get($template_info_key);
                 $template_list[] = $save_data;
-                $redis->set($template_info_key, json_encode($template_list));
+                $redis->set($template_info_key, $template_list);
             } else {
+                $template_list = array();
                 $template_list[] = $save_data;
-                $redis->set($template_info_key, json_encode($template_list));
+                $redis->set($template_info_key, $template_list);
             }
             return [
                 'status' => 1,
