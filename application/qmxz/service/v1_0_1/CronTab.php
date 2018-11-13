@@ -128,11 +128,12 @@ class CronTab
                     if ($end_time > time()) {
                         continue;
                     } else {
+                        unset($template_list[$k]);
+                        $redis->set($template_info_key,$template_list);
                         //发送模板消息
                         $send_url = Config::get('send_url');
 
                         try {
-                            // $data = json_decode(file_get_contents(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)), true);
                             $data = json_decode(https_get(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])));
 
                             echo $data;
@@ -141,11 +142,15 @@ class CronTab
                             Db::startTrans();
                             try {
                                 //保存发送记录
-                                $template_record             = new TemplateRecordModel();
-                                $template_record->user_id    = $v['user_id'];
-                                $template_record->special_id = $v['special_id'];
-                                $template_record->dday       = date('Ymd');
-                                $template_record->save();
+                                $template_record = TemplateRecordModel::where('user_id', $v['user_id'])->where('special_id', $v['special_id']);
+                                if (!$template_record) {
+                                    $template_record             = new TemplateRecordModel();
+                                    $template_record->user_id    = $v['user_id'];
+                                    $template_record->special_id = $v['special_id'];
+                                    $template_record->dday       = date('Ymd');
+                                    $template_record->save();
+                                }
+
                                 Db::commit();
                             } catch (\Exception $e) {
                                 lg($e);
@@ -155,11 +160,11 @@ class CronTab
 
                             //访问结果页
                             $special_result_url = Config::get('special_result_url');
-                            // $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v->user_id, $v->special_id)), true);
                             $result_data = json_decode(https_get(sprintf($special_result_url, $v['user_id'], $v['special_id'])));
 
                             //删除记录
                             unset($template_list[$k]);
+                            $redis->set($template_info_key,$template_list);
                         } catch (Exception $e) {
                             lg($e);
                             continue;
