@@ -123,8 +123,12 @@ class CronTab
                                     //删除记录
                                     unset($template_list[$k]);
                                     //修改缓存信息
-                                    $redis->set($template_info_key, $template_list);
-                                    continue;
+                                    if(empty($template_list)){
+                                        $redis->rm($template_info_key);
+                                    }else{
+                                        $redis->set($template_info_key, $template_list);
+                                    }
+                                    break;
                                 } else {
                                     $data = json_decode(https_get(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])));
                                 }
@@ -133,7 +137,7 @@ class CronTab
                                 Db::startTrans();
                                 try {
                                     //保存发送记录
-                                    $template_record = TemplateRecordModel::where('user_id', $v['user_id'])->where('special_id', $v['special_id']);
+                                    $template_record = TemplateRecordModel::where('user_id', $v['user_id'])->where('special_id', $v['special_id'])->find();
                                     if (!$template_record) {
                                         $template_record             = new TemplateRecordModel();
                                         $template_record->user_id    = $v['user_id'];
@@ -143,20 +147,20 @@ class CronTab
                                     }
                                     Db::commit();
                                 } catch (\Exception $e) {
-                                    lg($e);
                                     Db::rollback();
-                                }
-                                try {
-                                    $result_data = json_decode(https_get(sprintf($special_result_url, $v['user_id'], $v['special_id'])));
-                                } catch (Exception $e) {
-                                    //删除记录
-                                    unset($template_list[$k]);
-                                    //修改缓存信息
-                                    $redis->set($template_info_key, $template_list);
-                                    lg($e);
-                                    continue;
+                                    try {
+                                        $result_data = json_decode(https_get(sprintf($special_result_url, $v['user_id'], $v['special_id'])));
+                                    } catch (Exception $e) {
+                                        //删除记录
+                                        unset($template_list[$k]);
+                                        //修改缓存信息
+                                        $redis->set($template_info_key, $template_list);
+                                        lg($e);
+                                        continue;
 
+                                    }
                                 }
+
                             }
                         }
                     }
