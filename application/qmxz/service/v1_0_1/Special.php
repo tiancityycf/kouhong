@@ -1433,31 +1433,42 @@ class Special
             $special_info = SpecialModel::where('id', $data['special_id'])->find();
             //答题时长
             $config_data = $this->configData;
-            $save_data   = array(
-                'special_word_id'   => (int) $data['special_word_id'],
-                'special_id'        => (int) $data['special_id'],
-                'user_id'           => (int) $data['user_id'],
-                'page'              => (string) $data['page'],
-                'form_id'           => (string) $data['form_id'],
-                'display_time'      => (int) $special_info['display_time'],
-                'answer_time_limit' => (int) $config_data['answer_time_limit'],
-            );
-            $is_has = 0;
+            $is_has      = 0;
             if ($redis->has($template_info_key)) {
                 $template_list = $redis->get($template_info_key);
                 foreach ($template_list as $key => $value) {
                     if ($data['user_id'] == $value['user_id']) {
                         $is_has = 1;
                         if (isset($data['form_id']) && ($data['form_id'] == '')) {
-                            $template_list[$key]['form_id'] = $data['form_id'];
+                            $template_list[$key]['form_id']           = (string) $data['form_id'];
+                            $template_list[$key]['display_time']      = (string) $special_info['display_time'];
+                            $template_list[$key]['answer_time_limit'] = (int) $config_data['answer_time_limit'];
                         }
                     }
                 }
                 if ($is_has == 0) {
+                    $save_data = array(
+                        'special_word_id'   => (int) $data['special_word_id'],
+                        'special_id'        => (int) $data['special_id'],
+                        'user_id'           => (int) $data['user_id'],
+                        'page'              => (string) $data['page'],
+                        'form_id'           => (string) $data['form_id'],
+                        'display_time'      => (int) $special_info['display_time'],
+                        'answer_time_limit' => (int) $config_data['answer_time_limit'],
+                    );
                     $template_list[] = $save_data;
                 }
                 $redis->set($template_info_key, $template_list);
             } else {
+                $save_data = array(
+                    'special_word_id'   => (int) $data['special_word_id'],
+                    'special_id'        => (int) $data['special_id'],
+                    'user_id'           => (int) $data['user_id'],
+                    'page'              => (string) $data['page'],
+                    'form_id'           => (string) $data['form_id'],
+                    'display_time'      => (int) $special_info['display_time'],
+                    'answer_time_limit' => (int) $config_data['answer_time_limit'],
+                );
                 $template_list   = array();
                 $template_list[] = $save_data;
                 $redis->set($template_info_key, $template_list);
