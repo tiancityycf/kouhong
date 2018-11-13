@@ -15,6 +15,7 @@ use app\qmxz\model\UserTopicWordComment as UserTopicWordCommentModel;
 use app\qmxz\model\UserTopicWordCount as UserTopicWordCountModel;
 use app\qmxz\model\UserTopicWordRecord as UserTopicWordRecordModel;
 use think\Db;
+use think\facade\Config;
 
 /**
  * 普通场服务类
@@ -574,6 +575,43 @@ class Topic
     public function submitComment($data)
     {
         try {
+            //暴恐词库
+            $baokuciku = explode(",", Config::get('baokuciku'));
+            //反动词库
+            $fandongciku = explode(",", Config::get('fandongciku'));
+            //民生词库
+            $minshengciku = explode(",", Config::get('minshengciku'));
+            //其他词库
+            $qitaciku = explode(",", Config::get('qitaciku'));
+            //色情词库
+            $seqingciku = explode(",", Config::get('seqingciku'));
+            //贪腐词库
+            $tanfuciku = explode(",", Config::get('tanfuciku'));
+            //替换敏感词语
+            //屏蔽暴恐词语
+            foreach ($baokuciku as $k => $v) {
+                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+            }
+            //反动词库
+            foreach ($fandongciku as $k => $v) {
+                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+            }
+            //民生词库
+            foreach ($minshengciku as $k => $v) {
+                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+            }
+            //其他词库
+            foreach ($qitaciku as $k => $v) {
+                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+            }
+            //色情词库
+            foreach ($seqingciku as $k => $v) {
+                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+            }
+            //贪腐词库
+            foreach ($tanfuciku as $k => $v) {
+                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+            }
             // 开启事务
             Db::startTrans();
             try {
@@ -589,6 +627,9 @@ class Topic
                 return [
                     'status' => 1,
                     'msg'    => 'ok',
+                    'date'   => [
+                        'user_comment' => $data['user_comment'],
+                    ],
                 ];
             } catch (\Exception $e) {
                 Db::rollback();

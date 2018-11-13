@@ -104,7 +104,7 @@ class Index
         //获奖信息限制数量
         $config_data     = $this->configData;
         $prize_limit_num = $config_data['prize_limit_num'];
-        $exchange_list      = ExchangeLogModel::limit($prize_limit_num)->order('create_time desc')->select();
+        $exchange_list      = ExchangeLogModel::where('status', 1)->limit($prize_limit_num)->order('create_time desc')->select();
         foreach ($exchange_list as $key => $value) {
             $exchange_list[$key]['addtime']  = $value['create_time'];
             //奖品信息
