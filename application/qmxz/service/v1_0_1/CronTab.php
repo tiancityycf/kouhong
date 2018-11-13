@@ -104,6 +104,7 @@ class CronTab
         //访问结果页url
         $special_result_url = Config::get('special_result_url');
         while (true) {
+            trace("xxx",'error');
             if ($redis->has($template_info_key)) {
                 if (time() >= strtotime(date('Y-m-d 23:00:00'))) {
                     $redis->rm($template_info_key);
@@ -112,6 +113,7 @@ class CronTab
                 //获取模板消息队列
                 $template_list = $redis->get($template_info_key);
                 if (!empty($template_list)) {
+                    trace(json_encode($template_list),'error');
                     foreach ($template_list as $k => $v) {
                         if ($k % 100 == 0) {
                             sleep(1);
