@@ -5,6 +5,8 @@ namespace app\qmxz\service\v1_0_1;
 use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
 use app\qmxz\model\User as UserModel;
 use app\qmxz\model\UserSpecialPrize as UserSpecialPrizeModel;
+use app\qmxz\model\ExchangeLog as ExchangeLogModel;
+use app\qmxz\model\Goods as GoodsModel;
 use think\Db;
 
 /**
@@ -73,12 +75,12 @@ class Index
      * @param  [type] $data 接收参数
      * @return [type]       [description]
      */
-    public function getPrizeInfo($data)
+    public function getPrizeList($data)
     {
         //获奖信息限制数量
         $config_data     = $this->configData;
         $prize_limit_num = $config_data['prize_limit_num'];
-        $prize_list      = UserSpecialPrizeModel::limit($prize_limit_num)->select();
+        $prize_list      = UserSpecialPrizeModel::limit($prize_limit_num)->order('addtime desc')->select();
         foreach ($prize_list as $key => $value) {
             //奖品信息
             $prize_info                     = SpecialPrizeModel::get($value['prize_id']);
@@ -90,5 +92,30 @@ class Index
             $prize_list[$key]['avatar']   = $user_info['avatar'];
         }
         return $prize_list;
+    }
+
+    /**
+     * 获取兑换信息
+     * @param  [type] $data 接收参数
+     * @return [type]       [description]
+     */
+    public function getExchangeList($data)
+    {
+        //获奖信息限制数量
+        $config_data     = $this->configData;
+        $prize_limit_num = $config_data['prize_limit_num'];
+        $exchange_list      = ExchangeLogModel::limit($prize_limit_num)->order('create_time desc')->select();
+        foreach ($exchange_list as $key => $value) {
+            $exchange_list[$key]['addtime']  = $value['create_time'];
+            //奖品信息
+            $good_info                     = GoodsModel::get($value['good_id']);
+            $exchange_list[$key]['prize_name'] = $good_info['title'];
+            $exchange_list[$key]['prize_img']  = $good_info['img'];
+            //用户信息
+            $user_info                    = UserModel::get($value['user_id']);
+            $exchange_list[$key]['nickname'] = $user_info['nickname'];
+            $exchange_list[$key]['avatar']   = $user_info['avatar'];
+        }
+        return $exchange_list;
     }
 }

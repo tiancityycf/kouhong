@@ -42,8 +42,12 @@ class User extends BasicController
         $result['share_info'] = $share_info;
 
         //获奖信息
-        $prize_list = $indexService->getPrizeInfo($data);
+        $prize_list = $indexService->getPrizeList($data);
         $result['prize_list'] = $prize_list;
+
+        //兑换信息
+        $exchange_list = $indexService->getExchangeList($data);
+        $result['exchange_list'] = $exchange_list;
 
         return result(200, 'ok', $result);
 	}
