@@ -350,42 +350,42 @@ class Special
     public function submitComment($data)
     {
         //暴恐词库
-            $baokuciku = explode(",", Config::get('baokuciku'));
-            //反动词库
-            $fandongciku = explode(",", Config::get('fandongciku'));
-            //民生词库
-            $minshengciku = explode(",", Config::get('minshengciku'));
-            //其他词库
-            $qitaciku = explode(",", Config::get('qitaciku'));
-            //色情词库
-            $seqingciku = explode(",", Config::get('seqingciku'));
-            //贪腐词库
-            $tanfuciku = explode(",", Config::get('tanfuciku'));
-            //替换敏感词语
-            //屏蔽暴恐词语
-            foreach ($baokuciku as $k => $v) {
-                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
-            }
-            //反动词库
-            foreach ($fandongciku as $k => $v) {
-                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
-            }
-            //民生词库
-            foreach ($minshengciku as $k => $v) {
-                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
-            }
-            //其他词库
-            foreach ($qitaciku as $k => $v) {
-                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
-            }
-            //色情词库
-            foreach ($seqingciku as $k => $v) {
-                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
-            }
-            //贪腐词库
-            foreach ($tanfuciku as $k => $v) {
-                $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
-            }
+        $baokuciku = explode(",", Config::get('baokuciku'));
+        //反动词库
+        $fandongciku = explode(",", Config::get('fandongciku'));
+        //民生词库
+        $minshengciku = explode(",", Config::get('minshengciku'));
+        //其他词库
+        $qitaciku = explode(",", Config::get('qitaciku'));
+        //色情词库
+        $seqingciku = explode(",", Config::get('seqingciku'));
+        //贪腐词库
+        $tanfuciku = explode(",", Config::get('tanfuciku'));
+        //替换敏感词语
+        //屏蔽暴恐词语
+        foreach ($baokuciku as $k => $v) {
+            $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+        }
+        //反动词库
+        foreach ($fandongciku as $k => $v) {
+            $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+        }
+        //民生词库
+        foreach ($minshengciku as $k => $v) {
+            $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+        }
+        //其他词库
+        foreach ($qitaciku as $k => $v) {
+            $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+        }
+        //色情词库
+        foreach ($seqingciku as $k => $v) {
+            $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+        }
+        //贪腐词库
+        foreach ($tanfuciku as $k => $v) {
+            $data['user_comment'] = str_replace($v, str_repeat('*', mb_strlen($v)), $data['user_comment']);
+        }
         try {
             // 开启事务
             Db::startTrans();
@@ -1393,22 +1393,28 @@ class Special
     public function saveTemplateInfo($data)
     {
         try {
+            //初始化
+            $redis = new Redis(Config::get('redis_config'));
+            //模板消息key值
+            $template_info_key = Config::get('template_info_key');
             // 开启事务
             Db::startTrans();
             try {
                 //保存参数信息
                 $template_info = TemplateInfoModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('special_word_id', $data['special_word_id'])->where('dday', date('Ymd'))->find();
                 $start         = strpos($data['page'], "?");
-                if($start){
-                    $data['page']  = substr($data['page'], 0, $start);
+                if ($start) {
+                    $data['page'] = substr($data['page'], 0, $start);
                 }
-                $sec = strpos($data['page'],"/");
-                if($sec === 0){
+                $sec = strpos($data['page'], "/");
+                if ($sec === 0) {
                     $data['page'] = ltrim($data['page'], '/');
                 }
                 if ($template_info) {
                     $template_info->page    = $data['page'];
-                    $template_info->form_id = $data['form_id'];
+                    if($data['form_id'] != ''){
+                        $template_info->form_id = $data['form_id'];
+                    }
                     $template_info->save();
                 } else {
                     $template_info                  = new TemplateInfoModel();
@@ -1429,27 +1435,32 @@ class Special
             $special_info = SpecialModel::where('id', $data['special_id'])->find();
             //答题时长
             $config_data = $this->configData;
-            $save_data = array(
-                'special_word_id'   => $data['special_word_id'],
-                'special_id'        => $data['special_id'],
-                'user_id'           => $data['user_id'],
-                'page'              => $data['page'],
-                'form_id'           => $data['form_id'],
-                'display_time'      => $special_info['display_time'],
-                'answer_time_limit' => $config_data['answer_time_limit'],
+            $save_data   = array(
+                'special_word_id'   => (int)$data['special_word_id'],
+                'special_id'        => (int)$data['special_id'],
+                'user_id'           => (int)$data['user_id'],
+                'page'              => (string)$data['page'],
+                'form_id'           => (string)$data['form_id'],
+                'display_time'      => (int)$special_info['display_time'],
+                'answer_time_limit' => (int)$config_data['answer_time_limit'],
             );
-            // $template_list[] = $save_data;
-            // dump($template_list);exit;
-            //初始化
-            $redis = new Redis(Config::get('redis_config'));
-            //模板消息key值
-            $template_info_key = Config::get('template_info_key');
+            $is_has            = 0;
             if ($redis->has($template_info_key)) {
-                $template_list   = $redis->get($template_info_key);
-                $template_list[] = $save_data;
+                $template_list = $redis->get($template_info_key);
+                foreach ($template_list as $key => $value) {
+                    if ($data['user_id'] == $value['user_id']) {
+                        $is_has = 1;
+                        if (isset($data['form_id']) && ($data['form_id'] == '')) {
+                            $template_list[$key]['form_id'] = $data['form_id'];
+                        }
+                    }
+                }
+                if ($is_has == 0) {
+                    $template_list[] = $save_data;
+                }
                 $redis->set($template_info_key, $template_list);
             } else {
-                $template_list = array();
+                $template_list   = array();
                 $template_list[] = $save_data;
                 $redis->set($template_info_key, $template_list);
             }

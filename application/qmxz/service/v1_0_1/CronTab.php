@@ -118,29 +118,36 @@ class CronTab
                     $end_time = $v['display_time'] + $v['answer_time_limit'] * 60;
                     if ($end_time <= time()) {
                         try {
-                            $data = json_decode(https_get(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])));
-                            // 开启事务
-                            Db::startTrans();
-                            try {
-                                //保存发送记录
-                                $template_record = TemplateRecordModel::where('user_id', $v['user_id'])->where('special_id', $v['special_id']);
-                                if (!$template_record) {
-                                    $template_record             = new TemplateRecordModel();
-                                    $template_record->user_id    = $v['user_id'];
-                                    $template_record->special_id = $v['special_id'];
-                                    $template_record->dday       = date('Ymd');
-                                    $template_record->save();
+                            if ($v['form_id'] == '') {
+                                //删除记录
+                                unset($template_list[$k]);
+                                //修改缓存信息
+                                $redis->set($template_info_key, $template_list);
+                            } else {
+                                $data = json_decode(https_get(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])));
+                                // 开启事务
+                                Db::startTrans();
+                                try {
+                                    //保存发送记录
+                                    $template_record = TemplateRecordModel::where('user_id', $v['user_id'])->where('special_id', $v['special_id']);
+                                    if (!$template_record) {
+                                        $template_record             = new TemplateRecordModel();
+                                        $template_record->user_id    = $v['user_id'];
+                                        $template_record->special_id = $v['special_id'];
+                                        $template_record->dday       = date('Ymd');
+                                        $template_record->save();
+                                    }
+                                    Db::commit();
+                                } catch (\Exception $e) {
+                                    lg($e);
+                                    Db::rollback();
                                 }
-                                Db::commit();
-                            } catch (\Exception $e) {
-                                lg($e);
-                                Db::rollback();
+                                $result_data = json_decode(https_get(sprintf($special_result_url, $v['user_id'], $v['special_id'])));
+                                //删除记录
+                                unset($template_list[$k]);
+                                //修改缓存信息
+                                $redis->set($template_info_key, $template_list);
                             }
-                            $result_data = json_decode(https_get(sprintf($special_result_url, $v['user_id'], $v['special_id'])));
-                            //删除记录
-                            unset($template_list[$k]);
-                            //修改缓存信息
-                            $redis->set($template_info_key, $template_list);
                         } catch (Exception $e) {
                             lg($e);
                             continue;
