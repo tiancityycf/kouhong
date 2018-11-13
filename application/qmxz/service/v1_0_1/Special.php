@@ -444,6 +444,20 @@ class Special
             // 开启事务
             Db::startTrans();
             try {
+                //判断金币是否足够
+                $config_data = $this->configData;
+                //消耗金币
+                $timing_consume_gold = $config_data['timing_consume_gold'];
+                if (!isset($timing_consume_gold) || $timing_consume_gold == 0) {
+                    $timing_consume_gold = 50;
+                }
+                $user_obj = UserRecordModel::where('user_id', $data['user_id'])->find();
+                if (!$user_obj || ($user_obj['gold'] < $timing_consume_gold)) {
+                    return [
+                        'status' => 0,
+                        'msg'    => '金币不足',
+                    ];
+                }
                 //保存普通场记录
                 $user_special = UserSpecialModel::where('user_id', $data['user_id'])->where('special_id', $data['special_id'])->where('create_date', date('ymd'))->find();
                 if ($user_special) {

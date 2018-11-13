@@ -312,9 +312,20 @@ class Topic
             // 开启事务
             Db::startTrans();
             try {
-                //是否已打过此题
-                // $user_topic_word = UserTopicWordModel::where('user_id', $data['user_id'])->where('topic_id', $data['topic_id'])->where('topic_word_id')->find();
-                // if (!$user_topic_word) {
+                //判断金币是否足够
+                $config_data = $this->configData;
+                //消耗金币
+                $default_consume_gold = $config_data['default_consume_gold'];
+                if (!isset($default_consume_gold) || $default_consume_gold == 0) {
+                    $default_consume_gold = 10;
+                }
+                $user_obj = UserRecordModel::where('user_id', $data['user_id'])->find();
+                if (!$user_obj || ($user_obj['gold'] < $default_consume_gold)) {
+                    return [
+                        'status' => 0,
+                        'msg'    => '金币不足',
+                    ];
+                }
                 //添加普通场参与人数
                 if ($data['is_pass'] == 1) {
                     // $select_topic = SelectTopicModel::where('topic_id', $data['topic_id'])->find();
@@ -426,11 +437,8 @@ class Topic
                     }
                     $answer->save();
                 }
-                $config_data = $this->configData;
-                //消耗金币
-                $default_consume_gold = $config_data['default_consume_gold'];
-                $user_obj             = UserRecordModel::where('user_id', $data['user_id'])->find();
-                $get_gold_one         = 0;
+
+                $get_gold_one = 0;
                 if ((int) $data['user_select'] == $answer['most_select']) {
                     $get_gold_one   = $config_data['get_gold_one'];
                     $user_obj->gold = $user_obj->gold - $default_consume_gold + $get_gold_one;
@@ -528,7 +536,6 @@ class Topic
                     }
                     $user_topic_small_label->save();
                 }
-
                 //随机提示语
                 //正确提示语
                 $topic_correct_arr = $config_data['topic_correct_arr'];

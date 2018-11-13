@@ -64,7 +64,8 @@ class Task extends BasicController
             }
             //判断今日邀请好友数量
             if ($val['id'] == 3) {
-                $invite_number                    = $invitemodel->where(['openid' => $openid])->where('create_time', 'between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->count();
+                // $invite_number                    = $invitemodel->where(['openid' => $openid])->where('create_time', 'between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->count();
+                $invite_number                    = Db::name('invite_user')->where(['openid' => $openid])->where('create_time', 'between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->count();
                 $list[$key]['task_invite_number'] = $this->task_invite_number;
                 $list[$key]['invite_number']      = $invite_number;
             }

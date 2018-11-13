@@ -14,7 +14,7 @@ use app\qmxz\model\UserRecord as User;
  */
 class InviteUser extends Model{
     //重新定义用户表位置
-    // protected $userTable='user_record';
+    protected $userTable='user_record';
     /**
      * 记录邀请好友
      * @param type $openid 被邀请人
