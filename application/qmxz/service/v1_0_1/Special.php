@@ -1430,6 +1430,7 @@ class Special
             } catch (\Exception $e) {
                 Db::rollback();
             }
+
             $special_info = SpecialModel::where('id', $data['special_id'])->find();
             //答题时长
             $config_data = $this->configData;
@@ -1439,7 +1440,7 @@ class Special
                 foreach ($template_list as $key => $value) {
                     if ($data['user_id'] == $value['user_id']) {
                         $is_has = 1;
-                        if (isset($data['form_id']) && ($data['form_id'] == '')) {
+                        if (isset($data['form_id']) && ($data['form_id'] != '')) {
                             $template_list[$key]['form_id']           = (string) $data['form_id'];
                             $template_list[$key]['display_time']      = (string) $special_info['display_time'];
                             $template_list[$key]['answer_time_limit'] = (int) $config_data['answer_time_limit'];
@@ -1495,9 +1496,15 @@ class Special
             //模板消息key值
             $template_info_key = Config::get('template_info_key');
             if (isset($data['test']) && $data['test'] == 1) {
-                return $redis->get($template_info_key);
+                if($redis->has($template_info_key)){
+                    return $redis->get($template_info_key);
+                }else{
+                    return [
+                        'data' => '',
+                    ];
+                }
             } else {
-                $redis->set($template_info_key, null);
+                $redis->rm($template_info_key);
                 return [
                     'data' => '',
                 ];
