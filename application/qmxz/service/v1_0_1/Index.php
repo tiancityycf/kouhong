@@ -1,8 +1,10 @@
 <?php
 
 namespace app\qmxz\service\v1_0_1;
-use app\qmxz\model\User as UserModel;
 
+use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
+use app\qmxz\model\User as UserModel;
+use app\qmxz\model\UserSpecialPrize as UserSpecialPrizeModel;
 use think\Db;
 
 /**
@@ -12,7 +14,7 @@ class Index
 {
     protected $configData;
 
-    public function __construct($configData=[])
+    public function __construct($configData = [])
     {
         $this->configData = $configData;
     }
@@ -44,15 +46,16 @@ class Index
      * @param  [type] $data [description]
      * @return [type]       [description]
      */
-    public function getShareInfo($data){
+    public function getShareInfo($data)
+    {
         //分享文案
-        $config_data = $this->configData;
+        $config_data    = $this->configData;
         $share_text_arr = $config_data['share_text_arr'];
-        if(!empty($share_text_arr)){
+        if (!empty($share_text_arr)) {
             $user_info = UserModel::where('openid', $data['openid'])->find();
-            $now_time = date('Y-m-d H:i:s');
-            $rep = ['{name}','{time}'];
-            $rep_arr = [$user_info['nickname'], $now_time];
+            $now_time  = date('Y-m-d H:i:s');
+            $rep       = ['{name}', '{time}'];
+            $rep_arr   = [$user_info['nickname'], $now_time];
             foreach ($share_text_arr as $key => $value) {
                 $share_text_arr[$key] = str_replace($rep, $rep_arr, $value);
             }
@@ -61,7 +64,31 @@ class Index
         $share_img_arr = $config_data['share_img_arr'];
         return [
             'share_text_arr' => $share_text_arr,
-            'share_img_arr' => $share_img_arr
+            'share_img_arr'  => $share_img_arr,
         ];
+    }
+
+    /**
+     * 获取获奖信息
+     * @param  [type] $data 接收参数
+     * @return [type]       [description]
+     */
+    public function getPrizeInfo($data)
+    {
+        //获奖信息限制数量
+        $config_data     = $this->configData;
+        $prize_limit_num = $config_data['prize_limit_num'];
+        $prize_list      = UserSpecialPrizeModel::limit($prize_limit_num)->select();
+        foreach ($prize_list as $key => $value) {
+            //奖品信息
+            $prize_info                     = SpecialPrizeModel::get($value['prize_id']);
+            $prize_list[$key]['prize_name'] = $prize_info['name'];
+            $prize_list[$key]['prize_img']  = $prize_info['img'];
+            //用户信息
+            $user_info                    = UserModel::get($value['user_id']);
+            $prize_list[$key]['nickname'] = $user_info['nickname'];
+            $prize_list[$key]['avatar']   = $user_info['avatar'];
+        }
+        return $prize_list;
     }
 }
