@@ -104,27 +104,31 @@ class CronTab
         //访问结果页url
         $special_result_url = Config::get('special_result_url');
         while (true) {
-            if (time() >= strtotime(date('Y-m-d 23:00:00'))) {
-                $redis->rm($template_info_key);
-                break;
-            }
-            //获取模板消息队列
-            $template_list = $redis->get($template_info_key);
-            if (!empty($template_list)) {
-                foreach ($template_list as $k => $v) {
-                    if ($k % 100 == 0) {
-                        sleep(1);
-                    }
-                    $end_time = $v['display_time'] + $v['answer_time_limit'] * 60;
-                    if ($end_time <= time()) {
-                        try {
-                            if ($v['form_id'] == '') {
-                                //删除记录
-                                unset($template_list[$k]);
-                                //修改缓存信息
-                                $redis->set($template_info_key, $template_list);
-                            } else {
-                                $data = json_decode(https_get(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])));
+            if ($redis->has($template_info_key)) {
+                if (time() >= strtotime(date('Y-m-d 23:00:00'))) {
+                    $redis->rm($template_info_key);
+                    break;
+                }
+                //获取模板消息队列
+                $template_list = $redis->get($template_info_key);
+                if (!empty($template_list)) {
+                    foreach ($template_list as $k => $v) {
+                        if ($k % 100 == 0) {
+                            sleep(1);
+                        }
+                        $end_time = $v['display_time'] + $v['answer_time_limit'] * 60;
+                        if ($end_time <= time()) {
+                            try {
+                                if ($v['form_id'] == '') {
+                                    //删除记录
+                                    unset($template_list[$k]);
+                                    //修改缓存信息
+                                    $redis->set($template_info_key, $template_list);
+                                    continue;
+                                } else {
+                                    $data = json_decode(https_get(sprintf($send_url, $v['special_word_id'], $v['user_id'], $v['page'], $v['form_id'], $v['special_id'])));
+                                }
+                            } catch (Exception $e) {
                                 // 开启事务
                                 Db::startTrans();
                                 try {
@@ -142,20 +146,26 @@ class CronTab
                                     lg($e);
                                     Db::rollback();
                                 }
-                                $result_data = json_decode(https_get(sprintf($special_result_url, $v['user_id'], $v['special_id'])));
-                                //删除记录
-                                unset($template_list[$k]);
-                                //修改缓存信息
-                                $redis->set($template_info_key, $template_list);
+                                try {
+                                    $result_data = json_decode(https_get(sprintf($special_result_url, $v['user_id'], $v['special_id'])));
+                                } catch (Exception $e) {
+                                    //删除记录
+                                    unset($template_list[$k]);
+                                    //修改缓存信息
+                                    $redis->set($template_info_key, $template_list);
+                                    lg($e);
+                                    continue;
+
+                                }
                             }
-                        } catch (Exception $e) {
-                            lg($e);
-                            continue;
                         }
                     }
+                } else {
+                    $redis->rm($template_info_key);
                 }
+            } else {
+                continue;
             }
-
         }
     }
 }
