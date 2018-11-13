@@ -120,7 +120,7 @@ class CronTab
                         'msg'    => '不是一个数组',
                     ];
                     break;
-                }else{
+                } else {
                     // return [
                     //     'status' => 1,
                     //     'msg'    => '是一个数组',
@@ -140,32 +140,31 @@ class CronTab
                             // $data = json_decode(file_get_contents(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)), true);
                             $data = json_decode(https_get(sprintf($send_url, $v->special_word_id, $v->user_id, $v->page, $v->form_id, $v->special_id)));
 
-                            if ($data['data']['errcode'] == 0) {
-                                //访问结果页
-                                $special_result_url = Config::get('special_result_url');
-                                // $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v->user_id, $v->special_id)), true);
-                                $result_data        = json_decode(https_get(sprintf($special_result_url, $v->user_id, $v->special_id)));
+                            echo $data;
 
-                                // 开启事务
-                                Db::startTrans();
-                                try {
-                                    //保存发送记录
-                                    $template_record             = new TemplateRecordModel();
-                                    $template_record->user_id    = $v->user_id;
-                                    $template_record->special_id = $v->special_id;
-                                    $template_record->dday       = date('Ymd');
-                                    $template_record->save();
-
-                                    //删除记录
-                                    unset($template_list[$k]);
-
-                                    Db::commit();
-                                } catch (\Exception $e) {
-                                    lg($e);
-                                    Db::rollback();
-                                    throw new \Exception("系统繁忙");
-                                }
+                            // 开启事务
+                            Db::startTrans();
+                            try {
+                                //保存发送记录
+                                $template_record             = new TemplateRecordModel();
+                                $template_record->user_id    = $v->user_id;
+                                $template_record->special_id = $v->special_id;
+                                $template_record->dday       = date('Ymd');
+                                $template_record->save();
+                                Db::commit();
+                            } catch (\Exception $e) {
+                                lg($e);
+                                Db::rollback();
+                                throw new \Exception("系统繁忙");
                             }
+
+                            //访问结果页
+                            $special_result_url = Config::get('special_result_url');
+                            // $result_data        = json_decode(file_get_contents(sprintf($special_result_url, $v->user_id, $v->special_id)), true);
+                            $result_data = json_decode(https_get(sprintf($special_result_url, $v->user_id, $v->special_id)));
+
+                            //删除记录
+                            unset($template_list[$k]);
                         } catch (Exception $e) {
                             lg($e);
                             continue;
