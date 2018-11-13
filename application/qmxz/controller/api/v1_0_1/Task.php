@@ -68,6 +68,9 @@ class Task extends BasicController
                 $invite_number                    = Db::name('invite_user')->where(['openid' => $openid])->where('create_time', 'between', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->count();
                 $list[$key]['task_invite_number'] = $this->task_invite_number;
                 $list[$key]['invite_number']      = $invite_number;
+                if($invite_number >= $this->task_invite_number){
+                    $list[$key]['is_give'] = 1;
+                }
             }
             //普通场押宝
             if ($val['id'] == 4) {
