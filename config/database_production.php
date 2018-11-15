@@ -9,7 +9,7 @@ return [
     // 服务器地址
     'hostname'        => '172.16.0.74',
     // 数据库名
-    'database'        => 'dbqmxz',
+    'database'        => 'dbkhj',
     // 用户名
     'username'        => 'root',
     // 密码
@@ -55,23 +55,4 @@ return [
     // 断线标识字符串
     'break_match_str' => [],
 
-    //数据库配置1
-    'db_base' => [
-        // 数据库类型
-        'type'            => 'mysql',
-        // 服务器地址
-        'hostname'        => 'gz-cdb-7rl1j14d.sql.tencentcdb.com',
-        // 数据库名
-        'database'        => 'dbqmxz',
-        // 用户名
-        'username'        => 'root',
-        // 密码
-        'password'        => '!$AERGERGEFYU!@#',
-        // 端口
-        'hostport'        => '62072',
-        // 数据库编码默认采用utf8
-        'charset'     => 'utf8',
-        // 数据库表前缀
-        'prefix'          => 't_',
-    ],
 ];
