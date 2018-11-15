@@ -31,57 +31,13 @@
     </div>
  
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">金币值</label>
+        <label class="layui-form-label">价格</label>
         <div class="layui-input-inline">
             <input name="price" value="{$Think.get.price|default=''}" placeholder="搜索出大于你填入的数字的数据" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">推荐位</label>
-        <div class="layui-input-inline">
-            <select name='onsale' class='layui-select' lay-search="">
-                <option value=''> - 请选择分类 -</option>
-                <!--{foreach [0 => '非推荐商品', 1=> '推荐商品'] as $k => $v}-->
-                <!--{if($Think.get.onsale != '' && $Think.get.onsale == $k)}-->
-                <option selected="selected" value='{$k}'> - {$v} - </option>
-                <!--{else}-->
-                <option value='{$k}'> - {$v} - </option>
-                <!--{/if}-->
-                <!--{/foreach}-->
-            </select>
-        </div>
-    </div>
 
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">合作方</label>
-        <div class="layui-input-inline">
-            <select name='is_partner' class='layui-select' lay-search="">
-                <option value=''> - 所有状态 -</option>
-                <!--{foreach [1 => '非合作方', 2=> '是合作方'] as $k => $v}-->
-                <!--{if $Think.get.is_partner == $k}-->
-                <option selected="selected" value='{$k}'> - {$v} - </option>
-                <!--{else}-->
-                <option value='{$k}'> - {$v} - </option>
-                <!--{/if}-->
-                <!--{/foreach}-->
-            </select>
-        </div>
-    </div>
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">是否首页</label>
-        <div class="layui-input-inline">
-            <select name='is_index' class='layui-select' lay-search="">
-                <option value=''> - 所有 -</option>
-                <!--{foreach [0 => '否', 1=> '是'] as $k => $v}-->
-                <!--{if($Think.get.is_index != '' && $Think.get.is_index == $k)}-->
-                <option selected="selected" value='{$k}'> - {$v} - </option>
-                <!--{else}-->
-                <option value='{$k}'> - {$v} - </option>
-                <!--{/if}-->
-                <!--{/foreach}-->
-            </select>
-        </div>
-    </div>
+
     <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
@@ -99,14 +55,14 @@
             <th class='text-left nowrap'>商品ID</th>
             <th class='text-left nowrap'>商品名称</th>
             <th class='text-left nowrap'>商品图片</th>
-            <th class='text-left nowrap'>库存量</th>
-            <th class='text-left nowrap'>所需金币</th>
+            <!--<th class='text-left nowrap'>库存量</th>-->
+            <th class='text-left nowrap'>价格</th>
             <th class='text-left nowrap'>所属分类</th>
-            <th class='text-left nowrap'>合作方</th>
-            <th class='text-left nowrap'>Appid</th>
-            <th class='text-left nowrap'>跳转路径</th>
-            <th class='text-left nowrap'>排序</th>
-            <th class='text-left nowrap'>首页</th>
+            <!--<th class='text-left nowrap'>合作方</th>-->
+            <!--<th class='text-left nowrap'>Appid</th>-->
+            <th class='text-left nowrap'>描述</th>
+            <!--<th class='text-left nowrap'>排序</th>-->
+            <!--<th class='text-left nowrap'>首页</th>-->
             <th class='text-left nowrap'>商品状态</th>
             
     	</tr>
@@ -135,9 +91,6 @@
             <td class='text-left nowrap'>
                 <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.img}' />
             </td>
-            <td class='text-left nowrap'>
-                {$vo.stock}
-            </td>
        
             <td class='text-left nowrap'>
                 {$vo.price}
@@ -145,29 +98,14 @@
             <td class='text-left nowrap'>
                 {$vo.cate_name}
             </td>
+
             <td class='text-left nowrap'>
-                 {if condition="$vo.is_partner == 1"}
-                 <span style="color:green">否</span>
-                 {else}
-                 <span style="color:red">是</span> 
-                 {/if}
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.partner_appid|default="暂无"}
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.jump_route|default="暂无"}
+                {$vo.desc|default="暂无"}
             </td>
             <td class='text-left nowrap'>
                 {$vo.order}
             </td>
-            <td class='text-left nowrap'>
-                 {if condition="$vo.is_index == 1"}
-                 <span style="color:red">是</span>
-                 {else}
-                 <span style="color:green">否</span> 
-                 {/if}
-            </td>
+            
             <td class='text-left nowrap'>
                  {if condition="$vo.status == 1"}
                  <span style="color:green">启用</span>

@@ -24,10 +24,6 @@ class Goods extends Model
         if (isset($params['cate']) && $params['cate'] !== '') {
             $query->where('cate', "{$params['cate']}");
         }
-        
-        if (isset($params['onsale']) && $params['onsale'] !== '') {
-            $query->where('onsale', $params['onsale']);
-        }
 
         if (isset($params['is_index']) && $params['is_index'] !== '') {
             $query->where('is_index', $params['is_index']);
