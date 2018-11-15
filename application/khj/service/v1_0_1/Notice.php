@@ -1,13 +1,13 @@
 <?php
 
-namespace app\qmxz\service\v1_0_1;
+namespace app\khj\service\v1_0_1;
 
-use app\qmxz\model\SendLog;
-use app\qmxz\model\Special as SpecialModel;
-use app\qmxz\model\SpecialWord as SpecialWordModel;
-use app\qmxz\model\TemplateMsg as TemplateMsgModel;
-use app\qmxz\model\User;
-use app\qmxz\model\UserSpecialWordCount as UserSpecialWordCountModel;
+use app\khj\model\SendLog;
+use app\khj\model\Special as SpecialModel;
+use app\khj\model\SpecialWord as SpecialWordModel;
+use app\khj\model\TemplateMsg as TemplateMsgModel;
+use app\khj\model\User;
+use app\khj\model\UserSpecialWordCount as UserSpecialWordCountModel;
 use think\facade\Cache;
 use think\facade\Config;
 

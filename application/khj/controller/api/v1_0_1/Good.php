@@ -1,13 +1,13 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
 use think\facade\Request;
 use think\Db;
 use think\facade\Config;
 use think\facade\Cache;
 
-use app\qmxz\model\Goods as GoodsModel;
+use app\khj\model\Goods as GoodsModel;
 use controller\BasicController;
 /**
  * 商品详情页控制器类
@@ -22,7 +22,7 @@ class Good extends BasicController
 
     public function index()
     {
-        //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/index.html;
+        //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/good/index.html;
         $goods_info = Cache::get(config('goods_info'));
         $config = Cache::get(config('config_key'));
 
@@ -42,7 +42,7 @@ class Good extends BasicController
 	 */
 	public function good_detail()
 	{
-		//前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/good_detail.html?id=40;
+		//前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/good/good_detail.html?id=40;
 		require_params('id');  //id指的是good_id
 		$good_id = Request::param('id');
 
@@ -69,7 +69,7 @@ class Good extends BasicController
      */
     public function exchange_good()
     {
-        //前台测试链接：https://qmxz.wqop2018.com/qmxz/api/v1_0_1/good/exchange_good.html?user_id=1&id=2&address_id=8;
+        //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/good/exchange_good.html?user_id=1&id=2&address_id=8;
         require_params('user_id','id','address_id'); //id值good_id address_id为地址id
         $data = Request::param();
 
@@ -124,7 +124,7 @@ class Good extends BasicController
      */
     public function good_info()
     {
-        //前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/good/good_info.html?user_id=9&id=8;
+        //前台测试链接：http://khj.com/khj/api/v1_0_1/good/good_info.html?user_id=9&id=8;
         require_params('user_id','id'); //id值good_id 
         $data = Request::param();
         
@@ -148,7 +148,7 @@ class Good extends BasicController
      */
     public function logs()
     {
-        //前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/good/logs.html?user_id=1;
+        //前台测试链接：http://khj.com/khj/api/v1_0_1/good/logs.html?user_id=1;
         require_params('user_id');
         $user_id = Request::param('user_id');
 

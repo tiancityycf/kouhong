@@ -1,9 +1,9 @@
 <?php
-namespace app\qmxz\service\v1_0_1;
+namespace app\khj\service\v1_0_1;
 
-use app\qmxz\model\Special as SpecialModel;
-use app\qmxz\model\TemplateInfo as TemplateInfoModel;
-use app\qmxz\model\TemplateRecord as TemplateRecordModel;
+use app\khj\model\Special as SpecialModel;
+use app\khj\model\TemplateInfo as TemplateInfoModel;
+use app\khj\model\TemplateRecord as TemplateRecordModel;
 use think\cache\driver\Redis;
 use think\Db;
 use think\facade\Config;

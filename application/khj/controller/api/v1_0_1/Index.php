@@ -1,8 +1,8 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
-use app\qmxz\service\v1_0_1\Index as IndexService;
+use app\khj\service\v1_0_1\Index as IndexService;
 use controller\BasicController;
 use think\Db;
 use think\facade\Request;

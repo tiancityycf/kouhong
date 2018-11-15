@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
-use app\qmxz\model\Task as TaskModel;
+use app\khj\model\Task as TaskModel;
 use controller\BasicAdmin;
 use think\Db;
 

@@ -1,11 +1,11 @@
 <?php
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
-use app\qmxz\model\Goods as GoodsModel;
-use app\qmxz\model\ExchangeLog as ExchangeLogModel;
+use app\khj\model\Goods as GoodsModel;
+use app\khj\model\ExchangeLog as ExchangeLogModel;
 
 use think\cache\driver\Redis;
 use think\facade\Cache;

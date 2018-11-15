@@ -1,11 +1,10 @@
 <?php
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
-//use model\User as UserModel;
-use app\qmxz\model\User as UserModel;
-use app\qmxz\model\Address as AddressModel;
+use app\khj\model\User as UserModel;
+use app\khj\model\Address as AddressModel;
 
 class UserRecord extends BasicAdmin
 {

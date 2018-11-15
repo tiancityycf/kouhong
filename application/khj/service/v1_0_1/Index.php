@@ -1,12 +1,12 @@
 <?php
 
-namespace app\qmxz\service\v1_0_1;
+namespace app\khj\service\v1_0_1;
 
-use app\qmxz\model\SpecialPrize as SpecialPrizeModel;
-use app\qmxz\model\User as UserModel;
-use app\qmxz\model\UserSpecialPrize as UserSpecialPrizeModel;
-use app\qmxz\model\ExchangeLog as ExchangeLogModel;
-use app\qmxz\model\Goods as GoodsModel;
+use app\khj\model\SpecialPrize as SpecialPrizeModel;
+use app\khj\model\User as UserModel;
+use app\khj\model\UserSpecialPrize as UserSpecialPrizeModel;
+use app\khj\model\ExchangeLog as ExchangeLogModel;
+use app\khj\model\Goods as GoodsModel;
 use think\Db;
 
 /**
@@ -24,7 +24,7 @@ class Index
     public function hot_goods()
     {
         //筛选最火热的四件兑换商品的SQL:
-        //SELECT good_id,count(*) as nums FROM `dbqmxz`.`t_exchange_log` GROUP BY good_id ORDER BY nums desc LIMIT 4
+        //SELECT good_id,count(*) as nums FROM `dbkhj`.`t_exchange_log` GROUP BY good_id ORDER BY nums desc LIMIT 4
         // $hot_exchange = Db::name('exchange_log')->field('good_id,count(*) as nums')->group('good_id')->order('nums desc')->limit(4)->select();
         $hot_exchange = Db::name('exchange_log')->field('good_id,count(*) as nums')->group('good_id')->order('nums desc')->select();
         $hot_good_ids = '';

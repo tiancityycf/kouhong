@@ -1,8 +1,8 @@
 <?php
 
-namespace app\qmxz\service;
+namespace app\khj\service;
 
-use app\qmxz\model\Config as ConfigModel;
+use app\khj\model\Config as ConfigModel;
 use think\facade\Cache;
 use think\facade\Config as ThinkConfig;
 

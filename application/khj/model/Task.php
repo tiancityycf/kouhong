@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace app\qmxz\model;
+namespace app\khj\model;
 
 use think\Model;
 use think\Exception;

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
 use controller\BasicAdmin;
 use think\Db;

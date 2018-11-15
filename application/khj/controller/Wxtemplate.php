@@ -1,7 +1,7 @@
 <?php
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
-use app\qmxz\model\Wxtemplate as WxtemplateModel;
+use app\khj\model\Wxtemplate as WxtemplateModel;
 use controller\BasicAdmin;
 use think\Db;
 

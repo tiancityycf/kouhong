@@ -6,12 +6,12 @@
  * and open the template in the editor.
  */
 
-namespace app\qmxz\model;
+namespace app\khj\model;
 
 use think\Model;
 use think\Exception;
 use think\Db;
-use app\qmxz\model\UserRecord as User;
+use app\khj\model\UserRecord as User;
 
 /**
  * Description of UserRegister

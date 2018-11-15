@@ -1,17 +1,17 @@
 <?php
 
-namespace app\qmxz\service\v1_0_1;
+namespace app\khj\service\v1_0_1;
 
 use think\Db;
 use think\facade\Cache;
 use think\facade\Config;
-use app\qmxz\model\User as UserModel;
-use app\qmxz\model\UserRecord as UserRecordModel;
+use app\khj\model\User as UserModel;
+use app\khj\model\UserRecord as UserRecordModel;
 use model\WithdrawLog as WithdrawLogModel;
 
 use zhise\HttpClient;
 use api_data_service\Notify as NotifyService;
-use app\qmxz\service\Config as ConfigService;
+use app\khj\service\Config as ConfigService;
 
 /**
  * 用户服务类

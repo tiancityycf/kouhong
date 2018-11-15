@@ -1,5 +1,5 @@
 <?php
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
 use controller\BasicAdmin;
 
@@ -7,7 +7,7 @@ use think\Db;
 use think\cache\driver\Redis;
 use think\facade\Cache;
 
-use app\qmxz\model\GoodCates as GoodCatesModel;
+use app\khj\model\GoodCates as GoodCatesModel;
 
 class GoodCates extends BasicAdmin
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\qmxz\model;
+namespace app\khj\model;
 
 use think\Model;
 //use api_data_service\Config as ConfigService;

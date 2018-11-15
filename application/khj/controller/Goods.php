@@ -1,10 +1,10 @@
 <?php
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
-use app\qmxz\model\GoodCates as GoodCatesModel;
-use app\qmxz\model\GoodDetails as GoodDetailsModel;
-use app\qmxz\model\GoodImgs as GoodImgsModel;
-use app\qmxz\model\Goods as GoodsModel;
+use app\khj\model\GoodCates as GoodCatesModel;
+use app\khj\model\GoodDetails as GoodDetailsModel;
+use app\khj\model\GoodImgs as GoodImgsModel;
+use app\khj\model\Goods as GoodsModel;
 use controller\BasicAdmin;
 use think\Db;
 use think\facade\Cache;

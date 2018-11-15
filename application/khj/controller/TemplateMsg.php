@@ -1,7 +1,7 @@
 <?php
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
-use app\qmxz\model\TemplateMsg as TemplateMsgModel;
+use app\khj\model\TemplateMsg as TemplateMsgModel;
 use controller\BasicAdmin;
 use think\Db;
 

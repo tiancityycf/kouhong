@@ -1,13 +1,13 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
 use think\facade\Request;
 use think\Db;
-use app\qmxz\service\v1_0_1\User as UserService;
-use app\qmxz\model\User as UserModel;
+use app\khj\service\v1_0_1\User as UserService;
+use app\khj\model\User as UserModel;
 use controller\BasicController;
-use app\qmxz\service\v1_0_1\Index as IndexService;
+use app\khj\service\v1_0_1\Index as IndexService;
 
 /**
  * 用户控制器类
@@ -58,7 +58,7 @@ class User extends BasicController
 	 */
 	public function login()
 	{
-		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
+		//前台测试链接：http://khj.com/khj/api/v1_0_1/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
 		require_params('code');
 		$code = Request::param('code');
 	
@@ -121,7 +121,7 @@ class User extends BasicController
 
 	public function center()
 	{
-		//前台测试链接：http://www.zhuqian.com/qmxz/api/v1_0_0/user/center.html?openid=1&sign=0a53bf188436d7372adfa7e613217f01&timestamp=1
+		//前台测试链接：http://www.zhuqian.com/khj/api/v1_0_0/user/center.html?openid=1&sign=0a53bf188436d7372adfa7e613217f01&timestamp=1
 		require_params('openid');
         $openid = Request::param('openid');
 

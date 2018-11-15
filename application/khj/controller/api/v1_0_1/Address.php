@@ -1,10 +1,10 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
 use think\facade\Request;
 
-use app\qmxz\model\Address as AddressModel;
+use app\khj\model\Address as AddressModel;
 
 /**
  * 用户分享控制器类
@@ -18,7 +18,7 @@ class Address
 
 	 public function index()
 	{
-		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/address/index.html?openid=1
+		//前台测试链接：http://khj.com/khj/api/v1_0_1/address/index.html?openid=1
 		require_params('openid');
 		$openid = Request::param('openid');
         $AddressModel = new AddressModel();
@@ -32,7 +32,7 @@ class Address
 	 */
 	public function create_addr()
 	{
-		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/address/create_addr.html?openid=1&nickname='kevin'&phone=15888888888&addr='长沙岳麓区'&region='湖南';
+		//前台测试链接：http://khj.com/khj/api/v1_0_1/address/create_addr.html?openid=1&nickname='kevin'&phone=15888888888&addr='长沙岳麓区'&region='湖南';
 		require_params('openid', 'nickname', 'phone', 'addr','region');
 		$data = Request::param();
 	
@@ -49,7 +49,7 @@ class Address
 
 	public function set_default_addr()
 	{
-		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/address/set_default_addr.html?openid=1&id=3;
+		//前台测试链接：http://khj.com/khj/api/v1_0_1/address/set_default_addr.html?openid=1&id=3;
 		require_params('openid', 'id');
 		$data = Request::param();
         $AddressModel = new AddressModel();
@@ -68,7 +68,7 @@ class Address
 	 */
 	public function edit_addr()
 	{
-		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/address/edit_addr.html?id=3&openid=1&nickname=kevin&phone=15888888888&addr=长沙岳麓区&region=湖南&ty=getInfo;
+		//前台测试链接：http://khj.com/khj/api/v1_0_1/address/edit_addr.html?id=3&openid=1&nickname=kevin&phone=15888888888&addr=长沙岳麓区&region=湖南&ty=getInfo;
 		require_params('id','ty');
 		$AddressModel = new AddressModel();
 		$data = Request::param();
@@ -92,7 +92,7 @@ class Address
 	 */
 	public function del_addr()
 	{
-		//前台测试链接：http://qmxz.com/qmxz/api/v1_0_1/address/del_addr.html?id=7
+		//前台测试链接：http://khj.com/khj/api/v1_0_1/address/del_addr.html?id=7
 		require_params('id');
 		$id = Request::param('id');
         $AddressModel = new AddressModel();

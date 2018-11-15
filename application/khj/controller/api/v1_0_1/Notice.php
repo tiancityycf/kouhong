@@ -1,10 +1,10 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
 use think\facade\Request;
 use controller\BasicController;
-use app\qmxz\service\v1_0_1\Notice as NoticeService;
+use app\khj\service\v1_0_1\Notice as NoticeService;
 
 /**
  * 服务通知控制器类

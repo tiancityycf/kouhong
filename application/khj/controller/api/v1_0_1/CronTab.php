@@ -1,8 +1,8 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
-use app\qmxz\service\v1_0_1\CronTab as CronTabService;
+use app\khj\service\v1_0_1\CronTab as CronTabService;
 use controller\BasicController;
 
 /**

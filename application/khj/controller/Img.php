@@ -1,5 +1,5 @@
 <?php
-namespace app\qmxz\controller;
+namespace app\khj\controller;
 
 use controller\BasicAdmin;
 use service\DataService;

@@ -6,12 +6,12 @@
  * and open the template in the editor.
  */
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
-use app\qmxz\model\InviteUser;
-use app\qmxz\model\Task as TaskModel;
-use app\qmxz\model\UserRecord as UserRecord;
-use app\qmxz\model\UserRegister;
+use app\khj\model\InviteUser;
+use app\khj\model\Task as TaskModel;
+use app\khj\model\UserRecord as UserRecord;
+use app\khj\model\UserRegister;
 use controller\BasicController;
 use think\Db;
 use think\facade\Request;

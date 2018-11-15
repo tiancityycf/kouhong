@@ -1,6 +1,6 @@
 <?php
 
-namespace app\qmxz\controller\api\v1_0_1;
+namespace app\khj\controller\api\v1_0_1;
 
 use think\facade\Request;
 
