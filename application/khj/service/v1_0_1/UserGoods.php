@@ -64,7 +64,7 @@ class UserGoods
     			$user_goods_list[$key]['create_time'] = $value->create_time;
     			$user_goods_list[$key]['title'] = $value->goods->title;
     			$user_goods_list[$key]['img'] = $value->goods->img;
-    			$user_goods_list[$key]['address'] = $value->address->region.$value->address->addr;
+    			$user_goods_list[$key]['address'] = $value->address->region.' '.$value->address->addr;
     			$user_goods_list[$key]['is_shiping'] = $value->is_shiping;
     		}
     	}
