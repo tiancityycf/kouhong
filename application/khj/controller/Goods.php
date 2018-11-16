@@ -103,7 +103,7 @@ class Goods extends BasicAdmin
 
         $this->assign('cates', $cates);
 
-        return $this->fetch('edit', ['vo' => $vo]);
+        return $this->fetch('form', ['vo' => $vo]);
     }
 
     //刷新配置的时候一次存入缓存
