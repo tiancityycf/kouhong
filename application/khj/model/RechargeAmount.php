@@ -5,19 +5,19 @@ namespace app\khj\model;
 use think\Model;
 
 /**
- * 订单模型类
+ * 充值金额模型类
  */
-class Order extends Model
+class RechargeAmount extends Model
 {
-	public function search($params)
+    public function search($params)
     {
         $query = self::buildQuery();
 
-        foreach (['id', 'user_id', 'status'] as $key) {
+        foreach (['id','title', 'caption', 'status'] as $key) {
             (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
         }
 
-        $query->order('id desc');
+        $query->order('sort desc');
 
         return $query;
     }
