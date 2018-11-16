@@ -110,6 +110,9 @@ class WxPay
                 return false;
             }
             $result = $this->xml_to_data($response);
+   //          if( !empty($result['result_code']) && !empty($result['err_code']) ){
+			// 	$result['err_msg'] = $this->error_code( $result['err_code'] );
+			// }
             return $result;
         } catch (Exception $e) {
             lg($e);
