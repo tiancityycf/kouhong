@@ -110,6 +110,10 @@ class User
         try {
             $time = time();
             $user = UserModel::where('openid', $data['openid'])->find();
+            if(empty($user)){
+                Db::rollback();
+                return ['error' => '用户不存在'];
+            }
             //dump($user);die;
             $user->nickname = $data['nickname'];
             $user->avatar = $data['avatar'];
@@ -131,7 +135,7 @@ class User
         } catch (\Exception $e) {
             Db::rollback();
             lg($e);
-            throw new \Exception("系统繁忙");
+            return ['error' => $e->getMessage()];
         }
     }
 
