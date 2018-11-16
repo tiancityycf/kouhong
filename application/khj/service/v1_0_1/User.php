@@ -109,9 +109,11 @@ class User
         Db::startTrans();
         try {
             $time = time();
-            $user = UserModel::where('openid', $data['openid'])->find();
+            $userModel = new UserModel();
+            $user = $userModel->where('openid', $data['openid'])->find();
             if(empty($user)){
                 Db::rollback();
+                trace($userModel->getLastSql(),'error');
                 return ['error' => '用户不存在'];
             }
             //dump($user);die;
