@@ -32,7 +32,8 @@ class User
             $data = json_decode(file_get_contents(sprintf($loginUrl, $appid, $secret, $code)), true);
         } catch (\Exception $e) {
             lg($e);
-            throw new \Exception("系统繁忙");
+            $result = ['status' => 0];
+            return $result;
         }
 
         //强制通过
@@ -79,7 +80,8 @@ class User
             } catch (\Exception $e) {
                 Db::rollback();
                 lg($e);
-                throw new \Exception("系统繁忙");
+                $result = ['status' => 0];
+                return $result;
             }
 
             $result = [
