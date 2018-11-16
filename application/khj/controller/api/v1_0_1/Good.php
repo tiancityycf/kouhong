@@ -25,6 +25,10 @@ class Good extends BasicController
         $goods_info = Db::name('good_cates')->alias('a')->join(['t_goods' => 'b'], 'a.id=b.cate')->where(['b.status' => 1])->order('b.order desc')->field("a.cate_name,b.*")->select();
         $data['good_info'] = $goods_info;
 
+        $data['rules'] = [];
+        if(isset($this->configData['rules'])){
+            $data['rules'] = $this->configData['rules'];
+        }
         return result(200, 'ok', $data);
     }
 	/**

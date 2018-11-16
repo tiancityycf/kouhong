@@ -16,7 +16,6 @@ return [
     'ad_url'             => 'https://ad.ali-yun.wang',
 //    'ad_url'=>'http://gg.com:8083',
 
-    'goods_info'         => 'goods_info',
     'config_key'         => 'config_info',
 
     //异常系统接入参数
