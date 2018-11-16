@@ -4,6 +4,7 @@ namespace app\khj\service\v1_0_1;
 
 use app\khj\model\Goods as GoodsModel;
 use app\khj\model\Order as OrderModel;
+use app\khj\model\User as UserModel;
 use think\Db;
 use think\facade\Config;
 
@@ -78,7 +79,9 @@ class WxPay
         $notify_url = Config::get('wx_notify_url');
         //交易类型
         $trade_type = 'JSAPI';
-        $param      = [
+        //用户openid
+        $openid = UserModel::where('id', $data['user_id'])->value('openid');
+        $param  = [
             'appid'            => $appid,
             'mch_id'           => $mch_id,
             'nonce_str'        => $nonce_str,
@@ -89,6 +92,7 @@ class WxPay
             'spbill_create_ip' => $spbill_create_ip,
             'notify_url'       => $notify_url,
             'trade_type'       => $trade_type,
+            'openid'           => $openid,
         ];
         ksort($param);
         //商户平台设置的密钥key
