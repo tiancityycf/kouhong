@@ -20,34 +20,18 @@ class User extends BasicController
 	 */
 	public function index()
 	{
-		require_params('openid');
+        //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/user/index.html?openid=1
+        require_params('openid');
         $data = Request::param();
 
-		$user_info = Db::name('user_record')->field('avatar,nickname,gold')->where('openid',$data['openid'])->find();
+		$user_info = Db::name('user_record')->field('avatar,nickname,gold,money')->where('openid',$data['openid'])->find();
 		$result['user_info'] =  $user_info;
 
-		//是否跳转小程序
-		$config_data = $this->configData;
-		$is_jump = $config_data['is_jump'];
-		$result['is_jump'] = $is_jump;
-
 		$indexService = new IndexService($this->configData);
-		$result['hot_goods'] = $indexService->hot_goods();
-
-        $config_data = $this->configData;
-        $result['config'] = $config_data;
-
-        //获取分享信息
-        $share_info = $indexService->getShareInfo($data);
-        $result['share_info'] = $share_info;
-
-        //获奖信息
-        $prize_list = $indexService->getPrizeList($data);
-        $result['prize_list'] = $prize_list;
 
         //兑换信息
-        $exchange_list = $indexService->getExchangeList($data);
-        $result['exchange_list'] = $exchange_list;
+//        $exchange_list = $indexService->getExchangeList($data);
+//        $result['exchange_list'] = $exchange_list;
 
         return result(200, 'ok', $result);
 	}
@@ -58,7 +42,7 @@ class User extends BasicController
 	 */
 	public function login()
 	{
-		//前台测试链接：http://khj.com/khj/api/v1_0_1/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
+		//前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
 		require_params('code');
 		$code = Request::param('code');
 	

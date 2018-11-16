@@ -7,8 +7,8 @@ return [
     'str_secret'          => '',
 
     // 微信设置
-    'wx_appid'            => 'wxb22df5347915b0aa',
-    'wx_secret'           => '2f2c49f504048edf1673dcc49bf21077',
+    'wx_appid'            => 'wx6acc78416f0a6aca',
+    'wx_secret'           => '0bf1f0a099df61011773850a49e45310',
     //商户号
     'wx_mch_id'            => '1519068881',
     //商户平台设置的密钥key
@@ -20,8 +20,8 @@ return [
     'ad_url'              => 'https://ad.ali-yun.wang',
 //    'ad_url'=>'http://gg.com:8083',
 
-    'goods_info'          => 'goods_info',
-    'config_key'          => 'config_info',
+
+    'config_key'         => 'config_info',
 
     //异常系统接入参数
     'system_title'        => '口红机挑战吧',

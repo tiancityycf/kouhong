@@ -58,7 +58,7 @@
             <!--<th class='text-left nowrap'>库存量</th>-->
             <th class='text-left nowrap'>价格</th>
             <th class='text-left nowrap'>所属分类</th>
-            <!--<th class='text-left nowrap'>合作方</th>-->
+            <th class='text-left nowrap'>专柜价</th>
             <!--<th class='text-left nowrap'>Appid</th>-->
             <th class='text-left nowrap'>描述</th>
             <!--<th class='text-left nowrap'>排序</th>-->
@@ -100,12 +100,15 @@
             </td>
 
             <td class='text-left nowrap'>
+                {$vo.sale_price}
+            </td>
+            <td class='text-left nowrap'>
                 {$vo.desc|default="暂无"}
             </td>
             <td class='text-left nowrap'>
                 {$vo.order}
             </td>
-            
+
             <td class='text-left nowrap'>
                  {if condition="$vo.status == 1"}
                  <span style="color:green">启用</span>

@@ -54,7 +54,7 @@ class Goods extends BasicAdmin
             $arr                = $data;
             $arr['create_time'] = time();
 
-            if (Db::name($this->table)->strict(false)->insert($arr) !== false && $this->redisSave()) {
+            if (Db::name($this->table)->strict(false)->insert($arr) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -90,7 +90,7 @@ class Goods extends BasicAdmin
             $arr                = $post_data;
             $arr['update_time'] = time();
 
-            if (Db::name($this->table)->where(['id' => $get_data['id']])->update($arr) !== false && $this->redisSave()) {
+            if (Db::name($this->table)->where(['id' => $get_data['id']])->update($arr) !== false ) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -103,7 +103,7 @@ class Goods extends BasicAdmin
 
         $this->assign('cates', $cates);
 
-        return $this->fetch('edit', ['vo' => $vo]);
+        return $this->fetch('form', ['vo' => $vo]);
     }
 
     //刷新配置的时候一次存入缓存
@@ -159,7 +159,7 @@ class Goods extends BasicAdmin
             $arr               = $post_data;
             $arr['product_id'] = $get_data['id'];
 
-            if ($model->save($arr) !== false && $this->redisSave()) {
+            if ($model->save($arr) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -191,7 +191,7 @@ class Goods extends BasicAdmin
             $arr               = $post_data;
             $arr['product_id'] = $get_data['id'];
 
-            if ($model->save($arr) !== false && $this->redisSave()) {
+            if ($model->save($arr) !== false ) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -219,7 +219,7 @@ class Goods extends BasicAdmin
 
         $res = $model->where('id', $product_id)->delete();
 
-        if ($res && $this->redisSave()) {
+        if ($res ) {
 
             echo 'success';
         } else {
@@ -247,7 +247,7 @@ class Goods extends BasicAdmin
 
         $res = $model->where('id', $product_id)->delete();
 
-        if ($res && $this->redisSave()) {
+        if ($res ) {
 
             echo 'success';
         } else {

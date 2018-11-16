@@ -122,8 +122,6 @@ class Tpfig extends BasicAdmin
 
     protected function redisSave()
     {
-        $redis = Cache::init();
-
         $arr = Db::name($this->table)->where('status',1)->column('index, value, type', 'index');
 
         if (Cache::set(config('config_key'), $arr)) {
@@ -131,7 +129,5 @@ class Tpfig extends BasicAdmin
         } else {
             return false;
         }
-
     }
-
 }

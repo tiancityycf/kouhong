@@ -27,7 +27,14 @@ class User
         $appid = Config::get('wx_appid');
         $secret = Config::get('wx_secret');
         $loginUrl = Config::get('wx_login_url');
-        $data = json_decode(file_get_contents(sprintf($loginUrl, $appid, $secret, $code)), true);
+
+        try{
+            $data = json_decode(file_get_contents(sprintf($loginUrl, $appid, $secret, $code)), true);
+        } catch (\Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
+        }
+
         //强制通过
         //$data['openid'] = 1;
         //$data['session_key'] = 'test';
@@ -50,38 +57,28 @@ class User
                     $user->userRecord->save();
 
                 } else {
-
                     $user = new UserModel();
                     $user->openid = $data['openid'];
                     $user->create_time = $time;
                     $user->session_key = $data['session_key'];
                     $user->save();
-
                     //新用户初始化金币的值
-                    $config = Cache::get(config('config_key'));
-                    $init_gold = $config['init_gold']['value'];
-                    if(!isset($init_gold)){
-                        $init_gold = ConfigService::get('init_gold');
-                    }
-
                     $userRecord = new UserRecordModel();
                     $userRecord->user_id = $user->id;
                     $userRecord->openid = $data['openid'];
-                    $userRecord->gold = $init_gold;
+                    $userRecord->gold = 0;
                     $userRecord->last_login = $time;
                     if ($from_type == 1) {
                         $userRecord->user_status = 2;
                     } else {
                         $userRecord->user_status = 1;
                     }
-                   
                     $userRecord->save();
-                    
                 }
-
                 Db::commit();
             } catch (\Exception $e) {
                 Db::rollback();
+                lg($e);
                 throw new \Exception("系统繁忙");
             }
 
@@ -130,6 +127,7 @@ class User
             return ['user_status' => $user_status];
         } catch (\Exception $e) {
             Db::rollback();
+            lg($e);
             throw new \Exception("系统繁忙");
         }
     }
