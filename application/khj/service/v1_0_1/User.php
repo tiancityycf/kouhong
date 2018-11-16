@@ -90,6 +90,7 @@ class User
                 'user_status' => 1,
             ];
         } else {
+            trace("login error ".json_encode($data),'error');
             $result = ['status' => 0];
         }
 
