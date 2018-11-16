@@ -62,8 +62,6 @@ class User extends BasicController
         require_params('openid', 'nickname', 'avatar', 'gender');
 		$data = Request::param();
 
-        trace(json_encode($data),'error');
-		
 		$userService = new UserService();
 		$result = $userService->update($data);
 
