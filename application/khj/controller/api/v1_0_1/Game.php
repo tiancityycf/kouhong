@@ -18,8 +18,20 @@ use app\khj\service\v1_0_1\Game as GameService;
  */
 class Game extends BasicController
 {
-	public function end(){
-		require_params('user_id', 'mode', 'checkpoint', 'is_win');
+	public function start()
+	{
+		require_params('user_id', 'goods_id');
+		$data = Request::param();
+
+		$game_service = new GameService($this->configData);
+		$result = $game_service->start($data);
+
+		return result(200, 'ok', $result);
+	}
+
+	public function end()
+	{
+		require_params('user_id', 'challenge_id', 'goods_id', 'checkpoint', 'is_win');
         $data = Request::param();
 
         $game_service = new GameService($this->configData);
