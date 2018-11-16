@@ -27,91 +27,94 @@ class WxPay
      */
     public function unifiedorder($data)
     {
-        // 开启事务
-        Db::startTrans();
         try {
-            //商户下单
-            if ($data['type'] == 0) {
-                //充值下单
-                // $order           = new OrderModel();
-                // $order->user_id  = $data['user_id'];
-                // $order->trade_no = $this->getTradeNo('KH');
-            } elseif ($data['type'] == 1) {
-                //商品信息
-                $good_info = GoodsModel::get($data['good_id']);
-                //购买下单
-                $order             = new OrderModel();
-                $order->user_id    = $data['user_id'];
-                $order->trade_no   = $this->getTradeNo('KH');
-                $order->good_id    = $data['good_id'];
-                $order->good_name  = $good_info['title'];
-                $order->good_value = $good_info['price'];
-                $order->num        = $data['num'];
-                $order->pay_value  = $good_info['price'] * $data['num'];
-                $order->type       = 1;
-                $order->dday       = date('Ymd');
-                $order->add_time   = date('Y-m-d H:i:s');
-                $order->save();
+            // 开启事务
+            Db::startTrans();
+            try {
+                //商户下单
+                if ($data['type'] == 0) {
+                    return false;
+                    //充值下单
+                    // $order           = new OrderModel();
+                    // $order->user_id  = $data['user_id'];
+                    // $order->trade_no = $this->getTradeNo('KH');
+                } elseif ($data['type'] == 1) {
+                    //商品信息
+                    $good_info = GoodsModel::get($data['good_id']);
+                    //购买下单
+                    $order             = new OrderModel();
+                    $order->user_id    = $data['user_id'];
+                    $order->trade_no   = $this->getTradeNo('KH');
+                    $order->good_id    = $data['good_id'];
+                    $order->good_name  = $good_info['title'];
+                    $order->good_value = $good_info['price'];
+                    $order->num        = $data['num'];
+                    $order->pay_value  = $good_info['price'] * $data['num'];
+                    $order->type       = 1;
+                    $order->dday       = date('Ymd');
+                    $order->add_time   = date('Y-m-d H:i:s');
+                    $order->save();
+                }
+                Db::commit();
+            } catch (\Exception $e) {
+                lg($e);
+                Db::rollback();
             }
-            Db::commit();
-        } catch (\Exception $e) {
+            //调用微信下单接口下单
+            //小程序id
+            $appid = Config::get('wx_appid');
+            //商户id
+            $mch_id = Config::get('wx_mch_id');
+            //随机字符串
+            $nonce_str = md5(time() . rand(10000, 99999));
+            //签名类型
+            $sign_type = 'MD5';
+            //商品描述
+            $body = '口红机挑战吧-购买' . $data['num'] . '件' . $order->good_name;
+            //生成订单号
+            $out_trade_no = $order->trade_no;
+            //订单总金额
+            $total_fee = $order->pay_value * 100;
+            //终端IP
+            $spbill_create_ip = $_SERVER['REMOTE_ADDR'];
+            //回调地址
+            $notify_url = Config::get('wx_notify_url');
+            //交易类型
+            $trade_type = 'JSAPI';
+            //用户openid
+            $openid = UserModel::where('id', $data['user_id'])->value('openid');
+            $param  = [
+                'appid'            => $appid,
+                'mch_id'           => $mch_id,
+                'nonce_str'        => $nonce_str,
+                'sign_type'        => $sign_type,
+                'body'             => $body,
+                'out_trade_no'     => $out_trade_no,
+                'total_fee'        => $total_fee,
+                'spbill_create_ip' => $spbill_create_ip,
+                'notify_url'       => $notify_url,
+                'trade_type'       => $trade_type,
+                'openid'           => $openid,
+            ];
+            ksort($param);
+            //商户平台设置的密钥key
+            $wx_mch_key = Config::get('wx_mch_key');
+            //签名
+            $sign          = $this->getmd5sec($param, $wx_mch_key);
+            $param['sign'] = $sign;
+            $xml           = $this->data_to_xml($param);
+            //微信统一下单接口
+            $wx_pay_unifiedorder = Config::get('wx_pay_unifiedorder');
+            $response            = $this->postXmlCurl($xml, $wx_pay_unifiedorder);
+            if (!$response) {
+                return false;
+            }
+            $result = $this->xml_to_data($response);
+            return $result;
+        } catch (Exception $e) {
             lg($e);
-            Db::rollback();
+            throw new \Exception("系统繁忙");
         }
-        //调用微信下单接口下单
-        //小程序id
-        $appid = Config::get('wx_appid');
-        //商户id
-        $mch_id = Config::get('wx_mch_id');
-        //随机字符串
-        $nonce_str = md5(time() . rand(10000, 99999));
-        //签名类型
-        $sign_type = 'MD5';
-        //商品描述
-        $body = $order->good_name;
-        //生成订单号
-        $out_trade_no = $order->trade_no;
-        //订单总金额
-        $total_fee = $order->pay_value * 100;
-        //终端IP
-        $spbill_create_ip = $_SERVER['REMOTE_ADDR'];
-        //回调地址
-        $notify_url = Config::get('wx_notify_url');
-        //交易类型
-        $trade_type = 'JSAPI';
-        //用户openid
-        $openid = UserModel::where('id', $data['user_id'])->value('openid');
-        $param  = [
-            'appid'            => $appid,
-            'mch_id'           => $mch_id,
-            'nonce_str'        => $nonce_str,
-            'sign_type'        => $sign_type,
-            'body'             => $body,
-            'out_trade_no'     => $out_trade_no,
-            'total_fee'        => $total_fee,
-            'spbill_create_ip' => $spbill_create_ip,
-            'notify_url'       => $notify_url,
-            'trade_type'       => $trade_type,
-            'openid'           => $openid,
-        ];
-        ksort($param);
-        //商户平台设置的密钥key
-        $wx_mch_key = Config::get('wx_mch_key');
-        //签名
-        $sign          = $this->getmd5sec($param, $wx_mch_key);
-        $param['sign'] = $sign;
-        $xml           = $this->data_to_xml($param);
-        //微信统一下单接口
-        $wx_pay_unifiedorder = Config::get('wx_pay_unifiedorder');
-        $response            = $this->postXmlCurl($xml, $wx_pay_unifiedorder);
-        if (!$response) {
-            return false;
-        }
-        $result = $this->xml_to_data($response);
-        if (!empty($result['result_code']) && !empty($result['err_code'])) {
-            $result['err_msg'] = $this->error_code($result['err_code']);
-        }
-        return $result;
     }
 
     /**
@@ -261,29 +264,70 @@ class WxPay
      * 下单回调
      * @return string
      */
-    public function unifiedorderNotify($data)
+    public function unifiedorderNotify($xml)
     {
-        $order = OrderModel::where('trade_no', $data['trade_no'])->find();
-        if ($order) {
-            // 开启事务
-            Db::startTrans();
-            try {
-                if ($data['code'] == 200) {
-                    $order->status   = 1; // 成功
-                    $order->pay_time = date('Y-m-d H:i:s');
-                } else {
-                    $order->status   = 2; // 失败
-                    $order->pay_time = date('Y-m-d H:i:s');
-                }
-                $order->save();
-                Db::commit();
-                return 'SUCCESS';
-            } catch (\Exception $e) {
-                lg($e);
-                Db::rollback();
-                return 'FAILUE';
-            }
+        if (empty($xml)) {
+            return false;
         }
-        return 'FAILUE';
+        $data = array();
+        $data = $this->xml_to_data($xml);
+        //回调状态码
+        if ($data['return_code'] == 'SUCCESS') {
+            $param       = $data['return_msg'];
+            $notify_sign = $param['sign'];
+            foreach ($param as $key => $value) {
+                if ($key == 'sign') {
+                    unset($param[$key]);
+                }
+            }
+            ksort($param);
+            //商户平台设置的密钥key
+            $wx_mch_key = Config::get('wx_mch_key');
+            //签名
+            $sign = $this->getmd5sec($param, $wx_mch_key);
+            if ($sign == $notify_sign) {
+                $trade_no = $param['out_trade_no'];
+                $order    = OrderModel::where('trade_no', $trade_no)->find();
+                if ($order) {
+                    if ($order['pay_value'] == $param['total_fee']) {
+                        // 开启事务
+                        Db::startTrans();
+                        try {
+                            //更改订单状态
+                            $order->status = 1;
+                            $order->save();
+                            Db::commit();
+                        } catch (\Exception $e) {
+                            lg($e);
+                            Db::rollback();
+                        }
+                        $return_xml = '<xml>
+							  <return_code><![CDATA[SUCCESS]]></return_code>
+							  <return_msg><![CDATA[OK]]></return_msg>
+							</xml>';
+                        return $return_xml;
+                    } else {
+                        // 开启事务
+                        Db::startTrans();
+                        try {
+                            //更改订单状态
+                            $order->status = 2;
+                            $order->save();
+                            Db::commit();
+                        } catch (\Exception $e) {
+                            lg($e);
+                            Db::rollback();
+                        }
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace app\khj\controller\api\v1_0_1;
 
 use app\khj\service\v1_0_1\WxPay as WxPayService;
 use controller\BasicController;
+use think\facade\Request;
 
 /**
  * 微信支付控制类
@@ -35,8 +36,8 @@ class WxPay extends BasicController
      */
     public function unifiedorderNotify()
     {
-        $data           = Request::param();
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $wx_pay_service = new WxPayService();
-        return $wx_pay_service->unifiedorderNotify($data);
+        return $wx_pay_service->unifiedorderNotify($xml);
     }
 }
