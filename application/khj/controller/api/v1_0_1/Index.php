@@ -12,21 +12,6 @@ use think\facade\Request;
  */
 class Index extends BasicController
 {
-    /**
-     * 首页接口
-     * @return boolean
-     */
-    public function index()
-    {
-        //echo "<pre>"; print_r($this->configData);exit();
-        require_params('user_id');
-        $data = Request::param();
-
-        $indexService = new IndexService($this->configData);
-        $result       = $indexService->index($data);
-
-        return result(200, 'ok', $result);
-    }
 
     /**
      * 用户中心接口
@@ -34,6 +19,7 @@ class Index extends BasicController
      */
     public function center()
     {
+        echo 1;die;
         //echo "<pre>"; print_r($this->configData);exit();
         require_params('user_id');
         $user_id             = Request::param('user_id');
@@ -75,6 +61,7 @@ class Index extends BasicController
      */
     public function rank()
     {
+        echo 1;die;
         $config_data = $this->configData;
         //默认用户名
         $system_default_nickname = $config_data['system_default_nickname'];
