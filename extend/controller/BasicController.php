@@ -3,9 +3,8 @@
 namespace controller;
 
 use think\Controller;
-use think\facade\Request;
 use think\facade\Config;
-use app\qmxz\service\Config as ConfigService;
+use app\khj\service\Config as ConfigService;
 
 /**
  * 基础控制器类

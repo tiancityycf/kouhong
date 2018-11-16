@@ -4,7 +4,6 @@ namespace app\khj\controller\api\v1_0_1;
 
 use think\facade\Request;
 use think\Db;
-use think\facade\Config;
 use think\facade\Cache;
 
 use app\khj\model\Goods as GoodsModel;
@@ -23,18 +22,10 @@ class Good extends BasicController
     public function index()
     {
         //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/good/index.html;
-        $goods_info = Cache::get(config('goods_info'));
-        $config = Cache::get(config('config_key'));
+        $goods_info = Db::name('good_cates')->alias('a')->join(['t_goods' => 'b'], 'a.id=b.cate')->where(['b.status' => 1])->order('b.order desc')->select();
+        $data['good_info'] = $goods_info;
 
-        //是否跳转小程序
-        $config_data = $this->configData;
-        $is_jump = $config_data['is_jump'];
-        $arr['is_jump'] = $is_jump;
-
-        $arr['banners'] = json_decode($config['good_banners']['value']);
-        $arr['good_info'] = $goods_info;
-
-        return result(200, '0k', $arr);
+        return result(200, 'ok', $data);
     }
 	/**
 	 * 查询具体商品信息与其兑换过的信息
