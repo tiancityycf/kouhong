@@ -38,7 +38,8 @@ class Address
 	
 		$data['create_time'] = time();
         $AddressModel = new AddressModel();
-        $result = $AddressModel->save($data);
+        $where['user_id'] = $data['user_id'];
+        $result = $AddressModel->save($data,$where);
         return result(200, 'ok', $result);
 	}
 
