@@ -8,6 +8,7 @@
 
 namespace app\khj\controller\api\v1_0_1;
 
+use think\facade\Request;
 use controller\BasicController;
 use app\khj\service\v1_0_1\Game as GameService;
 
@@ -31,7 +32,7 @@ class Game extends BasicController
 
 	public function end()
 	{
-		require_params('user_id', 'challenge_id', 'goods_id', 'checkpoint', 'is_win');
+		require_params('user_id', 'challenge_id', 'goods_id', 'is_win');
         $data = Request::param();
 
         $game_service = new GameService($this->configData);

@@ -26,24 +26,30 @@ class Game
     {
         Db::startTrans();
         try {
-            $userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
             $goods = GoodsModel::where('id', $data['goods_id'])->find();
+            if (empty($goods)) {
+                trace("商品不存在".$data['goods_id'],'error');
+                return ['status' => 0, 'msg' => '商品不存在'];
+            }
+            $userRecord = UserRecordModel::where('user_id', $data['user_id'])->lock(true)->find();
 
             if ($userRecord->money < $goods->price) {
+                Db::rollback();
+                trace("余额不足 goods_id=".$data['goods_id'].' user_id='.$data['user_id'],'error');
                 return ['status' => 0, 'msg' => '余额不足'];
             }
 
-            $userRecord->money -= $goods->price;
-            $userRecord->challenge_num += 1;
-
-            $challenge_id = $this->create_log($data);
+            $userRecord->money = ['dec',$goods->price];
+            $userRecord->challenge_num = ['inc', 1];
             $userRecord->save();
-
+            trace($userRecord->getLastSql(),'error');
+            $challenge_id = $this->create_log($data);
             Db::commit();
             return ['status' => 1, 'challenge_id' => $challenge_id, 'msg' => 'ok'];
 
         } catch (\Exception $e) {
             Db::rollback();
+            lg($e);
             throw new \Exception($e->getMessage());
         }
     }
@@ -53,7 +59,7 @@ class Game
     private function create_log($data)
     {
         $time = time();
-        $challenge = ChallengeLog::create([
+        $challenge = ChallengeLogModel::create([
             'user_id' => $data['user_id'],
             'goods_id' => $data['goods_id'],
             'start_time' => $time,
@@ -82,8 +88,8 @@ class Game
     private function update_log($data)
     {
         $time = time();
-        ChallengeLog::where('id', $data['challenge_id'])->update([
-            'score' => isset($data['checkpoint']) ? $data['checkpoint'] : 0,
+        ChallengeLogModel::where('id', $data['challenge_id'])->update([
+            'score' => isset($data['score']) ? $data['score'] : 0,
             'successed' => isset($data['is_win']) ? $data['is_win'] : 0,
             'end_time' => $time,
             'update_time' => $time,
@@ -96,30 +102,27 @@ class Game
      * @return [type]       [description]
      */
     public function end($data)
-    {   
-        if ($data['challenge_id'] == '') {
-            return ['status' => 0];
-        }
+    {
         // 开启事务
         Db::startTrans();
         try {
             $challengeLog = ChallengeLogModel::where('id', $data['challenge_id'])
-                ->where('user_id', $data['user_id'])
-                ->where('goods_id',$data['goods_id'])
                 ->lock(true)
                 ->find();
-            if (!$challengeLog || $challengeLog['end_time'] != 0) {
-                return ['status' => 0];
+            if (!$challengeLog || $challengeLog['end_time'] != 0 || $challengeLog['user_id'] != $data['user_id'] || $challengeLog['goods_id'] != $data['goods_id']) {
+                Db::rollback();
+                trace("状态异常 challenge_id=".$data['challenge_id'],'error');
+                return ['status' => 0,'msg' => '状态异常'];
             }
+
+            $userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
 
             if (isset($data['is_win']) && $data['is_win']) {
-                $userRecord->success_num += 1;
-
+                $userRecord->success_num = ['inc', 1];
+                $userRecord->save();
                 $this->success_log($data);
-                
             }
-            $userRecord->save();
-            
+
             $this->update_log($data);
 
             Db::commit();
@@ -129,6 +132,7 @@ class Game
             ];
         } catch (\Exception $e) {
             Db::rollback();
+            lg($e);
             throw new \Exception($e->getMessage());
         }
     }
