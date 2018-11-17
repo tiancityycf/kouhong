@@ -329,8 +329,8 @@ class WxPay
                             //给用户增加金额
                             $user_record = UserRecordModel::where('openid', $param['openid'])->find();
                             if ($user_record) {
-                                $user_record->money       = $user_record->money + $param['total_fee'];
-                                $user_record->total_money = $user_record->total_money + $param['total_fee'];
+                                $user_record->money       = $user_record->money + $order['pay_money'];
+                                $user_record->total_money = $user_record->total_money + $order['pay_money'];
                                 $user_record->save();
                             }
                             Db::commit();
