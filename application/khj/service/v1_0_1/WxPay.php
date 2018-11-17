@@ -271,7 +271,7 @@ class WxPay
         }
         $data = array();
         $data = $this->xml_to_data($xml);
-        trace($data,'error');
+        trace(json_encode($data),'error');
         //回调状态码
         if ($data['return_code'] == 'SUCCESS') {
             $param       = $data;
