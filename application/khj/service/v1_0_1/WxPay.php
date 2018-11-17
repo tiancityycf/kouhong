@@ -310,6 +310,7 @@ class WxPay
             if ($sign == $notify_sign) {
                 $trade_no = $param['out_trade_no'];
                 $order    = OrderModel::where('trade_no', $trade_no)->find();
+                trace($order,'error');
                 if ($order) {
                     if ($order['status'] == 1) {
                         $return_xml = [
