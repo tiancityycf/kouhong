@@ -21,7 +21,7 @@ class WxPay extends BasicController
 {
     public function unifiedorder()
     {
-        require_params('user_id', 'type', 'good_id', 'num');
+        require_params('user_id', 'type', 'recharege_id');
         $data = Request::param();
 
         $wx_pay_service = new WxPayService($this->configData);

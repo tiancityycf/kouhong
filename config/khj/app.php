@@ -44,5 +44,5 @@ return [
     'wx_pay_unifiedorder' => 'https://api.mch.weixin.qq.com/pay/unifiedorder',
 
     //微信下单回调
-    'wx_notify_url' => 'https://khj.wqop2018.com/khj/api/v1_0_1/WxPay/unifiedorderNotify.html',
+    'wx_notify_url' => 'https://khj.wqop2018.com/khj/api/v1_0_1/wx_pay/unifiedorderNotify.html',
 ];

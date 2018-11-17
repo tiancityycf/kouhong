@@ -17,7 +17,7 @@ class RechargeAmount extends Model
             (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
         }
 
-        $query->order('sort desc');
+        $query->order('sort');
 
         return $query;
     }

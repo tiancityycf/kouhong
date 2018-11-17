@@ -4,11 +4,6 @@
 
 {/block}
 {block name="content"}
-<div class="layui-form-item layui-inline">
-    <!--{if auth("$classuri/add")}-->
-     <button data-modal='{:url("$classuri/add")}' data-title="添加" data-width='50%' class='layui-btn layui-btn-sm'>添加</button> 
-    <!--{/if}-->
-</div>
 <div class="layui-form-item layui-inline" style="margin-left: 30px;">
 
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
@@ -22,6 +17,18 @@
         <label class="layui-form-label">用户ID</label>
         <div class="layui-input-inline">
             <input name="user_id" value="{$Think.get.user_id|default=''}" placeholder="请输入搜索关键词" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">生成时间</label>
+        <div class="layui-input-inline" style="width: 265px;">
+            <input name="addtime"  autocomplete="off" id='addtime' value="{$Think.get.addtime|default=''}" placeholder="请选择生成时间" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">支付时间</label>
+        <div class="layui-input-inline" style="width: 265px;">
+            <input name="pay_time"  autocomplete="off" id='pay_time' value="{$Think.get.pay_time|default=''}" placeholder="请选择支付时间" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
@@ -70,7 +77,7 @@
             <td>
                 {if auth("$classuri/del")}
                 <span class="text-explode">|</span>
-                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>删除</a>
+                <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
                 {/if}
 
             </td>
@@ -81,10 +88,14 @@
                 {$vo.trade_no}
             </td>
             <td class='text-left nowrap'>
-                {$vo.user_id}
+                ({$vo.user_id})--{$vo.nickname}--
+                <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.avatar}' />
             </td>
             <td class='text-left nowrap'>
-                {$vo.good_id}
+                {if($vo.good_id)}
+                ({$vo.good_id})--{$vo.good_name}--
+                <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.good_img}' />
+                {/if}
             </td>
             <td class='text-left nowrap'>
                 {$vo.pay_money}
@@ -112,6 +123,10 @@
     </table>
     {if isset($page)}<p>{$page|raw}</p>{/if}
     <!--{/empty}-->
-    <script>window.form.render();</script>
+    <script>
+        window.form.render();
+        window.laydate.render({range: true, elem: '#addtime', type: 'datetime'});
+        window.laydate.render({range: true, elem: '#pay_time', type: 'datetime'});
+    </script>
 </form>
 {/block}

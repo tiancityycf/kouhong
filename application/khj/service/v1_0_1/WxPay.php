@@ -2,9 +2,10 @@
 
 namespace app\khj\service\v1_0_1;
 
-use app\khj\model\Goods as GoodsModel;
 use app\khj\model\Order as OrderModel;
+use app\khj\model\RechargeAmount as RechargeAmountModel;
 use app\khj\model\User as UserModel;
+use app\khj\model\UserRecord as UserRecordModel;
 use think\Db;
 use think\facade\Config;
 
@@ -28,33 +29,29 @@ class WxPay
     public function unifiedorder($data)
     {
         try {
+            $recharege_info = RechargeAmountModel::where('id', $data['recharege_id'])->where('status', 1)->find();
+            if (!$recharege_info) {
+                return [
+                    'status' => 0,
+                    'msg'    => '无效的充值额度',
+                ];
+            }
             // 开启事务
             Db::startTrans();
             try {
-                //商户下单
-                if ($data['type'] == 0) {
-                    return false;
-                    //充值下单
-                    // $order           = new OrderModel();
-                    // $order->user_id  = $data['user_id'];
-                    // $order->trade_no = $this->getTradeNo('KH');
-                } elseif ($data['type'] == 1) {
-                    //商品信息
-                    $good_info = GoodsModel::get($data['good_id']);
-                    //购买下单
-                    $order             = new OrderModel();
-                    $order->user_id    = $data['user_id'];
-                    $order->trade_no   = $this->getTradeNo('KH');
-                    $order->good_id    = $data['good_id'];
-                    $order->good_name  = $good_info['title'];
-                    $order->good_value = $good_info['price'];
-                    $order->num        = $data['num'];
-                    $order->pay_value  = $good_info['price'] * $data['num'];
-                    $order->type       = 1;
-                    $order->dday       = date('Ymd');
-                    $order->add_time   = date('Y-m-d H:i:s');
-                    $order->save();
+                //充值下单
+                $order               = new OrderModel();
+                $order->user_id      = $data['user_id'];
+                $order->trade_no     = $this->getTradeNo('KH');
+                $order->recharege_id = $data['recharege_id'];
+                if (isset($data['good_id']) && $data['good_id'] != '') {
+                    $order->good_id = $data['good_id'];
                 }
+                $order->pay_money = $recharege_info['money'];
+                $order->type      = 0;
+                $order->dday      = date('Ymd');
+                $order->addtime  = date('Y-m-d H:i:s');
+                $order->save();
                 Db::commit();
             } catch (\Exception $e) {
                 lg($e);
@@ -70,11 +67,11 @@ class WxPay
             //签名类型
             $sign_type = 'MD5';
             //商品描述
-            $body = '口红机挑战吧-购买' . $data['num'] . '件' . $order->good_name;
+            $body = '口红机挑战吧-充值';
             //生成订单号
             $out_trade_no = $order->trade_no;
             //订单总金额
-            $total_fee = $order->pay_value * 100;
+            $total_fee = $order->pay_money*100;
             //终端IP
             $spbill_create_ip = $_SERVER['REMOTE_ADDR'];
             //回调地址
@@ -110,9 +107,9 @@ class WxPay
                 return false;
             }
             $result = $this->xml_to_data($response);
-   //          if( !empty($result['result_code']) && !empty($result['err_code']) ){
-			// 	$result['err_msg'] = $this->error_code( $result['err_code'] );
-			// }
+            //          if( !empty($result['result_code']) && !empty($result['err_code']) ){
+            //     $result['err_msg'] = $this->error_code( $result['err_code'] );
+            // }
             return $result;
         } catch (Exception $e) {
             lg($e);
@@ -292,6 +289,13 @@ class WxPay
                 $trade_no = $param['out_trade_no'];
                 $order    = OrderModel::where('trade_no', $trade_no)->find();
                 if ($order) {
+                    if ($order['status'] == 1) {
+                        $return_xml = '<xml>
+                              <return_code><![CDATA[SUCCESS]]></return_code>
+                              <return_msg><![CDATA[OK]]></return_msg>
+                            </xml>';
+                        return $return_xml;
+                    }
                     if ($order['pay_value'] == $param['total_fee']) {
                         // 开启事务
                         Db::startTrans();
@@ -299,15 +303,22 @@ class WxPay
                             //更改订单状态
                             $order->status = 1;
                             $order->save();
+                            //给用户增加金额
+                            $user_record = UserRecordModel::where('openid', $param['openid'])->find();
+                            if ($user_record) {
+                                $user_record->money       = $user_record->money + $param['total_fee'];
+                                $user_record->total_money = $user_record->total_money + $param['total_fee'];
+                                $user_record->save();
+                            }
                             Db::commit();
                         } catch (\Exception $e) {
                             lg($e);
                             Db::rollback();
                         }
                         $return_xml = '<xml>
-							  <return_code><![CDATA[SUCCESS]]></return_code>
-							  <return_msg><![CDATA[OK]]></return_msg>
-							</xml>';
+                              <return_code><![CDATA[SUCCESS]]></return_code>
+                              <return_msg><![CDATA[OK]]></return_msg>
+                            </xml>';
                         return $return_xml;
                     } else {
                         // 开启事务
