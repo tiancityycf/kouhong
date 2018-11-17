@@ -32,7 +32,7 @@ class Game extends BasicController
 
 	public function end()
 	{
-		require_params('user_id', 'challenge_id', 'goods_id', 'checkpoint', 'is_win');
+		require_params('user_id', 'challenge_id', 'goods_id', 'is_win');
         $data = Request::param();
 
         $game_service = new GameService($this->configData);

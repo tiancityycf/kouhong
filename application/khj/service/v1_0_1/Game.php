@@ -39,7 +39,7 @@ class Game
                 return ['status' => 0, 'msg' => '余额不足'];
             }
 
-            $userRecord->money -= $goods->price;
+            $userRecord->money = ['dec',$goods->price];
             $userRecord->challenge_num = ['inc', 1];
             $userRecord->save();
             trace($userRecord->getLastSql(),'error');
@@ -89,7 +89,7 @@ class Game
     {
         $time = time();
         ChallengeLog::where('id', $data['challenge_id'])->update([
-            'score' => isset($data['checkpoint']) ? $data['checkpoint'] : 0,
+            'score' => isset($data['score']) ? $data['score'] : 0,
             'successed' => isset($data['is_win']) ? $data['is_win'] : 0,
             'end_time' => $time,
             'update_time' => $time,
@@ -115,12 +115,14 @@ class Game
                 return ['status' => 0,'msg' => '状态异常'];
             }
 
+            $userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
+
             if (isset($data['is_win']) && $data['is_win']) {
                 $userRecord->success_num = ['inc', 1];
+                $userRecord->save();
                 $this->success_log($data);
             }
-            $userRecord->save();
-            
+
             $this->update_log($data);
 
             Db::commit();
