@@ -8,6 +8,7 @@
 
 namespace app\khj\controller\api\v1_0_1;
 
+use think\facade\Request;
 use controller\BasicController;
 use app\khj\service\v1_0_1\UserGoods as UserGoodsService;
 
@@ -18,7 +19,6 @@ use app\khj\service\v1_0_1\UserGoods as UserGoodsService;
  */
 class UserGoods extends BasicController
 {
-
 	//领取
 	public function receive()
 	{
@@ -31,15 +31,4 @@ class UserGoods extends BasicController
 		return result(200, 'ok', $result);
 	}
 
-	//记录
-	public function user_goods_list()
-	{
-		require_params('user_id');
-		$data = Request::param();
-
-		$service = new UserGoodsService($this->configData);
-		$result = $service->user_goods_list($data);
-
-		return result(200, 'ok', $result);
-	}
 }

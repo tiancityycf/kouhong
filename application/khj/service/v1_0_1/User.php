@@ -84,12 +84,15 @@ class User
                 return $result;
             }
 
+            $record = UserRecordModel::where('user_id', $user->id)->find();
+
             $result = [
                 'status' => 1,
                 'user_id' => $user->id,
                 'last_login' => $time,
                 'openid' => $data['openid'],
                 'user_status' => 1,
+                'money'=>$record["money"],
             ];
         } else {
             trace("login error ".json_encode($data),'error');

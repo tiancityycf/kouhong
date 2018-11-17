@@ -40,4 +40,15 @@ class Game extends BasicController
 
 		return result(200, 'ok', $result);
 	}
+
+    public function challenge_log()
+    {
+        require_params('user_id');
+        $data = Request::param();
+
+        $game_service = new GameService($this->configData);
+        $result = $game_service->challenge_log($data);
+
+        return result(200, 'ok', $result);
+    }
 }

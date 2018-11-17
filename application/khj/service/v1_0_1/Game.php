@@ -42,7 +42,6 @@ class Game
             $userRecord->money = ['dec',$goods->price];
             $userRecord->challenge_num = ['inc', 1];
             $userRecord->save();
-            trace($userRecord->getLastSql(),'error');
             $challenge_id = $this->create_log($data);
             Db::commit();
             return ['status' => 1, 'challenge_id' => $challenge_id, 'msg' => 'ok'];
@@ -59,9 +58,11 @@ class Game
     private function create_log($data)
     {
         $time = time();
+        $trade_no = date("YmdHis").rand(100000,999999);
         $challenge = ChallengeLogModel::create([
             'user_id' => $data['user_id'],
             'goods_id' => $data['goods_id'],
+            'trade_no' => $trade_no,
             'start_time' => $time,
             'create_time' => $time,
         ]);
@@ -136,4 +137,22 @@ class Game
             throw new \Exception($e->getMessage());
         }
     }
+
+    /**
+     * 挑战记录
+     * @param  [type] $data 接收参数
+     * @return [type]       [description]
+     */
+    public function challenge_log($data)
+    {
+        try {
+            $result = ChallengeLogModel::where('user_id',$data['user_id'])->order("id desc")->select();
+            return $result;
+        } catch (\Exception $e) {
+            Db::rollback();
+            lg($e);
+            throw new \Exception($e->getMessage());
+        }
+    }
+
 }
