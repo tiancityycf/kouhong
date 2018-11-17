@@ -31,14 +31,4 @@ class UserGoods extends BasicController
 		return result(200, 'ok', $result);
 	}
 
-	//记录
-	public function user_goods_list()
-	{
-		require_params('user_id');
-		$data = Request::param();
-
-        $result = Db::name('success_log')->where('user_id',$data['user_id'])->count();
-
-		return result(200, 'ok', $result);
-	}
 }

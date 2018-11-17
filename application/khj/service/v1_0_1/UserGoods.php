@@ -4,7 +4,7 @@ namespace app\khj\service\v1_0_1;
 
 use app\khj\model\UserRecord as UserRecordModel;
 use app\khj\model\SuccessLog as SuccessLogModel;
-use app\khj\model\UserGoods as UserGoodsModel;
+use app\khj\model\ChallengeLog as ChallengeLogModel;
 
 //用户领取服务类
 class UserGoods
@@ -47,39 +47,5 @@ class UserGoods
             'address_id' => $data['address_id'],
             'create_time' => $time,
         ]);
-    }
-
-    public function user_goods_list($data)
-    {
-    	$user_goods_list = [];
-    	$user_success_list = [];
-
-    	$user_goods = UserGoodsModel::where('user_id', $data['user_id'])->order("id desc")->select();
-
-    	if ($user_goods) {
-    		foreach ($user_goods as $key => $value) {
-    			$user_goods_list[$key]['id'] = $value->id;
-    			$user_goods_list[$key]['create_time'] = $value->create_time;
-    			$user_goods_list[$key]['title'] = $value->goods->title;
-    			$user_goods_list[$key]['img'] = $value->goods->img;
-    			$user_goods_list[$key]['address'] = $value->address->region.' '.$value->address->addr;
-    			$user_goods_list[$key]['is_shiping'] = $value->is_shiping;
-    		}
-    	}
-
-    	$success_log = SuccessLogModel::where('user_id', $data['user_id'])->select();
-    	if ($success_log) {
-    		foreach ($success_log as $k => $v) {
-    			$user_success_list[$key]['id'] = $v->id;
-    			$user_success_list[$key]['win_time'] = $v->win_time;
-    			$user_success_list[$key]['is_receive'] = $v->is_receive;
-    			$user_success_list[$key]['title'] = $v->goods->title;
-    			$user_success_list[$key]['img'] = $v->goods->img;
-    		}
-    	}
-
-
-    	return ['user_goods_list' => $user_goods_list, 'user_success_list' => $user_success_list];
-
     }
 }
