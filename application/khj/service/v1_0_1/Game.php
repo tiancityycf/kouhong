@@ -57,7 +57,7 @@ class Game
     private function create_log($data)
     {
         $time = time();
-        $challenge = ChallengeLog::create([
+        $challenge = ChallengeLogModel::create([
             'user_id' => $data['user_id'],
             'goods_id' => $data['goods_id'],
             'start_time' => $time,
