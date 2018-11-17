@@ -59,13 +59,14 @@ class Game
     {
         $time = time();
         $trade_no = date("YmdHis").rand(100000,999999);
-        $challenge = ChallengeLogModel::create([
+        $sdata = [
             'user_id' => $data['user_id'],
             'goods_id' => $data['goods_id'],
             'trade_no' => $trade_no,
             'start_time' => $time,
             'create_time' => $time,
-        ]);
+        ];
+        $challenge = ChallengeLogModel::create($sdata);
 
         return $challenge->id;
     }

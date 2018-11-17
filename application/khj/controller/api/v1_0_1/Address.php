@@ -33,7 +33,7 @@ class Address
 	public function create_addr()
 	{
 		//前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/address/create_addr.html?openid=1&nickname=kevin&phone=15888888888&addr=长沙岳麓区&region=湖南;
-		require_params('openid', 'nickname', 'phone', 'addr','region');
+		require_params('user_id', 'nickname', 'phone', 'addr','region');
 		$data = Request::param();
 	
 		$data['create_time'] = time();
