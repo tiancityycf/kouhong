@@ -324,7 +324,9 @@ class WxPay
                         }
                         if (($order['pay_money'] * 100) == $param['total_fee']) {
                             //更改订单状态
-                            $order->status = 1;
+                            $order->status   = 1;
+                            $order->pday     = date('Ymd');
+                            $order->pay_time = date('Y-m-d H:i:');
                             $order->save();
                             //给用户增加金额
                             $user_record = UserRecordModel::where('openid', $param['openid'])->find();
@@ -343,7 +345,9 @@ class WxPay
                             return $return_xml;
                         } else {
                             //更改订单状态
-                            $order->status = 2;
+                            $order->status   = 2;
+                            $order->pday     = date('Ymd');
+                            $order->pay_time = date('Y-m-d H:i:');
                             $order->save();
                             Db::commit();
                             return false;
