@@ -39,7 +39,12 @@ class Address
 		$data['create_time'] = time();
         $AddressModel = new AddressModel();
         $where['user_id'] = $data['user_id'];
-        $result = $AddressModel->save($data,$where);
+        $exists = $AddressModel->where($where)->find();
+        if(empty($exists)){
+            $result = $AddressModel->save($data);
+        }else{
+            $result = $AddressModel->save($data,$where);
+        }
         return result(200, 'ok', $result);
 	}
 
