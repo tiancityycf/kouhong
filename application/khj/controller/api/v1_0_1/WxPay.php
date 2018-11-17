@@ -40,6 +40,6 @@ class WxPay extends BasicController
         trace($xml,'error');
         $wx_pay_service = new WxPayService();
         $result = $wx_pay_service->unifiedorderNotify($xml);
-        return json($result);
+        echo $result;
     }
 }

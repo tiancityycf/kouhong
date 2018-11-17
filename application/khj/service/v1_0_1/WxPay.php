@@ -338,10 +338,7 @@ class WxPay
                                 $user_record->save();
                             }
                             Db::commit();
-                            $return_xml = [
-                                'return_code' => 'SUCCESS',
-                                'return_msg'  => 'OK',
-                            ];
+                            $return_xml = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
                             return $return_xml;
                         } else {
                             //更改订单状态
