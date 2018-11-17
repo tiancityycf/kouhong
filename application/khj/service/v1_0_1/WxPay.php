@@ -50,7 +50,7 @@ class WxPay
                 $order->pay_money = $recharege_info['money'];
                 $order->type      = 0;
                 $order->dday      = date('Ymd');
-                $order->addtime  = date('Y-m-d H:i:s');
+                $order->addtime   = date('Y-m-d H:i:s');
                 $order->save();
                 Db::commit();
             } catch (\Exception $e) {
@@ -71,7 +71,7 @@ class WxPay
             //生成订单号
             $out_trade_no = $order->trade_no;
             //订单总金额
-            $total_fee = $order->pay_money*100;
+            $total_fee = $order->pay_money * 100;
             //终端IP
             $spbill_create_ip = $_SERVER['REMOTE_ADDR'];
             //回调地址
@@ -271,9 +271,10 @@ class WxPay
         }
         $data = array();
         $data = $this->xml_to_data($xml);
+        trace($data,'error');
         //回调状态码
         if ($data['return_code'] == 'SUCCESS') {
-            $param       = $data['return_msg'];
+            $param       = $data;
             $notify_sign = $param['sign'];
             foreach ($param as $key => $value) {
                 if ($key == 'sign') {
@@ -285,18 +286,19 @@ class WxPay
             $wx_mch_key = Config::get('wx_mch_key');
             //签名
             $sign = $this->getmd5sec($param, $wx_mch_key);
+            trace($sign,'error');
             if ($sign == $notify_sign) {
                 $trade_no = $param['out_trade_no'];
                 $order    = OrderModel::where('trade_no', $trade_no)->find();
                 if ($order) {
                     if ($order['status'] == 1) {
-                        $return_xml = '<xml>
-                              <return_code><![CDATA[SUCCESS]]></return_code>
-                              <return_msg><![CDATA[OK]]></return_msg>
-                            </xml>';
+                        $return_xml = [
+                            'return_code' => 'SUCCESS',
+                            'return_msg'  => 'OK',
+                        ];
                         return $return_xml;
                     }
-                    if ($order['pay_value'] == $param['total_fee']) {
+                    if (($order['pay_value'] * 100) == $param['total_fee']) {
                         // 开启事务
                         Db::startTrans();
                         try {
@@ -315,10 +317,10 @@ class WxPay
                             lg($e);
                             Db::rollback();
                         }
-                        $return_xml = '<xml>
-                              <return_code><![CDATA[SUCCESS]]></return_code>
-                              <return_msg><![CDATA[OK]]></return_msg>
-                            </xml>';
+                        $return_xml = [
+                            'return_code' => 'SUCCESS',
+                            'return_msg'  => 'OK',
+                        ];
                         return $return_xml;
                     } else {
                         // 开启事务
