@@ -20,19 +20,13 @@ class User extends BasicController
 	 */
 	public function index()
 	{
-        //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/user/index.html?openid=1
-        require_params('openid');
+        //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/user/index.html?user_id=1
+        require_params('user_id');
         $data = Request::param();
 
-		$user_info = Db::name('user_record')->field('avatar,nickname,gold,money')->where('openid',$data['openid'])->find();
+		$user_info = Db::name('user_record')->field('avatar,nickname,gold,money')->where('user_id',$data['user_id'])->find();
 		$result['user_info'] =  $user_info;
-
-		$indexService = new IndexService($this->configData);
-
-        //兑换信息
-//        $exchange_list = $indexService->getExchangeList($data);
-//        $result['exchange_list'] = $exchange_list;
-
+        $result['count'] =  Db::name('success_log')->where('user_id',$data['user_id'])->count();
         return result(200, 'ok', $result);
 	}
 
@@ -96,22 +90,5 @@ class User extends BasicController
 		$withdrawList = $userService->getWithdrawList($userId);
 
 		return result(200, 'ok', ['withdraw_list' => $withdrawList]);
-	}
-
-
-	/**
-	 * 个人用户中心
-	 * @return array
-	 */
-
-	public function center()
-	{
-		//前台测试链接：http://www.zhuqian.com/khj/api/v1_0_0/user/center.html?openid=1&sign=0a53bf188436d7372adfa7e613217f01&timestamp=1
-		require_params('openid');
-        $openid = Request::param('openid');
-
-        $userInfo = new UserModel();
-        $result = $userInfo->field('nickname,avatar')->where('openid',$openid)->find();
-        return result(200, 'ok', $result);
 	}
 }

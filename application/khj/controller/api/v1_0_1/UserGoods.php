@@ -36,8 +36,7 @@ class UserGoods extends BasicController
 		require_params('user_id');
 		$data = Request::param();
 
-		$service = new UserGoodsService($this->configData);
-		$result = $service->user_goods_list($data);
+        $result = Db::name('success_log')->where('user_id',$data['user_id'])->count();
 
 		return result(200, 'ok', $result);
 	}
