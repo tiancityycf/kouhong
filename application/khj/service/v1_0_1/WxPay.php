@@ -319,7 +319,7 @@ class WxPay
                         ];
                         return $return_xml;
                     }
-                    if (($order['pay_value'] * 100) == $param['total_fee']) {
+                    if (($order['pay_money'] * 100) == $param['total_fee']) {
                         // 开启事务
                         Db::startTrans();
                         try {
