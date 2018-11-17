@@ -110,6 +110,26 @@ class WxPay
             //          if( !empty($result['result_code']) && !empty($result['err_code']) ){
             //     $result['err_msg'] = $this->error_code( $result['err_code'] );
             // }
+            if ($result['return_code'] == 'SUCCESS') {
+                $timeStamp = time();
+                //返回唤起支付数据
+                $zhifu_param = [
+                    'appid'     => $appid,
+                    'timeStamp' => $timeStamp,
+                    'nonceStr'  => $nonce_str,
+                    'package'   => 'prepay_id=' . $result['prepay_id'],
+                    'signType'  => 'MD5',
+                ];
+                $paySign      = $this->getmd5sec($zhifu_param, $wx_mch_key);
+                $return_param = [
+                    'timeStamp' => $timeStamp,
+                    'nonceStr'  => $nonce_str,
+                    'package'   => 'prepay_id=' . $result['prepay_id'],
+                    'signType'  => 'MD5',
+                    'paySign'   => $paySign,
+                ];
+                $result['return_param'] = $return_param;
+            }
             return $result;
         } catch (Exception $e) {
             lg($e);
@@ -271,7 +291,7 @@ class WxPay
         }
         $data = array();
         $data = $this->xml_to_data($xml);
-        trace(json_encode($data),'error');
+        trace(json_encode($data), 'error');
         //回调状态码
         if ($data['return_code'] == 'SUCCESS') {
             $param       = $data;
@@ -286,7 +306,7 @@ class WxPay
             $wx_mch_key = Config::get('wx_mch_key');
             //签名
             $sign = $this->getmd5sec($param, $wx_mch_key);
-            trace($sign,'error');
+            trace($sign, 'error');
             if ($sign == $notify_sign) {
                 $trade_no = $param['out_trade_no'];
                 $order    = OrderModel::where('trade_no', $trade_no)->find();
