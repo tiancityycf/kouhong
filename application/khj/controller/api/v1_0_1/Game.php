@@ -8,6 +8,7 @@
 
 namespace app\khj\controller\api\v1_0_1;
 
+use think\facade\Request;
 use controller\BasicController;
 use app\khj\service\v1_0_1\Game as GameService;
 
