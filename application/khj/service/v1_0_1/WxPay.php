@@ -31,6 +31,7 @@ class WxPay
         try {
             $recharege_info = RechargeAmountModel::where('id', $data['recharege_id'])->where('status', 1)->find();
             if (!$recharege_info) {
+                trace("{$data['recharege_id']}-" . json_encode($recharege_info), 'error');
                 return [
                     'status' => 0,
                     'msg'    => '无效的充值额度',
@@ -110,6 +111,26 @@ class WxPay
             //          if( !empty($result['result_code']) && !empty($result['err_code']) ){
             //     $result['err_msg'] = $this->error_code( $result['err_code'] );
             // }
+            if ($result['return_code'] == 'SUCCESS') {
+                $timeStamp = (string) time();
+                //返回唤起支付数据
+                $zhifu_param = [
+                    'appId'     => $appid,
+                    'timeStamp' => $timeStamp,
+                    'nonceStr'  => $nonce_str,
+                    'package'   => 'prepay_id=' . $result['prepay_id'],
+                    'signType'  => 'MD5',
+                ];
+                $paySign      = $this->getmd5sec($zhifu_param, $wx_mch_key);
+                $return_param = [
+                    'timeStamp' => $timeStamp,
+                    'nonceStr'  => $nonce_str,
+                    'package'   => 'prepay_id=' . $result['prepay_id'],
+                    'signType'  => 'MD5',
+                    'paySign'   => $paySign,
+                ];
+                $result['return_param'] = $return_param;
+            }
             return $result;
         } catch (Exception $e) {
             lg($e);
@@ -209,6 +230,7 @@ class WxPay
         } else {
             $error = curl_errno($ch);
             curl_close($ch);
+            trace($error, 'error');
             return false;
         }
     }
@@ -271,7 +293,6 @@ class WxPay
         }
         $data = array();
         $data = $this->xml_to_data($xml);
-        trace(json_encode($data),'error');
         //回调状态码
         if ($data['return_code'] == 'SUCCESS') {
             $param       = $data;
@@ -286,60 +307,62 @@ class WxPay
             $wx_mch_key = Config::get('wx_mch_key');
             //签名
             $sign = $this->getmd5sec($param, $wx_mch_key);
-            trace($sign,'error');
             if ($sign == $notify_sign) {
                 $trade_no = $param['out_trade_no'];
-                $order    = OrderModel::where('trade_no', $trade_no)->find();
-                if ($order) {
-                    if ($order['status'] == 1) {
-                        $return_xml = [
-                            'return_code' => 'SUCCESS',
-                            'return_msg'  => 'OK',
-                        ];
-                        return $return_xml;
-                    }
-                    if (($order['pay_value'] * 100) == $param['total_fee']) {
-                        // 开启事务
-                        Db::startTrans();
-                        try {
+                // 开启事务
+                Db::startTrans();
+                try {
+                    $order = OrderModel::where('trade_no', $trade_no)->lock(true)->find();
+                    if ($order) {
+                        if ($order['status'] == 1) {
+                            $return_xml = [
+                                'return_code' => 'SUCCESS',
+                                'return_msg'  => 'OK',
+                            ];
+                            Db::rollback();
+                            return $return_xml;
+                        }
+                        if (($order['pay_money'] * 100) == $param['total_fee']) {
                             //更改订单状态
-                            $order->status = 1;
+                            $order->status   = 1;
+                            $order->pday     = date('Ymd');
+                            $order->pay_time = date('Y-m-d H:i:');
                             $order->save();
                             //给用户增加金额
                             $user_record = UserRecordModel::where('openid', $param['openid'])->find();
                             if ($user_record) {
-                                $user_record->money       = $user_record->money + $param['total_fee'];
-                                $user_record->total_money = $user_record->total_money + $param['total_fee'];
+                                // $user_record->money       = $user_record->money + $order['pay_money'];
+                                // $user_record->total_money = $user_record->total_money + $order['pay_money'];
+                                $user_record->money       = ['inc', $order['pay_money']];
+                                $user_record->total_money = ['inc', $order['pay_money']];
                                 $user_record->save();
                             }
                             Db::commit();
-                        } catch (\Exception $e) {
-                            lg($e);
-                            Db::rollback();
-                        }
-                        $return_xml = [
-                            'return_code' => 'SUCCESS',
-                            'return_msg'  => 'OK',
-                        ];
-                        return $return_xml;
-                    } else {
-                        // 开启事务
-                        Db::startTrans();
-                        try {
+                            $return_xml = [
+                                'return_code' => 'SUCCESS',
+                                'return_msg'  => 'OK',
+                            ];
+                            return $return_xml;
+                        } else {
                             //更改订单状态
-                            $order->status = 2;
+                            $order->status   = 2;
+                            $order->pday     = date('Ymd');
+                            $order->pay_time = date('Y-m-d H:i:');
                             $order->save();
                             Db::commit();
-                        } catch (\Exception $e) {
-                            lg($e);
-                            Db::rollback();
+                            return false;
                         }
+                    } else {
+                        trace($trade_no . '-' . $order, 'error');
+                        Db::rollback();
                         return false;
                     }
-                } else {
-                    return false;
+                } catch (\Exception $e) {
+                    lg($e);
+                    Db::rollback();
                 }
             } else {
+                trace($sign . '-' . $notify_sign, 'error');
                 return false;
             }
         } else {

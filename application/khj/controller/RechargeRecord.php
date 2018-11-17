@@ -25,8 +25,8 @@ class RechargeRecord extends BasicAdmin
             //商品信息
             if ($value['good_id']) {
                 $good_info                         = GoodsModel::get($value['good_id']);
-                $result['list'][$key]['good_name'] = $user_info['title'];
-                $result['list'][$key]['good_img']  = $user_info['img'];
+                $result['list'][$key]['good_name'] = $good_info['title'];
+                $result['list'][$key]['good_img']  = $good_info['img'];
             }
 
         }
