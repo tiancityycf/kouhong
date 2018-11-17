@@ -6,7 +6,6 @@ use app\khj\model\UserRecord as UserRecordModel;
 use app\khj\model\SuccessLog as SuccessLogModel;
 use app\khj\model\UserGoods as UserGoodsModel;
 
-
 //用户领取服务类
 class UserGoods
 {
@@ -42,7 +41,6 @@ class UserGoods
     private function user_goods_log($data)
     {
         $time = time();
-
         UserGoodsModel::create([
             'user_id' => $data['user_id'],
             'goods_id' => $data['goods_id'],
@@ -56,7 +54,7 @@ class UserGoods
     	$user_goods_list = [];
     	$user_success_list = [];
 
-    	$user_goods = UserGoodsModel::where('user_id', $data['user_id'])->select();
+    	$user_goods = UserGoodsModel::where('user_id', $data['user_id'])->order("id desc")->select();
 
     	if ($user_goods) {
     		foreach ($user_goods as $key => $value) {

@@ -18,7 +18,6 @@ use app\khj\service\v1_0_1\UserGoods as UserGoodsService;
  */
 class UserGoods extends BasicController
 {
-
 	//领取
 	public function receive()
 	{
