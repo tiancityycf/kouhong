@@ -31,6 +31,7 @@ class WxPay
         try {
             $recharege_info = RechargeAmountModel::where('id', $data['recharege_id'])->where('status', 1)->find();
             if (!$recharege_info) {
+                trace("{$data['recharege_id']}-" . json_encode($recharege_info), 'error');
                 return [
                     'status' => 0,
                     'msg'    => '无效的充值额度',
@@ -111,7 +112,7 @@ class WxPay
             //     $result['err_msg'] = $this->error_code( $result['err_code'] );
             // }
             if ($result['return_code'] == 'SUCCESS') {
-                $timeStamp = (string)time();
+                $timeStamp = (string) time();
                 //返回唤起支付数据
                 $zhifu_param = [
                     'appId'     => $appid,
@@ -309,56 +310,51 @@ class WxPay
             trace($sign, 'error');
             if ($sign == $notify_sign) {
                 $trade_no = $param['out_trade_no'];
-                $order    = OrderModel::where('trade_no', $trade_no)->find();
-                trace($order,'error');
-                if ($order) {
-                    if ($order['status'] == 1) {
-                        $return_xml = [
-                            'return_code' => 'SUCCESS',
-                            'return_msg'  => 'OK',
-                        ];
-                        return $return_xml;
-                    }
-                    if (($order['pay_money'] * 100) == $param['total_fee']) {
-                        // 开启事务
-                        Db::startTrans();
-                        try {
+                // 开启事务
+                Db::startTrans();
+                try {
+                    $order = OrderModel::where('trade_no', $trade_no)->lock(true)->find();
+                    trace($order, 'error');
+                    if ($order) {
+                        if ($order['status'] == 1) {
+                            $return_xml = [
+                                'return_code' => 'SUCCESS',
+                                'return_msg'  => 'OK',
+                            ];
+                            return $return_xml;
+                        }
+                        if (($order['pay_money'] * 100) == $param['total_fee']) {
                             //更改订单状态
                             $order->status = 1;
                             $order->save();
                             //给用户增加金额
                             $user_record = UserRecordModel::where('openid', $param['openid'])->find();
                             if ($user_record) {
-                                $user_record->money       = $user_record->money + $order['pay_money'];
-                                $user_record->total_money = $user_record->total_money + $order['pay_money'];
+                                // $user_record->money       = $user_record->money + $order['pay_money'];
+                                // $user_record->total_money = $user_record->total_money + $order['pay_money'];
+                                $user_record->money       = ['inc', $order['pay_money']];
+                                $user_record->total_money = ['inc', $order['pay_money']];
                                 $user_record->save();
                             }
                             Db::commit();
-                        } catch (\Exception $e) {
-                            lg($e);
-                            Db::rollback();
-                        }
-                        $return_xml = [
-                            'return_code' => 'SUCCESS',
-                            'return_msg'  => 'OK',
-                        ];
-                        return $return_xml;
-                    } else {
-                        // 开启事务
-                        Db::startTrans();
-                        try {
+
+                            $return_xml = [
+                                'return_code' => 'SUCCESS',
+                                'return_msg'  => 'OK',
+                            ];
+                            return $return_xml;
+                        } else {
                             //更改订单状态
                             $order->status = 2;
                             $order->save();
-                            Db::commit();
-                        } catch (\Exception $e) {
-                            lg($e);
-                            Db::rollback();
+                            return false;
                         }
+                    } else {
                         return false;
                     }
-                } else {
-                    return false;
+                } catch (\Exception $e) {
+                    lg($e);
+                    Db::rollback();
                 }
             } else {
                 return false;
