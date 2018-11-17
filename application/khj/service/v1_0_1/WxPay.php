@@ -230,6 +230,7 @@ class WxPay
         } else {
             $error = curl_errno($ch);
             curl_close($ch);
+            trace($error, 'error');
             return false;
         }
     }
