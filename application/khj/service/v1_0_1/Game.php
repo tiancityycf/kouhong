@@ -40,7 +40,7 @@ class Game
             }
 
             $userRecord->money -= $goods->price;
-            $userRecord->challenge_num += 1;
+            $userRecord->challenge_num = ['inc', 1];
             $userRecord->save();
             trace($userRecord->getLastSql(),'error');
             $challenge_id = $this->create_log($data);
