@@ -88,7 +88,7 @@ class Game
     private function update_log($data)
     {
         $time = time();
-        ChallengeLog::where('id', $data['challenge_id'])->update([
+        ChallengeLogModel::where('id', $data['challenge_id'])->update([
             'score' => isset($data['score']) ? $data['score'] : 0,
             'successed' => isset($data['is_win']) ? $data['is_win'] : 0,
             'end_time' => $time,
