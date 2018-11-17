@@ -26,24 +26,28 @@ class Game
     {
         Db::startTrans();
         try {
-            $userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
             $goods = GoodsModel::where('id', $data['goods_id'])->find();
+            if (empty($goods)) {
+                trace("商品不存在".$data['goods_id'],'error');
+                return ['status' => 0, 'msg' => '商品不存在'];
+            }
+            $userRecord = UserRecordModel::where('user_id', $data['user_id'])->lock(true)->find();
 
             if ($userRecord->money < $goods->price) {
+                Db::rollback();
                 return ['status' => 0, 'msg' => '余额不足'];
             }
 
             $userRecord->money -= $goods->price;
             $userRecord->challenge_num += 1;
-
-            $challenge_id = $this->create_log($data);
             $userRecord->save();
-
+            $challenge_id = $this->create_log($data);
             Db::commit();
             return ['status' => 1, 'challenge_id' => $challenge_id, 'msg' => 'ok'];
 
         } catch (\Exception $e) {
             Db::rollback();
+            lg($e);
             throw new \Exception($e->getMessage());
         }
     }
