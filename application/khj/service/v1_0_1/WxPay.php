@@ -292,7 +292,6 @@ class WxPay
         }
         $data = array();
         $data = $this->xml_to_data($xml);
-        trace(json_encode($data), 'error');
         //回调状态码
         if ($data['return_code'] == 'SUCCESS') {
             $param       = $data;
@@ -307,20 +306,19 @@ class WxPay
             $wx_mch_key = Config::get('wx_mch_key');
             //签名
             $sign = $this->getmd5sec($param, $wx_mch_key);
-            trace($sign, 'error');
             if ($sign == $notify_sign) {
                 $trade_no = $param['out_trade_no'];
                 // 开启事务
                 Db::startTrans();
                 try {
                     $order = OrderModel::where('trade_no', $trade_no)->lock(true)->find();
-                    trace($order, 'error');
                     if ($order) {
                         if ($order['status'] == 1) {
                             $return_xml = [
                                 'return_code' => 'SUCCESS',
                                 'return_msg'  => 'OK',
                             ];
+                            Db::rollback();
                             return $return_xml;
                         }
                         if (($order['pay_money'] * 100) == $param['total_fee']) {
@@ -337,7 +335,6 @@ class WxPay
                                 $user_record->save();
                             }
                             Db::commit();
-
                             $return_xml = [
                                 'return_code' => 'SUCCESS',
                                 'return_msg'  => 'OK',
@@ -347,9 +344,12 @@ class WxPay
                             //更改订单状态
                             $order->status = 2;
                             $order->save();
+                            Db::commit();
                             return false;
                         }
                     } else {
+                        trace($trade_no . '-' . $order, 'error');
+                        Db::rollback();
                         return false;
                     }
                 } catch (\Exception $e) {
@@ -357,6 +357,7 @@ class WxPay
                     Db::rollback();
                 }
             } else {
+                trace($sign . '-' . $notify_sign, 'error');
                 return false;
             }
         } else {
