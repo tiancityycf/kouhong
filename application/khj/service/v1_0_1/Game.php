@@ -62,7 +62,7 @@ class Game
         $challenge = ChallengeLogModel::create([
             'user_id' => $data['user_id'],
             'goods_id' => $data['goods_id'],
-            'trade_no' => $data['trade_no'],
+            'trade_no' => $trade_no,
             'start_time' => $time,
             'create_time' => $time,
         ]);
