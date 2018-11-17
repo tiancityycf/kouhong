@@ -36,7 +36,7 @@
         <div class="layui-input-inline">
             <select name='status' class='layui-select' lay-verify="required" lay-search="">
                 <option value=''> - 全部 -</option>
-                <!--{foreach [0=>'未支付', 1=>'已支付'] as $k => $v}-->
+                <!--{foreach [0=>'未支付', 1=>'已支付', 2=>'支付失败'] as $k => $v}-->
                 <!--{if($Think.get.status != '' && $Think.get.status == $k)}-->
                 <option selected="selected" value='{$k}'> - {$v} - </option>
                 <!--{else}-->
