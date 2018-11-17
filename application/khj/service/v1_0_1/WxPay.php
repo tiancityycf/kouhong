@@ -114,7 +114,7 @@ class WxPay
                 $timeStamp = (string)time();
                 //返回唤起支付数据
                 $zhifu_param = [
-                    'appid'     => $appid,
+                    'appId'     => $appid,
                     'timeStamp' => $timeStamp,
                     'nonceStr'  => $nonce_str,
                     'package'   => 'prepay_id=' . $result['prepay_id'],
