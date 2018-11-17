@@ -111,7 +111,7 @@ class WxPay
             //     $result['err_msg'] = $this->error_code( $result['err_code'] );
             // }
             if ($result['return_code'] == 'SUCCESS') {
-                $timeStamp = time();
+                $timeStamp = (string)time();
                 //返回唤起支付数据
                 $zhifu_param = [
                     'appid'     => $appid,
