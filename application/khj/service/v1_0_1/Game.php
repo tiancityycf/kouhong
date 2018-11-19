@@ -133,7 +133,7 @@ class Game
         try {
             $user_id = intval($data['user_id']);
 //            $result = ChallengeLogModel::where('a.user_id',$data['user_id'])->order("id desc")->select();
-            $result = Db::query("select a.*,b.title,b.img,c.status from t_challenge_log a left join t_goods b on a.goods_id=b.id left join t_user_goods c on a.id=c.challenge_id order by a.id desc");
+            $result = Db::query("select a.*,b.title,b.img,c.status,d.cate_name from t_challenge_log a left join t_goods b on a.goods_id=b.id left join t_goods_cates d on b.cate=d.id left join t_user_goods c on a.id=c.challenge_id order by a.id desc");
             return $result;
         } catch (\Exception $e) {
             Db::rollback();
