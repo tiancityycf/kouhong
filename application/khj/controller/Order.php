@@ -5,7 +5,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
 use app\khj\model\Goods as GoodsModel;
-use app\khj\model\ExchangeLog as ExchangeLogModel;
+use app\khj\model\UserGoods as UserGoodsModel;
 
 use think\cache\driver\Redis;
 use think\facade\Cache;
@@ -16,13 +16,13 @@ class Order extends BasicAdmin
      * 指定当前数据表
      * @var string
      */
-    public $table = 'exchange_log';
+    public $table = 'user_goods';
 
 	public function index()
     {
     	$this->title = '订单管理';
 
-       	list($get, $db) = [$this->request->get(), new ExchangeLogModel()];
+       	list($get, $db) = [$this->request->get(), new UserGoodsModel()];
 
         $db = $db->search($get);
         
@@ -46,7 +46,7 @@ class Order extends BasicAdmin
 
         if(!$product_id) return;
 
-        $model = new ExchangeLogModel();
+        $model = new UserGoodsModel();
 
         $res = $model->where('id',$product_id)->update(['status'=>1]);
 
