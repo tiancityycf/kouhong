@@ -95,7 +95,7 @@ function createHg(GAMEMODE) {
           window.history.go(-1);
         } else {
           wx.miniProgram.getEnv(function (res) {
-            alert('res')
+            // alert('res')
             if (res.miniprogram) {
               var info = {
                 results: 1, //参数二
@@ -109,7 +109,8 @@ function createHg(GAMEMODE) {
           setTimeout(function () {
             // wx.miniProgram.navigateBack();
             wx.miniProgram.redirectTo({
-              url: '../my/my?address=' + 0 + '&orderId=' + orderId
+              // url: '../my/my?address=' + 0 + '&orderId=' + orderId
+                url: '../my/order/order'
             });
           }, 1000)
         }

@@ -11,6 +11,7 @@ namespace app\khj\controller\api\v1_0_1;
 use think\facade\Request;
 use controller\BasicController;
 use app\khj\service\v1_0_1\UserGoods as UserGoodsService;
+use app\khj\model\Address as AddressModel;
 
 /**
  * 游戏控制类
@@ -22,8 +23,18 @@ class UserGoods extends BasicController
 	//领取
 	public function receive()
 	{
-		require_params('user_id', 'goods_id', 'address_id');
+		require_params('user_id', 'goods_id', 'nickname', 'phone', 'addr','region');
 		$data = Request::param();
+
+//        $data['create_time'] = time();
+//        $AddressModel = new AddressModel();
+//        $where['user_id'] = $data['user_id'];
+//        $exists = $AddressModel->where($where)->find();
+//        if(empty($exists)){
+//            $result = $AddressModel->save($data);
+//        }else{
+//            $result = $AddressModel->save($data,$where);
+//        }
 
 		$service = new UserGoodsService($this->configData);
 		$result = $service->receive($data);
