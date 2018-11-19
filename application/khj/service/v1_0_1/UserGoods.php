@@ -19,6 +19,9 @@ class UserGoods
 			if ($log['successed']!=1) {
 				return ['status' => 0, 'msg' => '没有挑战成功'];
 			}
+            if ($log['user_id']!=$data['user_id']) {
+                return ['status' => 0, 'msg' => '非法操作'];
+            }
 
             $exist = UserGoodsModel::where("challenge_id",$data['challenge_id'])->find();
             if (!empty($exist)) {
@@ -31,6 +34,7 @@ class UserGoods
 
 		} catch (\Exception $e) {
             Db::rollback();
+            lg($e);
             throw new \Exception($e->getMessage());
         }
 	}
