@@ -10,25 +10,16 @@ use controller\BasicController;
  */
 class CronTab extends BasicController
 {
-	public function sendNotice(){
-		$cron_tab = new CronTabService($this->configData);
-		//从数据库中发送模板消息
-		// $result = $cron_tab->sendNotice();
-		//从缓存中发送模板消息
-		$result = $cron_tab->redisSendNotice();
+    /**
+     * 抓取商品信息脚本
+     * @return [type] [description]
+     */
+    public function captureData()
+    {
 
-		return result(200, 'ok', $result);
-	}
+        $cron_tab = new CronTabService($this->configData);
+        $result   = $cron_tab->captureData();
 
-	/**
-	 * 抓取商品信息脚本
-	 * @return [type] [description]
-	 */
-	public function captureData(){
-		
-		$cron_tab = new CronTabService($this->configData);
-		$result = $cron_tab->captureData();
-
-		return result(200, 'ok', $result);
-	}
+        return result(200, 'ok', $result);
+    }
 }
