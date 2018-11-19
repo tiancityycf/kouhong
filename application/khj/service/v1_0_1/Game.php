@@ -71,21 +71,6 @@ class Game
         return $challenge->id;
     }
 
-    //创建成功记录
-    private function success_log($data)
-    {
-        $time = time();
-        $date = date('ymd', $time);
-
-        SuccessLogModel::create([
-            'user_id' => $data['user_id'],
-            'goods_id' => $data['goods_id'],
-            'challenge_id' => $data['challenge_id'],
-            'win_time' => $time,
-            'win_date' => $date,
-        ]);
-    }
-
     //更新挑战记录
     private function update_log($data)
     {
@@ -122,7 +107,6 @@ class Game
             if (isset($data['is_win']) && $data['is_win']) {
                 $userRecord->success_num = ['inc', 1];
                 $userRecord->save();
-                $this->success_log($data);
             }
 
             $this->update_log($data);

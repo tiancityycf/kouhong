@@ -2,8 +2,7 @@
 
 namespace app\khj\service\v1_0_1;
 
-use app\khj\model\UserRecord as UserRecordModel;
-use app\khj\model\SuccessLog as SuccessLogModel;
+use app\khj\model\UserGoods as UserGoodsModel;
 use app\khj\model\ChallengeLog as ChallengeLogModel;
 
 //用户领取服务类
@@ -13,20 +12,14 @@ class UserGoods
 	{
 		Db::startTrans();
         try {
-			$successLog = SuccessLogModel::where('is_receive', 0)
-				->where('goods_id', $data['goods_id'])
-				->where('user_id', $data['user_id'])
-				->order('id', 'asc')
+			$log = ChallengeLogModel::where('id', $data['challenge_id'])
 				->find();
 
-			if (!$successLog) {
+			if ($log['successed']!=1) {
 				return ['status' => 0, 'msg' => '没有可领取的商品'];
 			}
 
 			$this->user_goods_log($data);
-
-			$successLog->is_receive = 1;
-			$successLog->save();
 
 			Db::commit();
 			return ['status' => 1];
@@ -45,6 +38,7 @@ class UserGoods
             'user_id' => $data['user_id'],
             'goods_id' => $data['goods_id'],
             'address_id' => $data['address_id'],
+            'challenge_id' => $data['challenge_id'],
             'create_time' => $time,
         ]);
     }
