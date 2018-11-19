@@ -49,7 +49,6 @@ $orderId = $_GET['orderId'];
         <div class="game" id="game" style="width: 596px; height: 938px;">
             <div class="account">
                 <span>
-                    <input type="hidden" id="orderId" value="<?php echo $orderId;?>" />
                 </span>
             </div>
             <div class="bulletsNumBox" style="display: none;">
@@ -81,6 +80,7 @@ $orderId = $_GET['orderId'];
         <div class="PopupBoxBtn" id="gameOverBoxBtn">重新闯关</div>
     </div>
     <div class="PopupBox" id="gameSuccessBox" style="display: none;">
+        <input type="hidden" id="orderId" value="<?php echo $orderId;?>" />
         <div id="gameSuccessBoxText">恭喜您，闯关成功</div>
         <div class="PopupBoxBtn" id="gameSuccessBoxBtn">点击我的口红领取</div>
     </div>
