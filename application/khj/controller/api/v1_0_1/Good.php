@@ -29,7 +29,8 @@ class Good extends BasicController
 
         $data['notice'] = [];
         if(isset($this->configData['notice'])){
-            $data['notice'] = $this->configData['notice'];
+            $data['notice']['title'] = isset($this->configData['notice'][0])?$this->configData['notice'][0]:'';
+            $data['notice']['content'] = isset($this->configData['notice'][1])?$this->configData['notice'][1]:'';
         }
         return result(200, 'ok', $data);
     }
