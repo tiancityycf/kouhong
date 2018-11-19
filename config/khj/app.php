@@ -45,4 +45,7 @@ return [
 
     //微信下单回调
     'wx_notify_url' => 'https://khj.wqop2018.com/khj/api/v1_0_1/wx_pay/unifiedorderNotify.html',
+
+    //抓取商品信息接口地址
+    'capture_data_url' => 'https://jingubang.taoanli.cn/app/index.php?i=717&t=0&v=1.2.2&from=wxapp&c=entry&a=wxapp&do=goods&&m=hc_doudou&sign=ab9a95145480b576c3277332661f35de',
 ];
