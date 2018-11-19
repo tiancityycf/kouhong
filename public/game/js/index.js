@@ -27,7 +27,7 @@ function removeClass(element, class_name) {
     }
   }
 }
-var orderId = null;
+var orderId = $('#orderId').val();
 $(function () {
   $(".close").on("click", function () {
     if (window.isH5) {
@@ -109,7 +109,7 @@ function createHg(GAMEMODE) {
             // wx.miniProgram.navigateBack();
             wx.miniProgram.redirectTo({
               // url: '../my/my?address=' + 0 + '&orderId=' + orderId
-                url: '../my/order/order'
+                url: '../my/order/order?orderId=' + orderId
             });
           }, 1000)
         }

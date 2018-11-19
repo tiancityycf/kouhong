@@ -33,9 +33,8 @@ class UserGoods extends BasicController
         $adata['region'] = $data['region'];
         $adata['create_time'] = time();
         $AddressModel = new AddressModel();
-        $address_id = $AddressModel->insertGetId($adata);
-
-        $data['address_id'] = $address_id;
+        $AddressModel->save($adata);
+        $data['address_id'] = $AddressModel->id;
 
 		$service = new UserGoodsService($this->configData);
 		$result = $service->receive($data);

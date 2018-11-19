@@ -48,7 +48,9 @@ $orderid = $_GET['orderid'];
     <div class="layoutRoot" id="app">
         <div class="game" id="game" style="width: 596px; height: 938px;">
             <div class="account">
-                <span></span>
+                <span>
+                    <input type="hidden" id="orderId" value="<?php echo $orderid;?>" />
+                </span>
             </div>
             <div class="bulletsNumBox" style="display: none;">
                 <img class="bulletsNum" id="bulletsNum1" src="images/1.png">
