@@ -4,6 +4,7 @@ namespace app\khj\service\v1_0_1;
 
 use app\khj\model\UserGoods as UserGoodsModel;
 use app\khj\model\ChallengeLog as ChallengeLogModel;
+use think\Db;
 
 //用户领取服务类
 class UserGoods
