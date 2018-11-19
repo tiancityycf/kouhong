@@ -2,7 +2,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">商品名称</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="title" required="required" value={$vo.title} pattern="" title="" placeholder="请输入商品名称" class="layui-input" style="width: 75%;">
+            <input type="text" autofocus name="title" required="required" value="{$vo.title|default=''}" pattern="" title="" placeholder="请输入商品名称" class="layui-input" style="width: 75%;">
         </div>
     </div>
     <div class="layui-form-item">
@@ -13,8 +13,11 @@
                 <option value="">- 请选择分类 -</option>
 
                 <!--{foreach $cates as $key=>$st}-->
-
-                <option {if condition="$vo.cate == $st.id"}selected{/if} value="{$st.id}">- {$st.cate_name} -</option>
+                <!--{if (isset($vo['cate']) AND $vo.cate eq $st.id)}-->
+                <option selected value="{$st.id}">- {$st.cate_name} -</option>
+                <!--{else}-->
+                <option value="{$st.id}">- {$st.cate_name} -</option>
+                <!--{/if}-->
 
                 <!--{/foreach}-->
             </select>
@@ -26,7 +29,7 @@
         <div class="layui-input-block">
             <div class="layui-row">
                 <div class="layui-col-md6">
-                    <input type="text" autofocus id="path" name="img" required="required" value='{$vo.img|default=""}' pattern="" title="图片地址" placeholder="图片地址" class="layui-input">
+                    <input type="text" autofocus id="path" name="img" required="required" value="{$vo.img|default=''}" pattern="" title="图片地址" placeholder="图片地址" class="layui-input">
                 </div>
                 <div class="layui-col-md3">
                     <div class="layui-upload" style="margin-left: 20px;">
@@ -34,7 +37,7 @@
                     </div>
                 </div>
                 <div class="layui-col-md3">
-                    <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.path|default=""}' />
+                    <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src="{$vo.img|default=''}"/>
                 </div>
             </div>
         </div>
@@ -45,21 +48,21 @@
     <div class="layui-form-item">
         <label class="layui-form-label">价格</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="price" required="required" value={$vo.price} pattern="" title="" placeholder="价格" class="layui-input" style="width: 75%;">
+            <input type="text" autofocus name="price" required="required" value="{$vo.price|default=''}" pattern="" title="" placeholder="价格" class="layui-input" style="width: 75%;">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">排序</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="order" required="required" value={$vo.order} pattern="" title="" placeholder="排序" class="layui-input" style="width: 75%;">
+            <input type="text" autofocus name="order" required="required" value="{$vo.order|default=0}" pattern="" title="" placeholder="排序" class="layui-input" style="width: 75%;">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-block">
-            <input type="text" autofocus name="desc" value="{$vo.desc}" pattern="" title="" placeholder="描述" class="layui-input" style="width: 75%;">
+            <input type="text" autofocus name="desc" value="{$vo.desc|default=''}" pattern="" title="" placeholder="描述" class="layui-input" style="width: 75%;">
         </div>
     </div>
     <div class="layui-form-item">
@@ -67,8 +70,11 @@
         <div style="width: 35%;" class="layui-input-block">
             <select  name="status" class="layui-select">
                 <!--{foreach [1=>'启用',0=>'不启用'] as $key=>$st}-->
-
-                <option {if condition="$vo.status == $key"}selected{/if} value="{$key}">- {$st} -</option>
+                <!--{if (!isset($vo['status']) AND $key eq 1) OR (isset($vo['status']) AND $vo.status eq $key)}-->
+                <option selected value="{$key}">- {$st} -</option>
+                <!--{else}-->
+                <option value="{$key}">- {$st} -</option>
+                <!--{/if}-->
                 <!--{/foreach}-->
             </select>
         </div>
