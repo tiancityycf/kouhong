@@ -1,7 +1,7 @@
 
 <?php
 $game = $_GET['game'];
-$orderid = $_GET['orderid'];
+$orderId = $_GET['orderId'];
 ?>
 <!DOCTYPE html>
 <html lang="en" style="font-size: 79.5424px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -49,7 +49,7 @@ $orderid = $_GET['orderid'];
         <div class="game" id="game" style="width: 596px; height: 938px;">
             <div class="account">
                 <span>
-                    <input type="hidden" id="orderId" value="<?php echo $orderid;?>" />
+                    <input type="hidden" id="orderId" value="<?php echo $orderId;?>" />
                 </span>
             </div>
             <div class="bulletsNumBox" style="display: none;">
