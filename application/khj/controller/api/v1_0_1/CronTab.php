@@ -19,4 +19,16 @@ class CronTab extends BasicController
 
 		return result(200, 'ok', $result);
 	}
+
+	/**
+	 * 抓取商品信息脚本
+	 * @return [type] [description]
+	 */
+	public function captureData(){
+		
+		$cron_tab = new CronTabService($this->configData);
+		$result = $cron_tab->captureData();
+
+		return result(200, 'ok', $result);
+	}
 }
