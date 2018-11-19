@@ -23,18 +23,17 @@ class UserGoods extends BasicController
 	//领取
 	public function receive()
 	{
-		require_params('user_id', 'goods_id', 'nickname', 'phone', 'addr','region');
+		require_params('user_id', 'challenge_id', 'nickname', 'phone', 'addr','region');
 		$data = Request::param();
 
-//        $data['create_time'] = time();
-//        $AddressModel = new AddressModel();
-//        $where['user_id'] = $data['user_id'];
-//        $exists = $AddressModel->where($where)->find();
-//        if(empty($exists)){
-//            $result = $AddressModel->save($data);
-//        }else{
-//            $result = $AddressModel->save($data,$where);
-//        }
+        $adata['user_id'] = $data['user_id'];
+        $adata['nickname'] = $data['nickname'];
+        $adata['phone'] = $data['phone'];
+        $adata['addr'] = $data['addr'];
+        $adata['region'] = $data['region'];
+        $adata['create_time'] = time();
+        $AddressModel = new AddressModel();
+        $result = $AddressModel->save($adata);
 
 		$service = new UserGoodsService($this->configData);
 		$result = $service->receive($data);

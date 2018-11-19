@@ -90,33 +90,21 @@ function createHg(GAMEMODE) {
       playAudioInWechat($("#gameSuccess_audio").get(0));
       $("#app").addClass("blur")
       $("#gameSuccessBox").css("display", "block")
-        if (window.isH5) {
-            window.history.go(-1);
-        } else {
-            wx.miniProgram.getEnv(function (res) {
-                // alert('res')
-                if (res.miniprogram) {
-                    var info = {
-                        results: 1, //参数二
-                    };
-                    var json = JSON.stringify(info);
-                    wx.miniProgram.postMessage({
-                        data: json
-                    });
-                }
-            });
-        }
       $("#gameSuccessBoxBtn").on("click", function () {
         if (window.isH5) {
           window.history.go(-1);
         } else {
-            setTimeout(function () {
-                // wx.miniProgram.navigateBack();
-                wx.miniProgram.redirectTo({
-                    // url: '../my/my?address=' + 0 + '&orderId=' + orderId
-                    url: '../my/order/order'
-                });
-            }, 1000)
+          wx.miniProgram.getEnv(function (res) {
+            if (res.miniprogram) {
+              var info = {
+                results: 1, //参数二
+              };
+              var json = JSON.stringify(info);
+              wx.miniProgram.postMessage({
+                data: json
+              });
+            }
+          });
         }
       })
     }

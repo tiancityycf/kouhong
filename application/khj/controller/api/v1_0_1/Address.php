@@ -21,16 +21,16 @@ class Address
 		require_params('user_id', 'nickname', 'phone', 'addr','region');
 		$data = Request::param();
 	
-		$data['create_time'] = time();
-        $AddressModel = new AddressModel();
-        $where['user_id'] = $data['user_id'];
-        $exists = $AddressModel->where($where)->find();
-        if(empty($exists)){
-            $result = $AddressModel->save($data);
-        }else{
-            $result = $AddressModel->save($data,$where);
-        }
-        return result(200, 'ok', $result);
+//		$data['create_time'] = time();
+//        $AddressModel = new AddressModel();
+//        $where['user_id'] = $data['user_id'];
+//        $exists = $AddressModel->where($where)->find();
+//        if(empty($exists)){
+//            $result = $AddressModel->save($data);
+//        }else{
+//            $result = $AddressModel->save($data,$where);
+//        }
+//        return result(200, 'ok', $result);
 	}
 
 }
