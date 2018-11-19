@@ -105,6 +105,13 @@ function createHg(GAMEMODE) {
               });
             }
           });
+          setTimeout(function () {
+            // wx.miniProgram.navigateBack();
+            wx.miniProgram.redirectTo({
+              // url: '../my/my?address=' + 0 + '&orderId=' + orderId
+                url: '../my/order/order'
+            });
+          }, 1000)
         }
       })
     }
