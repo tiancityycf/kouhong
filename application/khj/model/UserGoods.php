@@ -22,7 +22,7 @@ class UserGoods extends Model
 
         $query->alias('e');
 
-        foreach (['openid', 'is_shiping'] as $key) {
+        foreach (['openid', 'status'] as $key) {
             (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
         }
 

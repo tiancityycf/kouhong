@@ -21,10 +21,10 @@
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">订单状态</label>
         <div class="layui-input-inline">
-            <select name='is_shiping' class='layui-select' lay-search="">
+            <select name='status' class='layui-select' lay-search="">
                 <option value=''> - 所有状态 -</option>
                 <!--{foreach [0 => '未发货', 1=> '已发货'] as $k => $v}-->
-                <!--{if($Think.get.is_shiping != '' && $Think.get.is_shiping == $k)}-->
+                <!--{if($Think.get.status != '' && $Think.get.status == $k)}-->
                 <option selected="selected" value='{$k}'> - {$v} - </option>
                 <!--{else}-->
                 <option value='{$k}'> - {$v} - </option>
