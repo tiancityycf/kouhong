@@ -17,11 +17,15 @@ class UserGoods
 				->find();
 
 			if ($log['successed']!=1) {
-				return ['status' => 0, 'msg' => '没有可领取的商品'];
+				return ['status' => 0, 'msg' => '没有挑战成功'];
 			}
 
-			$this->user_goods_log($data);
+            $exist = UserGoodsModel::where("challenge_id",$data['challenge_id'])->find();
+            if (!empty($exist)) {
+                return ['status' => 0, 'msg' => '已领取'];
+            }
 
+			$this->user_goods_log($data);
 			Db::commit();
 			return ['status' => 1];
 
