@@ -38,7 +38,7 @@ $(function () {
   })
   document.getElementById("levelSwitchBox").addEventListener("webkitAnimationEnd", function () {
     $("#levelSwitchBox").css("display", "none")
-    $("#levelSwitchBoxMain").attr("src", "../images/level_2_mains.jpg?v=1.0.0")
+    $("#levelSwitchBoxMain").attr("src", "images/level_2_main.jpg?v=1.0.0")
     $("#levelSwitchBox").removeClass("hidden")
   })
   $("#levelSwitchBox").addClass("hidden")

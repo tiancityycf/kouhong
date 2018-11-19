@@ -27,7 +27,7 @@
     //子弹射入深度
     var BULLET_PIERCED_DEEP = 42*ratio;
     //默认旋转速度, 弧度为单位
-    var ROTATION_SPEED = 0.03;
+    var ROTATION_SPEED = 0.01;
     //击中震动Y向距离
     var QUAKE_Y = 4;
     //转速数组
@@ -37,7 +37,7 @@
     //旋转中心震动前Y坐标
     var oldy;
     //变速频率（秒）
-    var changeSpeed = 1;
+    var changeSpeed = 2;
     //重力
     var g = 0.2;
     //大圆初始y向分裂速度
@@ -81,31 +81,32 @@
             "startJudgeCheatDistanceNum":6
         }
     }*/
+    // 配置游戏口红的参数
     var D_Json = {
         "Level1_PARAMETERS":{
             "ROTAION_SPEED_ARRAY" : [-0.05,-0.04,-0.02,0.02,0.04,0.05],
             "rotationAccelerationSpeed" : 0.001,
             "levelArray":[0,6,-0.02,30]
-      
+            /*"levelArray":[0,2,0.02,30]*/
         },
         "Level2_PARAMETERS":{
-            "ROTAION_SPEED_ARRAY" : [-0.06,-0.03,-0.02,0.02,0.04,0.06],
-            "rotationAccelerationSpeed" : 0.002,
-            "levelArray":[0,8,0.04,40] 
-
+             "ROTAION_SPEED_ARRAY" : [-0.06,-0.03,-0.02,0.02,0.04,0.06],
+            "rotationAccelerationSpeed" : 0.001,
+            "levelArray":[0,8,0.03,40]
+            /*"levelArray":[0,2,0.04,40]*/
         },
         "Level3_PARAMETERS":{
-            "ROTAION_SPEED_ARRAY" : [-0.09,-0.07,-0.05,0.06,0.08,0.09],
-            "rotationAccelerationSpeed" : 0.007,
-            "levelArray":[0,12,0.09,60]
-
-        //    [0,口红数，速度，时间]
+            "ROTAION_SPEED_ARRAY" : [-0.08,-0.07,-0.05,0.06,0.08,0.08],
+            "rotationAccelerationSpeed" : 0.008,
+            "levelArray":[0,12,0.06,60]
+            /*"levelArray":[0,5,0.06,60]*/
         },
         "LAST_3_PARAMETERS":{
             "ROTAION_SPEED_ARRAY" : [-0.09,-0.07,-0.05,0.06,0.08,0.09],
             "rotationAccelerationSpeed" : 0.009,
             "levelArray":[0,6,0.07,60]
         },
+        //    [0,口红数，速度，时间]
         "LAST_2_PARAMETERS":{
             "ROTAION_SPEED_ARRAY" : [-0.1,-0.08,-0.03,0.04,0.07,0.1],
             "rotationAccelerationSpeed" : 0.009,
@@ -118,7 +119,7 @@
         },
         "fail_PARAMETERS":{
             "cheatDistance":AimBullet.w*5,
-            "startJudgeCheatDistanceNum":3 
+            "startJudgeCheatDistanceNum":3
         }
     }
     //子弹发射速度
@@ -185,7 +186,7 @@
                 context.drawImage(this.imgObj,0,0,this.w,this.h);
             }
             context.restore();
-            }
+        }
     }
     /*子弹基类*/
     function imgBullet(x,y,w,h,z/*纵轴偏移量*/,imgObj,angle){
@@ -197,21 +198,21 @@
         this.imgObj = imgObj;
         this.angle = angle;
         imgBullet.prototype.paint = function(context){
-        context.save();
-        context.translate(this.x,this.y);
-        context.rotate(this.angle+Math.PI*1.5);
-        context.beginPath();
-        context.moveTo(-this.w/2, -this.z);
-        context.lineTo(this.w/2, -this.z);
-        context.lineTo(this.w/2,this.h-this.z);
-        context.lineTo(-this.w/2,this.h-this.z);
-        context.closePath();
-        /*context.strokeStyle = "rgba(0,0,0,1)";
-        context.stroke();*/
-        if (this.imgObj) {
-            context.drawImage(this.imgObj,-1*w/2,-this.z,this.w,this.h);
-        }
-        context.restore();
+            context.save();
+            context.translate(this.x,this.y);
+            context.rotate(this.angle+Math.PI*1.5);
+            context.beginPath();
+            context.moveTo(-this.w/2, -this.z);
+            context.lineTo(this.w/2, -this.z);
+            context.lineTo(this.w/2,this.h-this.z);
+            context.lineTo(-this.w/2,this.h-this.z);
+            context.closePath();
+            /*context.strokeStyle = "rgba(0,0,0,1)";
+            context.stroke();*/
+            if (this.imgObj) {
+                context.drawImage(this.imgObj,-1*w/2,-this.z,this.w,this.h);
+            }
+            context.restore();
 
         }
         imgBullet.prototype.update = function(){
@@ -270,15 +271,15 @@
         context.restore();
         context.save();
         // console.log(CircleCenterText)
-/*        context.font = CircleCenterText+" PingFangSC-Semibold Arial"+ "border";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillStyle = BULLET_TEXT_STYLE;
-        context.fillText(this.restNum, this.x, this.y,100);
-        context.strokeStyle = 'white';
-        context.lineWidth = 2;
-        context.strokeText(this.restNum, this.x, this.y,100);
-        context.restore();*/
+        /*        context.font = CircleCenterText+" PingFangSC-Semibold Arial"+ "border";
+                context.textAlign = "center";
+                context.textBaseline = "middle";
+                context.fillStyle = BULLET_TEXT_STYLE;
+                context.fillText(this.restNum, this.x, this.y,100);
+                context.strokeStyle = 'white';
+                context.lineWidth = 2;
+                context.strokeText(this.restNum, this.x, this.y,100);
+                context.restore();*/
         // console.log(3633,this.restNum)
         if(this.restNum>=10){
             $("#bulletsNum2").css("display","block")
@@ -416,7 +417,7 @@
      * 其中前两个是必须的, 最后一个, 如果省略, 将用默认值0.03;
      * **/
     function Game(canvas,GAMEMODE){
-        Game.prototype.levelLength = 3;
+        Game.prototype.levelLength = 2;
         if(!canvas || !canvas.getContext){
             throw new Error("参数canvas不能为空, 且必须为canvas元素");
         }
@@ -425,15 +426,6 @@
         if (!data.game_result) {
             data = {game_result:0}
         }
-        /*if(data.game_result==1){
-            this.levelArray = Difficulty_Json.SUCCESS_PARAMETERS.levelArray
-            this.ROTAION_SPEED_ARRAY = Difficulty_Json.SUCCESS_PARAMETERS.ROTAION_SPEED_ARRAY
-            this.rotationAccelerationSpeed = Difficulty_Json.SUCCESS_PARAMETERS.rotationAccelerationSpeed
-        }else if(data.game_result==0){
-            this.levelArray = Difficulty_Json.fail_PARAMETERS.levelArray
-            this.ROTAION_SPEED_ARRAY = Difficulty_Json.fail_PARAMETERS.ROTAION_SPEED_ARRAY
-            this.rotationAccelerationSpeed = Difficulty_Json.fail_PARAMETERS.rotationAccelerationSpeed
-        }*/
     }
     Game.prototype = {
         level:1, /*游戏当前关卡*/
@@ -470,6 +462,7 @@
                 return D_Json.LAST_1_PARAMETERS
             }
         },
+        // 游戏初始化
         init:function (){
             var initParams = this.getParams(this.levelA);
             BulletCirclesIndex = 0;
@@ -479,7 +472,10 @@
             var ballimg = new Image();
             ballimg.src = 'images/CircleCenter_1.png';
             /*lens = this.levelArray[this.levelA][1];*/
+            // 关卡设置的参数
             lens = initParams.levelArray[1];
+            //centerCircle是干啥的
+            // CircleCenter构造函数可能是画游戏效果的方法
             if(!this.centerCircle)
                 this.centerCircle = new CircleCenter(ballimg,Math.PI * 0.5,lens,ROTATION_CENTER.y,false,false,1);
             var self = this;
@@ -489,13 +485,14 @@
             var clickEvent = 'ontouchend' in document ? 'touchend' : 'click';
             $("#game").on(clickEvent, function(event) {
                 event.preventDefault();
-                self.tapHandle.call(self,event);
+                self.tapHandle.call(self,event); 
             })
             $("#game").on("click",function(event){
                 //console.log(event)
                 self.tapHandle.call(self,event);
             })
         },
+        // 游戏开始
         gameStart:function (){
             this.level = 1;
             this.isPause = false;
@@ -520,6 +517,7 @@
         gameOver:function (){
             this.isOver = true;
             this.isCanTap = false;
+            console.log(this.gameOverHandle)
             if(this.gameOverHandle){
                 this.gameOverHandle.call(this,this.level);
             }
@@ -532,12 +530,10 @@
             if(!this.isPause&&!this.isOver){
                 var i, lens;
                 lens = this.rotationCircles.length;
-
                 for(i = 0; i < lens; i++){
                     this.rotationCircles[i].update(this.rotationSpeed,this.context);
                 }
                 lens = this.bulletCircles.length;
-
                 this.AimBullet.update(this);
                 if(!this.isCanTap){
                     var tempBC = this.AimBullet;
@@ -545,7 +541,7 @@
                     if(tempBC.y <=  ROTATION_CENTER.y + ROTATION_RADIUS + 2 * RADIUS_SMALL){
                         var checkCollisionResult = this.checkCollision.call(this,tempBC);
                         if(checkCollisionResult.isCollision){
-                            // console.log("失败")
+                            //console.log("失败")
                             this.audioPlay($("#collision_audio").get(0));
                             this.AimBullet.isFail = true;
                             this.AimBullet.failDirection = checkCollisionResult.failDirection
@@ -561,7 +557,6 @@
                     }
                 }
                 this.paint.call(this);
-
             }
             this.centerCircle.level = this.levelA;
             this.changeSpeed.call(this);
@@ -683,7 +678,7 @@
                 //插入
                 this.centerCircle.isSplit = true;
                 this.audioPlay($("#split_audio").get(0));
-                // console.log("成功")
+                console.log("成功")
                 for(var i=0;i<this.rotationCircles.length;i++){
                     this.rotationCircles[i].isSplit = true;
                 }
@@ -692,9 +687,8 @@
                 }
             }else{
                 oldy = this.centerCircle.y;
-                // this.audioPlay($("#insert_audio").get(0));
+                // this.audioPlay($("#insert_audio").get(0))
                 $("#insert_audio").get(0).play();
-                // console.log($("#insert_audio").get(0))
                 this.centerCircle.isQuake = true;
                 for(var key in this.AimBullet){
                     delete this.AimBullet[key];
@@ -728,29 +722,29 @@
         },
         nextLevel:function (){
             $(".bulletsNumBox").css("display","none")
-           clearInterval(timeboxInterval)
-           BulletCirclesIndex = 0;
-           var self = this;
-           self.gamePause.call(self);
-           self.level++;
-            // console.log(22,self.level,self.levelLength);
-           if (self.level <= self.levelLength) {
-               // console.log(11,self.level,self.levelLength);
+            clearInterval(timeboxInterval)
+            BulletCirclesIndex = 0;
+            var self = this;
+            self.gamePause.call(self);
+            self.level++;
+            console.log(22,self.level,self.levelLength);
+            if (self.level <= self.levelLength) {
+                console.log(11,self.level,self.levelLength);
                $("#levelSwitchBoxMain").attr("src", "images/level_"+self.level+"_main.jpg");
-               $("#levelSwitchBox").css("display","block");
-               $("#levelSwitchBox").addClass("hidden")
-           }
-           self.levelSuccessHandle(self.level)
-           /*if(self.levelSuccessHandle){
-            console.log("if")
-               self.levelSuccessHandle(self.level)
-           }
-           else{
-            console.log("else")
-               setTimeout(function (){
-                   self.gameContinue.call(self,true);
-               },1000 * this.levelSpaceTime);
-           }*/
+                $("#levelSwitchBox").css("display","block");
+                $("#levelSwitchBox").addClass("hidden")
+            }
+            self.levelSuccessHandle(self.level)
+            /*if(self.levelSuccessHandle){
+             console.log("if")
+                self.levelSuccessHandle(self.level)
+            }
+            else{
+             console.log("else")
+                setTimeout(function (){
+                    self.gameContinue.call(self,true);
+                },1000 * this.levelSpaceTime);
+            }*/
         },
         levelChange:function (){
             //this.levelA = Math.min(this.level-1, this.levelArray.length - 1);
@@ -763,14 +757,14 @@
             /*levelA=当前关数 初始为0*/
             //levelA = Math.min(this.level-1, this.levelArray.length - 1);
             //for (var i = 0; i < this.levelArray.length; i++) {
-              for (var i = 0; i < this.levelLength; i++) {
+            for (var i = 0; i < this.levelLength; i++) {
                 document.getElementById("levelbox").children[i].children[0].src = levelUrl[i].normal;
                 if(i<=this.levelA){
                     document.getElementById("levelbox").children[i].children[0].src = levelUrl[i].active
                 }
             }
             //lens = this.levelArray[this.levelA][0];
-              lens = parseInt(this.getParams(this.levelA).levelArray[0]);
+            lens = parseInt(this.getParams(this.levelA).levelArray[0]);
             //var times = this.levelArray[this.levelA][3];
             var times = parseInt(this.getParams(this.levelA).levelArray[3]);
             var ischangeSpeed = 0;
@@ -831,16 +825,16 @@
         },
         //相交返回true
         checkCross:function(p1,p2,p3,p4){
-          var v1={x:p1.x-p3.x,y:p1.y-p3.y},
-          v2={x:p2.x-p3.x,y:p2.y-p3.y},
-          v3={x:p4.x-p3.x,y:p4.y-p3.y},
-          v=this.crossMul(v1,v3)*this.crossMul(v2,v3)
-          v1={x:p3.x-p1.x,y:p3.y-p1.y}
-          v2={x:p4.x-p1.x,y:p4.y-p1.y}
-          v3={x:p2.x-p1.x,y:p2.y-p1.y}
-          // console.log("v: "+v+" ; "+"distance: "+this.crossMul(v1,v3)*this.crossMul(v2,v3))
-          if (v<=50000&&this.crossMul(v1,v3)*this.crossMul(v2,v3)<=50000) {}
-          return (v<=0&&this.crossMul(v1,v3)*this.crossMul(v2,v3)<=0)?true:false
+            var v1={x:p1.x-p3.x,y:p1.y-p3.y},
+                v2={x:p2.x-p3.x,y:p2.y-p3.y},
+                v3={x:p4.x-p3.x,y:p4.y-p3.y},
+                v=this.crossMul(v1,v3)*this.crossMul(v2,v3)
+            v1={x:p3.x-p1.x,y:p3.y-p1.y}
+            v2={x:p4.x-p1.x,y:p4.y-p1.y}
+            v3={x:p2.x-p1.x,y:p2.y-p1.y}
+            // console.log("v: "+v+" ; "+"distance: "+this.crossMul(v1,v3)*this.crossMul(v2,v3))
+            if (v<=50000&&this.crossMul(v1,v3)*this.crossMul(v2,v3)<=50000) {}
+            return (v<=0&&this.crossMul(v1,v3)*this.crossMul(v2,v3)<=0)?true:false
         },
         //碰撞检测
         checkCollision:function (circleBullet){
@@ -892,11 +886,12 @@
             return false
 
         },
+        // 这个是飞镖飞行的方法
         tapHandle:function (evt){
             evt.stopPropagation();
             evt.preventDefault();
             if(this.isCanTap){
-               this.isCanTap = false;
+                this.isCanTap = false;
                 var lens = this.bulletCircles.length;
                 //停在飞镖位置
                 //this.AimBullet.newY = ROTATION_CENTER.y + 107+RADIUS_BIG;
