@@ -347,7 +347,7 @@ class WxPay
                             //更改订单状态
                             $order->status   = 2;
                             $order->pday     = date('Ymd');
-                            $order->pay_time = date('Y-m-d H:i:');
+                            $order->pay_time = date('Y-m-d H:i:s');
                             $order->save();
                             Db::commit();
                             return false;
