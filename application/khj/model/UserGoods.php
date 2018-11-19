@@ -23,7 +23,7 @@ class UserGoods extends Model
         $query->alias('e');
 
         foreach (['openid', 'status'] as $key) {
-            (isset($params[$key]) && $params[$key] !== '') && $query->whereLike($key, "%{$params[$key]}%");
+            (isset($params[$key]) && $params[$key] !== '') && $query->whereLike('e.status', "%{$params[$key]}%");
         }
 
         $query->field('e.*,u.openid,u.avatar,g.title,g.img,a.nickname,a.phone,a.addr,a.region');
