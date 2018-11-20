@@ -32,12 +32,18 @@ class Game extends BasicController
 
 	public function end()
 	{
-		require_params('user_id', 'challenge_id', 'goods_id', 'is_win');
+		require_params('user_id', 'challenge_id', 'goods_id', 'is_win','sign');
         $data = Request::param();
 
-        $game_service = new GameService($this->configData);
-		$result = $game_service->end($data);
-
+        if($this->sign($data)){
+            $game_service = new GameService($this->configData);
+            $result = $game_service->end($data);
+        }else{
+            $result =  [
+                'status' => 0,
+                'msg'    => '签名失败',
+            ];
+        }
 		return result(200, 'ok', $result);
 	}
 
@@ -50,5 +56,16 @@ class Game extends BasicController
         $result = $game_service->challenge_log($data);
 
         return result(200, 'ok', $result);
+    }
+
+    private function sign($data)
+    {
+        //游戏结束 调用 end的接口  再加个参数 sign
+        //算法如下：md5("user_id="+user_id+"challenge_id="+challenge_id+"goods_id="+goods_id+"is_win="+is_win);
+        $sign = md5("user_id=".$data['user_id']."challenge_id=".$data['challenge_id']."goods_id=".$data['goods_id']."is_win=".$data['is_win']);
+        if($sign==$data['sign']){
+            return true;
+        }
+        return false;
     }
 }
