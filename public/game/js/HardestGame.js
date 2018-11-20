@@ -85,20 +85,20 @@
         "Level1_PARAMETERS":{
             "ROTAION_SPEED_ARRAY" : [-0.05,-0.04,-0.02,0.02,0.04,0.05],
             "rotationAccelerationSpeed" : 0.001,
-            // "levelArray":[0,6,-0.02,30]
-            "levelArray":[0,2,-0.02,30]
+            "levelArray":[0,6,-0.02,30]
+            // "levelArray":[0,2,-0.02,30]
         },
         "Level2_PARAMETERS":{
             "ROTAION_SPEED_ARRAY" : [-0.06,-0.03,-0.02,0.02,0.04,0.06],
             "rotationAccelerationSpeed" : 0.002,
-            // "levelArray":[0,8,0.04,40]
-            "levelArray":[0,2,0.04,40]
+            "levelArray":[0,8,0.04,40]
+            // "levelArray":[0,2,0.04,40]
         },
         "Level3_PARAMETERS":{
             "ROTAION_SPEED_ARRAY" : [-0.09,-0.07,-0.05,0.06,0.08,0.09],
             "rotationAccelerationSpeed" : 0.007,
-            // "levelArray":[0,12,0.09,60]
-            "levelArray":[0,2,0.09,60]
+            "levelArray":[0,12,0.09,60]
+            // "levelArray":[0,2,0.09,60]
         //    [0,口红数，速度，时间]
         },
         "LAST_3_PARAMETERS":{
