@@ -12,5 +12,15 @@ use think\facade\Request;
  */
 class Index extends BasicController
 {
+    /**
+     * 拉去首页切换的开关
+     * @return json
+     */
 
+    public function index()
+    {
+        //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/index/index.html;
+        $data['switch'] =1 ; //1:审核中 0:审核通过
+        return result(200, 'ok', $data);
+    }
 }
