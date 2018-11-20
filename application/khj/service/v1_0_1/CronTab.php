@@ -51,6 +51,7 @@ class CronTab
                                 }
                                 $img_info = $this->Upload($value['thumb']);
                                 if ($img_info['code'] != 1) {
+                                    trace($img_info['error_msg'],'error');
                                     continue;
                                 }
                                 $goods             = new GoodsModel();
@@ -76,6 +77,7 @@ class CronTab
                             }
                             $img_info = $this->Upload($value['thumb']);
                             if ($img_info['code'] != 1) {
+                                trace($img_info['error_msg'],'error');
                                 continue;
                             }
                             $goods             = new GoodsModel();
@@ -114,7 +116,7 @@ class CronTab
      */
     public function Upload($img = '')
     {
-        if (empty($img)) {
+        if ($img == '') {
             return ['error_msg' => '地址为空', 'code' => 2];
         }
         $content     = file_get_contents($img);

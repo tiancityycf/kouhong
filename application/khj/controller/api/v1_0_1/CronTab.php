@@ -22,17 +22,4 @@ class CronTab extends BasicController
 
         return result(200, 'ok', $result);
     }
-
-    /**
-     * 测试把远程图片上传到另一个站点
-     * @return [type] [description]
-     */
-    public function testUpload()
-    {
-
-        $cron_tab = new CronTabService($this->configData);
-        $result   = $cron_tab->testUpload();
-
-        return result(200, 'ok', $result);
-    }
 }
