@@ -111,6 +111,9 @@ class WxPay
             //          if( !empty($result['result_code']) && !empty($result['err_code']) ){
             //     $result['err_msg'] = $this->error_code( $result['err_code'] );
             // }
+            $return_data                = [];
+            $return_data['return_code'] = $result['return_code'];
+            $return_data['return_msg']  = $result['return_msg'];
             if ($result['return_code'] == 'SUCCESS') {
                 $timeStamp = (string) time();
                 //返回唤起支付数据
@@ -129,9 +132,13 @@ class WxPay
                     'signType'  => 'MD5',
                     'paySign'   => $paySign,
                 ];
-                $result['return_param'] = $return_param;
+                $result['return_param']      = $return_param;
+                $result['return_param']      = $return_param;
+                $return_data['result_code']  = $result['result_code'];
+                $return_data['prepay_id']    = $result['prepay_id'];
+                $return_data['return_param'] = $result['return_param'];
             }
-            return $result;
+            return $return_data;
         } catch (Exception $e) {
             lg($e);
             throw new \Exception("系统繁忙");
