@@ -7,13 +7,13 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => '172.16.0.74',
+    'hostname'        => '172.16.0.240',
     // 数据库名
     'database'        => 'dbkhj',
     // 用户名
-    'username'        => 'root',
+    'username'        => 'dbkhj',
     // 密码
-    'password'        => '!$AERGERGEFYU!@#',
+    'password'        => 'kMAn58YN2nzaaPQw',
     // 端口
     'hostport'        => '3306',
     // 连接dsn
