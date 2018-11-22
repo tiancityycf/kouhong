@@ -330,7 +330,7 @@ class WxPay
                             //更改订单状态
                             $order->status   = 1;
                             $order->pday     = date('Ymd');
-                            $order->pay_time = date('Y-m-d H:i:');
+                            $order->pay_time = date('Y-m-d H:i:s');
                             $order->save();
                             //给用户增加金额
                             $user_record = UserRecordModel::where('openid', $param['openid'])->find();
