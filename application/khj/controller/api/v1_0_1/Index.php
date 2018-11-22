@@ -21,6 +21,8 @@ class Index extends BasicController
     {
         //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/index/index
         $data['switch'] = 0 ; //1:审核中 0:审核通过
+        //控制ios android显示不同内容
+        $data['isIOS'] = 1 ; 
         return result(200, 'ok', $data);
     }
 }
