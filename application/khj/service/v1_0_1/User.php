@@ -22,7 +22,7 @@ class User
      * 用户登录
      * @return array
      */
-    public function login($code, $appid)
+    public function login($code, $appid,$from_type = 0)
     {
         if(isset($appid)){
             $applist = Config::get('applist');
