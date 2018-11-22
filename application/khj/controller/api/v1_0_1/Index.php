@@ -20,7 +20,7 @@ class Index extends BasicController
     public function index()
     {
         //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/index/index
-        $data['switch'] =1 ; //1:审核中 0:审核通过
+        $data['switch'] = 0 ; //1:审核中 0:审核通过
         return result(200, 'ok', $data);
     }
 }
