@@ -9,6 +9,11 @@ return [
     // 微信设置
     'wx_appid'            => 'wx6acc78416f0a6aca',
     'wx_secret'           => '0bf1f0a099df61011773850a49e45310',
+
+    'applist'            => [
+        'wx7fdd85975ac19c6b'=>'06f1bbc9f62abe1368de3b4e0c92e376',
+        '222'=>'bbb'
+    ],
     //商户号
     'wx_mch_id'            => '1519068881',
     //商户平台设置的密钥key

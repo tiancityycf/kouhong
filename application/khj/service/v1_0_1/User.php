@@ -22,10 +22,21 @@ class User
      * 用户登录
      * @return array
      */
-    public function login($code, $from_type = 0)
+    public function login($code, $appid)
     {
-        $appid = Config::get('wx_appid');
-        $secret = Config::get('wx_secret');
+        if(isset($appid)){
+            $applist = Config::get('applist');
+            if(isset($applist[$appid])){
+                $appid = $appid;
+                $secret =$applist[$appid];
+            }else{
+                $result = ['status' => 0,'msg'=>'不能识别的appid'];
+                return $result;
+            }
+        }else{
+            $appid = Config::get('wx_appid');
+            $secret = Config::get('wx_secret');
+        }
         $loginUrl = Config::get('wx_login_url');
 
         try{
