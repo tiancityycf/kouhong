@@ -22,7 +22,7 @@ class Index extends BasicController
         //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/index/index
         $data['switch'] = 0 ; //1:审核中 0:审核通过
         //0-开启IOS支付  1-关闭IOS支付
-        $data['isIOS'] = 1 ;
+        $data['isIOS'] = 0 ;
         return result(200, 'ok', $data);
     }
 }
