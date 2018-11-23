@@ -62,7 +62,7 @@ class WxPay
             //小程序id
             if(isset($data['appid'])){
                 $applist = Config::get('applist');
-                if(isset($applist[$appid])){
+                if(isset($applist[$data['appid']])){
                     $appid = $data['appid'];
                 }else{
                     $result = ['status' => 0,'msg'=>'不能识别的appid'];
