@@ -60,7 +60,18 @@ class WxPay
             }
             //调用微信下单接口下单
             //小程序id
-            $appid = Config::get('wx_appid');
+            if(isset($data['appid'])){
+                $applist = Config::get('applist');
+                if(isset($applist[$appid])){
+                    $appid = $data['appid'];
+                }else{
+                    $result = ['status' => 0,'msg'=>'不能识别的appid'];
+                    return $result;
+                }
+            }else{
+                $appid = Config::get('wx_appid');
+            }
+//            $appid = Config::get('wx_appid');
             //商户id
             $mch_id = Config::get('wx_mch_id');
             //随机字符串
