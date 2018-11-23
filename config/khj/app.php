@@ -11,8 +11,8 @@ return [
     'wx_secret'           => '0bf1f0a099df61011773850a49e45310',
 
     'applist'            => [
-        'wx7fdd85975ac19c6b'=>'06f1bbc9f62abe1368de3b4e0c92e376',
-        'wxb8aaef731e5a3c47'=>'97561711997a17b144c6827e170d5f0b'
+        'wx7fdd85975ac19c6b'=>'06f1bbc9f62abe1368de3b4e0c92e376', //唇色声香
+        'wxb8aaef731e5a3c47'=>'97561711997a17b144c6827e170d5f0b' //红唇秀
     ],
     //商户号
     'wx_mch_id'            => '1519068881',
