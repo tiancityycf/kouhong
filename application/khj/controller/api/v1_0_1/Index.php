@@ -20,9 +20,16 @@ class Index extends BasicController
     public function index()
     {
         //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/index/index
-        $data['switch'] = 0 ; //1:审核中 0:审核通过
+        $data = Request::param();
+        $switch = 0;
+        $iospay = 0;
+        if(isset($data['version'])){
+            $switch = $this->configData['switch_'.$data['version']];
+            $iospay = $this->configData['ios_pay_'.$data['version']];
+        }
+        $data['switch'] = $switch ; //1:审核中 0:审核通过
         //0-开启IOS支付  1-关闭IOS支付
-        $data['isIOS'] = 0 ;
+        $data['isIOS'] = $iospay ;
         return result(200, 'ok', $data);
     }
 }
