@@ -12,7 +12,7 @@ return [
 
     'applist'            => [
         'wx7fdd85975ac19c6b'=>'06f1bbc9f62abe1368de3b4e0c92e376',
-        '222'=>'bbb'
+        'wxb8aaef731e5a3c47'=>'97561711997a17b144c6827e170d5f0b'
     ],
     //商户号
     'wx_mch_id'            => '1519068881',
