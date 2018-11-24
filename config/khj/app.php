@@ -30,7 +30,7 @@ return [
     'config_key'         => 'config_info',
 
     //异常系统接入参数
-    'system_title'        => '口红机挑战吧',
+    'system_title'        => '红唇秀',
     'system_sign'         => 'khj.wqop2018.comkhj',
     'system_url'          => 'http://log.zxmn2018.com/logs/api/v1/exceptionlog/writeExceptionlog',
 
