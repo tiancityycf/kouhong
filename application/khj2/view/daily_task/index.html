@@ -1,0 +1,125 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline">
+    <!--{if auth("$classuri/add")}-->
+     <button data-modal='{:url("$classuri/add")}' data-title="添加" data-width='50%' class='layui-btn layui-btn-sm'>添加</button> 
+    <!--{/if}-->
+</div>
+<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+    
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>ID</th>
+            <th class='text-left nowrap'>标题</th>
+            <th class='text-left nowrap'>描述</th>
+            <th class='text-left nowrap'>初始文案</th>
+            <th class='text-left nowrap'>完成文案</th>
+            <th class='text-left nowrap'>按钮动作</th>
+            <th class='text-left nowrap'>金币</th>
+            <th class='text-left nowrap'>充值活动</th>
+            <th class='text-left nowrap'>每日次数</th>
+            <th class='text-left nowrap'>结算方式</th>
+            <th class='text-left nowrap'>排序</th>
+            <th class='text-left nowrap'>状态</th>
+            
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                {/if}
+
+                {if $vo.status eq 1 and auth("$classuri/forbid")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-value='0' data-action='{:url("$classuri/forbid")}'>禁用</a>
+                {elseif auth("$classuri/resume")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-value='1' data-action='{:url("$classuri/resume")}'>启用</a>
+                {/if}
+
+                {if auth("$classuri/del")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
+                {/if}
+
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.title}
+            </td>
+            <td class='text-left nowrap'>
+                <?php if(mb_strlen($vo['desc'], "utf-8") > 40) { echo mb_substr($vo['desc'], 0, 40, "UTF8") . '...'; } else { echo $vo['desc']; }?>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.btn_text}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.btn_text1}
+            </td>
+            <td class='text-left nowrap'>
+                {if condition="$vo.action == ''"}
+                 <span style="color:red">普通按钮</span>
+                {else}
+                <span style="color:green">{$action_list[$vo.action]}</span>
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.gold}
+            </td>
+            <td class='text-left nowrap'>
+                {if condition="$vo.recharege_id > 0"}
+                    <span style="color:green">{$recharge_list[$vo.recharege_id]}</span>
+                {else}
+                    <span style="color:red">暂无</span>
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+                {if condition="$vo.times == 0"}
+                    <span style="color:red">{$times_list[$vo.times]}</span>
+                {else}
+                    <span style="color:green">{$times_list[$vo.times]}</span>
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+                 {if condition="$vo.type == 1"}
+                 <span style="color:red">单次结算</span>
+                 {else}
+                 <span style="color:green">一起结算</span> 
+                 {/if}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.sort}
+            </td>
+            <td class='text-left nowrap'>
+                 {if condition="$vo.status == 1"}
+                 <span style="color:green">启用</span>
+                 {else}
+                 <span style="color:red">禁用</span> 
+                 {/if}
+            </td>
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+    <script>window.form.render();</script>
+</form>
+{/block}

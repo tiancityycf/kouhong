@@ -1,0 +1,157 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline">
+
+
+</div>
+<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户id</label>
+        <div class="layui-input-inline">
+            <input name="user_id" value="{$Think.get.user_id|default=''}"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">订单状态</label>
+        <div class="layui-input-inline">
+            <select name='status' class='layui-select' lay-search="">
+                <option value=''> - 所有状态 -</option>
+                <!--{foreach [0 => '未发货', 1=> '已发货'] as $k => $v}-->
+                <!--{if($Think.get.status != '' && $Think.get.status == $k)}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+<a href="/qmxz/user_special_prize/export_excel.html" class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe605;</i> 导出数据并生成EXCEL</a>
+
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>ID</th>
+            <th class='text-left nowrap'>头像</th>
+            <th class='text-left nowrap'>openid</th>
+            <th class='text-left nowrap'>奖品名称</th>
+            <th class='text-left nowrap'>奖品图片</th>
+            <th class='text-left nowrap'>寄送地址</th>
+            <th class='text-left nowrap'>收件人姓名</th>
+            <th class='text-left nowrap'>联系电话</th>
+            <th class='text-left nowrap'>发货状态</th>
+            <th class='text-left nowrap'>中奖时间</th>
+            
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <button type="button" class='ship layui-btn' value="{$vo.id}" >去发货</button>
+               
+                {/if}
+                
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                <img id="img" data-tips-image style="height:auto;max-height:50px;min-width:50px" src='{$vo.avatar}' />
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.openid}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.title}
+            </td>
+            <td class='text-left nowrap'>
+                <img id="img" data-tips-image style="height:auto;max-height:50px;min-width:50px" src='{$vo.img}' />
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.region}——{$vo.addr}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.nickname}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.phone}
+            </td>
+            
+            <td class='text-left nowrap'>
+                 {if condition="$vo.status == 1"}
+                 <span style="color: green;font-weight: bold;font-size: 15px;">已发货</span>
+                 {else}
+                 <span style="color: red;font-weight: bold;font-size: 15px;">未发货</span> 
+                 {/if}
+            </td>
+
+            <td class='text-left nowrap'>
+                {$vo.addtime}
+            </td>
+            
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+         $(function() {
+             //console.log($('.del').length);
+             $('.ship').click(function(){
+                  var productId = $(this).val();
+                  if(confirm('请确认是否成功发货')){
+
+                            $.get("/qmxz/user_special_prize/ship?productId="+productId, function(result){
+                                
+                             if(result == 'success'){
+
+                                alert('发货成功');
+
+
+                             }else if(result == 'fail'){
+
+                                alert('发货失败');
+
+                             }else{
+
+                                alert('异常');
+
+                             }
+                            window.location.reload();
+                        
+                    });    
+
+                }else{
+
+                    return;
+                }
+                  
+            });
+                
+        });
+
+    </script>
+</form>
+{/block}

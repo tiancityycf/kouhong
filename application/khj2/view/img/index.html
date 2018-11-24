@@ -1,0 +1,84 @@
+{extend name='admin@public/content'}
+
+{block name="content"}
+
+<div class="layui-form-item layui-inline" style="float: left;">
+	<div class="layui-form-item layui-inline" style="margin-top: 15px;">
+        <!--{if auth("$classuri/add")}-->
+        <button data-modal='{:url("$classuri/add")}' data-title="上传图片" class='layui-btn layui-btn-sm layui-bg-green'>上传图片</button>
+        <!--{/if}-->
+    </div>
+</div>
+<div class="layui-form-item layui-inline">
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">图片标题搜索</label>
+        <div class="layui-input-inline">
+            <input name="title" value="{$Think.get.title|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+    	<tr>
+    		<th class='text-left nowrap'>操作</th>
+    		<th class='text-left nowrap'>ID</th>
+    		<th class='text-left nowrap'>图片标题</th>
+            <th class='text-left nowrap'>图片展示</th>
+    		<th class='text-left nowrap'>图片地址</th>
+    		<th class='text-left nowrap'>图片大小</th>
+    		<th class='text-left nowrap'>图片类型</th>
+    		
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+    		<td class='text-left nowrap'>
+
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                {/if}
+
+                {if auth("$classuri/del")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
+                {/if}
+
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.title}
+            </td>
+            <td class='text-left nowrap'>
+                <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.path}' />
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.path}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.size}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.type}
+            </td>
+		</tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+</form>
+
+{/block}

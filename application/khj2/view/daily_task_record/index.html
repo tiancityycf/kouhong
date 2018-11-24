@@ -1,0 +1,135 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">ID</label>
+        <div class="layui-input-inline">
+            <input name="id" value="{$Think.get.id|default=''}" placeholder="请输入搜索关键词" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户ID</label>
+        <div class="layui-input-inline">
+            <input name="user_id" value="{$Think.get.user_id|default=''}" placeholder="请输入搜索关键词" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">任务</label>
+        <div class="layui-input-inline">
+            <select name='task_id' class='layui-select' lay-verify="required" lay-search="">
+                <option value=''> - 全部 -</option>
+                <!--{foreach $task_list as $k => $v}-->
+                <!--{if($Think.get.task_id != '' && $Think.get.task_id == $k)}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">结算方式</label>
+        <div class="layui-input-inline">
+            <select name='type' class='layui-select' lay-verify="required" lay-search="">
+                <option value=''> - 全部 -</option>
+                <!--{foreach [0=>'一起结算', 1=>'单次结算'] as $k => $v}-->
+                <!--{if($Think.get.type != '' && $Think.get.type == $k)}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">完成时间</label>
+        <div class="layui-input-inline" style="width: 265px;">
+            <input name="addtime"  autocomplete="off" id='addtime' value="{$Think.get.addtime|default=''}" placeholder="请选择完成时间" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+    
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>ID</th>
+            <th class='text-left nowrap'>任务信息</th>
+            <th class='text-left nowrap'>用户信息</th>
+            <th class='text-left nowrap'>完成次数/总共次数</th>
+            <th class='text-left nowrap'>获得金币</th>
+            <th class='text-left nowrap'>结算方式</th>
+            <th class='text-left nowrap'>添加时间</th>
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td>
+                {if auth("$classuri/del")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
+                {/if}
+
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                ({$vo.task_id}){$task_list[$vo.task_id]}
+            </td>
+            <td class='text-left nowrap'>
+                ({$vo.user_id}){$vo.nickname}
+                <img id="img" data-tips-image style="height:auto;max-height:32px;min-width:32px" src='{$vo.avatar}' />
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.times}
+                /
+                {if condition="$vo.all_times == 0"}
+                 不限次
+                {else}
+                 {$vo.all_times} 
+                {/if}
+            </td>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.gold}
+            </td>
+            <td class='text-left nowrap'>
+                 {if condition="$vo.type == 1"}
+                 <span style="color:green">单次结算</span>
+                 {else}
+                 <span style="color:red">一起结算</span> 
+                 {/if}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.addtime}
+            </td>
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+    <script>
+        window.form.render();
+        window.laydate.render({range: true, elem: '#addtime', type: 'datetime'});
+    </script>
+</form>
+{/block}

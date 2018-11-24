@@ -1,0 +1,116 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post" style="overflow-y:scroll; height:400px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="title" required="required" value="{$vo.title|default=''}" pattern="" title="标题" placeholder="请输入标题" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="desc" required="required" value="{$vo.desc|default=''}" pattern="" title="描述" placeholder="描述" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">初始文案</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="btn_text" required="required" value="{$vo.btn_text|default=''}" pattern="" title="按钮文案" placeholder="按钮文案" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">完成文案</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="btn_text1" required="required" value="{$vo.btn_text1|default=''}" pattern="" title="按钮文案" placeholder="按钮文案" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">按钮动作</label>
+        <div class="layui-input-block">
+                <select id="action" name="action" class="layui-select">
+                    <option selected value="0">- 普通按钮 -</option>
+                    <!--{foreach $action_list as $key=>$st}-->
+                    <!--{if (!isset($vo['action']) AND $key eq 1) OR (isset($vo['action']) AND $vo.action eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">金币</label>
+        <div class="layui-input-block">
+            <input type="num" autofocus name="gold" required="required" value="{$vo.gold|default=''}" pattern="" title="金币" placeholder="金币" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">充值金额</label>
+        <div class="layui-input-block">
+                <select id="recharege_id" name="recharege_id" class="layui-select">
+                    <option selected value="0">- 暂不需要 -</option>
+                    <!--{foreach $recharge_list as $key=>$st}-->
+                    <!--{if (!isset($vo['recharege_id']) AND $key eq 1) OR (isset($vo['recharege_id']) AND $vo.recharege_id eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">每日次数</label>
+        <div class="layui-input-block">
+                <select id="times" name="times" class="layui-select">
+                    <!--{foreach $times_list as $key=>$st}-->
+                    <!--{if (!isset($vo['times']) AND $key eq 1) OR (isset($vo['times']) AND $vo.times eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结算方式</label>
+        <div class="layui-input-block">
+                <select id="type" name="type" class="layui-select">
+                    <!--{foreach [1=>'单次结算',0=>'一起结算'] as $key=>$st}-->
+                    <!--{if (!isset($vo['type']) AND $key eq 1) OR (isset($vo['type']) AND $vo.type eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="sort" required="required" value="{$vo.sort|default=0}" pattern="" title="排序" placeholder="排序" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+                <select id="status" name="status" class="layui-select">
+                    <!--{foreach [1=>'启用',0=>'禁用'] as $key=>$st}-->
+                    <!--{if (!isset($vo['status']) AND $key eq 1) OR (isset($vo['status']) AND $vo.status eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+</form>
