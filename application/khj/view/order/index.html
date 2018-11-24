@@ -123,7 +123,7 @@
                   var productId = $(this).val();
                   if(confirm('请确认是否成功发货')){
 
-                            $.get("/bxdj/order/ship?productId="+productId, function(result){
+                            $.get("/khj/order/ship?productId="+productId, function(result){
                                 
                              if(result == 'success'){
 
