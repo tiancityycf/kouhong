@@ -37,6 +37,19 @@ class WxPay
                     'msg'    => '无效的充值额度',
                 ];
             }
+
+            //先注释了  等客户端发了新版本再打开
+//            $where = [];
+//            $where['user_id'] = $data['user_id'];
+//            $where['successed'] = 1;
+//            $count = Db::name('challenge_log')->where($where)->count();
+//            if($count>1){
+//                return [
+//                    'status' => 0,
+//                    'msg'    => '挑战成功次数已达2次',
+//                ];
+//            }
+
             // 开启事务
             Db::startTrans();
             try {
