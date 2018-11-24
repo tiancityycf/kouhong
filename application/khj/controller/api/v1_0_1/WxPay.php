@@ -37,7 +37,6 @@ class WxPay extends BasicController
     public function unifiedorderNotify()
     {
         $xml = file_get_contents('php://input');
-        trace($xml,'error');
         $wx_pay_service = new WxPayService();
         $result = $wx_pay_service->unifiedorderNotify($xml);
         echo $result;
