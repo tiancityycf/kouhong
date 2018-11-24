@@ -25,14 +25,14 @@ $orderId = $_GET['orderId'];
     <?php } ?>
 </head>
 <body>
-    <audio id="back_music" preload="" src="./audio/bg_audio.mp3" loop="true"></audio>
-    <audio id="split_audio" preload="" src="./audio/split_audio.mp3"></audio>
-    <audio id="collision_audio" preload="" src="./audio/collision_audio.mp3"></audio>
-    <audio id="Countdown_10s_audio" preload="" src="./audio/Countdown_10s_audio.mp3"></audio>
-    <audio id="gameFail_audio" preload="" src="./audio/gameFail_audio.mp3"></audio>
-    <audio id="gameSuccess_audio" preload="" src="./audio/gameSuccess_audio.mp3"></audio>
-    <audio id="insert_audio" preload="" src="./audio/insert_audio.mp3"></audio>
-    <audio id="success_audio" preload="" src="./audio/success_audio.mp3"></audio>
+    <audio id="back_music" preload="" src="https://txcdn.ylll111.xyz/khj/audio/bg_audio.mp3" loop="true"></audio>
+    <audio id="split_audio" preload="" src="https://txcdn.ylll111.xyz/khj/audio/split_audio.mp3"></audio>
+    <audio id="collision_audio" preload="" src="https://txcdn.ylll111.xyz/khj/audio/collision_audio.mp3"></audio>
+    <audio id="Countdown_10s_audio" preload="" src="https://txcdn.ylll111.xyz/khj/audio/Countdown_10s_audio.mp3"></audio>
+    <audio id="gameFail_audio" preload="" src="https://txcdn.ylll111.xyz/khj/audio/gameFail_audio.mp3"></audio>
+    <audio id="gameSuccess_audio" preload="" src="https://txcdn.ylll111.xyz/khj/audio/gameSuccess_audio.mp3"></audio>
+    <audio id="insert_audio" preload="" src="https://txcdn.ylll111.xyz/khj/audio/insert_audio.mp3"></audio>
+    <audio id="success_audio" preload="" src="https://txcdn.ylll111.xyz/khj/audio/success_audio.mp3"></audio>
     <?php if($game==1){?>
     <div class="levelSwitchBox" id="levelSwitchBox" style="display: block;">
         <img id="levelSwitchBoxMain" class="levelSwitchBoxMain" src="images/level_1_main.jpg">
