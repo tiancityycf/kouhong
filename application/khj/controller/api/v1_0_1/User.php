@@ -25,7 +25,10 @@ class User extends BasicController
         $data = Request::param();
 
 		$user_info = Db::name('user_record')->field('avatar,nickname,gold,money')->where('user_id',$data['user_id'])->find();
-        $user_info['count'] = Db::name('success_log')->where('user_id',$data['user_id'])->count();
+		$where = [];
+        $where['user_id'] = $data['user_id'];
+        $where['successed'] = 1;
+        $user_info['count'] = Db::name('challenge_log')->where($where)->count();
 		$result['user_info'] =  $user_info;
         return result(200, 'ok', $result);
 	}
