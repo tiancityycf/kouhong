@@ -11,6 +11,7 @@ return [
     'wx_secret'           => '0bf1f0a099df61011773850a49e45310',
 
     'applist'            => [
+        'wx6acc78416f0a6aca'=>'0bf1f0a099df61011773850a49e45310', //心动红唇
         'wx7fdd85975ac19c6b'=>'06f1bbc9f62abe1368de3b4e0c92e376', //唇色声香
         'wxb8aaef731e5a3c47'=>'97561711997a17b144c6827e170d5f0b' //红唇秀
     ],
