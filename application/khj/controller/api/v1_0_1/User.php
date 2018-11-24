@@ -29,6 +29,7 @@ class User extends BasicController
         $where['user_id'] = $data['user_id'];
         $where['successed'] = 1;
         $user_info['count'] = Db::name('challenge_log')->where($where)->count();
+        $user_info['limit'] = isset($this->configData['success_num'])?$this->configData['success_num']:0;
 		$result['user_info'] =  $user_info;
         return result(200, 'ok', $result);
 	}
