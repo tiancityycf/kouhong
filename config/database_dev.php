@@ -17,9 +17,9 @@ return [
     // 数据库名
     'database'        => 'dbkhj',
     // 用户名
-    'username'        => 'dbkhj',
+    'username'        => 'root',
     // 密码
-    'password'        => '8wIWjTm2TAgTpELF',
+    'password'        => '!$AERGERGEFYU!@#',
     // 端口
     'hostport'        => '62072',
     // 连接dsn
