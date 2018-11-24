@@ -20,7 +20,7 @@ class Good extends BasicController
     {
         //前台测试链接：https://khj.wqop2018.com/khj/api/v1_0_1/good/index.html;
         //按照价格升序
-        $goods_info = Db::name('good_cates')->alias('a')->join(['t_goods' => 'b'], 'a.id=b.cate')->where(['b.status' => 1])->order('b.price asc')->field("a.cate_name,b.*")->select();
+        $goods_info = Db::name('good_cates')->alias('a')->join(['t_goods' => 'b'], 'a.id=b.cate')->where(['b.status' => 1])->order('b.order asc')->field("a.cate_name,b.*")->select();
         $data['good_info'] = $goods_info;
 
         $data['rules'] = [];
