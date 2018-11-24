@@ -19,7 +19,7 @@ class GoodCates extends BasicAdmin
 
 	public function index()
     {
-    	$this->title = '商品所属分类管理';
+    	$this->title = '商品色号管理';
 
        	list($get, $db) = [$this->request->get(), new GoodCatesModel()];
         

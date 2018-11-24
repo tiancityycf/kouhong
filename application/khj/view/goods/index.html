@@ -15,10 +15,10 @@
 
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">产品分类</label>
+        <label class="layui-form-label">产品色号</label>
         <div class="layui-input-inline">
             <select name='cate' class='layui-select' lay-search="">
-                <option value=''> - 请选择分类 -</option>
+                <option value=''> - 请选择色号 -</option>
                 <!--{foreach $cates as $k => $v}-->
                 <!--{if $Think.get.cate == $v.id}-->
                 <option selected="selected" value='{$v.id}'> - {$v.cate_name} - </option>
@@ -57,7 +57,7 @@
             <th class='text-left nowrap'>商品图片</th>
             <!--<th class='text-left nowrap'>库存量</th>-->
             <th class='text-left nowrap'>价格</th>
-            <th class='text-left nowrap'>所属分类</th>
+            <th class='text-left nowrap'>所属色号</th>
             <th class='text-left nowrap'>专柜价</th>
             <!--<th class='text-left nowrap'>Appid</th>-->
             <th class='text-left nowrap'>描述</th>
