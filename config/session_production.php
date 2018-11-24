@@ -21,7 +21,7 @@ return [
     'type'   => 'redis',
     'host'=>'172.16.1.96',
     // SESSION 前缀
-    'prefix'         => 'qmxz',
+    'prefix'         => 'khj',
     'password'=>'zhise666',
     // 是否自动开启 SESSION
     'auto_start'     => true,
