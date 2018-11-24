@@ -24,8 +24,8 @@ class Index extends BasicController
         $switch = 0;
         $iospay = 0;
         if(isset($data['version'])){
-            $switch = $this->configData['switch_'.$data['version']];
-            $iospay = $this->configData['ios_pay_'.$data['version']];
+            $switch = isset($this->configData['switch_'.$data['version']])?$this->configData['switch_'.$data['version']]:0;
+            $iospay = isset($this->configData['ios_pay_'.$data['version']])?$this->configData['ios_pay_'.$data['version']]:0;
         }
         $data['switch'] = $switch ; //1:审核中 0:审核通过
         //0-开启IOS支付  1-关闭IOS支付
