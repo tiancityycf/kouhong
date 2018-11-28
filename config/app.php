@@ -48,6 +48,7 @@ return [
     'class_suffix'           => false,
     // 控制器类后缀
     'controller_suffix'      => false,
+    'URL_MODEL'              => 2,
 
     // +----------------------------------------------------------------------
     // | 模块设置
@@ -134,7 +135,7 @@ return [
     'show_error_msg'         => true,
     // 异常处理handle类 留空使用 \think\exception\Handle
     'exception_handle'       => '',
-    'img_url_config' => 'https://txcdn.ylll111.xyz/', //图片地址配置
-    'bucketName' => 'ylll111xyz', //空间名字
-    'folder' => 'qmxz/', //图片存储文件夹名字
+    'img_url_config'         => 'https://txcdn.ylll111.xyz/', //图片地址配置
+    'bucketName'             => 'ylll111xyz', //空间名字
+    'folder'                 => 'qmxz/', //图片存储文件夹名字
 ];
