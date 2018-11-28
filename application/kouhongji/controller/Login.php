@@ -7,11 +7,13 @@ use model\UserRelationList as UserRelationListModel;
 use think\Controller;
 use think\Db;
 use think\facade\Config;
+use think\facade\Request;
 
 class Login extends controller
 {
     public function index()
     {
+        $data = Request::param();
         //授权登录
         $wx_appid         = config('wx_appid');
         $wx_secret        = config('wx_secret');
@@ -27,12 +29,12 @@ class Login extends controller
         } else {
             $state = '';
         }
-        trace('code='.$data['code'],'error');
+        trace('code=' . $data['code'], 'error');
         //判断code是否存在
         if (isset($data['code']) && $data['code'] != '') {
             //获取access_token
             $access_data = json_decode(file_get_contents(sprintf($get_access_url, $wx_appid, $wx_secret, $data['code'])), true);
-            trace('access_data='.$access_data,'error');
+            trace('access_data=' . $access_data, 'error');
             if (!isset($access_data['errcode'])) {
                 //判断用户信息是否存在
                 $user_info = UserModel::where('openid', $access_data['openid'])->find();
@@ -47,7 +49,7 @@ class Login extends controller
                         'user_status' => 1,
                         'money'       => $record["money"],
                     ];
-                    $this->redirect("index/index",$result);
+                    $this->redirect("index/index", $result);
                 } else {
                     //拉取用户信息
                     $wx_user_info = json_decode(file_get_contents(sprintf($wx_user_info_url, $access_data['access_token'], $access_data['openid'])), true);
@@ -107,9 +109,9 @@ class Login extends controller
                         'user_status' => 1,
                         'money'       => $record["money"],
                     ];
-                    session('uid',$user->id);
-                    trace('login-uid='.$user->id,'error');
-                    $this->redirect("index/index",$result);
+                    session('uid', $user->id);
+                    trace('login-uid=' . $user->id, 'error');
+                    $this->redirect("index/index", $result);
                 }
             } else {
                 if ($access_data['errcode'] == 40029) {
