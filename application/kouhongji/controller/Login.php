@@ -49,6 +49,7 @@ class Login extends controller
                         'user_status' => 1,
                         'money'       => $record["money"],
                     ];
+                    session('uid', $user_info->id);
                     $this->redirect("index/index", $result);
                 } else {
                     //拉取用户信息
