@@ -13,15 +13,15 @@ class Login extends controller
     public function index()
     {
         //授权登录
-        $wx_appid         = Config::get('wx_appid');
-        $wx_secret        = Config::get('wx_secret');
-        $wx_authorize_url = Config::get('wx_authorize_url');
+        $wx_appid         = config('wx_appid');
+        $wx_secret        = config('wx_secret');
+        $wx_authorize_url = config('wx_authorize_url');
         //微信access_token获取接口
-        $get_access_url = Config::get('get_access_url');
+        $get_access_url = config('get_access_url');
         //微信拉取用户信息接口
-        $wx_user_info_url = Config::get('wx_user_info_url');
+        $wx_user_info_url = config('wx_user_info_url');
         //跳转地址
-        $redirect_uri = urlencode(Config::get('login_domain'));
+        $redirect_uri = urlencode(config('login_domain'));
         if (isset($data['pid']) && $data['pid'] != '') {
             $state = $data['pid'];
         } else {
