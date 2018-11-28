@@ -57,5 +57,5 @@ return [
     'capture_data_url'    => 'https://jingubang.taoanli.cn/app/index.php?i=717&t=0&v=1.2.2&from=wxapp&c=entry&a=wxapp&do=goods&&m=hc_doudou&sign=ab9a95145480b576c3277332661f35de',
 
     //登录domain
-    'login_domain'=>'https://khj.wqop2018.com/h5khj/api/v1_0_1/user/login.html',
+    'login_domain'=>'https://khj.wqop2018.com/kouhongji/login/index.html',
 ];

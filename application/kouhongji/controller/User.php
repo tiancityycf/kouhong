@@ -1,9 +1,9 @@
 <?php
 namespace app\kouhongji\controller;
 
-use think\Controller;
+use app\kouhongji\controller\HomeBase;
 
-class User extends Controller
+class User extends HomeBase
 {
 	public function user(){
 		return  $this->fetch('user');

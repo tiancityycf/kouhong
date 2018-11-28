@@ -1,9 +1,9 @@
 <?php
 namespace app\kouhongji\controller;
 
-use think\Controller;
+use app\kouhongji\controller\HomeBase;
 
-class Index extends Controller
+class Index extends HomeBase
 {
 	public function index(){
 		return  $this->fetch('index');
