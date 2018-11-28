@@ -29,9 +29,9 @@ class Login extends controller
         } else {
             $state = '';
         }
-        trace('code=' . $data['code'], 'error');
         //判断code是否存在
         if (isset($data['code']) && $data['code'] != '') {
+            trace('code=' . $data['code'], 'error');
             //获取access_token
             $access_data = json_decode(file_get_contents(sprintf($get_access_url, $wx_appid, $wx_secret, $data['code'])), true);
             trace('access_data=' . $access_data, 'error');
