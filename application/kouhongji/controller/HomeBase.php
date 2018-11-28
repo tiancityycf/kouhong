@@ -10,9 +10,9 @@ class HomeBase extends Controller
      */
     public function initialize()
     {
-    	tracce('uid='.session('uid'),'error');
+    	trace('uid='.session('uid'),'error');
         if (!session('uid')) {
-        	tracce('用户uid不存在','error');
+        	trace('用户uid不存在','error');
         	$this->redirect("login/index");
         }
     }
