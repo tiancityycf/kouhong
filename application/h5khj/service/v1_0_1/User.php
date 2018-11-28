@@ -5,15 +5,15 @@ namespace app\h5khj\service\v1_0_1;
 use api_data_service\Notify as NotifyService;
 use app\h5khj\model\User as UserModel;
 use app\h5khj\model\UserRecord as UserRecordModel;
-use model\UserRelationList as UserRelationListModel;
+use app\h5khj\model\UserRelationRecord as UserRelationRecordModel;
 use model\WithdrawLog as WithdrawLogModel;
+use think\Controller;
 use think\Db;
 use think\facade\Cache;
 use think\facade\Config;
 use Wcs\Http\PutPolicy;
 use Wcs\Upload\Uploader;
 use zhise\HttpClient;
-use think\Controller;
 
 /**
  * 用户服务类
@@ -23,7 +23,7 @@ class User extends Controller
 
     public function index($data)
     {
-        $user_info = UserRecordModel::where('user_id', $data['user_id'])->field('avatar,nickname,gold,money,qr_img')->find();
+        $user_info = UserRecordModel::where('user_id', $data['user_id'])->field('avatar,nickname,money,qr_img,dis_money')->find();
         if (!$user_info) {
             $result = [
                 'status' => 0,
@@ -126,166 +126,6 @@ class User extends Controller
     }
 
     /**
-     * 用户登录
-     * @return array
-     */
-    public function login($data)
-    {
-        //授权登录
-        $wx_appid         = Config::get('wx_appid');
-        $wx_secret        = Config::get('wx_secret');
-        $wx_authorize_url = Config::get('wx_authorize_url');
-        //微信access_token获取接口
-        $get_access_url = Config::get('get_access_url');
-        //微信拉取用户信息接口
-        $wx_user_info_url = Config::get('wx_user_info_url');
-        //跳转地址
-        $redirect_uri = urlencode(Config::get('login_domain'));
-        if (isset($data['pid']) && $data['pid'] != '') {
-            $state = $data['pid'];
-        } else {
-            $state = '';
-        }
-        //判断code是否存在
-        if (isset($data['code']) && $data['code'] != '') {
-            //获取access_token
-            $access_data = json_decode(file_get_contents(sprintf($get_access_url, $wx_appid, $wx_secret, $data['code'])), true);
-            if (!isset($access_data['errcode'])) {
-                //判断用户信息是否存在
-                $user_info = UserModel::where('openid', $access_data['openid'])->find();
-                if ($user_info) {
-                    $time   = time();
-                    $record = UserRecordModel::where('openid', $access_data['openid'])->find();
-                    $result = [
-                        'status'      => 1,
-                        'user_id'     => $user_info->id,
-                        'last_login'  => $time,
-                        'openid'      => $record['openid'],
-                        'user_status' => 1,
-                        'money'       => $record["money"],
-                    ];
-                } else {
-                    //拉取用户信息
-                    $wx_user_info = json_decode(file_get_contents(sprintf($wx_user_info_url, $access_data['access_token'], $access_data['openid'])), true);
-                    if (isset($wx_user_info['errcode']) && $wx_user_info['errcode'] != '') {
-                        trace($wx_user_info['errcode'] . $wx_user_info['errmsg'], 'error');
-                        $result = [
-                            'status' => 0,
-                            'msg'    => $wx_user_info['errmsg'],
-                            'data'   => '',
-                        ];
-                    }
-                    // 开启事务
-                    Db::startTrans();
-                    try {
-                        //添加用户信息
-                        $time              = time();
-                        $user              = new UserModel();
-                        $user->openid      = $wx_user_info['openid'];
-                        $user->nickname    = $wx_user_info['nickname'];
-                        $user->avatar      = $wx_user_info['headimgurl'];
-                        $user->gender      = $wx_user_info['sex'];
-                        $user->create_time = $time;
-                        $user->session_key = '';
-                        $user->save();
-                        //新用户初始化金币的值
-                        $userRecord              = new UserRecordModel();
-                        $userRecord->user_id     = $user->id;
-                        $userRecord->openid      = $wx_user_info['openid'];
-                        $userRecord->nickname    = $wx_user_info['nickname'];
-                        $userRecord->avatar      = $wx_user_info['headimgurl'];
-                        $userRecord->gender      = $wx_user_info['sex'];
-                        $userRecord->gold        = 0;
-                        $userRecord->last_login  = $time;
-                        $userRecord->user_status = 1;
-                        $userRecord->save();
-                        //判断是否邀请关联
-                        if (isset($state) && $state != '') {
-                            $user_relation_list = UserRelationListModel::where('user_id', $user->id)->where('pid', $state)->find();
-                            if (!$user_relation_list) {
-                                $user_relation_list          = new UserRelationListModel();
-                                $user_relation_list->pid     = $state;
-                                $user_relation_list->user_id = $user->id;
-                                $user_relation_list->save();
-                            }
-                        }
-                        Db::commit();
-                    } catch (\Exception $e) {
-                        Db::rollback();
-                        lg($e);
-                    }
-                    $record = UserRecordModel::where('user_id', $user->id)->find();
-                    $result = [
-                        'status'      => 1,
-                        'user_id'     => $user->id,
-                        'last_login'  => $time,
-                        'openid'      => $record['openid'],
-                        'user_status' => 1,
-                        'money'       => $record["money"],
-                    ];
-                }
-            } else {
-                if ($access_data['errcode'] == 40029) {
-                    $this->redirect(sprintf($wx_authorize_url, $wx_appid, $redirect_uri, $state));
-                    exit;
-                }
-                trace($access_data['errcode'] . $access_data['errmsg'], 'error');
-                $result = [
-                    'status' => 0,
-                    'msg'    => $access_data['errmsg'],
-                    'data'   => '',
-                ];
-            }
-        } else {
-            $this->redirect(sprintf($wx_authorize_url, $wx_appid, $redirect_uri, $state));
-            exit;
-        }
-        return $result;
-    }
-
-    /**
-     * 更新用户信息
-     * @return void
-     */
-    // public function update($data)
-    // {
-    //     // 开启事务
-    //     Db::startTrans();
-    //     try {
-    //         $time      = time();
-    //         $userModel = new UserModel();
-    //         $user      = $userModel->where('openid', $data['openid'])->find();
-    //         if (empty($user)) {
-    //             Db::rollback();
-    //             trace($userModel->getLastSql(), 'error');
-    //             return ['error' => '用户不存在'];
-    //         }
-    //         //dump($user);die;
-    //         $user->nickname                = $data['nickname'];
-    //         $user->avatar                  = $data['avatar'];
-    //         $user->gender                  = $data['gender'];
-    //         $user->update_time             = $time;
-    //         $user->userRecord->nickname    = $data['nickname'];
-    //         $user->userRecord->avatar      = $data['avatar'];
-    //         $user->userRecord->update_time = $time;
-    //         $user->userRecord->gender      = $data['gender'];
-
-    //         $user->save();
-    //         $user->userRecord->save();
-
-    //         Db::commit();
-
-    //         $user_status = $user->userRecord->user_status;
-
-    //         return ['user_status' => $user_status];
-    //     } catch (\Exception $e) {
-    //         Db::rollback();
-    //         lg($e);
-    //         return ['error' => $e->getMessage()];
-    //     }
-    // }
-
-    /**
      * 取现
      * @param  array $data 请求数据
      * @return boolean
@@ -357,5 +197,23 @@ class User extends Controller
     {
         $tradeLogModel = new WithdrawLogModel();
         return $tradeLogModel->getWithdrawList($userId);
+    }
+
+    /**
+     * 用户佣金记录
+     * @param  integer $data 接收数据
+     * @return array
+     */
+    public function userRelationList($data)
+    {
+        $list = UserRelationRecordModel::where('pid', $data['user_id'])->order('addtime desc')->select();
+        if (!empty($list)) {
+            foreach ($list as $key => $value) {
+                $user_info                   = UserModel::where('id', $value['user_id'])->find();
+                $list[$key]['user_nickname'] = isset($user_info['nickname']) ? $user_info['nickname'] : '';
+                $list[$key]['user_avatar']   = isset($user_info['avatar']) ? $user_info['avatar'] : '';
+            }
+        }
+        return $list;
     }
 }

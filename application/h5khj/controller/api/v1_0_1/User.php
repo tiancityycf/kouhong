@@ -27,35 +27,6 @@ class User extends BasicController
     }
 
     /**
-     * 用户登录
-     * @return json
-     */
-    public function login()
-    {
-        $data        = Request::param();
-        $userService = new UserService();
-        $result      = $userService->login($data);
-
-        return result(200, 'ok', $result);
-    }
-
-    /**
-     * 更新用户
-     * @return void
-     */
-    // public function update()
-    // {
-    //        //前台测试链接：https://h5khj.wqop2018.com/h5khj/api/v1_0_1/user/update.html?openid=1&nickname=xxx&avatar=1&gender=1
-    //        require_params('openid', 'nickname', 'avatar', 'gender');
-    //     $data = Request::param();
-
-    //     $userService = new UserService();
-    //     $result = $userService->update($data);
-
-    //     return result(200, 'ok', $result);
-    // }
-
-    /**
      * 提现
      * @return boolean
      */
@@ -83,5 +54,20 @@ class User extends BasicController
         $withdrawList = $userService->getWithdrawList($userId);
 
         return result(200, 'ok', ['withdraw_list' => $withdrawList]);
+    }
+
+    /**
+     * 用户佣金记录
+     * @return array
+     */
+    public function userRelationList()
+    {
+        require_params('user_id');
+        $data = Request::param();
+
+        $userService  = new UserService();
+        $result = $userService->userRelationList($data);
+
+        return result(200, 'ok', $result);
     }
 }

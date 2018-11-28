@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -7,32 +7,40 @@
     <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
     <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
     <meta HTTP-EQUIV="expires" CONTENT="0">
-    <title>个人中心22</title>
-    <script src="__STATIC__/kouhongji/base/base.js"></script>
+    <title>个人中心</title>
+    <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
 </head>
 
 <body>
     <div class="body" id="vm">
         <div class="top">
             <div class="user column">
-                <image class="avatar" src="__STATIC__/kouhongji/image/avatar.png"></image>
-                <div class="nickname">移动小霸王</div>
+                <image class="avatar" :src="userInfo.avatar?userInfo.avatar:'__STATIC__/kouhongji/image/avatar.png'"></image>
+                <div class="nickname">{{userInfo.nickname?userInfo.nickname:'神秘人'}}</div>
             </div>
             <div class="money flex">
-                <div class="left">
+                <div class="li">
                     <div>口红</div>
                     <div class="item">
                         <image src="__STATIC__/kouhongji/image/icon.png"></image>
-                        <div class="mycoin">0</div>
+                        <div class="mycoin">{{userInfo.count}}</div>
                     </div>
                 </div>
                 <div></div>
-                <div class="right">
-                    <div>我的金币</div>
+                <div class="li">
+                    <div>我的余额</div>
                     <div class="item">
-                        <span class="mycoin">0</span>
-                        <span>个</span>
+                        <span class="mycoin ys">{{userInfo.money}}</span>
+                        <span>元</span>
                     </div>
+                </div>
+                <div></div>
+                <div class="li">
+                        <div>我的佣金</div>
+                        <div class="item">
+                            <span class="mycoin ys">{{userInfo.dis_money}}</span>
+                            <span>元</span>
+                        </div>
                 </div>
             </div>
             <div class="order">
@@ -40,13 +48,13 @@
                 <image src="__STATIC__/kouhongji/image/right.png"></image>
             </div>
             <div class="order">
+                <div>我的海报</div>
+                <image src="__STATIC__/kouhongji/image/right.png"></image>
+            </div>
+            <div class="order">
                 <div>获取地址</div>
                 <image src="__STATIC__/kouhongji/image/right.png"></image>
             </div>
-            <!-- <div class="order between" hoverClass="none" openType="contact" style="border:0;">
-                <div>联系客服</div>
-                <image src="__STATIC__/kouhongji/__STATIC__/kouhongji/resource/images/right.png"></image>
-            </div> -->
             <div class="footer">
                 <div class="tabbar" @click="goIndex">
                     <img src="__STATIC__/kouhongji/image/order.png"></image>
@@ -57,11 +65,11 @@
                     <div class="tit">我的</div>
                 </div>
             </div>
-            <!-- <div class="share" open-type='share'>分享给好友一起赢口红</div> -->
         </div>
     </div>
+    <div class="loading" v-show="loadShow"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
 </body>
 
 </html>
-<script src="__STATIC__/kouhongji/user/user.js"></script>
-<link rel="stylesheet" href="__STATIC__/kouhongji/user/user.css">
+<script src="__STATIC__/kouhongji/user/user.js?v={:time()}"></script>
+<link rel="stylesheet" href="__STATIC__/kouhongji/user/user.css?v={:time()}">

@@ -8,7 +8,7 @@
   <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
   <meta HTTP-EQUIV="expires" CONTENT="0">
   <title>我要赢口红</title>
-  <script src="__STATIC__/kouhongji/base/base.js"></script>
+  <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
 </head>
 
 <body>
@@ -29,11 +29,11 @@
         <div class="item" v-for="(item,index) of goods">
           <div class="detail">
             <image src="__STATIC__/kouhongji/image/kouhong.jpg"></image>
-            <div class="price">这是价格{{index}}</div>
-            <div class="title">这是名字</div>
-            <div class="model">这是说明啦啦啦啦</div>
+            <div class="price">专柜价 ￥{{item.sale_price}}</div>
+            <div class="title">{{item.cate_name}}</div>
+            <div class="model">{{item.title}}</div>
           </div>
-          <div class="btn">50金币闯关购</div>
+          <div class="btn">{{item.price}}元闯关购</div>
         </div>
       </div>
       <div class="footer">
@@ -50,13 +50,7 @@
     <div class="rule" v-show="ruleShow">
       <div class="bg">
         <div class="close" @click="closeTk">✕</div>
-        <div class="list">这是规则1</div>
-        <div class="list">这是规则1</div>
-        <div class="list">这是规则1</div>
-        <div class="list">这是规则1</div>
-        <div class="list">这是规则1</div>
-        <div class="list">这是规则1</div>
-        <div class="list">这是规则1</div>
+        <div class="list" v-for="(item,index) of ruleList">{{item}}</div>
       </div>
     </div>
     <!-- <div class="loading"><img src="__STATIC__/kouhongji/image/loading.gif"></div> -->
@@ -70,7 +64,8 @@
   var openid = "{$openid}";
   var user_status = "{$user_status}";
   var money = "{$money}";
-  console.log(user_id);
-</script>>
-<script src="__STATIC__/kouhongji/index/index.js"></script>
-<link rel="stylesheet" href="__STATIC__/kouhongji/index/index.css">
+  localStorage.setItem("user_id",user_id);
+  localStorage.setItem("money",money);
+</script>
+<script src="__STATIC__/kouhongji/index/index.js?v={:time()}"></script>
+<link rel="stylesheet" href="__STATIC__/kouhongji/index/index.css?v={:time()}">

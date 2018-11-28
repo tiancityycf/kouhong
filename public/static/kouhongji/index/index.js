@@ -1,22 +1,31 @@
 var o = new Vue({
     el: '#vm',
     data: {
-        goods:[1,2,3,4,5,6,7,8,9,10],
+        goods:[],
         musicOn:true,
         ruleShow:false,
-        topTit:"挑战送口红",
+        topTit:"",
+        ruleList:[]
+    },
+    created:function(){
+        this.loadIndex();
     },
     methods:{
-        login:function(){
-            console.log("login")
+        loadIndex:function(){
             $.ajax({  
-                type:"GET",
-                // url:"http://khj.local.com/h5khj/api/v1_0_1/user/login.html",
-                url:"http://khj.local.com/h5khj/api/v1_0_1/user/login.html",
-                data:{},
-                // dataType: 'jsonp',
+                type:"POST",
+                url:"http://khj.local.com/h5khj/api/v1_0_1/good/index.html",
+                data:{
+                    user_id:user_id
+                },
                 success:function(res){
-                    console.log(res)
+                    o.topTit=res.data.notice.title;
+                    o.ruleList =res.data.rules;
+                    for(let i=0;i<res.data.good_info.length;i++){
+                        res.data.good_info[i].price=parseInt(res.data.good_info[i].price);
+                        res.data.good_info[i].sale_price=parseInt(res.data.good_info[i].sale_price);
+                    }
+                    o.goods=res.data.good_info;
                 }
             })
         },
@@ -34,4 +43,3 @@ var o = new Vue({
         }
     }
 })
-o.login();
