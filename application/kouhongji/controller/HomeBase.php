@@ -2,6 +2,7 @@
 namespace app\kouhongji\controller;
 
 use think\Controller;
+use think\facade\Request;
 
 class HomeBase extends Controller
 {
