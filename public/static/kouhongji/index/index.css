@@ -1,0 +1,151 @@
+body{
+    background:#fef2f6;
+    position: relative;
+    height: auto;
+}
+.topbg{
+    width:100%;
+    height:3rem;
+    padding-top: 0.3rem;
+    background: url("../image/bg.png") no-repeat;
+    background-size:100% 100%;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.toptit{
+    position: relative;
+    width: 90%;
+    margin:0 auto;
+    padding-top: 0.3rem;
+}
+.toptit .notice{
+    height:0.6rem;
+    width:5.1rem;
+    border-radius:1.2rem;
+    background-color:#fff;
+    color:pink;
+    font-size:0.28rem;
+    line-height:0.6rem;
+    padding-left:0.8rem;
+    position:relative;
+    float: left;
+}
+.toptit .notice img{
+    width:0.3rem;
+    height:0.3rem;
+    position:absolute;
+    left:0.2rem;
+    top:0.16rem;
+}
+.toptit .music-img{
+    width:0.4rem;
+    height:0.4rem;
+    background:rgba(0, 0, 0, 0.5);
+    padding:0.1rem;
+    border-radius:50%;
+    display:block;
+    float: right;
+}
+.banner{
+    width:90%;
+    margin:0.3rem auto 0;
+    display:block;
+    height: 2.6rem;
+    position: relative;
+}
+.centerTxt{
+    width: 90%;
+    margin:0.3rem auto;
+}
+.centerTxt .fl{
+    font-size:0.32rem;
+    color:#383435;
+    font-weight: 600;
+}
+.centerTxt .fr{
+    font-size:0.28rem;
+    color:#fe9cb8;
+}
+.goods{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    width:92%;
+    padding:0 4% 1.2rem;
+}
+.goods .item{
+    margin:0 1% 0.2rem;
+    width:31.3%;
+    font-size:0.28rem;
+    color:#161616;
+    text-align: center;
+}
+.goods .detail{
+    padding:0 0 0.1rem;
+    border-radius:0.1rem;
+    background: #fff;
+}
+.goods .detail>div{
+    height:0.4rem;
+    line-height:0.4rem;
+}
+.goods .detail img{
+    width:100%;
+    height:2rem;
+    display:block;
+}
+.goods .detail .price{
+    color:#bf1c12;
+}
+.goods .detail .model{
+    font-size:0.32rem;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.goods .item .btn{
+    margin-top:0.2rem;
+    width:100%;
+    height:0.6rem;
+    line-height:0.6rem;
+    color:#fff;
+    font-size:0.3rem;
+    border-radius:0.1rem;
+    background:-webkit-linear-gradient(left, #f8807f, #fe5a95)
+}
+.footer{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:#fff;
+    font-size:0.3rem;
+    border-top:1px solid #ffdeea;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    height: 1.2rem;
+    box-sizing: border-box;
+}
+.footer .tabbar{
+    background:#fff;
+    color:#fe5a96;
+    padding:0.06rem 0 0;
+    margin:0;
+    width:50%;
+    border:none;
+    border-radius:0;
+    font-size:0.3rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.footer img{
+    display:block;
+    width:0.5rem;
+    height:0.5rem;
+}
+.footer .tit{
+    height:0.56rem;
+    line-height:0.56rem;
+}

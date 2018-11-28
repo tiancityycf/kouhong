@@ -1,0 +1,30 @@
+@charset "UTF-8";
+*{margin:0;padding:0;}
+body, html {
+  background-color: #ffffff;
+  font-family:"Microsoft YaHei";
+  height: 100%;
+  -webkit-tap-highlight-color: transparent; }
+
+a {text-decoration: none; }
+.clearfix::after{
+   content:"";
+   display: block;
+   clear:both;
+}
+.fl{float:left;}
+.fr{float:right;}
+.line1{
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
+}
+.line2{
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
+}

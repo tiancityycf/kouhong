@@ -244,3 +244,31 @@ function lg($e, $remark = '')
     ];
     sendCmd($send_url, $sendData);
 }
+
+/**
+ * 生成原始的二维码(生成图片文件)
+ * @param  string $url 链接
+ * @return [type]      [description]
+ */
+function createQr($url = '')
+{
+    require_once '../vendor/phpqrcode/phpqrcode.php';
+    $value                = $url; //二维码内容
+    $errorCorrectionLevel = 'L'; //容错级别
+    $matrixPointSize      = 5; //生成图片大小
+    $qrcode_dir           = 'qrcode';
+    $PNG_WEB_DIR          = './' . $qrcode_dir;
+    if (!file_exists($PNG_WEB_DIR)) {
+        mkdir($PNG_WEB_DIR, 0777, true);
+    }
+    //生成二维码图片
+    $filename = 'qrcode.png';
+    QRcode::png($value, $PNG_WEB_DIR . '/' . $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+    $QR      = basename($filename); //已经生成的原始二维码图片文件
+    $img_url = 'http://' . $_SERVER['HTTP_HOST'] . '/' . $qrcode_dir . '/' . $QR;
+
+    return [
+        'filepath' => '/' . $qrcode_dir . '/' . $QR,
+        'img_url'  => $img_url,
+    ];
+}

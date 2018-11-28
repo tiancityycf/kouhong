@@ -1,0 +1,117 @@
+<form class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板标题</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="title" required="required" value='{$vo.title|default=""}' pattern="" title="分类名称" placeholder="分类名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板ID</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="template_id" required="required" value='{$vo.template_id|default=""}' pattern="" title="分类名称" placeholder="分类名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板内容</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="content" required="required" value='{$vo.content|default=""}' pattern="" title="分类名称" placeholder="分类名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板样例</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="example" required="required" value='{$vo.example|default=""}' pattern="" title="分类名称" placeholder="分类名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+                <select id="status" name="status" class="layui-select" style="width: 75%;">
+                    <!--{foreach [1=>'启用',0=>'禁用'] as $key=>$st}-->
+                    <!--{if (!isset($vo['status']) AND $key eq 1) OR (isset($vo['status']) AND $vo.status eq $key)}-->
+                    <option selected value="{$key}">- {$st} -</option>
+                    <!--{else}-->
+                    <option value="{$key}">- {$st} -</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+        </div>
+    </div>
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+        $("#word").on('change', function(){
+            var length = $(this).val().length;
+            var mix_num = $("#mix_num option:selected").val();
+            var html = '';
+            for(var i = 1; i <= length; i++){
+                if(mix_num == i){
+                    html += "<option selected value='"+ i +"'>- "+ i +" -</option>";
+                }else{
+                    html += "<option value='"+ i +"'>- "+ i +" -</option>";
+                }
+            }
+            $("#mix_num").html(html);
+            renderForm();
+        });
+
+        function renderForm(){
+            layui.use('form', function(){
+                var form = layui.form;
+                form.render();
+            });
+        }
+
+  //    $(document).ready(function(){
+  //        var word = $("#word");
+        //     var length = word.val().length;
+        //     var mix_num = word.attr("word_mix");
+        //     var word_id = word.attr("word_id");
+
+  //           var html = '';
+        //     if(word_id != ''){
+  //               for(var i = 1; i <= length; i++){
+  //                   if(mix_num == i){
+  //                       html += "<option selected value='"+ i +"'>- "+ i +" -</option>";
+  //                   }else{
+  //                       html += "<option value='"+ i +"'>- "+ i +" -</option>";
+  //                   }
+  //               }
+  //               $("#mix_num").html(html);
+  //               renderForm();
+  //           }
+        // });
+    </script>
+    <script type="text/javascript">
+        layui.use('upload', function(){
+            var $ = layui.jquery
+            ,upload = layui.upload;
+
+            var uploadInst = upload.render({
+                elem: '#test2' //绑定元素
+                ,url: '/admin/img/upload' //上传接口
+                ,method: 'post'
+                ,exts : 'jpg|png|gif'
+                ,done: function(res){
+                    if(res.code == 1){
+                        $("#path").val(res.path);
+                        $("#size").val(res.size);
+                        $("#type").val(res.type);
+                        $("#img").attr('src', res.path);
+                        layer.msg('图片已经上传到网宿云存储', {icon: 6});
+
+                    }else if(res.code == 0){
+                        layer.msg(res.msg);
+                    }else{
+                        layer.msg(res.error_msg);
+                    }
+                }
+            });
+        });
+    </script>
+</form>

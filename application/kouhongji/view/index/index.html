@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="divport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+  <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+  <meta HTTP-EQUIV="expires" CONTENT="0">
+  <title>我要赢口红</title>
+  <script src="__STATIC__/kouhongji/base/base.js"></script>
+</head>
+<body>
+  <div class="body" id="vm">
+    <div class="topbg"></div>
+    <div class="toptit clearfix">
+      <div class="notice">
+        <image class="notice-img" src="__STATIC__/kouhongji/image/notice.png"></image>{{topTit}}
+      </div>
+      <image class="music-img" @click="musicSet" :src="musicOn?'__STATIC__/kouhongji/image/voice.png':'__STATIC__/kouhongji/image/closevoice.png'"></image>
+    </div>
+    <img src="__STATIC__/kouhongji/image/banner.png" class="banner">
+    <div class="centerTxt clearfix">
+      <div class="fl">玩游戏过三关赢口红</div>
+      <div class="fr" @click="openRule">闯关购说明</div>
+    </div>
+    <div class="goods">
+      <div class="item" v-for="(item,index) of goods">
+        <div class="detail">
+          <image src="__STATIC__/kouhongji/image/kouhong.jpg"></image>
+          <div class="price">这是价格{{index}}</div>
+          <div class="title">这是名字</div>
+          <div class="model">这是说明啦啦啦啦</div>
+        </div>
+        <div class="btn">50金币闯关购</div>
+      </div>
+    </div>
+    <div class="footer">
+        <div class="tabbar">
+          <img src="__STATIC__/kouhongji/image/order.png"></image>
+          <div class="tit">订单</div>
+        </div>
+        <div class="tabbar" @click="goUser">
+          <image src="__STATIC__/kouhongji/image/my.png"></image>
+          <div class="tit">我的</div>
+        </div>
+    </div>
+  </div>
+</body>
+</html>
+<script src="__STATIC__/kouhongji/index/index.js"></script>
+<link rel="stylesheet" href="__STATIC__/kouhongji/index/index.css">
