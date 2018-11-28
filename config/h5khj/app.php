@@ -35,7 +35,7 @@ return [
 
     //异常系统接入参数
     'system_title'        => 'H5口红机',
-    'system_sign'         => 'h5khj.local.comh5khj',
+    'system_sign'         => 'khj.wqop2018.comh5khj',
     'system_url'          => 'http://log.zxmn2018.com/logs/api/v1/exceptionlog/writeExceptionlog',
 
     // 提现设置
@@ -51,11 +51,11 @@ return [
     'wx_pay_unifiedorder' => 'https://api.mch.weixin.qq.com/pay/unifiedorder',
 
     //微信下单回调
-    'wx_notify_url'       => 'https://h5khj.local.com/khj/api/v1_0_1/wx_pay/unifiedorderNotify.html',
+    'wx_notify_url'       => 'https://khj.wqop2018.com/h5khj/api/v1_0_1/wx_pay/unifiedorderNotify.html',
 
     //抓取商品信息接口地址
     'capture_data_url'    => 'https://jingubang.taoanli.cn/app/index.php?i=717&t=0&v=1.2.2&from=wxapp&c=entry&a=wxapp&do=goods&&m=hc_doudou&sign=ab9a95145480b576c3277332661f35de',
 
     //登录domain
-    'login_domain'=>'http://h5khj.local.com/khj/api/v1_0_1/user/login.html',
+    'login_domain'=>'https://khj.wqop2018.com/h5khj/api/v1_0_1/user/login.html',
 ];
