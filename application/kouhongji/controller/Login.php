@@ -34,7 +34,7 @@ class Login extends controller
             trace('code=' . $data['code'], 'error');
             //获取access_token
             $access_data = json_decode(file_get_contents(sprintf($get_access_url, $wx_appid, $wx_secret, $data['code'])), true);
-            trace('access_data=' . $access_data, 'error');
+            trace('access_data=' . json_encode($access_data), 'error');
             if (!isset($access_data['errcode'])) {
                 //判断用户信息是否存在
                 $user_info = UserModel::where('openid', $access_data['openid'])->find();
