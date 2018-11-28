@@ -42,7 +42,6 @@ class Login extends controller
                     $time   = time();
                     $record = UserRecordModel::where('openid', $access_data['openid'])->find();
                     $result = [
-                        'status'      => 1,
                         'user_id'     => $user_info->id,
                         'last_login'  => $time,
                         'openid'      => $record['openid'],
@@ -103,7 +102,6 @@ class Login extends controller
                     }
                     $record = UserRecordModel::where('user_id', $user->id)->find();
                     $result = [
-                        'status'      => 1,
                         'user_id'     => $user->id,
                         'last_login'  => $time,
                         'openid'      => $record['openid'],

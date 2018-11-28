@@ -16,7 +16,6 @@ class HomeBase extends Controller
             trace('用户uid不存在', 'error');
             $this->redirect("login/index");
         } else {
-            $status      = Request::param('status');
             $user_id     = Request::param('user_id');
             $last_login  = Request::param('last_login');
             $openid      = Request::param('openid');
