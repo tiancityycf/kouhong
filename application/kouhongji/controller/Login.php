@@ -51,7 +51,7 @@ class Login extends controller
                     session('openid', $record['openid']);
                     session('user_status', 1);
                     session('money', $record["money"]);
-                    $this->redirect("index/index", $result);
+                    $this->redirect("index/index");
                 } else {
                     //拉取用户信息
                     $wx_user_info = json_decode(file_get_contents(sprintf($wx_user_info_url, $access_data['access_token'], $access_data['openid'])), true);
@@ -115,7 +115,7 @@ class Login extends controller
                     session('openid', $record['openid']);
                     session('user_status', 1);
                     session('money', $record["money"]);
-                    $this->redirect("index/index", $result);
+                    $this->redirect("index/index");
                 }
             } else {
                 if ($access_data['errcode'] == 40029) {
