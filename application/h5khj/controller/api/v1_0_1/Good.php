@@ -24,6 +24,10 @@ class Good extends BasicController
         foreach($goods_info as $k=>$v){
             $goods_info[$k]['imgs'] = Db::name('good_imgs')->where(['product_id' => $v['id']])->field("img")->select();
         }
+        $user_info = Db::name('user_record')->where('user_id',session('uid'))->field('user_id,money,gold')->find();
+        if($user_info){
+            $data['user_info'] = $user_info;
+        }
         $data['good_info'] = $goods_info;
 
         $data['rules'] = [];
