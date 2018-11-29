@@ -46,6 +46,7 @@ class Login extends controller
                         'user_status' => 1,
                         'money'       => $record["money"],
                     ];
+                    trace('uid='.$user_info->id,'error');
                     session('uid', $user_info->id);
                     $this->redirect("index/index", $result);
                 } else {
@@ -106,6 +107,7 @@ class Login extends controller
                         'user_status' => 1,
                         'money'       => $record["money"],
                     ];
+                    trace('uid='.$user->id,'error');
                     session('uid', $user->id);
                     $this->redirect("index/index", $result);
                 }
