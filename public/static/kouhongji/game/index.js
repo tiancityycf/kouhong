@@ -130,7 +130,7 @@ function createHg(GAMEMODE) {
     $("#gameOverBox").css("display", "block");
     $("#app").addClass("blur");
     var level = this.level;
-    // console.log(111,this.level);
+    console.log(game,orderId,goods_id)
     $("#gameOverBoxBtn").on("click", function () {
       if (window.isH5) {
         window.history.go(-1);

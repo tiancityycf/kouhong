@@ -52,7 +52,7 @@ var o = new Vue({
                 },
                 success:function(res){
                     if(res.data.status==1){
-                        location.href="../game/index.html?game=2&orderId="+res.data.challenge_id
+                        location.href="../game/index.html?game=2&orderId="+res.data.challenge_id+"&goods_id="+e
                     }else{
                         o.tkShow=true;
                         o.balanceShow=true;
