@@ -10,6 +10,7 @@
   <title>我要赢口红</title>
   <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
   <link rel="stylesheet" href="__STATIC__/kouhongji/index/index.css?v={:time()}">
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 </head>
 
 <body>
@@ -61,6 +62,21 @@
           <image src="__STATIC__/kouhongji/image/nomoney.png"></image>
           <div class="leave">余额不足</div>
           <div @click="payMoney" class="payBtn">去充值</div>
+      </div>
+      <div class="pay" v-show="payShow">
+          <div class="paytitle">收银台</div>
+          <div @click="closeTk" class="close">✕</div>
+          <div class="money flex">
+            <span>当前余额：</span>
+            <image src="__STATIC__/kouhongji/image/money.png"></image>
+            <span class="leave">{{money}}元</span>
+          </div>
+          <div class="change">
+            <div class="changeitem" v-for="item of payList" @click="buy(item.id)">
+              <span class="num">{{item.money}}</span>
+              <span>元</span>
+            </div>
+          </div>
       </div>
     </div>
     <div class="loading" v-show="loadShow">

@@ -7,8 +7,12 @@ var o = new Vue({
         tkShow:false,
         ruleShow:false,
         balanceShow:false,
+        payShow:false,
+        canClick:true,
         topTit:"",
-        ruleList:[]
+        ruleList:[],
+        payList:[],
+        money:""
     },
     created:function(){
         this.loadIndex();
@@ -35,6 +39,10 @@ var o = new Vue({
             })
         },
         startGame:function(e){
+            if(!o.canClick){
+                return;
+            }
+            o.canClick=false;
             $.ajax({  
                 type:"POST",
                 url:"http://khj.local.com/h5khj/api/v1_0_1/game/start.html",
@@ -46,14 +54,61 @@ var o = new Vue({
                     if(res.data.status==1){
 
                     }else{
-                        o.ruleShow=true;
+                        o.tkShow=true;
                         o.balanceShow=true;
+                        o.canClick=true;
+                        o.money =localStorage.getItem("money");
+                        o.loadPayList();
                     }
                 }
             })
         },
+        loadPayList:function(){
+            $.ajax({  
+                type:"POST",
+                url:"http://khj.local.com/h5khj/api/v1_0_1/recharge_amount/amount_list.html",
+                data:{
+                    user_id:user_id
+                },
+                success:function(res){
+                    o.payList=res.data;
+                }
+            })
+        },
+        buy:function(e){
+            if(!o.canClick){
+                return;
+            }
+            o.canClick=false;
+            $.ajax({  
+                type:"POST",
+                url:"http://khj.local.com/h5khj/api/v1_0_1/wx_pay/unifiedorder.html",
+                data:{
+                    user_id:user_id,
+                    type:0,
+                    recharege_id:e
+                },
+                success:function(res){
+                    wx.chooseWXPay({
+                        timestamp: res.data.return_param.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                        nonceStr: res.data.return_param.nonceStr, // 支付签名随机串，不长于 32 位
+                        package: res.data.return_param.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                        signType: res.data.return_param.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                        paySign: res.data.return_param.paySign, // 支付签名
+                        success: function () {
+                            o.canClick=true;
+                            o.closeTk();
+                        },
+                        fail:function(){
+                            console.log("充值失败")
+                        }
+                    });
+                }
+            })
+        },
         payMoney:function(){
-
+            o.balanceShow=false;
+            o.payShow=true;
         },
         musicSet:function(){
             o.musicOn=!o.musicOn;
@@ -71,6 +126,7 @@ var o = new Vue({
             o.ruleShow=false;
             o.tkShow=false;
             o.balanceShow=false;
+            o.payShow=false;
         },
         goUser:function(){
             location.href="../user/user.html"

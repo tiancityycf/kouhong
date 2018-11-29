@@ -201,9 +201,9 @@ body{
 }
 .balance .close{
     position:absolute;
-    top:15px;
-    right:15px;
-    font-size:20px;
+    top:0.3rem;
+    right:0.3rem;
+    font-size:0.4rem;
 }
 .balance img{
     width:3.4rem;
@@ -224,4 +224,67 @@ body{
     width:56%;
     margin-top:0.3rem;
     text-align:center;
+}
+.tk .pay{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:88%;
+    padding:0.3rem 3%;
+    background:#fff;
+    border-radius:5px;
+    box-shadow:0.06rem 0.06rem 0.06rem #fda3bd;
+    font-size: 0.28rem;
+}
+.pay .paytitle{
+    color:#fb1f7f;
+    text-align:center;
+    font-size:0.4rem;
+}
+.pay .close{
+    position:absolute;
+    top:0.3rem;
+    right:0.3rem;
+    font-size:0.4rem;
+}
+.pay .money{
+    font-size:0.3rem;
+    color:#333;
+    margin:0.5rem 0;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+.pay img{
+    width:0.4rem;
+    height:0.4rem;
+    display:block;
+    margin-right:0.2rem;
+}
+.pay .leave{
+    color:#fb1f7f;
+}
+.pay .change{
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    font-size: 0.28rem;
+}
+.changeitem{
+    width:28%;
+    margin:0 2%;
+    height:1.6rem;
+    line-height:1.6rem;
+    margin-bottom:0.3rem;
+    color:#fb1f7f;
+    border:2px solid #fb1f7f;
+    border-radius:5px;
+    text-align:center;
+    font-size:0.28rem;
+    box-sizing: border-box;
+}
+.changeitem .num{
+    font-size: 0.5rem;
 }
