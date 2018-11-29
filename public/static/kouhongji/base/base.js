@@ -1,6 +1,6 @@
-document.write("<script src='../../static/kouhongji/base/jquery.js?v=1.1'><\/script>");
-document.write("<script src='../../static/kouhongji/base/vue.js?v=1.1'><\/script>");
-document.write("<link rel='stylesheet' type='text/css' href='../../static/kouhongji/base/app.css?v=1.1' />");
+document.write("<script src='../../static/kouhongji/base/jquery.js?v=1.2'><\/script>");
+document.write("<script src='../../static/kouhongji/base/vue.js?v=1.2'><\/script>");
+document.write("<link rel='stylesheet' type='text/css' href='../../static/kouhongji/base/app.css?v=1.5' />");
 //自适应
 ;(function(win, lib) {
     var doc = win.document;

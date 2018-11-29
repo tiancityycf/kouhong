@@ -9,16 +9,17 @@
     <meta HTTP-EQUIV="expires" CONTENT="0">
     <title>个人中心</title>
     <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
+    <link rel="stylesheet" href="__STATIC__/kouhongji/user/user.css?v={:time()}">
 </head>
 
 <body>
     <div class="body" id="vm">
         <div class="top">
-            <div class="user column">
+            <div class="user column" v-cloak>
                 <image class="avatar" :src="userInfo.avatar?userInfo.avatar:'__STATIC__/kouhongji/image/avatar.png'"></image>
                 <div class="nickname">{{userInfo.nickname?userInfo.nickname:'神秘人'}}</div>
             </div>
-            <div class="money flex">
+            <div class="money flex" v-cloak>
                 <div class="li">
                     <div>口红</div>
                     <div class="item">
@@ -66,10 +67,11 @@
                 </div>
             </div>
         </div>
+        <div class="loading" v-show="loadShow">
+            <div class="bg"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
+        </div>
     </div>
-    <div class="loading" v-show="loadShow"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
 </body>
 
 </html>
 <script src="__STATIC__/kouhongji/user/user.js?v={:time()}"></script>
-<link rel="stylesheet" href="__STATIC__/kouhongji/user/user.css?v={:time()}">

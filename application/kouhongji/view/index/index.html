@@ -9,13 +9,14 @@
   <meta HTTP-EQUIV="expires" CONTENT="0">
   <title>我要赢口红</title>
   <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
+  <link rel="stylesheet" href="__STATIC__/kouhongji/index/index.css?v={:time()}">
 </head>
 
 <body>
   <div class="body" id="vm">
     <div class="topbg" v-bind:class="{blur:ruleShow}">
       <div class="toptit clearfix">
-        <div class="notice">
+        <div class="notice" v-cloak>
           <image class="notice-img" src="__STATIC__/kouhongji/image/notice.png"></image>{{topTit}}
         </div>
         <image class="music-img" @click="musicSet" :src="musicOn?'__STATIC__/kouhongji/image/voice.png':'__STATIC__/kouhongji/image/closevoice.png'"></image>
@@ -26,7 +27,7 @@
         <div class="fr" @click="openRule">闯关购说明</div>
       </div>
       <div class="goods">
-        <div class="item" v-for="(item,index) of goods">
+        <div class="item" v-for="(item,index) of goods" v-cloak>
           <div class="detail">
             <image src="__STATIC__/kouhongji/image/kouhong.jpg"></image>
             <div class="price">专柜价 ￥{{item.sale_price}}</div>
@@ -47,13 +48,15 @@
         </div>
       </div>
     </div>
-    <div class="rule" v-show="ruleShow">
+    <div class="rule" v-show="ruleShow" v-cloak>
       <div class="bg">
         <div class="close" @click="closeTk">✕</div>
-        <div class="list" v-for="(item,index) of ruleList">{{item}}</div>
+        <div class="list" v-for="(item,index) of ruleList" v-cloak>{{item}}</div>
       </div>
     </div>
-    <!-- <div class="loading"><img src="__STATIC__/kouhongji/image/loading.gif"></div> -->
+    <div class="loading" v-show="loadShow">
+        <div class="bg"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
+    </div>
   </div>
 </body>
 
@@ -68,4 +71,3 @@
   localStorage.setItem("money",money);
 </script>
 <script src="__STATIC__/kouhongji/index/index.js?v={:time()}"></script>
-<link rel="stylesheet" href="__STATIC__/kouhongji/index/index.css?v={:time()}">

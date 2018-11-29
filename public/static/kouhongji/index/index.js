@@ -3,6 +3,7 @@ var o = new Vue({
     data: {
         goods:[],
         musicOn:true,
+        loadShow:true,
         ruleShow:false,
         topTit:"",
         ruleList:[]
@@ -26,6 +27,7 @@ var o = new Vue({
                         res.data.good_info[i].sale_price=parseInt(res.data.good_info[i].sale_price);
                     }
                     o.goods=res.data.good_info;
+                    o.loadShow=false;
                 }
             })
         },
@@ -42,4 +44,4 @@ var o = new Vue({
             location.href="../user/user.html"
         }
     }
-})
+})    

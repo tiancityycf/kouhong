@@ -48,10 +48,12 @@ class User extends Controller
                 // 开启事务
                 Db::startTrans();
                 try {
-                    $user_record         = UserRecordModel::where('user_id', $data['user_id'])->find();
-                    $user_record->qr_img = $rt['img_url'];
-                    $user_record->save();
-                    Db::commit();
+                    $user_record = UserRecordModel::where('user_id', $data['user_id'])->find();
+                    if ($user_record) {
+                        $user_record->qr_img = $rt['img_url'];
+                        $user_record->save();
+                        Db::commit();
+                    }
                 } catch (\Exception $e) {
                     Db::rollback();
                     lg($e);
