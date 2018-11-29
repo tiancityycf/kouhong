@@ -12,7 +12,7 @@ var o = new Vue({
         topTit:"",
         ruleList:[],
         payList:[],
-        money:""
+        money:0
     },
     created:function(){
         this.loadIndex();
@@ -45,7 +45,7 @@ var o = new Vue({
             o.canClick=false;
             $.ajax({  
                 type:"POST",
-                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/game/start.html",
+                url:"/h5khj/api/v1_0_1/game/start.html",
                 data:{
                     user_id:user_id,
                     goods_id:e
@@ -66,7 +66,7 @@ var o = new Vue({
         loadPayList:function(){
             $.ajax({  
                 type:"POST",
-                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/recharge_amount/amount_list.html",
+                url:"/h5khj/api/v1_0_1/recharge_amount/amount_list.html",
                 data:{
                     user_id:user_id
                 },
@@ -82,7 +82,7 @@ var o = new Vue({
             o.canClick=false;
             $.ajax({  
                 type:"POST",
-                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/wx_pay/unifiedorder.html",
+                url:"/h5khj/api/v1_0_1/wx_pay/unifiedorder.html",
                 data:{
                     user_id:user_id,
                     type:0,

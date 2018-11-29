@@ -12,7 +12,7 @@ var o = new Vue({
         loadUser:function(){
             $.ajax({  
                 type:"POST",
-                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/user/index.html",
+                url:"/h5khj/api/v1_0_1/user/index.html",
                 data:{
                     user_id:user_id
                 },

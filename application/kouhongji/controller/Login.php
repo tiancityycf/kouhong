@@ -46,8 +46,11 @@ class Login extends controller
                         'user_status' => 1,
                         'money'       => $record["money"],
                     ];
-                    trace('uid='.$user_info->id,'error');
                     session('uid', $user_info->id);
+                    session('last_login', date('Y-m-d H:i:s',$time));
+                    session('openid', $record['openid']);
+                    session('user_status', 1);
+                    session('money', $record["money"]);
                     $this->redirect("index/index", $result);
                 } else {
                     //拉取用户信息
@@ -107,8 +110,11 @@ class Login extends controller
                         'user_status' => 1,
                         'money'       => $record["money"],
                     ];
-                    trace('uid='.$user->id,'error');
                     session('uid', $user->id);
+                    session('last_login', date('Y-m-d H:i:s',$time));
+                    session('openid', $record['openid']);
+                    session('user_status', 1);
+                    session('money', $record["money"]);
                     $this->redirect("index/index", $result);
                 }
             } else {

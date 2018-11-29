@@ -16,11 +16,11 @@ class HomeBase extends Controller
             trace('用户uid不存在', 'error');
             $this->redirect("login/index");
         } else {
-            $user_id     = Request::param('user_id');
-            $last_login  = date('Y-m-d H:i:s',Request::param('last_login'));
-            $openid      = Request::param('openid');
-            $user_status = Request::param('user_status');
-            $money       = Request::param('money');
+            $user_id     = session('uid');
+            $last_login  = session('last_login');
+            $openid      = session('openid');
+            $user_status = session('user_status');
+            $money       = session('money');
             trace('user_id='.$user_id,'error');
             trace('last_login='.$last_login,'error');
             trace('openid='.$openid,'error');
