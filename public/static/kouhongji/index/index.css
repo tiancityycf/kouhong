@@ -288,3 +288,12 @@ body{
 .changeitem .num{
     font-size: 0.5rem;
 }
+.tryBtn{
+    position:fixed;
+    right:0.36rem;
+    bottom:1.6rem;
+}
+.tryBtn img{
+    width: 1.8rem;
+    height: 1.8rem;
+}

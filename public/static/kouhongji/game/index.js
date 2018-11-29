@@ -1,5 +1,5 @@
 var hg = null;
-
+var user_id =localStorage.getItem("user_id");
 function addClass(element, new_name) {
   if (!element || !new_name) return false;
   if (element.className) {
@@ -65,7 +65,6 @@ function playAudioInWechat(obj) {
   }
   console.log(22, obj);
 }
-
 function createHg(GAMEMODE) {
   //初始化游戏, 两个参数分别表示"游戏所处的canvas画布元素"和"关卡设置, 可以省略(省略后将使用默认设置)"
   hg = new HardestGame(document.getElementById("gameStage"), GAMEMODE);
@@ -90,30 +89,23 @@ function createHg(GAMEMODE) {
       playAudioInWechat($("#gameSuccess_audio").get(0));
       $("#app").addClass("blur")
       $("#gameSuccessBox").css("display", "block")
-      $("#gameSuccessBoxBtn").on("click", function () {
-        if (window.isH5) {
-          window.history.go(-1);
-        } else {
-          wx.miniProgram.getEnv(function (res) {
-            if (res.miniprogram) {
-              var info = {
-                results: 1, //参数二
-              };
-              var json = JSON.stringify(info);
-              wx.miniProgram.postMessage({
-                data: json
-              });
-            }
-          });
-          setTimeout(function () {
-            // wx.miniProgram.navigateBack();
-              orderId = $('#orderId').val();
-            wx.miniProgram.redirectTo({
-              // url: '../my/my?address=' + 0 + '&orderId=' + orderId
-                url: '../my/order/order?orderId=' + orderId
-            });
-          }, 1000)
+      var signData = "user_id=" + user_id + "challenge_id=" + $('#orderId').val() + "goods_id=" + $('#goods_id').val() +"is_win=1";
+      $.ajax({  
+        type:"POST",
+        url:"/h5khj/api/v1_0_1/game/end.html",
+        data:{
+            user_id:user_id,
+            challenge_id:$('#orderId').val(),
+            goods_id:$('#goods_id').val(),
+            is_win:1,
+            sign:hex_md5(signData)
+        },
+        success:function(res){
+         
         }
+      })
+      $("#gameSuccessBoxBtn").on("click", function () {
+        location.href="../index/index.html"
       })
     }
   }
@@ -130,36 +122,23 @@ function createHg(GAMEMODE) {
     $("#gameOverBox").css("display", "block");
     $("#app").addClass("blur");
     var level = this.level;
-    console.log(game,orderId,"orderId")
-    $("#gameOverBoxBtn").on("click", function () {
-      if (window.isH5) {
-        window.history.go(-1);
-      } else {
-        wx.miniProgram.getEnv(function (res) {
-          if (res.miniprogram) {
-            // wx.miniProgram.postMessage({
-            //   data: {
-            //     game_id: '1',
-            //     openid: '2',
-            //     orderId: '3',
-            //     level: 'level',
-            //     results: 1
-            //   }
-            // });
-            var info = { //参数二
-              results: 0, //参数二
-            };
-            // alert('res1')
-            var json = JSON.stringify(info);
-            wx.miniProgram.postMessage({
-              data: json
-            });            
-          }
-        });
-        setTimeout(function () {
-          wx.miniProgram.navigateBack();
-        }, 1000)
+    var signData = "user_id=" + user_id + "challenge_id=" + $('#orderId').val() + "goods_id=" + $('#goods_id').val() +"is_win=0";
+    $.ajax({  
+      type:"POST",
+      url:"/h5khj/api/v1_0_1/game/end.html",
+      data:{
+          user_id:user_id,
+          challenge_id:$('#orderId').val(),
+          goods_id:$('#goods_id').val(),
+          is_win:0,
+          sign:hex_md5(signData)
+      },
+      success:function(res){
+       
       }
+    })
+    $("#gameOverBoxBtn").on("click", function () {
+      window.history.go(-1);
     })
   }
 

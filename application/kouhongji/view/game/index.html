@@ -1,8 +1,8 @@
 
 <?php
 $game = $_GET['game'];
-$orderId = $_GET['orderId'];
-$goods_id = $_GET['goods_id'];
+$orderId = isset($_GET['orderId']) ? $_GET['orderId'] : 0;
+$goods_id = isset($_GET['goods_id']) ? $_GET['goods_id'] : 0;
 ?>
 <!DOCTYPE html>
 <html lang="en" style="font-size: 79.5424px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -17,6 +17,7 @@ $goods_id = $_GET['goods_id'];
     <script typet="text/javascript" src="__STATIC__/kouhongji/game/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="__STATIC__/kouhongji/game/jquery.cookie.js"></script>
     <script type="text/javascript" src="__STATIC__/kouhongji/game/JicemoonMobileTouch.js"></script>
+    <script type="text/javascript" src="__STATIC__/kouhongji/base/md5.js?v1.0"></script>
     <?php if($game==1){?>
     <script type="text/javascript" src="__STATIC__/kouhongji/game/HardestGame1.js?v={:time()}"></script>
     <script type="text/javascript" src="__STATIC__/kouhongji/game/index1.js?v={:time()}"></script>
@@ -77,11 +78,14 @@ $goods_id = $_GET['goods_id'];
         <img id="levelSwitchBoxMain" class="levelSwitchBoxMain" src="https://txcdn.ylll111.xyz/khj/level_1_main.jpg">
     </div>
     <div class="PopupBox" id="gameOverBox" style="display: none;">
+    <input type="hidden" id="orderId" value="<?php echo $orderId;?>" />
+        <input type="hidden" id="goods_id" value="<?php echo $goods_id;?>" />
         <div id="gameOverBoxTitle">闯关失败</div>
         <div class="PopupBoxBtn" id="gameOverBoxBtn">重新闯关</div>
     </div>
     <div class="PopupBox" id="gameSuccessBox" style="display: none;">
         <input type="hidden" id="orderId" value="<?php echo $orderId;?>" />
+        <input type="hidden" id="goods_id" value="<?php echo $goods_id;?>" />
         <div id="gameSuccessBoxText">恭喜您，闯关成功</div>
         <div class="PopupBoxBtn" id="gameSuccessBoxBtn">点击我的口红领取</div>
     </div>
@@ -162,7 +166,7 @@ $goods_id = $_GET['goods_id'];
             loop: false,
             autoplay: false,
             prerender: true,
-            path: './js/data.json'
+            path: '__STATIC__/kouhongji/game/data.json'
         });
         function play(){
             anim.goToAndStop(0, true)

@@ -157,7 +157,6 @@ class WxPay
                     'paySign'   => $paySign,
                 ];
                 $result['return_param']      = $return_param;
-                $result['return_param']      = $return_param;
                 $return_data['result_code']  = $result['result_code'];
                 $return_data['prepay_id']    = $result['prepay_id'];
                 $return_data['return_param'] = $result['return_param'];

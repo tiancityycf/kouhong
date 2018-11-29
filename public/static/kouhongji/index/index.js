@@ -95,12 +95,14 @@ var o = new Vue({
                         package: res.data.return_param.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
                         signType: res.data.return_param.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
                         paySign: res.data.return_param.paySign, // 支付签名
-                        success: function () {
-                            o.canClick=true;
-                            o.closeTk();
+                        success: function (aa) {
+                            // o.canClick=true;
+                            // o.closeTk();
+                            alert(aa)
                         },
-                        fail:function(){
+                        fail:function(aa){
                             console.log("充值失败")
+                            alert(aa)
                         }
                     });
                 }
@@ -130,6 +132,9 @@ var o = new Vue({
         },
         goUser:function(){
             location.href="../user/user.html"
+        },
+        tryGame:function(){
+            location.href="../game/index.html?game=1"
         }
     }
 })    

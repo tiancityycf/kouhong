@@ -11,18 +11,18 @@ class HomeBase extends Controller
      */
     public function initialize()
     {
-        if (Request::param('test') == 1) {
-            $user_id     = 3;
-            $last_login  = date('Y-m-d H:i:s', 1543393349);
-            $openid      = 'olHrk1LSJxL1GBcrtnhIq8snHKGE';
-            $user_status = 1;
-            $money       = 0.00;
-            $this->assign('user_id', $user_id);
-            $this->assign('last_login', $last_login);
-            $this->assign('openid', $openid);
-            $this->assign('user_status', $user_status);
-            $this->assign('money', $money);
-        } else {
+            // $user_id     = 3;
+            // $last_login  = date('Y-m-d H:i:s', 1543393349);
+            // $openid      = 'olHrk1LSJxL1GBcrtnhIq8snHKGE';
+            // $user_status = 1;
+            // $money       = 0.00;
+            // $this->assign('user_id', $user_id);
+            // $this->assign('last_login', $last_login);
+            // $this->assign('openid', $openid);
+            // $this->assign('user_status', $user_status);
+            // $this->assign('money', $money);
+
+            
             if (session('uid')) {
                 $user_id     = session('uid');
                 $last_login  = session('last_login');
@@ -38,6 +38,5 @@ class HomeBase extends Controller
                 trace('用户uid不存在', 'error');
                 $this->redirect("login/index");
             }
-        }
     }
 }
