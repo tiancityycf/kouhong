@@ -102,7 +102,7 @@ var o = new Vue({
                         },
                         fail:function(aa){
                             console.log("充值失败")
-                            alert(aa)
+                            alert(JSON.stringify(aa))
                         }
                     });
                 }

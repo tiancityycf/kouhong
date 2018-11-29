@@ -17,23 +17,17 @@ class HomeBase extends Controller
             // $user_status = 1;
             // $money       = 0.00;
             // $this->assign('user_id', $user_id);
-            // $this->assign('last_login', $last_login);
             // $this->assign('openid', $openid);
             // $this->assign('user_status', $user_status);
-            // $this->assign('money', $money);
 
             
             if (session('uid')) {
                 $user_id     = session('uid');
-                $last_login  = session('last_login');
                 $openid      = session('openid');
                 $user_status = session('user_status');
-                $money       = session('money');
                 $this->assign('user_id', $user_id);
-                $this->assign('last_login', $last_login);
                 $this->assign('openid', $openid);
                 $this->assign('user_status', $user_status);
-                $this->assign('money', $money);
             } else {
                 trace('用户uid不存在', 'error');
                 $this->redirect("login/index");

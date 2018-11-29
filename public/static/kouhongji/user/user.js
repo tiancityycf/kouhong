@@ -19,7 +19,6 @@ var o = new Vue({
                 success:function(res){
                     res.data.data.user_info.money=parseInt(res.data.data.user_info.money);
                     o.userInfo =res.data.data.user_info;
-                    localStorage.setItem("money",o.userInfo.money);
                     o.loadShow=false;
                 }
             })
