@@ -11,26 +11,27 @@ class HomeBase extends Controller
      */
     public function initialize()
     {
-        trace('login-uid='.session('uid'),'error');
-        if (!session('uid')) {
-            trace('用户uid不存在', 'error');
-            $this->redirect("login/index");
-        } else {
+        trace('uid1='.session('uid'),'error');
+        if (session('uid')) {
+            trace('用户uid存在', 'error');
             $user_id     = session('uid');
             $last_login  = session('last_login');
             $openid      = session('openid');
             $user_status = session('user_status');
             $money       = session('money');
-            trace('user_id='.$user_id,'error');
-            trace('last_login='.$last_login,'error');
-            trace('openid='.$openid,'error');
-            trace('user_status='.$user_status,'error');
-            trace('money='.$money,'error');
+            trace('uid2='.$user_id,'error');
+            trace('last_login1='.$last_login,'error');
+            trace('openid1='.$openid,'error');
+            trace('user_status1='.$user_status,'error');
+            trace('money1='.$money,'error');
             $this->assign('user_id', $user_id);
             $this->assign('last_login', $last_login);
             $this->assign('openid', $openid);
             $this->assign('user_status', $user_status);
             $this->assign('money', $money);
+        } else {
+            trace('用户uid不存在', 'error');
+            $this->redirect("login/index");
         }
         
         // $user_id     = 3;

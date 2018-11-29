@@ -5,7 +5,7 @@ use app\kouhongji\controller\HomeBase;
 
 class Game extends HomeBase
 {
-	public function game(){
-		return  $this->fetch('game');
+	public function index(){
+		return  $this->fetch('index');
 	}
 }
