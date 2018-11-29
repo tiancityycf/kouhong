@@ -17,7 +17,7 @@ class HomeBase extends Controller
             $this->redirect("login/index");
         } else {
             $user_id     = Request::param('user_id');
-            $last_login  = Request::param('last_login');
+            $last_login  = date('Y-m-d H:i:s',Request::param('last_login'));
             $openid      = Request::param('openid');
             $user_status = Request::param('user_status');
             $money       = Request::param('money');
