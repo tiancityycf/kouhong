@@ -21,7 +21,7 @@ var o = new Vue({
         loadIndex:function(){
             $.ajax({  
                 type:"POST",
-                url:"http://khj.local.com/h5khj/api/v1_0_1/good/index.html",
+                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/good/index.html",
                 data:{
                     user_id:user_id
                 },
@@ -45,7 +45,7 @@ var o = new Vue({
             o.canClick=false;
             $.ajax({  
                 type:"POST",
-                url:"http://khj.local.com/h5khj/api/v1_0_1/game/start.html",
+                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/game/start.html",
                 data:{
                     user_id:user_id,
                     goods_id:e
@@ -66,7 +66,7 @@ var o = new Vue({
         loadPayList:function(){
             $.ajax({  
                 type:"POST",
-                url:"http://khj.local.com/h5khj/api/v1_0_1/recharge_amount/amount_list.html",
+                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/recharge_amount/amount_list.html",
                 data:{
                     user_id:user_id
                 },
@@ -82,7 +82,7 @@ var o = new Vue({
             o.canClick=false;
             $.ajax({  
                 type:"POST",
-                url:"http://khj.local.com/h5khj/api/v1_0_1/wx_pay/unifiedorder.html",
+                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/wx_pay/unifiedorder.html",
                 data:{
                     user_id:user_id,
                     type:0,
