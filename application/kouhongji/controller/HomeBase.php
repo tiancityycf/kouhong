@@ -11,6 +11,7 @@ class HomeBase extends Controller
      */
     public function initialize()
     {
+        trace('login-uid='.session('uid'),'error');
         if (!session('uid')) {
             trace('用户uid不存在', 'error');
             $this->redirect("login/index");
