@@ -14,12 +14,15 @@
 
 <body>
   <div class="body" id="vm">
-    <div class="topbg" v-bind:class="{blur:ruleShow}">
+    <div class="topbg" v-bind:class="{blur:tkShow}">
       <div class="toptit clearfix">
         <div class="notice" v-cloak>
           <image class="notice-img" src="__STATIC__/kouhongji/image/notice.png"></image>{{topTit}}
         </div>
         <image class="music-img" @click="musicSet" :src="musicOn?'__STATIC__/kouhongji/image/voice.png':'__STATIC__/kouhongji/image/closevoice.png'"></image>
+        <div class="audioBox">
+            <audio src="https://khj.wqop2018.com/game/audio/bgm.mp3" id="bgMusic" loop="true"></audio>
+        </div>
       </div>
       <img src="__STATIC__/kouhongji/image/banner.png" class="banner">
       <div class="centerTxt clearfix">
@@ -27,7 +30,7 @@
         <div class="fr" @click="openRule">闯关购说明</div>
       </div>
       <div class="goods">
-        <div class="item" v-for="(item,index) of goods" v-cloak>
+        <div class="item" v-for="(item,index) of goods" v-cloak @click="startGame(item.id)">
           <div class="detail">
             <image src="__STATIC__/kouhongji/image/kouhong.jpg"></image>
             <div class="price">专柜价 ￥{{item.sale_price}}</div>
@@ -48,10 +51,16 @@
         </div>
       </div>
     </div>
-    <div class="rule" v-show="ruleShow" v-cloak>
-      <div class="bg">
+    <div class="tk" v-show="tkShow" v-cloak>
+      <div class="rule" v-show="ruleShow">
         <div class="close" @click="closeTk">✕</div>
         <div class="list" v-for="(item,index) of ruleList" v-cloak>{{item}}</div>
+      </div>
+      <div class="balance" v-show="balanceShow">
+          <div @click="closeTk" class="close">✕</div>
+          <image src="__STATIC__/kouhongji/image/nomoney.png"></image>
+          <div class="leave">余额不足</div>
+          <div @click="payMoney" class="payBtn">去充值</div>
       </div>
     </div>
     <div class="loading" v-show="loadShow">

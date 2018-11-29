@@ -4,7 +4,9 @@ var o = new Vue({
         goods:[],
         musicOn:true,
         loadShow:true,
+        tkShow:false,
         ruleShow:false,
+        balanceShow:false,
         topTit:"",
         ruleList:[]
     },
@@ -28,17 +30,47 @@ var o = new Vue({
                     }
                     o.goods=res.data.good_info;
                     o.loadShow=false;
+                    $("#bgMusic")[0].play();
                 }
             })
         },
+        startGame:function(e){
+            $.ajax({  
+                type:"POST",
+                url:"http://khj.local.com/h5khj/api/v1_0_1/game/start.html",
+                data:{
+                    user_id:user_id,
+                    goods_id:e
+                },
+                success:function(res){
+                    if(res.data.status==1){
+
+                    }else{
+                        o.ruleShow=true;
+                        o.balanceShow=true;
+                    }
+                }
+            })
+        },
+        payMoney:function(){
+
+        },
         musicSet:function(){
-            o.musicOn=!o.musicOn
+            o.musicOn=!o.musicOn;
+            if(!o.musicOn){
+                $("#bgMusic")[0].pause();
+            }else{
+                $("#bgMusic")[0].play();
+            }
         },
         openRule:function(){
             o.ruleShow=true;
+            o.tkShow=true;
         },
         closeTk:function(){
             o.ruleShow=false;
+            o.tkShow=false;
+            o.balanceShow=false;
         },
         goUser:function(){
             location.href="../user/user.html"

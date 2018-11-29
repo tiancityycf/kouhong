@@ -84,9 +84,10 @@ class Plugs extends BasicAdmin
     public function upstate()
     {
         $post = $this->request->post();
+        $uptype = isset($post['uptype']) ? $post['uptype'] : 'local';
         $filename = join('/', str_split($post['md5'], 16)) . '.' . strtolower(pathinfo($post['filename'], 4));
         // 检查文件是否已上传
-        if (($site_url = FileService::getFileUrl($filename))) {
+        if (($site_url = FileService::getFileUrl($filename,$uptype))) {
             $this->result(['site_url' => $site_url], 'IS_FOUND');
         }
         // 需要上传文件，生成上传配置参数
