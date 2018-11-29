@@ -21,6 +21,11 @@ class HomeBase extends Controller
             $openid      = Request::param('openid');
             $user_status = Request::param('user_status');
             $money       = Request::param('money');
+            trace('user_id='.$user_id,'error');
+            trace('last_login='.$last_login,'error');
+            trace('openid='.$openid,'error');
+            trace('user_status='.$user_status,'error');
+            trace('money='.$money,'error');
             $this->assign('user_id', $user_id);
             $this->assign('last_login', $last_login);
             $this->assign('openid', $openid);
