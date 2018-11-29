@@ -21,7 +21,7 @@ var o = new Vue({
         loadIndex:function(){
             $.ajax({  
                 type:"POST",
-                url:"https://khj.wqop2018.com/h5khj/api/v1_0_1/good/index.html",
+                url:"/h5khj/api/v1_0_1/good/index.html",
                 data:{
                     user_id:user_id
                 },
