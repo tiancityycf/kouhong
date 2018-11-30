@@ -82,17 +82,17 @@ class Youzi extends BasicController
 
 
                 $result = [];
-                $result['success'] = true;
-                echo json_encode($result);exit();
+                $result['success'] = 'true'; //必须用字符串 尴尬
+                echo json_encode($result);exit();//不要删除 exit
             }else{
                 $result = [];
-                $result['success'] = false;
+                $result['success'] = 'false';//必须用字符串 尴尬
                 echo json_encode($result);exit();
             }
         }else{
             trace($postdata,'critical');
             $result = [];
-            $result['success'] = false;
+            $result['success'] = 'false';//必须用字符串 尴尬
             echo json_encode($result);exit();
         }
     }
