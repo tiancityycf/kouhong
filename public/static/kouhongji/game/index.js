@@ -105,7 +105,7 @@ function createHg(GAMEMODE) {
         }
       })
       $("#gameSuccessBoxBtn").on("click", function () {
-        location.href="../index/index.html"
+        window.location.replace("../order/order.html")
       })
     }
   }
@@ -138,7 +138,7 @@ function createHg(GAMEMODE) {
       }
     })
     $("#gameOverBoxBtn").on("click", function () {
-      window.history.go(-1);
+      window.location.replace("../index/index.html")
     })
   }
 

@@ -33,7 +33,7 @@
       <div class="goods">
         <div class="item" v-for="(item,index) of goods" v-cloak @click="startGame(item.id)">
           <div class="detail">
-            <image src="__STATIC__/kouhongji/image/kouhong.jpg"></image>
+            <image :src="item.img"></image>
             <div class="price">专柜价 ￥{{item.sale_price}}</div>
             <div class="title">{{item.cate_name}}</div>
             <div class="model">{{item.title}}</div>
@@ -70,7 +70,7 @@
           <div class="money flex">
             <span>当前余额：</span>
             <image src="__STATIC__/kouhongji/image/money.png"></image>
-            <span class="leave">{{money}}元</span>
+            <span class="leave">{{user_money}}元</span>
           </div>
           <div class="change">
             <div class="changeitem" v-for="item of payList" @click="buy(item.id)">

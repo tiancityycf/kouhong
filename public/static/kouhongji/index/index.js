@@ -12,7 +12,7 @@ var o = new Vue({
         topTit:"",
         ruleList:[],
         payList:[],
-        money:0
+        user_money:0
     },
     created:function(){
         this.loadIndex();
@@ -33,7 +33,7 @@ var o = new Vue({
                         res.data.good_info[i].sale_price=parseInt(res.data.good_info[i].sale_price);
                     }
                     o.goods=res.data.good_info;
-                    o.money=res.data.user_info.money;
+                    o.user_money=res.data.user_info.money;
                     o.loadShow=false;
                 }
             })
@@ -52,7 +52,7 @@ var o = new Vue({
                 },
                 success:function(res){
                     if(res.data.status==1){
-                        location.href="../game/index.html?game=2&orderId="+res.data.challenge_id+"&goods_id="+e
+                        window.location.href("../game/index.html?game=2&orderId="+res.data.challenge_id+"&goods_id="+e)
                     }else{
                         o.tkShow=true;
                         o.balanceShow=true;
@@ -131,10 +131,10 @@ var o = new Vue({
             o.payShow=false;
         },
         goUser:function(){
-            location.href="../user/user.html"
+            window.location.replace("../user/user.html")
         },
         tryGame:function(){
-            location.href="../game/index.html?game=1"
+            window.location.href("../game/index.html?game=1")
         }
     }
 })    

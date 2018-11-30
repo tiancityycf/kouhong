@@ -13,9 +13,9 @@
 </head>
 
 <body>
-    <div class="body" id="vm" v-cloak>
-        <div class="order" v-if="orderList.length"> 
-            <div class="goods flex" v-for="(item,index) of orderList">
+    <div class="body" id="vm">
+        <div class="order" v-if="orderList.length" v-for="item of orderList" v-cloak> 
+            <div class="goods flex">
                 <image :src="item.img"></image>
                 <div class="detail column">
                     <div class="model between">
@@ -31,7 +31,7 @@
             </div>
             <div class="express">订单编号：{{item.trade_no}}</div>
         </div>
-        <div class="nogoods" v-if="!orderList.length">- - - 暂无订单 - - -</div>
+        <div class="nogoods" v-if="!orderList.length" v-cloak>- - - 暂无订单 - - -</div>
     </div>
 </body>
 
