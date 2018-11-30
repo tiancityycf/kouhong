@@ -138,7 +138,7 @@ function createHg(GAMEMODE) {
       }
     })
     $("#gameOverBoxBtn").on("click", function () {
-      window.location.replace("../index/index.html")
+      history.go(-1)
     })
   }
 

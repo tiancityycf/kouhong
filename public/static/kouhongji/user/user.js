@@ -59,7 +59,7 @@ var o = new Vue({
             o.posterImgShow=false;
         },
         goIndex: function () {
-            location.replace("../index/index.html")
+            location.href="../index/index.html"
         },
         goOrder:function(){
             location.href="../order/order.html"

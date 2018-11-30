@@ -82,7 +82,7 @@ function createHg(GAMEMODE){
             $("#app").addClass("blur")
             $("#gameSuccessBox").css("display","block")
             $("#gameSuccessBoxBtn").on("click",function(){
-                window.location.replace("../index/index.html")
+                history.go(-1)
             })
         }
     }
@@ -97,7 +97,7 @@ function createHg(GAMEMODE){
         $("#gameOverBox").css("display","block");
         $("#app").addClass("blur")
         $("#gameOverBoxBtn").on("click",function(){
-            window.location.replace("../index/index.html")
+            history.go(-1)
         })
     }
     //初始化游戏

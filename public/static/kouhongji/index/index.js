@@ -131,10 +131,9 @@ var o = new Vue({
             o.payShow=false;
         },
         goUser:function(){
-            location.replace("../user/user.html")
+            location.href="../user/user.html"
         },
         tryGame:function(){
-            history.forward(1);
             location.href ="../game/index.html?game=1"
         }
     }
