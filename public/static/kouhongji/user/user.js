@@ -59,13 +59,13 @@ var o = new Vue({
             o.posterImgShow=false;
         },
         goIndex: function () {
-            window.location.replace("../index/index.html")
+            location.replace("../index/index.html")
         },
         goOrder:function(){
-            window.location.href="../order/order.html"
+            location.href="../order/order.html"
         },
         tixian:function(){
-            window.location.href="../order/order.html"
+            location.href="../order/order.html"
         }
     }
 })

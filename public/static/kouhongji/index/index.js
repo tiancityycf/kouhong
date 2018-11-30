@@ -52,7 +52,7 @@ var o = new Vue({
                 },
                 success:function(res){
                     if(res.data.status==1){
-                        window.location.href("../game/index.html?game=2&orderId="+res.data.challenge_id+"&goods_id="+e)
+                        location.href="../game/index.html?game=2&orderId="+res.data.challenge_id+"&goods_id="+e
                     }else{
                         o.tkShow=true;
                         o.balanceShow=true;
@@ -131,10 +131,10 @@ var o = new Vue({
             o.payShow=false;
         },
         goUser:function(){
-            window.location.replace("../user/user.html")
+            location.replace("../user/user.html")
         },
         tryGame:function(){
-            window.location.href ="../game/index.html?game=1"
+            location.href ="../game/index.html?game=1"
         }
     }
 })    
