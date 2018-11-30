@@ -134,7 +134,7 @@ var o = new Vue({
             window.location.replace("../user/user.html")
         },
         tryGame:function(){
-            window.location.href("../game/index.html?game=1")
+            window.location.href ="../game/index.html?game=1"
         }
     }
 })    

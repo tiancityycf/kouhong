@@ -62,10 +62,10 @@ var o = new Vue({
             window.location.replace("../index/index.html")
         },
         goOrder:function(){
-            window.location.href("../order/order.html")
+            window.location.href="../order/order.html"
         },
         tixian:function(){
-            window.location.href("../order/order.html")
+            window.location.href="../order/order.html"
         }
     }
 })
