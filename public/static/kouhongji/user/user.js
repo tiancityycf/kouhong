@@ -50,6 +50,7 @@ var o = new Vue({
                     }
                 } else {
                     alert("点击了我的海报2")
+                    alert(c.toDataURL("image/png"))
                     //保存生成作品图片
                     o.posterImg=c.toDataURL("image/png");
                     o.posterImgShow=true;
