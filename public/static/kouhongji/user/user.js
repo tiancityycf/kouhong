@@ -26,7 +26,6 @@ var o = new Vue({
             })
         },
         codePoster: function () {
-            alert("点击了我的海报")
             var data=["/static/kouhongji/image/qrCodebg.jpg",o.userInfo.qr_img];
             var c = document.getElementById("myCanvas"),ctx = c.getContext('2d'); 
             c.width = window.screen.width;  // 画布宽   
@@ -35,7 +34,6 @@ var o = new Vue({
             ctx.fillStyle = '#fff';
             ctx.fill();
             function drawing(n) {
-                alert("点击了我的海报1")
                 if (n < 2) {
                     var img = new Image;
                     img.src = data[n];
@@ -50,17 +48,17 @@ var o = new Vue({
                     }
                 } else {
                     alert("点击了我的海报2")
-                    // alert(c.toDataURL("image/png"))
                     //保存生成作品图片
-                    o.posterImg=c.toDataURL("image/png");
+                    setTimeout(function(){
+                        o.posterImg=c.toDataURL("image/png");
+                    },1000)
+                    alert.log(o.posterImg)
+                    // o.posterImg=c.toDataURL("image/jpg");
                     o.posterImgShow=true;
                     alert("点击了我的海报2.5")
-                    alert(o.posterImg)
-                    alert(o.posterImgShow)
                 }
             }
             drawing(0);
-            alert("点击了我的海报3")
         },
         closeImg:function(){
             o.posterImgShow=false;
