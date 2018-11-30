@@ -53,6 +53,9 @@ var o = new Vue({
                     //保存生成作品图片
                     o.posterImg=c.toDataURL("image/png");
                     o.posterImgShow=true;
+                    alert("点击了我的海报2.5")
+                    alert(o.posterImg)
+                    alert(o.posterImgShow)
                 }
             }
             drawing(0);
