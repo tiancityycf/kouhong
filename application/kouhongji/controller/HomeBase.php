@@ -12,6 +12,7 @@ class HomeBase extends Controller
     public function initialize()
     {
             // $user_id     = 3;
+            // session('uid',3);
             // $last_login  = date('Y-m-d H:i:s', 1543393349);
             // $openid      = 'olHrk1LSJxL1GBcrtnhIq8snHKGE';
             // $user_status = 1;
@@ -20,7 +21,7 @@ class HomeBase extends Controller
             // $this->assign('openid', $openid);
             // $this->assign('user_status', $user_status);
 
-            
+
             if (session('uid')) {
                 $user_id     = session('uid');
                 $openid      = session('openid');

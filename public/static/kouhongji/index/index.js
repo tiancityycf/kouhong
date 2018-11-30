@@ -33,6 +33,7 @@ var o = new Vue({
                         res.data.good_info[i].sale_price=parseInt(res.data.good_info[i].sale_price);
                     }
                     o.goods=res.data.good_info;
+                    o.money=res.data.user_info.money;
                     o.loadShow=false;
                     $("#bgMusic")[0].play();
                 }
@@ -89,7 +90,6 @@ var o = new Vue({
                     recharege_id:e
                 },
                 success:function(res){
-                    alert(JSON.stringify(res))
                     wx.chooseWXPay({
                         timestamp: res.data.return_param.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
                         nonceStr: res.data.return_param.nonceStr, // 支付签名随机串，不长于 32 位

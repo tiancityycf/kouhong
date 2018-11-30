@@ -10,6 +10,7 @@
     <title>个人中心</title>
     <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
     <link rel="stylesheet" href="__STATIC__/kouhongji/user/user.css?v={:time()}">
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 </head>
 
 <body>
@@ -48,7 +49,7 @@
                 <div>我的订单</div>
                 <image src="__STATIC__/kouhongji/image/right.png"></image>
             </div>
-            <div class="order">
+            <div class="order" @click="codePoster">
                 <div>我的海报</div>
                 <image src="__STATIC__/kouhongji/image/right.png"></image>
             </div>
@@ -70,6 +71,7 @@
         <div class="loading" v-show="loadShow">
             <div class="bg"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
         </div>
+        <canvas id="myCanvas"></canvas>
     </div>
 </body>
 
