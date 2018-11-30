@@ -35,7 +35,6 @@ var o = new Vue({
                     o.goods=res.data.good_info;
                     o.money=res.data.user_info.money;
                     o.loadShow=false;
-                    $("#bgMusic")[0].play();
                 }
             })
         },

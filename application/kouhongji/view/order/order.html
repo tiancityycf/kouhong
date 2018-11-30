@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="divport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>我的挑战</title>
+    <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
+    <link rel="stylesheet" href="__STATIC__/kouhongji/order/order.css?v={:time()}">
+</head>
+
+<body>
+    <div class="body" id="vm" v-cloak>
+        <div class="order" v-if="orderList.length"> 
+            <div class="goods flex" v-for="(item,index) of orderList">
+                <image :src="item.img"></image>
+                <div class="detail column">
+                    <div class="model between">
+                        <div>{{item.cate_name}}</div>
+                        <div v-if="item.successed==0" style='color:gray;'>未中奖</div>
+                        <div v-if="item.status==0&&item.successed==1" style='color:orange;'>待发货</div>
+                        <div v-if="item.status==1&&item.successed==1" style='color:green;'>已发货</div>
+                        <!-- <div v:if="!item.status&&item.status!=0&&item.successed==1">领奖</div> -->
+                    </div>
+                    <div class="name">{{item.title}}</div>
+                    <div class="orderstatus">{{item.successed==1?"挑战成功":"挑战失败"}}</div>
+                </div>
+            </div>
+            <div class="express">订单编号：{{item.trade_no}}</div>
+        </div>
+        <div class="nogoods" v-if="!orderList.length">- - - 暂无订单 - - -</div>
+    </div>
+</body>
+
+</html>
+<script src="__STATIC__/kouhongji/order/order.js?v={:time()}"></script>

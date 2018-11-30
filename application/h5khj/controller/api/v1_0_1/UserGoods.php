@@ -16,7 +16,7 @@ use app\h5khj\model\Address as AddressModel;
 /**
  * 游戏控制类
  *
- * @author 625575737@qq.com
+ * @author
  */
 class UserGoods extends BasicController
 {

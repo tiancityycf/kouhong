@@ -47,15 +47,10 @@ var o = new Vue({
                         drawing(n + 1);//递归
                     }
                 } else {
-                    alert("点击了我的海报2")
                     //保存生成作品图片
-                    setTimeout(function(){
-                        o.posterImg=c.toDataURL("image/png");
-                    },1000)
-                    alert.log(o.posterImg)
-                    // o.posterImg=c.toDataURL("image/jpg");
+                    o.posterImg=c.toDataURL("image/png");
+                    console.log(o.posterImg)
                     o.posterImgShow=true;
-                    alert("点击了我的海报2.5")
                 }
             }
             drawing(0);
@@ -65,6 +60,9 @@ var o = new Vue({
         },
         goIndex: function () {
             location.href = "../index/index.html"
+        },
+        goOrder:function(){
+            location.href = "../order/order.html"
         }
     }
 })
