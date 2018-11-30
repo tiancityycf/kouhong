@@ -101,6 +101,7 @@ class User extends Controller
         $bucketName = config('bucketName'); //bucketName 空间名称
         $fileKey    = 'h5khj/' . $file_name; //fileKey   自定义文件名
         $localFile  = '.' . $local_path; //localFile 上传文件名
+        //var_dump($localFile);exit;
         $returnBody = ''; //returnBody    自定义返回内容  (可选）
         $userParam  = ''; //userParam 自定义变量名    <x:VariableName>    (可选）
         $userVars   = ''; //userVars  自定义变量值    <x:VariableValue>   (可选）
@@ -217,5 +218,37 @@ class User extends Controller
             }
         }
         return $list;
+    }
+
+    public function saveCode($data)
+    {
+        $userRecord = UserRecordModel::where('user_id', $data['user_id'])->find();
+
+        if (!$userRecord || $data['img_content'] == '') {
+            return ['status' => 0, 'msg' => '系统错误'];
+        }
+
+        if ($userRecord->qr_path != '') {
+            return ['status' => 2, 'msg' => '图片已经存在'];
+        }
+
+        $local_path = base64_image_content($data['img_content']);
+
+        $local_path = ltrim($local_path,'.');
+
+        $img_arr = $this->Upload($local_path,$local_path);
+
+        if ($img_arr['code'] == 1) {
+            $userRecord->qr_path = $img_arr['img_url'];
+            $userRecord->save();
+
+            return ['status' => 1, 'msg' => '已经保存', 'path' => $img_arr['img_url']];
+        } else {
+            return ['status' => 3, 'msg' => '上传错误'];
+        }
+
+        
+
+        
     }
 }

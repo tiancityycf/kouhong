@@ -47,13 +47,24 @@ var o = new Vue({
                         drawing(n + 1);//递归
                     }
                 } else {
-                    //保存生成作品图片
-                    o.posterImg=c.toDataURL("image/png");
-                    console.log(o.posterImg)
-                    o.posterImgShow=true;
+                    o.updateImg(c.toDataURL("image/png"))
                 }
             }
             drawing(0);
+        },
+        updateImg:function(img){
+            $.ajax({
+                type: "POST",
+                url: "/h5khj/api/v1_0_1/user/saveCode.html",
+                data: {
+                    user_id: user_id,
+                    img_content:img
+                },
+                success: function (res) {
+                    o.posterImg=res.data.path;
+                    o.posterImgShow=true;
+                }
+            })
         },
         closeImg:function(){
             o.posterImgShow=false;
@@ -65,7 +76,7 @@ var o = new Vue({
             location.href="../order/order.html"
         },
         tixian:function(){
-            location.href="../order/order.html"
+            location.href="../tixian/tixian.html"
         }
     }
 })

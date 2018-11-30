@@ -88,7 +88,6 @@ function createHg(GAMEMODE) {
       audio.pause();
       playAudioInWechat($("#gameSuccess_audio").get(0));
       $("#app").addClass("blur")
-      $("#gameSuccessBox").css("display", "block")
       var signData = "user_id=" + user_id + "challenge_id=" + $('#orderId').val() + "goods_id=" + $('#goods_id').val() +"is_win=1";
       $.ajax({  
         type:"POST",
@@ -101,7 +100,14 @@ function createHg(GAMEMODE) {
             sign:hex_md5(signData)
         },
         success:function(res){
-         
+          if(res.data.status==0){
+            alert("状态异常！")
+            setTimeout(function(){
+              history.go(-1)
+            },1000)
+          }else{
+            $("#gameSuccessBox").css("display", "block")
+          }
         }
       })
       $("#gameSuccessBoxBtn").on("click", function () {
@@ -134,7 +140,14 @@ function createHg(GAMEMODE) {
           sign:hex_md5(signData)
       },
       success:function(res){
-       
+        if(res.data.status==0){
+          alert("状态异常！")
+          setTimeout(function(){
+            history.go(-1)
+          },1000)
+        }else{
+          $("#gameOverBox").css("display", "block");
+        }
       }
     })
     $("#gameOverBoxBtn").on("click", function () {

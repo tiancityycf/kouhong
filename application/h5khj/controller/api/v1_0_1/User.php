@@ -70,4 +70,16 @@ class User extends BasicController
 
         return result(200, 'ok', $result);
     }
+
+
+    public function saveCode()
+    {
+        require_params('user_id', 'img_content');
+        $data = Request::param();
+
+        $userService  = new UserService();
+        $result = $userService->saveCode($data);
+
+        return result(200, 'ok', $result);
+    }
 }

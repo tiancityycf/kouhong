@@ -31,7 +31,7 @@ return [
     'h5_notify' => "https://khj.wqop2018.com/h5khj/api/v1_0_1/youzi/notify",
 
 
-'exception_handle'    => '\\exception\\ExceptionHandle', //自定义异常捕获类
+//'exception_handle'    => '\\exception\\ExceptionHandle', //自定义异常捕获类
 
     'ad_url'              => 'https://ad.ali-yun.wang',
 //    'ad_url'=>'http://gg.com:8083',
@@ -63,4 +63,7 @@ return [
 
     //登录domain
     'login_domain'=>'https://khj.wqop2018.com/kouhongji/login/index.html',
+
+    //base64解码图片存放路径
+    'base64_upload_path' => '/static/upload/',
 ];
