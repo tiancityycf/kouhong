@@ -83,17 +83,17 @@ class Youzi extends BasicController
 
                 $result = [];
                 $result['success'] = true;
-                echo json_encode($result);
+                echo json_encode($result);exit();
             }else{
                 $result = [];
                 $result['success'] = false;
-                echo json_encode($result);
+                echo json_encode($result);exit();
             }
         }else{
             trace($postdata,'critical');
             $result = [];
             $result['success'] = false;
-            echo json_encode($result);
+            echo json_encode($result);exit();
         }
     }
 
