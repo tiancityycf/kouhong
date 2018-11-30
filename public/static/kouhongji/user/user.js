@@ -27,7 +27,7 @@ var o = new Vue({
         },
         codePoster: function () {
             alert("点击了我的海报")
-            var data=["https://khj.wqop2018.com/static/upload/d930246d14180a61/1d5ecc9b2b344f19.png",o.userInfo.qr_img];
+            var data=["/static/kouhongji/image/qrCodebg.jpg",o.userInfo.qr_img];
             var c = document.getElementById("myCanvas"),ctx = c.getContext('2d'); 
             c.width = window.screen.width;  // 画布宽   
             c.height = window.screen.height;  // 画布高
