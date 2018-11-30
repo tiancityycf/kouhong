@@ -46,6 +46,69 @@ class Test extends BasicController
         $json['remark'] = "";
         $json = json_encode($json);
 
+        $data = $this->dorequest($url,$json);
+
+        //返回结果
+        if (!empty($data['url'])) {
+            header('Location: '.$data['url']);exit();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 支付回调
+     * @return string
+     * 回调结果为获取JSON串
+     *{
+     *"amount": "1",//支付金额,单位为分
+     *"orderId": "201801aacca36104816",//订单ID，CP方提交订单的时候的订单ID
+     *"extra": "abced0",//额外的参数，用goodsId来传服务器和用户ID，回调的时候用extra参数来获取
+     *"status": "1"//状态，0是失败，1是成功
+     *}
+     */
+    public function notify()
+    {
+        $postdata = file_get_contents('php://input');
+        trace($postdata,'error');
+        $data = json_decode($postdata,true);
+
+        if($data['status']==1){
+            //没有签名验证，只能去查询订单状态验证了
+            if($this->valid($data['orderId'])){
+                $result = [];
+                $result['success'] = true;
+                echo json_encode($result);
+            }else{
+                $result = [];
+                $result['success'] = false;
+                echo json_encode($result);
+            }
+        }else{
+            trace($postdata,'error');
+            $result = [];
+            $result['success'] = false;
+            echo json_encode($result);
+        }
+    }
+
+    private function valid($order_id)
+    {
+        //没有签名验证，只能去查询订单状态验证了
+        $url = 'http://finance.youzikj.com/finance/finance/orderStatus';
+        $json['orderId'] = $order_id;
+        $json['appid'] = "2018113001";
+        $json = json_encode($json);
+        $data = $this->dorequest($url,$json);
+        trace(json_encode($data),'error');
+        if($data['state']==2){
+            return true;
+        }else{
+            trace(json_encode($data),'error');
+            return false;
+        }
+    }
+    private function dorequest($url,$json){
         $ch = curl_init();
         //设置超时
         curl_setopt($ch, CURLOPT_TIMEOUT, 2);
@@ -62,30 +125,7 @@ class Test extends BasicController
         //运行curl
         $data = curl_exec($ch);
         $data = json_decode($data,true);
-
-        //返回结果
-        if (!empty($data['url'])) {
-            curl_close($ch);
-            header('Location: '.$data['url']);exit();
-        } else {
-            $error = curl_errno($ch);
-            curl_close($ch);
-            trace($error, 'error');
-            return false;
-        }
-    }
-
-    /**
-     * 支付回调
-     * @return string
-     */
-    public function notify()
-    {
-        $postdata = file_get_contents('php://input');
-        trace($postdata,'error');
-        trace(json_encode($_POST),'error');
-        $result = [];
-        $result['success'] = true;
-        echo json_encode($result);
+        curl_close($ch);
+        return $data;
     }
 }
