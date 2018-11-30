@@ -26,6 +26,7 @@ var o = new Vue({
             })
         },
         codePoster: function () {
+            alert("点击了我的海报")
             var data=["https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg",o.userInfo.qr_img];
             var c = document.getElementById("myCanvas"),ctx = c.getContext('2d'); 
             c.width = window.screen.width;  // 画布宽   
@@ -34,6 +35,7 @@ var o = new Vue({
             ctx.fillStyle = '#fff';
             ctx.fill();
             function drawing(n) {
+                alert("点击了我的海报1")
                 if (n < 2) {
                     var img = new Image;
                     img.src = data[n];
@@ -47,12 +49,14 @@ var o = new Vue({
                         drawing(n + 1);//递归
                     }
                 } else {
+                    alert("点击了我的海报2")
                     //保存生成作品图片
                     o.posterImg=c.toDataURL("image/png");
                     o.posterImgShow=true;
                 }
             }
             drawing(0);
+            alert("点击了我的海报3")
         },
         closeImg:function(){
             o.posterImgShow=false;
