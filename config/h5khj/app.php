@@ -28,7 +28,7 @@ return [
 
     //H5支付设置
     'h5_appid' => "2018113001", //支付平台分配
-    'h5_notify' => "https://khj.wqop2018.com/h5khj/api/v1_0_1/test/notify",
+    'h5_notify' => "https://khj.wqop2018.com/h5khj/api/v1_0_1/youzi/notify",
 
 
 'exception_handle'    => '\\exception\\ExceptionHandle', //自定义异常捕获类
