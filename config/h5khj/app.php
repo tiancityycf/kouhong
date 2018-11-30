@@ -26,7 +26,12 @@ return [
     //微信获取用户信息接口
     'wx_user_info_url'    => "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN",
 
-    'exception_handle'    => '\\exception\\ExceptionHandle', //自定义异常捕获类
+    //H5支付设置
+    'h5_appid' => "2018113001", //支付平台分配
+    'h5_notify' => "https://khj.wqop2018.com/h5khj/api/v1_0_1/youzi/notify",
+
+
+'exception_handle'    => '\\exception\\ExceptionHandle', //自定义异常捕获类
 
     'ad_url'              => 'https://ad.ali-yun.wang',
 //    'ad_url'=>'http://gg.com:8083',
