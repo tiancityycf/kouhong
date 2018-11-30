@@ -27,7 +27,7 @@ var o = new Vue({
         },
         codePoster: function () {
             alert("点击了我的海报")
-            var data=["https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg",o.userInfo.qr_img];
+            var data=["https://khj.wqop2018.com/static/upload/d930246d14180a61/1d5ecc9b2b344f19.png",o.userInfo.qr_img];
             var c = document.getElementById("myCanvas"),ctx = c.getContext('2d'); 
             c.width = window.screen.width;  // 画布宽   
             c.height = window.screen.height;  // 画布高
@@ -52,7 +52,7 @@ var o = new Vue({
                     alert("点击了我的海报2")
                     // alert(c.toDataURL("image/png"))
                     //保存生成作品图片
-                    // o.posterImg=c.toDataURL("image/png");
+                    o.posterImg=c.toDataURL("image/png");
                     o.posterImgShow=true;
                     alert("点击了我的海报2.5")
                     alert(o.posterImg)
