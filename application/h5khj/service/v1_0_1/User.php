@@ -229,7 +229,7 @@ class User extends Controller
         }
 
         if ($userRecord->qr_path != '') {
-            return ['status' => 2, 'msg' => '图片已经存在'];
+            return ['status' => 2, 'msg' => '图片已经存在', 'path' => $userRecord->qr_path];
         }
 
         $local_path = base64_image_content($data['img_content']);
