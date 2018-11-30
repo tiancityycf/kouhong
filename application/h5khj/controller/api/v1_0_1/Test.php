@@ -41,7 +41,7 @@ class Test extends BasicController
         $json['mac'] = "";
         $json['orderId'] = $data['recharege_id'];
         $json['isPhone'] = 1;
-        $json['notifyUrl'] = "";
+        $json['notifyUrl'] = "https://khj.wqop2018.com/h5khj/api/v1_0_1/test/notify";
         $json['returnUrl'] = "";
         $json['remark'] = "";
         $json = json_encode($json);
@@ -76,14 +76,16 @@ class Test extends BasicController
     }
 
     /**
-     * 下单回调
+     * 支付回调
      * @return string
      */
     public function notify()
     {
-        $xml = file_get_contents('php://input');
-        $wx_pay_service = new WxPayService();
-        $result = $wx_pay_service->unifiedorderNotify($xml);
-        echo $result;
+        $postdata = file_get_contents('php://input');
+        trace($postdata,'error');
+        trace(json_encode($_POST),'error');
+        $result = [];
+        $result['success'] = true;
+        echo json_encode($result);
     }
 }
