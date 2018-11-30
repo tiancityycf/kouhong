@@ -3,7 +3,9 @@ var o = new Vue({
     el: '#vm',
     data: {
         loadShow: true,
-        userInfo: {}
+        userInfo: {},
+        posterImg:"",
+        posterImgShow:false
     },
     created: function () {
         this.loadUser();
@@ -24,7 +26,7 @@ var o = new Vue({
             })
         },
         codePoster: function () {
-            var data=["https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg",o.userInfo.qr_img],base64=[];
+            var data=["https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg",o.userInfo.qr_img];
             var c = document.getElementById("myCanvas"),ctx = c.getContext('2d'); 
             c.width = window.screen.width;  // 画布宽   
             c.height = window.screen.height;  // 画布高
@@ -46,19 +48,14 @@ var o = new Vue({
                     }
                 } else {
                     //保存生成作品图片
-                    base64.push(c.toDataURL("image/png"));
-                    console.log(base64)
-                    // wx.previewImage({
-                    //     current: base64[0], // 当前显示图片的http链接
-                    //     urls: [base64[0]] // 需要预览的图片http链接列表
-                    // });
-                    wx.previewImage({
-                        current: "https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg", // 当前显示图片的http链接
-                        urls: ["https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg"] // 需要预览的图片http链接列表
-                    });
+                    o.posterImg=c.toDataURL("image/png");
+                    o.posterImgShow=true;
                 }
             }
             drawing(0);
+        },
+        closeImg:function(){
+            o.posterImgShow=false;
         },
         goIndex: function () {
             location.href = "../index/index.html"

@@ -30,7 +30,6 @@ class HomeBase extends Controller
                 $this->assign('openid', $openid);
                 $this->assign('user_status', $user_status);
             } else {
-                trace('用户uid不存在', 'error');
                 $this->redirect("login/index");
             }
     }
