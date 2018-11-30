@@ -3,7 +3,6 @@ var o = new Vue({
     el: '#vm',
     data: {
         user_amount: 0,
-        input_amount: "",
         tixian_amount: 0,
         tkShow: false,
         withdraw_limit: 0,   // 需要满足多少元才能提现
@@ -16,18 +15,15 @@ var o = new Vue({
         this.user_amount=localStorage.getItem("dis_money");
         this.withdraw_limit=localStorage.getItem("withdraw_limit");
     },
-    // watch:{
-    //     bindKeyInput:function(e){
-    //         console.log("dudu",e)
-    //         o.tixian_amount= parseFloat(e)
-    //     }
-    // },
+    watch:{
+        bindKeyInput:function(e){
+            o.tixian_amount= parseFloat(e)
+        }
+    },
     methods: {
         tixianAll: function () {
-            console.log(1111)
-            o.input_amount=o.user_amount;
+            o.bindKeyInput=o.user_amount;
             o.tixian_amount=parseFloat(o.user_amount)
-            console.log(o.input_amount,o.tixian_amount)
         },
         fuzhi: function () {
             wx.setClipboardData({

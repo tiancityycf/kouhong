@@ -20,31 +20,6 @@ use zhise\HttpClient;
  */
 class User extends Controller
 {
-    public function test()
-    {
-        $config = array(
-            'image'      => array(
-                array(
-                    'url'     => './static/kouhongji/image/1.png', //二维码资源
-                    'stream'  => 0,
-                    'left'    => 116,
-                    'top'     => -216,
-                    'right'   => 0,
-                    'bottom'  => 0,
-                    'width'   => 178,
-                    'height'  => 178,
-                    'opacity' => 100,
-                ),
-            ),
-            'background' => './static/kouhongji/image/qrCodeBg.jpg', //背景图
-        );
-        $filename = 'bg/' . time() . '.jpg';
-//echo createPoster($config,$filename);
-        $data = createPoster($config);
-        $path = base64_image_content($data);
-        var_dump($path);
-    }
-
     public function index($data)
     {
         //新用户初始化金币的值
@@ -70,14 +45,36 @@ class User extends Controller
             //保存二维码到云存储
             $rt = $this->Upload($img_data['img_url'], $img_data['filepath']);
             if ($rt['code'] == 1) {
-                $user_info['qr_img'] = $rt['img_url'];
+                //生成海报
+                $config = array(
+                    'image'      => array(
+                        array(
+                            'url'     => $rt['img_url'],
+                            'stream'  => 0,
+                            'left'    => 169,
+                            'top'     => -90,
+                            'right'   => 0,
+                            'bottom'  => 0,
+                            'width'   => 300,
+                            'height'  => 300,
+                            'opacity' => 100,
+                        ),
+                    ),
+                    'background' => './static/kouhongji/image/qrCodeBg.jpg', //背景图
+                );
+                $filename = './static/upload/teset.jpg';
+                $img_path = createPoster($config, $filename);
+                $img_path = ltrim($img_path, '.');
+                $img_arr  = $this->Upload($img_path, $img_path);
+                $img_url  = $img_arr['img_url'];
+                $user_info['qr_img'] = $img_url;
                 //保存二维码图片
                 // 开启事务
                 Db::startTrans();
                 try {
                     $user_record = UserRecordModel::where('user_id', $data['user_id'])->find();
                     if ($user_record) {
-                        $user_record->qr_img = $rt['img_url'];
+                        $user_record->qr_img = $img_url;
                         $user_record->save();
                         Db::commit();
                     }

@@ -21,7 +21,7 @@
             <div class='money'>￥{{user_amount}}</div>
             <div class='numbox clearfix'>
                 <div class='txt-l'>￥</div>
-                <input type='text'  :value="input_amount" placeholder="请输入要提现的金额" class='inputClass' />
+                <input type='text' v-model="bindKeyInput" placeholder="请输入要提现的金额" class='inputClass' id="yyy"/>
                 <div class='txt-r' @click='tixianAll'>全部提现</div>
             </div>
             <div class='tixianBtn' @click='tixianBtn'>提现</div>

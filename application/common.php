@@ -387,7 +387,6 @@ function createPoster($config = array(), $filename = "")
         if (!$res) {
             return false;
         }
-
         return $filename;
     } else {
         imagejpeg($imageRes); //在浏览器上显示

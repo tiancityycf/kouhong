@@ -11,12 +11,6 @@ use think\facade\Request;
  */
 class User extends BasicController
 {
-    public function test(){
-        $userService = new UserService();
-        $result      = $userService->test();
-
-        return result(200, 'ok', $result);
-    }
 
     /**
      * 用户首页
