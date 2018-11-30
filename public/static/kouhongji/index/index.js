@@ -134,6 +134,7 @@ var o = new Vue({
             location.replace("../user/user.html")
         },
         tryGame:function(){
+            history.forward(1);
             location.href ="../game/index.html?game=1"
         }
     }
