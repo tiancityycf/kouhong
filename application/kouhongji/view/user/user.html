@@ -7,7 +7,7 @@
     <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
     <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
     <meta HTTP-EQUIV="expires" CONTENT="0">
-    <title>个人中心</title>
+    <title>个人中心1</title>
     <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
     <link rel="stylesheet" href="__STATIC__/kouhongji/user/user.css?v={:time()}">
     <script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
@@ -72,6 +72,7 @@
             <div class="bg"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
         </div>
         <canvas id="myCanvas"></canvas>
+        <image class="qrcodeImg" :src="posterImg" v-if="posterImgShow" @click="closeImg"></image>
     </div>
 </body>
 

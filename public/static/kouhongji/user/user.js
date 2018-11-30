@@ -3,7 +3,9 @@ var o = new Vue({
     el: '#vm',
     data: {
         loadShow: true,
-        userInfo: {}
+        userInfo: {},
+        posterImg:"",
+        posterImgShow:false
     },
     created: function () {
         this.loadUser();
@@ -24,7 +26,8 @@ var o = new Vue({
             })
         },
         codePoster: function () {
-            var data=["https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg",o.userInfo.qr_img],base64=[];
+            alert("点击了我的海报")
+            var data=["https://khj.wqop2018.com/static/upload/d930246d14180a61/1d5ecc9b2b344f19.png",o.userInfo.qr_img];
             var c = document.getElementById("myCanvas"),ctx = c.getContext('2d'); 
             c.width = window.screen.width;  // 画布宽   
             c.height = window.screen.height;  // 画布高
@@ -32,6 +35,7 @@ var o = new Vue({
             ctx.fillStyle = '#fff';
             ctx.fill();
             function drawing(n) {
+                alert("点击了我的海报1")
                 if (n < 2) {
                     var img = new Image;
                     img.src = data[n];
@@ -45,20 +49,21 @@ var o = new Vue({
                         drawing(n + 1);//递归
                     }
                 } else {
+                    alert("点击了我的海报2")
+                    // alert(c.toDataURL("image/png"))
                     //保存生成作品图片
-                    base64.push(c.toDataURL("image/png"));
-                    console.log(base64)
-                    // wx.previewImage({
-                    //     current: base64[0], // 当前显示图片的http链接
-                    //     urls: [base64[0]] // 需要预览的图片http链接列表
-                    // });
-                    wx.previewImage({
-                        current: "https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg", // 当前显示图片的http链接
-                        urls: ["https://txcdn.ylll111.xyz/khj/f1ba173256c5aeb28d33e583287ef381.jpg"] // 需要预览的图片http链接列表
-                    });
+                    o.posterImg=c.toDataURL("image/png");
+                    o.posterImgShow=true;
+                    alert("点击了我的海报2.5")
+                    alert(o.posterImg)
+                    alert(o.posterImgShow)
                 }
             }
             drawing(0);
+            alert("点击了我的海报3")
+        },
+        closeImg:function(){
+            o.posterImgShow=false;
         },
         goIndex: function () {
             location.href = "../index/index.html"
