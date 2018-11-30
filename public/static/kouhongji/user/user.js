@@ -21,6 +21,8 @@ var o = new Vue({
                 success: function (res) {
                     res.data.data.user_info.money = parseInt(res.data.data.user_info.money);
                     o.userInfo = res.data.data.user_info;
+                    localStorage.setItem("dis_money",res.data.data.user_info.dis_money);
+                    localStorage.setItem("withdraw_limit",res.data.data.withdraw_limit);
                     o.loadShow = false;
                 }
             })

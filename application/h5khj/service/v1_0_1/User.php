@@ -20,10 +20,37 @@ use zhise\HttpClient;
  */
 class User extends Controller
 {
+    public function test()
+    {
+        $config = array(
+            'image'      => array(
+                array(
+                    'url'     => './static/kouhongji/image/1.png', //二维码资源
+                    'stream'  => 0,
+                    'left'    => 116,
+                    'top'     => -216,
+                    'right'   => 0,
+                    'bottom'  => 0,
+                    'width'   => 178,
+                    'height'  => 178,
+                    'opacity' => 100,
+                ),
+            ),
+            'background' => './static/kouhongji/image/qrCodeBg.jpg', //背景图
+        );
+        $filename = 'bg/' . time() . '.jpg';
+//echo createPoster($config,$filename);
+        $data = createPoster($config);
+        $path = base64_image_content($data);
+        var_dump($path);
+    }
 
     public function index($data)
     {
-        $user_info = UserRecordModel::where('user_id', $data['user_id'])->field('avatar,nickname,money,qr_img,dis_money')->find();
+        //新用户初始化金币的值
+        $config         = Cache::get(config('config_key'));
+        $withdraw_limit = $config['withdraw_limit']['value'];
+        $user_info      = UserRecordModel::where('user_id', $data['user_id'])->field('avatar,nickname,money,qr_img,dis_money')->find();
         if (!$user_info) {
             $result = [
                 'status' => 0,
@@ -62,7 +89,8 @@ class User extends Controller
                     'status' => 1,
                     'msg'    => 'ok',
                     'data'   => [
-                        'user_info' => $user_info,
+                        'withdraw_limit' => $withdraw_limit,
+                        'user_info'      => $user_info,
                     ],
                 ];
             } else {
@@ -77,7 +105,8 @@ class User extends Controller
                 'status' => 1,
                 'msg'    => 'ok',
                 'data'   => [
-                    'user_info' => $user_info,
+                    'withdraw_limit' => $withdraw_limit,
+                    'user_info'      => $user_info,
                 ],
             ];
         }
@@ -149,6 +178,7 @@ class User extends Controller
             }
 
             if ($data['amount'] > 0 && $userRecord->dis_money >= $data['amount']) {
+
                 if ($data['type'] == 1) {
                     $params = [
                         'appid'   => Config::get('wx_appid'),
@@ -234,9 +264,9 @@ class User extends Controller
 
         $local_path = base64_image_content($data['img_content']);
 
-        $local_path = ltrim($local_path,'.');
+        $local_path = ltrim($local_path, '.');
 
-        $img_arr = $this->Upload($local_path,$local_path);
+        $img_arr = $this->Upload($local_path, $local_path);
 
         if ($img_arr['code'] == 1) {
             $userRecord->qr_path = $img_arr['img_url'];
@@ -247,8 +277,5 @@ class User extends Controller
             return ['status' => 3, 'msg' => '上传错误'];
         }
 
-        
-
-        
     }
 }

@@ -2,7 +2,7 @@
 //配置文件
 return [
     // 加密设置
-    'app_secret'          => 'QKTWuxzM5EfkeQhi',
+    'app_secret'          => '',
     'word_secret'         => '',
     'str_secret'          => '',
 
@@ -47,7 +47,7 @@ return [
     'withdraw_url'        => 'http://wxpay.wudee.cc/api/v1/withdraw_record/create_order', // 获取交易号URL
 
     //提现加密密钥
-    'withdraw_secret'     => 'cVCM47ZDqD',
+    'withdraw_secret'     => 'drQIrk9TEQ',
 
     //发送模板消息url
     'send_template_url'   => 'https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=%s',

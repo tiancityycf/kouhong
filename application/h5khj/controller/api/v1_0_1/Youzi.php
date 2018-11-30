@@ -125,70 +125,78 @@ class Youzi extends BasicController
         if ($data['status'] == 1) {
             //没有签名验证，只能去查询订单状态验证了
             if ($this->valid($data['orderId'])) {
-                //支付成功 这里 写自己的业务逻辑
-                $order = OrderModel::where('trade_no', $data['orderId'])->lock(true)->find();
-                if ($order) {
-                    if ($order['status'] == 1) {
-                        $result            = [];
-                        $result['success'] = 'true'; //必须用字符串 尴尬
-                        echo json_encode($result);exit(); //不要删除 exit
-                    } else {
-                        if (($order['pay_money'] * 100) == $data['amount']) {
-                            //更改订单状态
-                            $order->status   = 1;
-                            $order->pday     = date('Ymd');
-                            $order->pay_time = date('Y-m-d H:i:s');
-                            $order->save();
-                            //给用户增加金额
-                            $user_record = UserRecordModel::where('openid', $param['openid'])->find();
-                            if ($user_record) {
-                                $user_record->money       = ['inc', $order['pay_money']];
-                                $user_record->total_money = ['inc', $order['pay_money']];
-                                $user_record->save();
-
-                                //判断是否存在上级
-                                $relation_info = UserRelationListModel::where('user_id', $user_record['user_id'])->find();
-                                if ($relation_info) {
-                                    $config_data = $this->configData;
-                                    $br_money    = $order['pay_money'] * $config_data['one_distribution_br'];
-                                    //添加分销记录
-                                    $user_relation_record            = new UserRelationRecordModel();
-                                    $user_relation_record->user_id   = $user_record['user_id'];
-                                    $user_relation_record->pid       = $relation_info['pid'];
-                                    $user_relation_record->br        = $config_data['one_distribution_br'];
-                                    $user_relation_record->pay_money = $order['pay_money'];
-                                    $user_relation_record->dis_money = $br_money;
-                                    $user_relation_record->save();
-                                    $relation_pid_record = UserRecordModel::where('user_id', $relation_info['pid'])->find();
-                                    if ($relation_pid_record) {
-                                        //给上级增加分销金额
-                                        $relation_pid_record->dis_money = ['inc', $br_money];
-                                        $relation_pid_record->save();
-                                    }
-                                }
-                            }
-                            Db::commit();
-
+                // 开启事务
+                Db::startTrans();
+                try {
+                    //支付成功 这里 写自己的业务逻辑
+                    $order = OrderModel::where('trade_no', $data['orderId'])->lock(true)->find();
+                    if ($order) {
+                        if ($order['status'] == 1) {
                             $result            = [];
                             $result['success'] = 'true'; //必须用字符串 尴尬
                             echo json_encode($result);exit(); //不要删除 exit
                         } else {
-                            //更改订单状态
-                            $order->status   = 2;
-                            $order->pday     = date('Ymd');
-                            $order->pay_time = date('Y-m-d H:i:s');
-                            $order->save();
-                            Db::commit();
+                            if (($order['pay_money'] * 100) == $data['amount']) {
+                                //更改订单状态
+                                $order->status   = 1;
+                                $order->pday     = date('Ymd');
+                                $order->pay_time = date('Y-m-d H:i:s');
+                                $order->save();
+                                //给用户增加金额
+                                $user_record = UserRecordModel::where('openid', $param['openid'])->find();
+                                if ($user_record) {
+                                    $user_record->money       = ['inc', $order['pay_money']];
+                                    $user_record->total_money = ['inc', $order['pay_money']];
+                                    $user_record->save();
 
-                            $result            = [];
-                            $result['success'] = 'false'; //必须用字符串 尴尬
-                            echo json_encode($result);exit(); //不要删除 exit
+                                    //判断是否存在上级
+                                    $relation_info = UserRelationListModel::where('user_id', $user_record['user_id'])->find();
+                                    if ($relation_info) {
+                                        $config_data = $this->configData;
+                                        $br_money    = $order['pay_money'] * $config_data['one_distribution_br'];
+                                        //添加分销记录
+                                        $user_relation_record            = new UserRelationRecordModel();
+                                        $user_relation_record->user_id   = $user_record['user_id'];
+                                        $user_relation_record->pid       = $relation_info['pid'];
+                                        $user_relation_record->br        = $config_data['one_distribution_br'];
+                                        $user_relation_record->pay_money = $order['pay_money'];
+                                        $user_relation_record->dis_money = $br_money;
+                                        $user_relation_record->save();
+                                        $relation_pid_record = UserRecordModel::where('user_id', $relation_info['pid'])->find();
+                                        if ($relation_pid_record) {
+                                            //给上级增加分销金额
+                                            $relation_pid_record->dis_money = ['inc', $br_money];
+                                            $relation_pid_record->save();
+                                        }
+                                    }
+                                }
+                                Db::commit();
+
+                                $result            = [];
+                                $result['success'] = 'true'; //必须用字符串 尴尬
+                                echo json_encode($result);exit(); //不要删除 exit
+                            } else {
+                                //更改订单状态
+                                $order->status   = 2;
+                                $order->pday     = date('Ymd');
+                                $order->pay_time = date('Y-m-d H:i:s');
+                                $order->save();
+                                Db::commit();
+
+                                $result            = [];
+                                $result['success'] = 'false'; //必须用字符串 尴尬
+                                echo json_encode($result);exit(); //不要删除 exit
+                            }
                         }
+                    } else {
+                        $result            = [];
+                        $result['success'] = 'false'; //必须用字符串 尴尬
+                        echo json_encode($result);exit();
+                        Db::rollback();
                     }
-                } else {
-                    $result            = [];
-                    $result['success'] = 'false'; //必须用字符串 尴尬
-                    echo json_encode($result);exit();
+                } catch (\Exception $e) {
+                    lg($e);
+                    Db::rollback();
                 }
             } else {
                 $result            = [];

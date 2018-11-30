@@ -1,0 +1,203 @@
+body{
+    background: #f1f0f5;
+    padding-top: 0.3rem;
+    box-sizing: border-box;
+  }
+  .mingxi{
+    font-size: 0.24rem;
+    text-align: center;
+    border:1px solid #999;
+    color:#999;
+    width: 1.4rem;
+    height: 0.4rem;
+    line-height: 0.4rem;
+    border-radius:30px;
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+    float: right;
+  }
+  .toptxt{
+    text-align: center;
+    font-size: 0.26rem;
+    color:#999;
+    margin-bottom: 0.4rem;
+  }
+  .money{
+    text-align: center;
+    color:#333;
+    font-size: 0.6rem;
+    margin-bottom: 0.3rem;
+  }
+  .numbox{
+    background-color: #fff;
+    width: 100%;
+    height: 1rem;
+    line-height: 1rem;
+    padding:0 0.3rem;
+    box-sizing: border-box;
+  }
+  .txt-l{
+    float: left;
+    font-size:0.5rem;
+    width: 0.6rem;
+  }
+  .txt-r{
+    float: right;
+    font-size: 0.3rem;
+    text-align: right;
+    width: 1.5rem;
+    color:#406b91;
+  }
+  .inputClass{
+    max-width: calc(100% - 2.1rem);  
+    float: left;
+    height: 100%;
+    font-size: 0.3rem;
+    border: none;
+    outline: none;
+  }
+  .tixianBtn{
+    margin:0.4rem auto 0.3rem;
+    width: 6rem;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    text-align: center;
+    font-size: 0.32rem;
+    color:#fff;
+    border-radius:5px;
+    background-color: #57b837;
+  }
+  .gameBtn{
+    margin:0 auto 0.4rem;
+    width: 6rem;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    text-align: center;
+    font-size: 0.32rem;
+    color:#666;
+    background-color: #f0f1f2;
+    border-radius:5px;
+    border:1px solid #ccc;
+    box-sizing: border-box;
+  }
+  .success_tk{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 100;
+  }
+  .success_tk .bg{
+    width: 5.4rem;
+    background-color: #fff;
+    border-radius:10px;
+    padding-top: 0.9rem;
+    padding-bottom: 0.4rem;
+    box-sizing: border-box;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+  }
+  .success_tk .success_img{
+    border:3px solid #fff;
+    border-radius:50%;
+    width: 1.2rem;
+    height: 1.2rem;
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+    top:-0.64rem;
+  }
+  .success_tk .title{
+    font-size: 0.36rem;
+    font-weight: 600;
+    margin-bottom: 0.36rem;
+  }
+  .success_tk .txt{
+    font-size: 0.3rem;
+    color:#666;
+    padding:0 0.3rem;
+    box-sizing: border-box;
+    margin-bottom: 0.1rem;
+  }
+  .success_tk .no1 .tit{
+    font-size: 0.24rem;
+    color:#666;
+    margin-bottom: 0.1rem;
+    margin-top: 0.3rem;
+  }
+  .success_tk .no1 .con{
+    height: 0.8rem;
+    line-height: 0.8rem;
+    background-color: #ffebcc;
+    font-size: 0.32rem;
+    color:#666;
+    margin-bottom: 0.3rem;
+  }
+  .success_tk .bg .close{
+    width: 0.5rem;
+    height: 0.5rem;
+    position: absolute;
+    top:0.16rem;
+    right: 0.16rem;
+  }
+  .success_tk .fuzhi_btn{
+    font-size: 0.32rem;
+    color:#666;
+    width: 2.2rem;
+    height: 0.7rem;
+    line-height: 0.68rem;
+    margin:0 auto;
+    border:1px solid #666;
+    text-align: center;
+    border-radius:20px;
+    box-sizing: border-box;
+  }
+  .kf_tips{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 100;
+  }
+  .kf_tips .bg{
+    width: 5.4rem;
+    background-color: #fff;
+    border-radius:10px;
+    position: absolute;
+    top:46%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    padding:0.9rem 0.3rem 0.4rem;
+    box-sizing: border-box;
+  }
+  .kf_tips .tit{
+    font-size: 0.32rem;
+    text-align: center;
+    margin-bottom: 0.4rem;
+  }
+  .kf_tips .kfbtn{
+    width: 3.2rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    border-radius:30px;
+    text-align: center;
+    padding:0;
+    font-size: 0.32rem;
+    color:#fff;
+    background: #09bb07;
+    margin:0 auto;
+  }
+  .kf_tips .close{
+    width: 0.5rem;
+    height: 0.5rem;
+    position: absolute;
+    top:0.16rem;
+    right: 0.16rem;
+  }
