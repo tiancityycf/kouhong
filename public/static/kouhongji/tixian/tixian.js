@@ -26,15 +26,7 @@ var o = new Vue({
             o.tixian_amount=parseFloat(o.user_amount)
         },
         fuzhi: function () {
-            wx.setClipboardData({
-                data: that.data.orderNo,
-                success: function (res) {
-                    that.setData({
-                        tkShow: false,
-                        kfTkShow: true
-                    })
-                }
-            })
+            
         },
         tixianBtn: function () {
             var reg = /^([1-9]\d*|0)(\.\d{1,2})?$/;
