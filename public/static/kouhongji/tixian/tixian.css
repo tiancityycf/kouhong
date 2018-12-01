@@ -156,6 +156,7 @@ body{
     text-align: center;
     border-radius:40px;
     box-sizing: border-box;
+    background: #fff;
   }
   .success_tk #orderInput{
     position: absolute;

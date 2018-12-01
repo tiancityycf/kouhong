@@ -11,7 +11,7 @@ var o = new Vue({
         loadShow:false,
         canClick:false,
         bindKeyInput:"",
-
+        orderNo2:""
     },
     created: function () {
         this.user_amount=localStorage.getItem("dis_money");
@@ -30,8 +30,8 @@ var o = new Vue({
         fuzhi: function () {
             // $("#orderInput").focus();
             // document.execCommand("Copy");
-            o.tkShow=false;
-            o.kfTkShow=true;
+            // o.tkShow=false;
+            // o.kfTkShow=true;
         },
         tixianBtn: function () {
             var reg = /^([1-9]\d*|0)(\.\d{1,2})?$/;
@@ -64,6 +64,7 @@ var o = new Vue({
                             o.user_amount= +(o.user_amount - o.tixian_amount).toFixed(2);
                             localStorage.setItem("dis_money",o.user_amount);
                             o.orderNo=res.data.trade_no;
+                            o.orderNo2=o.orderNo;
                             o.tkShow=true;
                         } else {
                             alert("提现失败")
@@ -98,6 +99,9 @@ var o = new Vue({
 var clipboard = new Clipboard("#id_copy");
 clipboard.on("success",function (element) {//复制成功的回调
     console.log("复制成功，复制内容: " + element.text);
+    o.tkShow=false;
+    o.kfTkShow=true;
+    return element.text;
 });
 clipboard.on("error",function (element) {//复制失败的回调
     console.log(element);
