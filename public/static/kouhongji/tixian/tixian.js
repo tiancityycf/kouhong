@@ -28,9 +28,9 @@ var o = new Vue({
             o.tixian_amount=parseFloat(o.user_amount)
         },
         fuzhi: function () { 
-            var rwm = document.getElementById('orderInput');
-            rwm.focus();
-            rwm.setSelectionRange(0, rwm.value.length);
+            var rnm = document.getElementById('rnm');
+            rnm.focus();
+            rnm.setSelectionRange(0, rnm.value.length);
             document.execCommand("Copy");
             o.tkShow=false;
             o.kfTkShow=true;
@@ -66,7 +66,6 @@ var o = new Vue({
                             o.user_amount= +(o.user_amount - o.tixian_amount).toFixed(2);
                             localStorage.setItem("dis_money",o.user_amount);
                             o.orderNo=res.data.trade_no;
-                            o.orderNo2=o.orderNo;
                             o.tkShow=true;
                         } else {
                             alert("提现失败")
@@ -78,12 +77,12 @@ var o = new Vue({
             })
         },
         wxTixian:function(){
-            // setTimeout(function(){
-            //     o.canclick=true;
-            // },1000)
-            // if(o.canclick){
+            setTimeout(function(){
+                o.canclick=true;
+            },1000)
+            if(o.canclick){
                 location.href="http://wxpay.wudee.cc/api/v1_3/wxpay/index"
-            // }
+            }
         },
         gotixianRecord:function(){
             location.href="../tixianRecord/tixianRecord.html"

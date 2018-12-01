@@ -137,6 +137,11 @@ body{
     font-size: 0.32rem;
     color:#666;
     margin-bottom: 0.3rem;
+    width: 100%;
+    outline: none;
+    border: 0;
+    text-align: center;
+    display: block;
   }
   .success_tk .bg .close{
     width: 0.5rem;
