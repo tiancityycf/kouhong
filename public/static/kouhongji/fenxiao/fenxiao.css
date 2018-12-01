@@ -1,0 +1,33 @@
+.body{
+    background: #efeff4;
+    padding-top: 0.2rem;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+}
+.nolist {
+    text-align: center;
+    width: 100%;
+    margin: 0.6rem 0;
+    color: #888888;
+    font-size: 0.3rem;
+}
+.list{
+    height: 1.2rem;
+    line-height: 1.2rem;
+    background: #fff;
+    border-bottom:1px silid #eee;
+    box-sizing: border-box;
+    padding:0 0.3rem;
+    font-size: 15px;
+    color:#666;
+}
+.list .name{
+    display: inline-block;
+    width: 200px;
+    margin-right: 5px;
+    color:#333;
+}
+.list span{
+    color:#fe5a96;
+}

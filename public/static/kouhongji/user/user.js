@@ -42,6 +42,9 @@ var o = new Vue({
         },
         tixian:function(){
             location.href="../tixian/tixian.html"
+        },
+        goFenxiao:function(){
+            location.href="../fenxiao/fenxiao.html"
         }
     }
 })

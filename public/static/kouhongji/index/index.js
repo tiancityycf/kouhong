@@ -82,11 +82,11 @@ var o = new Vue({
             o.canClick=false;
             $.ajax({  
                 type:"POST",
-                // url:"/h5khj/api/v1_0_1/wx_pay/unifiedorder.html",
-                url:"/h5khj/api/v1_0_1/youzi/prepay.html",
+                url:"/h5khj/api/v1_0_1/wx_pay/relationTest.html",
+                // url:"/h5khj/api/v1_0_1/youzi/prepay.html",
                 data:{
                     user_id:user_id,
-                    // type:0,
+                    type:1,
                     recharege_id:e
                 },
                 success:function(res){
@@ -106,6 +106,8 @@ var o = new Vue({
                     //         alert(JSON.stringify(aa))
                     //     }
                     // });
+                    alert("充值成功")
+                    o.closeTk();
                 }
             })
         },

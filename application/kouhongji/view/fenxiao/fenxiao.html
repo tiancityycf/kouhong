@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="divport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>我的佣金</title>
+    <script src="__STATIC__/kouhongji/base/base.js?v={:time()}"></script>
+    <link rel="stylesheet" href="__STATIC__/kouhongji/fenxiao/fenxiao.css?v={:time()}">
+</head>
+<body>
+    <div class="body" id="vm">
+        <div class="list" v-if="list.length" v-for="item in list" v-cloak>
+            <div class="name line1">移动小霸王</div>充值了<span>5</span>元，获得佣金<span>0.5</span>元
+        </div>
+        <div class="nolist" v-if="!list.length" v-cloak>- - - 暂无记录 - - -</div>
+    </div>
+</body>
+</html>
+<script src="__STATIC__/kouhongji/fenxiao/fenxiao.js?v={:time()}"></script>
