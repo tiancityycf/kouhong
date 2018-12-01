@@ -63,6 +63,14 @@ var o = new Vue({
                 success: function (res) {
                     o.canClick= true;
                     o.loadShow=false;
+                    o.tkShow=false;
+                    if(res.data.status==1){
+                        alert("领取成功")
+                        history.go()
+                    }else{
+                        alert("状态异常")
+                        history.go()
+                    }
                 }
             })
         },

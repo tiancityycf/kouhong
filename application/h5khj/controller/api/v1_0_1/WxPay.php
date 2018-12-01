@@ -30,6 +30,17 @@ class WxPay extends BasicController
         return result(200, 'ok', $result);
     }
 
+    public function relationTest()
+    {
+        require_params('user_id', 'type', 'recharege_id');
+        $data = Request::param();
+
+        $wx_pay_service = new WxPayService($this->configData);
+        $result         = $wx_pay_service->relationTest($data);
+
+        return result(200, 'ok', $result);
+    }
+
     /**
      * 下单回调
      * @return string

@@ -446,8 +446,8 @@ class WxPay
                             Db::rollback();
                             // $return_xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
                             $return_xml = [
-                                'return_code'=>"SUCCESS",
-                                'return_msg'=>"OK",
+                                'return_code' => "SUCCESS",
+                                'return_msg'  => "OK",
                             ];
                             return $return_xml;
                         }
@@ -490,8 +490,8 @@ class WxPay
                             Db::commit();
                             // $return_xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
                             $return_xml = [
-                                'return_code'=>"SUCCESS",
-                                'return_msg'=>"OK",
+                                'return_code' => "SUCCESS",
+                                'return_msg'  => "OK",
                             ];
                             return $return_xml;
                         } else {
@@ -518,6 +518,95 @@ class WxPay
             }
         } else {
             return false;
+        }
+    }
+
+    public function relationTest($data)
+    {
+        try {
+            $recharege_info = RechargeAmountModel::where('id', $data['recharege_id'])->where('status', 1)->find();
+            if (!$recharege_info) {
+                trace("{$data['recharege_id']}-" . json_encode($recharege_info), 'error');
+                return [
+                    'status' => 0,
+                    'msg'    => '无效的充值额度',
+                ];
+            }
+
+            //先注释了  等客户端发了新版本再打开
+            //            $where = [];
+            //            $where['user_id'] = $data['user_id'];
+            //            $where['successed'] = 1;
+            //            $count = Db::name('challenge_log')->where($where)->count();
+            //            if($count>1){
+            //                return [
+            //                    'status' => 0,
+            //                    'msg'    => '挑战成功次数已达2次',
+            //                ];
+            //            }
+
+            // 开启事务
+            Db::startTrans();
+            try {
+                //充值下单
+                $order               = new OrderModel();
+                $order->user_id      = $data['user_id'];
+                $order->trade_no     = $this->getTradeNo('KH');
+                $order->recharege_id = $data['recharege_id'];
+                if (isset($data['good_id']) && $data['good_id'] != '') {
+                    $order->good_id = $data['good_id'];
+                }
+                $order->pay_money = $recharege_info['money'];
+                $order->type      = 0;
+                $order->dday      = date('Ymd');
+                $order->addtime   = date('Y-m-d H:i:s');
+                $order->save();
+
+                //给用户增加金额
+                $user_record = UserRecordModel::where('user_id', $data['user_id'])->find();
+                if ($user_record) {
+                    // $user_record->money       = $user_record->money + $order['pay_money'];
+                    // $user_record->total_money = $user_record->total_money + $order['pay_money'];
+                    $user_record->money       = ['inc', $order['pay_money']];
+                    $user_record->total_money = ['inc', $order['pay_money']];
+                    $user_record->save();
+
+                    //判断是否存在上级
+                    $relation_info = UserRelationListModel::where('user_id', $data['user_id'])->find();
+                    if ($relation_info) {
+                        $config_data = $this->configData;
+                        $br_money    = $order['pay_money'] * $config_data['one_distribution_br'];
+                        //添加分销记录
+                        $user_relation_record            = new UserRelationRecordModel();
+                        $user_relation_record->user_id   = $user_record['user_id'];
+                        $user_relation_record->pid       = $relation_info['pid'];
+                        $user_relation_record->br        = $config_data['one_distribution_br'];
+                        $user_relation_record->pay_money = $order['pay_money'];
+                        $user_relation_record->dis_money = $br_money;
+                        $user_relation_record->save();
+                        $relation_pid_record = UserRecordModel::where('user_id', $relation_info['pid'])->find();
+                        if ($relation_pid_record) {
+                            //给上级增加分销金额
+                            $relation_pid_record->dis_money = ['inc', $br_money];
+                            $relation_pid_record->save();
+                        }
+                    }
+                }
+
+                Db::commit();
+            } catch (\Exception $e) {
+                lg($e);
+                Db::rollback();
+            }
+
+            $return_xml = [
+                'return_code' => "SUCCESS",
+                'return_msg'  => "OK",
+            ];
+            return $return_xml;
+        } catch (Exception $e) {
+            lg($e);
+            throw new \Exception("系统繁忙");
         }
     }
 }
