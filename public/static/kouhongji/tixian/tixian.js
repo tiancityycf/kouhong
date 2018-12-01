@@ -28,8 +28,8 @@ var o = new Vue({
             o.tixian_amount=parseFloat(o.user_amount)
         },
         fuzhi: function () {
-            $("#orderInput").focus();
-            document.execCommand("Copy");
+            // $("#orderInput").focus();
+            // document.execCommand("Copy");
             o.tkShow=false;
             o.kfTkShow=true;
         },
@@ -94,4 +94,11 @@ var o = new Vue({
             o.kfTkShow= false;
             o.canClick=false;        }
     }
+})
+var clipboard = new Clipboard("#id_copy");
+clipboard.on("success",function (element) {//复制成功的回调
+    console.log("复制成功，复制内容: " + element.text);
+});
+clipboard.on("error",function (element) {//复制失败的回调
+    console.log(element);
 })
