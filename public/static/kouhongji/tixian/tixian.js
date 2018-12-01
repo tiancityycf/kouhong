@@ -59,7 +59,6 @@ var o = new Vue({
                     o.loadShow=false;
                     if (res.code == 200) {
                         if (res.data.status == 1) {
-                            alert(res.data.msg)
                             o.user_amount= +(o.user_amount - o.tixian_amount).toFixed(2);
                             localStorage.setItem("dis_money",o.user_amount);
                             o.orderNo=res.data.trade_no;
@@ -72,6 +71,9 @@ var o = new Vue({
                     }
                 },
             })
+        },
+        wxTixian:function(){
+            location.href="http://wxpay.wudee.cc/api/v1_3/wxpay/index"
         },
         gotixianRecord:function(){
             location.href="../tixianRecord/tixianRecord.html"

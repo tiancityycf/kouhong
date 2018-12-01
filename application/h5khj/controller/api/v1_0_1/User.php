@@ -20,7 +20,7 @@ class User extends BasicController
     {
         require_params('user_id');
         $data = Request::param();
-        
+
         $userService = new UserService();
         $result      = $userService->index($data);
 
@@ -66,20 +66,19 @@ class User extends BasicController
         require_params('user_id');
         $data = Request::param();
 
-        $userService  = new UserService();
-        $result = $userService->userRelationList($data);
+        $userService = new UserService();
+        $result      = $userService->userRelationList($data);
 
         return result(200, 'ok', $result);
     }
-
 
     public function saveCode()
     {
         require_params('user_id', 'img_content');
         $data = Request::param();
 
-        $userService  = new UserService();
-        $result = $userService->saveCode($data);
+        $userService = new UserService();
+        $result      = $userService->saveCode($data);
 
         return result(200, 'ok', $result);
     }

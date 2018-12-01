@@ -43,7 +43,7 @@
         <div class='kf_tips' v-if="kfTkShow">
             <div class='bg'>
                 <div class='tit'>单号已复制，前往提现</div>
-                <div class='kfbtn'>去提现 </div>
+                <div class='kfbtn' @click="wxTixian">去提现 </div>
                 <image class='close' src='https://txcdn.ylll111.xyz/hzttk/tixian_close.png' @click='closeTk'></image>
             </div>
         </div>

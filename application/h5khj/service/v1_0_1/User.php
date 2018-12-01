@@ -62,11 +62,11 @@ class User extends Controller
                     ),
                     'background' => "https://txcdn.ylll111.xyz/khjhfive/e30f92cee3b750681a2e389e770bcf6d.jpg", //背景图
                 );
-                $filename = "./static/upload/teset".$user_info['user_id'].".jpg";
-                $img_path = createPoster($config, $filename);
-                $img_path = ltrim($img_path, '.');
-                $img_arr  = $this->Upload($img_path, $img_path);
-                $img_url  = $img_arr['img_url'];
+                $filename            = "./static/upload/teset" . $user_info['user_id'] . ".jpg";
+                $img_path            = createPoster($config, $filename);
+                $img_path            = ltrim($img_path, '.');
+                $img_arr             = $this->Upload($img_path, $img_path);
+                $img_url             = $img_arr['img_url'];
                 $user_info['qr_img'] = $img_url;
                 //保存二维码图片
                 // 开启事务
