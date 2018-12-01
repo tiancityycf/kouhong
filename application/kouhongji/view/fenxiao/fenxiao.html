@@ -13,7 +13,8 @@
 <body>
     <div class="body" id="vm">
         <div class="list" v-if="list.length" v-for="item in list" v-cloak>
-            <div class="name line1">移动小霸王</div>充值了<span>5</span>元，获得佣金<span>0.5</span>元
+            <div class="name line1 fl">{{item.user_nickname}}</div>
+            <div class="fl">充值了<span>{{item.pay_money}}</span>元，获得佣金<span>{{item.dis_money}}</span>元</div>
         </div>
         <div class="nolist" v-if="!list.length" v-cloak>- - - 暂无记录 - - -</div>
     </div>

@@ -16,16 +16,16 @@
     height: 1.2rem;
     line-height: 1.2rem;
     background: #fff;
-    border-bottom:1px silid #eee;
+    border-bottom:1px solid #eee;
     box-sizing: border-box;
     padding:0 0.3rem;
-    font-size: 15px;
+    font-size: 0.3rem;
     color:#666;
 }
 .list .name{
-    display: inline-block;
-    width: 200px;
-    margin-right: 5px;
+    max-width: 2.4rem;
+    padding-right: 0.1rem;
+    box-sizing: border-box;
     color:#333;
 }
 .list span{

@@ -16,7 +16,7 @@ var o = new Vue({
                     user_id: user_id
                 },
                 success: function (res) {
-                    
+                    o.list=res.data
                 }
             })
         }
