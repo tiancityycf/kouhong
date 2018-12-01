@@ -60,7 +60,7 @@ class User extends Controller
                             'opacity' => 100,
                         ),
                     ),
-                    'background' => '/static/kouhongji/image/qrCodeBg.jpg', //背景图
+                    'background' => "./static/kouhongji/image/qrCodeBg.jpg", //背景图
                 );
                 $filename = './static/upload/teset.jpg';
                 $img_path = createPoster($config, $filename);
