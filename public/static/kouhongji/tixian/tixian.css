@@ -157,6 +157,12 @@ body{
     border-radius:40px;
     box-sizing: border-box;
   }
+  .success_tk #orderInput{
+    position: absolute;
+    height: 0;
+    border:0;
+    bottom:-20px;
+  }
   .kf_tips{
     position: fixed;
     top:0;

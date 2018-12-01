@@ -26,7 +26,10 @@ var o = new Vue({
             o.tixian_amount=parseFloat(o.user_amount)
         },
         fuzhi: function () {
-            
+            $("#orderInput").select();
+            document.execCommand("Copy");
+            o.tkShow=false;
+            o.kfTkShow=true;
         },
         tixianBtn: function () {
             var reg = /^([1-9]\d*|0)(\.\d{1,2})?$/;
