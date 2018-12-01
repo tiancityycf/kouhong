@@ -78,12 +78,12 @@ var o = new Vue({
             })
         },
         wxTixian:function(){
-            setTimeout(function(){
-                o.canclick=true;
-            },1000)
-            if(o.canclick){
+            // setTimeout(function(){
+            //     o.canclick=true;
+            // },1000)
+            // if(o.canclick){
                 location.href="http://wxpay.wudee.cc/api/v1_3/wxpay/index"
-            }
+            // }
         },
         gotixianRecord:function(){
             location.href="../tixianRecord/tixianRecord.html"
