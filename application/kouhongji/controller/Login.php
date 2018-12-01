@@ -3,7 +3,7 @@ namespace app\kouhongji\controller;
 
 use app\h5khj\model\User as UserModel;
 use app\h5khj\model\UserRecord as UserRecordModel;
-use model\UserRelationList as UserRelationListModel;
+use app\h5khj\model\UserRelationList as UserRelationListModel;
 use think\Controller;
 use think\Db;
 use think\facade\Config;
@@ -88,8 +88,10 @@ class Login extends controller
                         $userRecord->user_status = 1;
                         $userRecord->save();
                         //判断是否邀请关联
+                        trace('user_id='.$user->id,'error');
                         if (isset($state) && $state != '') {
-                            $user_relation_list = UserRelationListModel::where('user_id', $user->id)->where('pid', $state)->find();
+                            trace('pid='.$state,'error');
+                            $user_relation_list = UserRelationListModel::where('user_id', $user->id)->find();
                             if (!$user_relation_list) {
                                 $user_relation_list          = new UserRelationListModel();
                                 $user_relation_list->pid     = $state;

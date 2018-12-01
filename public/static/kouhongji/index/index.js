@@ -132,6 +132,7 @@ var o = new Vue({
             o.tkShow=false;
             o.balanceShow=false;
             o.payShow=false;
+            o.canClick=true;
         },
         goUser:function(){
             location.href="../user/user.html"
