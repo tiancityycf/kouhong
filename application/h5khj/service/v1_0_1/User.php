@@ -25,7 +25,7 @@ class User extends Controller
         //新用户初始化金币的值
         $config         = Cache::get(config('config_key'));
         $withdraw_limit = $config['withdraw_limit']['value'];
-        $user_info      = UserRecordModel::where('user_id', $data['user_id'])->field('avatar,nickname,money,qr_img,dis_money')->find();
+        $user_info      = UserRecordModel::where('user_id', $data['user_id'])->field('user_id,avatar,nickname,money,qr_img,dis_money')->find();
         if (!$user_info) {
             $result = [
                 'status' => 0,

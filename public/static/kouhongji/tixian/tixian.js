@@ -9,7 +9,9 @@ var o = new Vue({
         orderNo: "",
         kfTkShow: false,
         loadShow:false,
-        bindKeyInput:""
+        canClick:false,
+        bindKeyInput:"",
+
     },
     created: function () {
         this.user_amount=localStorage.getItem("dis_money");
@@ -73,6 +75,12 @@ var o = new Vue({
             })
         },
         wxTixian:function(){
+            setTimeout(function(){
+                o.canClick=true
+            },1000)
+            if(!o.canClick){
+                return;
+            }
             location.href="http://wxpay.wudee.cc/api/v1_3/wxpay/index"
         },
         gotixianRecord:function(){
@@ -84,6 +92,6 @@ var o = new Vue({
         closeTk:function(){
             o.tkShow= false;
             o.kfTkShow= false;
-        }
+            o.canClick=false;        }
     }
 })
