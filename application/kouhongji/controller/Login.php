@@ -29,6 +29,7 @@ class Login extends controller
         } else {
             $state = '';
         }
+        trace('state=' . $state, 'error');
         //判断code是否存在
         if (isset($data['code']) && $data['code'] != '') {
             //获取access_token
@@ -47,7 +48,7 @@ class Login extends controller
                         'money'       => $record["money"],
                     ];
                     session('uid', $user_info->id);
-                    session('last_login', date('Y-m-d H:i:s',$time));
+                    session('last_login', date('Y-m-d H:i:s', $time));
                     session('openid', $record['openid']);
                     session('user_status', 1);
                     session('money', $record["money"]);
@@ -88,9 +89,10 @@ class Login extends controller
                         $userRecord->user_status = 1;
                         $userRecord->save();
                         //判断是否邀请关联
-                        trace('user_id='.$user->id,'error');
+                        trace('user_id=' . $user->id, 'error');
+                        trace('pid=' . $state, 'error');
                         if (isset($state) && $state != '') {
-                            trace('pid='.$state,'error');
+                            trace('pid=' . $state, 'error');
                             $user_relation_list = UserRelationListModel::where('user_id', $user->id)->find();
                             if (!$user_relation_list) {
                                 $user_relation_list          = new UserRelationListModel();
@@ -113,7 +115,7 @@ class Login extends controller
                         'money'       => $record["money"],
                     ];
                     session('uid', $user->id);
-                    session('last_login', date('Y-m-d H:i:s',$time));
+                    session('last_login', date('Y-m-d H:i:s', $time));
                     session('openid', $record['openid']);
                     session('user_status', 1);
                     session('money', $record["money"]);

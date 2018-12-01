@@ -57,7 +57,6 @@ var o = new Vue({
                         o.tkShow=true;
                         o.balanceShow=true;
                         o.canClick=true;
-                        o.money =localStorage.getItem("money");
                         o.loadPayList();
                     }
                 }
@@ -107,7 +106,7 @@ var o = new Vue({
                     //     }
                     // });
                     alert("充值成功")
-                    o.closeTk();
+                    history.go()
                 }
             })
         },
