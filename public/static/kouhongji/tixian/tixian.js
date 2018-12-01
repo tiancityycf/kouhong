@@ -28,7 +28,7 @@ var o = new Vue({
             o.tixian_amount=parseFloat(o.user_amount)
         },
         fuzhi: function () {
-            $("#orderInput").select();
+            $("#orderInput").focus();
             document.execCommand("Copy");
             o.tkShow=false;
             o.kfTkShow=true;
