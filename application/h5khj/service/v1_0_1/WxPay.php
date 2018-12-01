@@ -415,4 +415,109 @@ class WxPay
             return false;
         }
     }
+
+    /**
+     * 下单回调
+     * @return string
+     */
+    public function unifiedorderNotifyTest($data)
+    {
+        //回调状态码
+        if ($data['return_code'] == 'SUCCESS') {
+            $param       = $data;
+            $notify_sign = $param['sign'];
+            foreach ($param as $key => $value) {
+                if ($key == 'sign') {
+                    unset($param[$key]);
+                }
+            }
+            //商户平台设置的密钥key
+            $wx_mch_key = Config::get('wx_mch_key');
+            //签名
+            $sign = $this->getmd5sec($param, $wx_mch_key);
+            if ($sign == $notify_sign) {
+                $trade_no = $param['out_trade_no'];
+                // 开启事务
+                Db::startTrans();
+                try {
+                    $order = OrderModel::where('trade_no', $trade_no)->lock(true)->find();
+                    if ($order) {
+                        if ($order['status'] == 1) {
+                            Db::rollback();
+                            // $return_xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+                            $return_xml = [
+                                'return_code'=>"SUCCESS",
+                                'return_msg'=>"OK",
+                            ];
+                            return $return_xml;
+                        }
+                        if (($order['pay_money'] * 100) == $param['total_fee']) {
+                            //更改订单状态
+                            $order->status   = 1;
+                            $order->pday     = date('Ymd');
+                            $order->pay_time = date('Y-m-d H:i:s');
+                            $order->save();
+                            //给用户增加金额
+                            $user_record = UserRecordModel::where('openid', $param['openid'])->find();
+                            if ($user_record) {
+                                // $user_record->money       = $user_record->money + $order['pay_money'];
+                                // $user_record->total_money = $user_record->total_money + $order['pay_money'];
+                                $user_record->money       = ['inc', $order['pay_money']];
+                                $user_record->total_money = ['inc', $order['pay_money']];
+                                $user_record->save();
+
+                                //判断是否存在上级
+                                $relation_info = UserRelationListModel::where('user_id', $user_record['user_id'])->find();
+                                if ($relation_info) {
+                                    $config_data = $this->configData;
+                                    $br_money    = $order['pay_money'] * $config_data['one_distribution_br'];
+                                    //添加分销记录
+                                    $user_relation_record            = new UserRelationRecordModel();
+                                    $user_relation_record->user_id   = $user_record['user_id'];
+                                    $user_relation_record->pid       = $relation_info['pid'];
+                                    $user_relation_record->br        = $config_data['one_distribution_br'];
+                                    $user_relation_record->pay_money = $order['pay_money'];
+                                    $user_relation_record->dis_money = $br_money;
+                                    $user_relation_record->save();
+                                    $relation_pid_record = UserRecordModel::where('user_id', $relation_info['pid'])->find();
+                                    if ($relation_pid_record) {
+                                        //给上级增加分销金额
+                                        $relation_pid_record->dis_money = ['inc', $br_money];
+                                        $relation_pid_record->save();
+                                    }
+                                }
+                            }
+                            Db::commit();
+                            // $return_xml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+                            $return_xml = [
+                                'return_code'=>"SUCCESS",
+                                'return_msg'=>"OK",
+                            ];
+                            return $return_xml;
+                        } else {
+                            //更改订单状态
+                            $order->status   = 2;
+                            $order->pday     = date('Ymd');
+                            $order->pay_time = date('Y-m-d H:i:s');
+                            $order->save();
+                            Db::commit();
+                            return false;
+                        }
+                    } else {
+                        trace($trade_no . '-' . $order, 'error');
+                        Db::rollback();
+                        return false;
+                    }
+                } catch (\Exception $e) {
+                    lg($e);
+                    Db::rollback();
+                }
+            } else {
+                trace($sign . '-' . $notify_sign, 'error');
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

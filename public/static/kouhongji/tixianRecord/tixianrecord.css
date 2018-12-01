@@ -1,0 +1,61 @@
+.body{
+    background: #efeff4;
+    padding-top: 0.2rem;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+  }
+  .list{
+    border-bottom:1px solid #eee;
+    background-color: #fff;
+    padding:0.2rem 0.3rem;
+    box-sizing: border-box;
+  }
+  .list .orderNo{
+    color:#333;
+    font-size: 0.3rem;
+    margin-bottom: 0.04rem;
+  }
+  .list .money{
+    color:#999;
+    font-size: 0.3rem;
+    margin-bottom: 0.04rem;
+  }
+  .list .time{
+    font-size: 0.24rem;
+    color:#999;
+  }
+   .list .success_btn{
+    font-size: 0.28rem;
+    color:#03bc01;
+    width: 1.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    border-radius:40px;
+    border:1px solid #03bc01;
+    box-sizing: border-box;
+    text-align: center;
+    margin-top: 0.3rem;
+  } 
+  .noRecord {
+    text-align: center;
+    width: 100%;
+    margin: 0.6rem 0;
+    color: #888888;
+    font-size: 0.3rem;
+}
+  .kf_tips{
+    position: fixed;
+    bottom:1.2rem;
+    right:0.4rem;
+    width:1.2rem;
+    height: 1.2rem;
+    border-radius:50%;
+    background: #03bc01;
+    color:#fff;
+    font-size: 0.28rem;
+    text-align: center;
+    line-height: 1.2rem;
+  }
+
+  

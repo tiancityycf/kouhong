@@ -27,7 +27,7 @@ class UserGoods
             if (!empty($exist)) {
                 return ['status' => 0, 'msg' => '已领取'];
             }
-
+            $data['goods_id'] = $log['goods_id'];
 			$this->user_goods_log($data);
 			Db::commit();
 			return ['status' => 1];

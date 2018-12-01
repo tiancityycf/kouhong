@@ -41,4 +41,18 @@ class WxPay extends BasicController
         $result = $wx_pay_service->unifiedorderNotify($xml);
         echo $result;
     }
+
+    /**
+     * 下单回调测试
+     * @return string
+     */
+    public function unifiedorderNotifyTest()
+    {
+        $data = Request::param();
+
+        $wx_pay_service = new WxPayService($this->configData);
+        $result         = $wx_pay_service->unifiedorderNotifyTest($data);
+
+        return result(200, 'ok', $result);
+    }
 }

@@ -32,11 +32,11 @@
             <div class='bg'>
                 <image class='success_img' src='https://txcdn.ylll111.xyz/hzttk/icon-finish.png'></image>
                 <div class='title'>提现单号</div>
-                <div class='txt'>点击下方复制单号提现</div>
+                <div class='txt'>复制下方单号去提现</div>
                 <div class='no1'>
                     <div class='con'>{{orderNo}}</div>
                     <input type="text" v-model="orderNo2" id="orderInput">
-                    <button class='fuzhi_btn' @click="fuzhi">复制单号</button>
+                    <div class='fuzhi_btn' @click="fuzhi">复制单号</div>
                 </div>
                 <image class='close' src='https://txcdn.ylll111.xyz/hzttk/tixian_close.png' @click='closeTk'></image>
             </div>

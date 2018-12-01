@@ -14,16 +14,16 @@
 
 <body>
     <div class="body" id="vm">
-        <div class="order" v-if="orderList.length" v-for="item of orderList" v-cloak> 
+        <div class="order" v-if="orderList.length" v-for="item of orderList" v-cloak>
             <div class="goods flex">
                 <image :src="item.img"></image>
                 <div class="detail column">
                     <div class="model between">
                         <div>{{item.cate_name}}</div>
                         <div v-if="item.successed==0" style='color:gray;'>未中奖</div>
-                        <div v-if="item.status==0&&item.successed==1" style='color:orange;'>待发货</div>
-                        <div v-if="item.status==1&&item.successed==1" style='color:green;'>已发货</div>
-                        <!-- <div v:if="!item.status&&item.status!=0&&item.successed==1">领奖</div> -->
+                        <div v-if="item.status==1&&item.successed==1" style='color:orange;'>待发货</div>
+                        <div v-if="item.status==2&&item.successed==1" style='color:green;'>已发货</div>
+                        <div v-if="item.status==0&&item.successed==1" @click="linqu(item.id)">领奖</div>
                     </div>
                     <div class="name">{{item.title}}</div>
                     <div class="orderstatus">{{item.successed==1?"挑战成功":"挑战失败"}}</div>
@@ -32,6 +32,29 @@
             <div class="express">订单编号：{{item.trade_no}}</div>
         </div>
         <div class="nogoods" v-if="!orderList.length" v-cloak>- - - 暂无订单 - - -</div>
+        <!-- 收货地址 -->
+        <div class="userAddress" v-if="tkShow" v-cloak>
+            <div class="bg">
+                <div class="title">请填写领取信息</div>
+                <div class="name">
+                    <div class="tit">收货人姓名</div>
+                    <input type="text" v-model="name" />
+                </div>
+                <div class="phone">
+                    <div class="tit">收货人电话</div>
+                    <input type="number" v-model="phone"  />
+                </div>
+                <div class="address">
+                    <div class="tit">收货人地址</div>
+                    <input type="text" v-model="address" />
+                </div>
+                <div class="submit" @click="submit">确定提交</div>
+                <div class="close" @click="closeTk">✕</div>
+            </div>
+        </div>
+        <div class="loading" v-show="loadShow" v-cloak>
+            <div class="bg"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
+        </div>
     </div>
 </body>
 

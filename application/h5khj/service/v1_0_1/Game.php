@@ -134,6 +134,20 @@ class Game
             $user_id = intval($data['user_id']);
 //            $result = ChallengeLogModel::where('a.user_id',$data['user_id'])->order("id desc")->select();
             $result = Db::query("select a.*,b.title,b.img,c.status,d.cate_name from t_challenge_log a left join t_goods b on a.goods_id=b.id left join t_good_cates d on b.cate=d.id left join t_user_goods c on a.id=c.challenge_id where a.user_id={$user_id} order by a.id desc");
+            if(!empty($result)){
+                foreach ($result as $key => $value) {
+                    if(isset($value['status'])){
+                        if($value['status'] == 1){
+                            $result[$key]['status'] = 2;
+                        }
+                        if($value['status'] == 0){
+                            $result[$key]['status'] = 1;
+                        }
+                    }else{
+                        $result[$key]['status'] = 0;
+                    }
+                }
+            }
             return $result;
         } catch (\Exception $e) {
             Db::rollback();

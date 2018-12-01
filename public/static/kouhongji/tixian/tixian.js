@@ -9,9 +9,9 @@ var o = new Vue({
         orderNo: "",
         kfTkShow: false,
         loadShow:false,
-        canClick:false,
         bindKeyInput:"",
-        orderNo2:""
+        orderNo2:"",
+        canclick:false
     },
     created: function () {
         this.user_amount=localStorage.getItem("dis_money");
@@ -27,8 +27,9 @@ var o = new Vue({
             o.bindKeyInput=o.user_amount;
             o.tixian_amount=parseFloat(o.user_amount)
         },
-        fuzhi: function () {
+        fuzhi: function () { 
             $("#orderInput").focus();
+            $("#orderInput").setSelectionRange(0, $("#orderInput").value.length);
             document.execCommand("Copy");
             o.tkShow=false;
             o.kfTkShow=true;
@@ -77,12 +78,11 @@ var o = new Vue({
         },
         wxTixian:function(){
             setTimeout(function(){
-                o.canClick=true
+                o.canclick=true;
             },1000)
-            if(!o.canClick){
-                return;
+            if(o.canclick){
+                location.href="http://wxpay.wudee.cc/api/v1_3/wxpay/index"
             }
-            location.href="http://wxpay.wudee.cc/api/v1_3/wxpay/index"
         },
         gotixianRecord:function(){
             location.href="../tixianRecord/tixianRecord.html"
@@ -92,8 +92,8 @@ var o = new Vue({
         },
         closeTk:function(){
             o.tkShow= false;
-            o.kfTkShow= false;
-            o.canClick=false;  
+            o.kfTkShow= false; 
+            o.canclick=false;
         }
     }
 })
