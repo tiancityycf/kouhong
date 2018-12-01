@@ -46,15 +46,15 @@
                 </div>
             </div>
             <div class="order" @click="goOrder">
-                <div>我的挑战</div>
+                <div>我的挑战记录</div>
                 <image src="__STATIC__/kouhongji/image/right.png"></image>
             </div>
             <div class="order" @click="codePoster">
-                <div>我的海报</div>
+                <div>我的推广海报</div>
                 <image src="__STATIC__/kouhongji/image/right.png"></image>
             </div>
             <div class="order" @click="tixian">
-                <div>佣金提现</div>
+                <div>推广佣金提现</div>
                 <image src="__STATIC__/kouhongji/image/right.png"></image>
             </div>
             <div class="footer">
@@ -72,7 +72,9 @@
             <div class="bg"><img src="__STATIC__/kouhongji/image/loading.gif"></div>
         </div>
         <canvas id="myCanvas"></canvas>
-        <image class="qrcodeImg" :src="posterImg" v-if="posterImgShow" @click="closeImg"></image>
+        <div class="qrcodeImgBox" v-if="posterImgShow" @click="closeImg" v-cloak>
+            <image class="qrcodeImg" :src="posterImg" v-if="posterImgShow" @click="closeImg"></image>
+        </div>
     </div>
 </body>
 

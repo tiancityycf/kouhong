@@ -140,10 +140,18 @@ body{
     top:0;
     left:-100%;
 }
-.qrcodeImg{
+.qrcodeImgBox{
+    position: fixed;
     width: 100%;
     height: 100%;
-    position: fixed;
     top:0;
     left:0;
+    background: rgba(0,0,0,0.8);
+}
+.qrcodeImg{
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
 }
