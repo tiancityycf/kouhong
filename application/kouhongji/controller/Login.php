@@ -24,10 +24,14 @@ class Login extends controller
         $wx_user_info_url = config('wx_user_info_url');
         //跳转地址
         $redirect_uri = urlencode(config('login_domain'));
-        if (isset($data['pid']) && $data['pid'] != '') {
-            $state = $data['pid'];
+        if (isset($data['state'])) {
+            $state = $data['state'];
         } else {
-            $state = '';
+            if (isset($data['pid']) && $data['pid'] != '') {
+                $state = $data['pid'];
+            } else {
+                $state = '';
+            }
         }
         trace('state=' . $state, 'error');
         //判断code是否存在
