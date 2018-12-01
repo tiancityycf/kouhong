@@ -39,7 +39,7 @@ class User extends Controller
         $user_info['count'] = Db::name('challenge_log')->where($where)->count();
         $user_info['limit'] = isset($this->configData['success_num']) ? $this->configData['success_num'] : 0;
         if (!isset($user_info['qr_img']) || $user_info['qr_img'] == '') {
-            $login_url = Config::get('login_domain') . '?user_id=' . $data['user_id'];
+            $login_url = Config::get('login_domain') . '?pid=' . $data['user_id'];
             //生成二维码
             $img_data = createQr($login_url);
             //保存二维码到云存储
