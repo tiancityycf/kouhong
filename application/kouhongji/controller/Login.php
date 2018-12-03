@@ -33,7 +33,6 @@ class Login extends controller
                 $state = '';
             }
         }
-        trace('state=' . $state, 'error');
         //判断code是否存在
         if (isset($data['code']) && $data['code'] != '') {
             //获取access_token
@@ -93,10 +92,7 @@ class Login extends controller
                         $userRecord->user_status = 1;
                         $userRecord->save();
                         //判断是否邀请关联
-                        trace('user_id=' . $user->id, 'error');
-                        trace('pid=' . $state, 'error');
                         if (isset($state) && $state != '') {
-                            trace('pid=' . $state, 'error');
                             $user_relation_list = UserRelationListModel::where('user_id', $user->id)->find();
                             if (!$user_relation_list) {
                                 $user_relation_list          = new UserRelationListModel();
