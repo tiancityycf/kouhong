@@ -1,8 +1,8 @@
 <?php
 
-namespace app\khj\controller\api\v1_0_1;
+namespace app\khj2\controller\api\v1_0_1;
 
-use app\khj\service\v1_0_1\DailyTask as DailyTaskService;
+use app\khj2\service\v1_0_1\DailyTask as DailyTaskService;
 use controller\BasicController;
 use think\facade\Request;
 

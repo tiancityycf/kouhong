@@ -67,7 +67,7 @@ class User
                     $user->save();
                     $user->userRecord->last_login = $time;
                     $user->userRecord->save();
-
+                    $is_new = 0;
                 } else {
                     $user = new UserModel();
                     $user->openid = $data['openid'];
@@ -86,6 +86,7 @@ class User
                         $userRecord->user_status = 1;
                     }
                     $userRecord->save();
+                    $is_new = 1;
                 }
                 Db::commit();
             } catch (\Exception $e) {
@@ -104,6 +105,7 @@ class User
                 'openid' => $data['openid'],
                 'user_status' => 1,
                 'money'=>$record["money"],
+                'is_new'      => $is_new,
             ];
         } else {
             trace("login error ".json_encode($data),'error');

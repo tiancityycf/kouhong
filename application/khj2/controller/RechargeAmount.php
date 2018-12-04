@@ -3,9 +3,21 @@ namespace app\khj2\controller;
 
 use controller\BasicAdmin;
 use app\khj2\model\RechargeAmount as RechargeAmountModel;
+use app\khj2\validate\RechargeAmount as RechargeAmountValidate;
 
 class RechargeAmount extends BasicAdmin
 {
+    //字段验证
+    protected function checkData($data)
+    {
+        $validate = new RechargeAmountValidate();
+
+        if (!$validate->check($data)) {
+            $this->error($validate->getError());
+        }
+
+        return true;
+    }
 
     public function index()
     {
@@ -24,7 +36,7 @@ class RechargeAmount extends BasicAdmin
         $data = $this->request->post();
         if ($data) {
             $model = new RechargeAmountModel();
-            if ($model->save($data) !== false) {
+            if ($this->checkData($data) === true && $model->save($data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
@@ -42,7 +54,7 @@ class RechargeAmount extends BasicAdmin
 
         $post_data = $this->request->post();
         if ($post_data) {
-            if ($vo->save($post_data) !== false) {
+            if ($this->checkData($post_data) === true && $vo->save($post_data) !== false) {
                 $this->success('恭喜, 数据保存成功!', '');
             } else {
                 $this->error('数据保存失败, 请稍候再试!');
