@@ -4,7 +4,6 @@ namespace app\xtxpd\controller;
 use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
-use think\cache\driver\Redis;
 use think\facade\Cache;
 
 class Tpfig extends BasicAdmin
