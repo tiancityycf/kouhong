@@ -27,7 +27,7 @@ return [
 //    'ad_url'=>'http://gg.com:8083',
 
 
-    'config_key'         => 'config_info',
+    'config_key'         => 'khj2:config_info',
 
     //异常系统接入参数
     'system_title'        => '红唇秀第二版',

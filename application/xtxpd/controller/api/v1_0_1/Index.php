@@ -16,7 +16,6 @@ class Index extends BasicController
      * 拉去首页配置 审核开关等
      * @return json
      */
-
     public function index()
     {
         //前台测试链接：https://xtxpd.wqop2018.com/xtxpd/api/v1_0_1/index/index
