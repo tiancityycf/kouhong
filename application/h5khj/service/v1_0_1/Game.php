@@ -35,7 +35,7 @@ class Game
 
             if ($userRecord->money < $goods->price) {
                 Db::rollback();
-                trace("余额不足 goods_id=".$data['goods_id'].' user_id='.$data['user_id'],'error');
+                trace("余额不足 goods_id=".$data['goods_id'].' user_id='.$data['user_id'],'info');
                 return ['status' => 0, 'msg' => '余额不足'];
             }
 
