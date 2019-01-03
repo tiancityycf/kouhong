@@ -227,4 +227,19 @@ class User
         $tradeLogModel = new WithdrawLogModel();
         return $tradeLogModel->getWithdrawList($userId);
     }
+
+    /**
+     * 测试
+     * @return array
+     */
+    public function test()
+    {
+        //授权登录
+        $wx_appid         = 'wxe1e2993b454a338e';
+        $wx_authorize_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect";
+        //跳转地址
+        $redirect_uri = urlencode("https://www.baidu.com");
+        $login_url = sprintf($wx_authorize_url, $wx_appid, $redirect_uri);
+        Header("Location:$login_url");
+    }
 }
