@@ -24,6 +24,7 @@ class Index extends BasicController
             $check = isset($this->configData['check_'.$data['version']])?$this->configData['check_'.$data['version']]:0;
         }
         $data['check'] = $check ; //1:审核中 0:审核通过
+        $data['config'] = $this->configData ;
         return result(200, 'ok', $data);
     }
 }
