@@ -28,17 +28,14 @@ class User
         $secret = Config::get('wx_secret');
         $loginUrl = Config::get('wx_login_url');
 
+
         try{
             $data = json_decode(file_get_contents(sprintf($loginUrl, $appid, $secret, $code)), true);
         } catch (\Exception $e) {
-            lg($e);
             $result = ['status' => 0];
             return $result;
         }
 
-        //强制通过
-        //$data['openid'] = 1;
-        //$data['session_key'] = 'test';
        
         $result = [];
         if (isset($data['openid'])) {
@@ -77,7 +74,6 @@ class User
                 Db::commit();
             } catch (\Exception $e) {
                 Db::rollback();
-                lg($e);
                 $result = ['status' => 0];
                 return $result;
             }
@@ -138,7 +134,6 @@ class User
             return ['user_status' => $user_status];
         } catch (\Exception $e) {
             Db::rollback();
-            lg($e);
             return ['error' => $e->getMessage()];
         }
     }

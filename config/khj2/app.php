@@ -9,6 +9,8 @@ return [
     // 微信设置
     'wx_appid'            => 'wx36d249695ef0c93c',
     'wx_secret'           => 'daa45d4f334828c2a37dfc11d47564df',
+    'wx_login_url'        => "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
+
 
     'exception_handle' => '\\exception\\ExceptionHandle', //自定义异常捕获类
 
