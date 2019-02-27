@@ -22,21 +22,10 @@ class User
      * 用户登录
      * @return array
      */
-    public function login($code, $appid,$from_type = 0)
+    public function login($code)
     {
-        if(isset($appid)){
-            $applist = Config::get('applist');
-            if(isset($applist[$appid])){
-                $appid = $appid;
-                $secret =$applist[$appid];
-            }else{
-                $result = ['status' => 0,'msg'=>'不能识别的appid'];
-                return $result;
-            }
-        }else{
-            $appid = Config::get('wx_appid');
-            $secret = Config::get('wx_secret');
-        }
+        $appid = Config::get('wx_appid');
+        $secret = Config::get('wx_secret');
         $loginUrl = Config::get('wx_login_url');
 
         try{
@@ -80,11 +69,8 @@ class User
                     $userRecord->openid = $data['openid'];
                     $userRecord->gold = 0;
                     $userRecord->last_login = $time;
-                    if ($from_type == 1) {
-                        $userRecord->user_status = 2;
-                    } else {
-                        $userRecord->user_status = 1;
-                    }
+                    $userRecord->user_status = 1;
+
                     $userRecord->save();
                     $is_new = 1;
                 }
