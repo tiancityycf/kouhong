@@ -218,6 +218,7 @@ class User
 			$m->ad_id = $data['ad_id'];
 			$m->user_id = $data['user_id'];
 			$m->is_end = $data['is_end'];
+			$m->create_time = time();
 			$m->save();
 			return true;
 		} catch (\Exception $e) {
