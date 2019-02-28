@@ -68,32 +68,54 @@ class User extends BasicController
 	}
 
 	/**
-	 * 提现
 	 * @return boolean
 	 */
-	public function withdraw()
+	public function friend()
 	{
-		require_params('user_id', 'amount');
+		require_params('user_id');
 		$data = Request::param();
 
 		$userService = new UserService();
-		$result = $userService->withdraw($data);
+		$result = $userService->friend($data);
+
+		return result(200, 'ok', $result);
+	}
+	/**
+	 * @return boolean
+	 */
+	public function video()
+	{
+		require_params('user_id','ad_id','is_end');
+		$data = Request::param();
+
+		$userService = new UserService();
+		$result = $userService->video($data);
+
+		return result(200, 'ok', $result);
+	}
+	/**
+	 * @return boolean
+	 */
+	public function playtimes()
+	{
+		require_params('user_id');
+		$data = Request::param();
+
+		$userService = new UserService();
+		$result = $userService->playtimes($data);
+
+		return result(200, 'ok', $result);
+	}
+	/**
+	 * @return boolean
+	 */
+	public function broadcast()
+	{
+
+		$userService = new UserService();
+		$result = $userService->broadcast();
 
 		return result(200, 'ok', $result);
 	}
 
-	/**
-	 * 提现记录
-	 * @return array
-	 */
-	public function withdrawList()
-	{
-		require_params('user_id');
-		$userId = Request::param('user_id');
-
-		$userService = new UserService();
-		$withdrawList = $userService->getWithdrawList($userId);
-
-		return result(200, 'ok', ['withdraw_list' => $withdrawList]);
-	}
 }

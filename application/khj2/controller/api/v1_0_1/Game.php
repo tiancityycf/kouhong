@@ -14,29 +14,17 @@ use app\khj2\service\v1_0_1\Game as GameService;
 
 /**
  * 游戏控制类
- *
- * @author 625575737@qq.com
  */
 class Game extends BasicController
 {
-	public function start()
-	{
-		require_params('user_id', 'goods_id');
-		$data = Request::param();
-
-		$game_service = new GameService($this->configData);
-		$result = $game_service->start($data);
-
-		return result(200, 'ok', $result);
-	}
 
 	public function end()
 	{
-		require_params('user_id', 'challenge_id', 'goods_id', 'is_win','sign');
+		require_params('user_id', 'success', 'sign','timestamp');
         $data = Request::param();
 
         if($this->sign($data)){
-            $game_service = new GameService($this->configData);
+            $game_service = new GameService();
             $result = $game_service->end($data);
         }else{
             $result =  [
@@ -47,13 +35,13 @@ class Game extends BasicController
 		return result(200, 'ok', $result);
 	}
 
-    public function challenge_log()
+    public function lipstick()
     {
         require_params('user_id');
         $data = Request::param();
 
-        $game_service = new GameService($this->configData);
-        $result = $game_service->challenge_log($data);
+        $game_service = new GameService();
+        $result = $game_service->lipstick($data);
 
         return result(200, 'ok', $result);
     }
@@ -61,8 +49,8 @@ class Game extends BasicController
     private function sign($data)
     {
         //游戏结束 调用 end的接口  再加个参数 sign
-        //算法如下：md5("user_id="+user_id+"challenge_id="+challenge_id+"goods_id="+goods_id+"is_win="+is_win);
-        $sign = md5("user_id=".$data['user_id']."challenge_id=".$data['challenge_id']."goods_id=".$data['goods_id']."is_win=".$data['is_win']);
+        //算法如下：md5("user_id="+user_id+"timestamp="+timestamp);
+        $sign = md5("user_id=".$data['user_id']."timestamp=".$data['timestamp']);
         if($sign==$data['sign']){
             return true;
         }
