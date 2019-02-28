@@ -13,7 +13,13 @@
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">用户openid</label>
+        <label class="layui-form-label">用户id</label>
+        <div class="layui-input-inline">
+            <input name="user_id" value="{$Think.get.user_id|default=''}"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">openid</label>
         <div class="layui-input-inline">
             <input name="openid" value="{$Think.get.openid|default=''}"  class="layui-input">
         </div>
@@ -37,7 +43,6 @@
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 </form>
-<a href="/qmxz/order/export_excel.html" class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe605;</i> 导出数据并生成EXCEL</a>
 
 </div>
 <form onsubmit="return false;" data-auto="true" method="post">
@@ -50,12 +55,9 @@
             <th class='text-left nowrap'>操作</th>
             <th class='text-left nowrap'>订单ID</th>
             <th class='text-left nowrap'>用户头像</th>
-            <th class='text-left nowrap'>用户openid</th>
-            <th class='text-left nowrap'>商品名称</th>
-            <th class='text-left nowrap'>商品图片</th>
-            <th class='text-left nowrap'>寄送地址</th>
-            <th class='text-left nowrap'>收件人姓名</th>
-            <th class='text-left nowrap'>联系电话</th>
+            <th class='text-left nowrap'>用户id</th>
+            <th class='text-left nowrap'>openid</th>
+            <th class='text-left nowrap'>昵称</th>
             <th class='text-left nowrap'>发货状态</th>
             <th class='text-left nowrap'>兑换时间</th>
             
@@ -67,7 +69,11 @@
             <td>
                 {if auth("$classuri/edit")}
                 <span class="text-explode">|</span>
-                <button type="button" class='ship layui-btn' value="{$vo.id}" >去发货</button>
+                 {if condition="$vo.status == 1"}
+                 <span style="color: green;font-weight: bold;font-size: 15px;">已发货</span>
+                 {else}
+				 <button type="button" class='ship layui-btn' value="{$vo.id}" >去发货</button>
+                 {/if}
                
                 {/if}
                 
@@ -79,22 +85,13 @@
                 <img id="img" data-tips-image style="height:auto;max-height:50px;min-width:50px" src='{$vo.avatar}' />
             </td>
             <td class='text-left nowrap'>
+                {$vo.user_id}
+            </td>
+            <td class='text-left nowrap'>
                 {$vo.openid}
             </td>
             <td class='text-left nowrap'>
-                {$vo.title}
-            </td>
-            <td class='text-left nowrap'>
-                <img id="img" data-tips-image style="height:auto;max-height:50px;min-width:50px" src='{$vo.img}' />
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.region}——{$vo.addr}
-            </td>
-            <td class='text-left nowrap'>
                 {$vo.nickname}
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.phone}
             </td>
             
             <td class='text-left nowrap'>

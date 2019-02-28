@@ -11,7 +11,23 @@ class UserLipstick extends Model
     {
     	$query = self::buildQuery();
   
-        $query->order('id desc');
+		$query->alias('e');
+
+		if(!empty($params['user_id'])){
+			$query->where('e.user_id', $params['user_id']);
+		}
+		if(!empty($params['openid'])){
+			$query->where('u.openid', $params['openid']);
+		}
+		if(isset($params['status'])){
+			$query->where('e.status', $params['status']);
+		}
+
+        $query->field('e.*,u.openid,u.nickname,u.avatar');
+
+        $query->join(['t_user'=>'u'],'e.user_id=u.id');
+
+        $query->order('e.id desc');
 
         return $query;
     }

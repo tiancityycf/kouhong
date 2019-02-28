@@ -23,6 +23,9 @@ class User extends Model
         if (isset($params['openid']) && $params['openid'] !== '') {
         	$query->whereLike('u.openid', "%{$params['openid']}%");
         }
+        if (isset($params['invite_id']) && $params['invite_id'] !== '') {
+        	$query->where('u.invite_id', $params['invite_id']);
+        }
 
         if (isset($params['nickname']) && $params['nickname'] !== '') {
         	$query->whereLike('u.nickname', "%{$params['nickname']}%");
