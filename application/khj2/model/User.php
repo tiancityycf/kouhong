@@ -16,7 +16,7 @@ class User extends Model
     	$query = self::buildQuery();
     	$query->alias('u');
 
-    	$query->field('u.id, u.openid, u.nickname,ur.gender, ur.money, ur.gold, ur.gold');
+		$query->field('u.*');
 
     	$query->join(['t_user_record'=>'ur'],'ur.user_id=u.id');
 

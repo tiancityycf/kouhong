@@ -24,19 +24,6 @@
             <input name="nickname" value="{$Think.get.nickname|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">金币值</label>
-        <div class="layui-input-inline">
-            <input name="gold" value="{$Think.get.gold|default=''}" placeholder="搜索出大于你填入的数字的数据" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">金额</label>
-        <div class="layui-input-inline">
-            <input name="money" value="{$Think.get.money|default=''}" placeholder="搜索出大于你填入的数字的数据" class="layui-input">
-        </div>
-    </div>
 
     <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
@@ -55,18 +42,15 @@
             <th class='text-left nowrap'>openid</th>
             <th class='text-left nowrap'>昵称</th>
             <th class='text-left nowrap'>性别</th>
-            <th class='text-left nowrap'>金币值</th>
-            <th class='text-left nowrap'>金额</th>
-           
+            <th class='text-left nowrap'>邀请人ID</th>
+            <th class='text-left nowrap'>免费次数</th>
+            <th class='text-left nowrap'>邀请次数</th>
     	</tr>
     	</thead>
     	<tbody>
     	<!--{foreach $list as $key=>$vo}-->
     	<tr>
             <td>
-               
-                <span class="text-explode">|</span>
-                 <a data-title="收货地址" data-modal='{:url("$classuri/address")}?openid={$vo.openid}'>收货地址</a>
                  
             </td>
             <td class='text-left nowrap'>
@@ -84,15 +68,21 @@
                 {else /}
                 女
                 {/if}
-
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.invite_id}
             </td>
        
             <td class='text-left nowrap'>
-                {$vo.gold}
+                {if condition="$vo.free_used == 1"}
+                已使用
+                {else /}
+                未使用
+                {/if}
             </td>
 
             <td class='text-left nowrap'>
-               {$vo.money}
+               {$vo.invite_times}
             </td>
             
         </tr>

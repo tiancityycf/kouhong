@@ -26,6 +26,7 @@ class User
 		$appid = Config::get('wx_appid');
 		$secret = Config::get('wx_secret');
 		$loginUrl = Config::get('wx_login_url');
+		$gameid = Config::get('game_id');
 
 
 		try{
@@ -92,6 +93,7 @@ class User
 				'user_id' => $user->id,
 				'last_login' => $time,
 				'openid' => $data['openid'],
+				'showid' => $data['openid']."-".$game_id,
 				'user_status' => 1,
 				];
 		} else {
