@@ -43,9 +43,10 @@ class User extends BasicController
 		//前台测试链接：https://khj2.wqop2018.com/khj2/api/v1_0_1/user/login.html?code=1&sign=d7e197d95a418afdc1914bd0e32a94b2&timestamp=1
 		require_params('code');
 		$code = Request::param('code');
+		$invite_id = Request::param('invite_id');
 	
 		$userService = new UserService();
-		$result = $userService->login($code);
+		$result = $userService->login($code,$invite_id);
 
 		return result(200, 'ok', $result);
 	}

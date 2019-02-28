@@ -22,7 +22,7 @@ class User
      * 用户登录
      * @return array
      */
-    public function login($code)
+	public function login($code,$invite_id)
     {
         $appid = Config::get('wx_appid');
         $secret = Config::get('wx_secret');
@@ -49,6 +49,7 @@ class User
                 if (!empty($user)) {
                     $user->update_time = $time;
                     $user->session_key = $data['session_key'];
+                    $user->invite_id = $invite_id?$invite_id:0;
                     
                     $user->save();
                     $user->userRecord->last_login = $time;
@@ -59,6 +60,7 @@ class User
                     $user->openid = $data['openid'];
                     $user->create_time = $time;
                     $user->session_key = $data['session_key'];
+                    $user->invite_id = $invite_id?$invite_id:0;
                     $user->save();
                     //新用户初始化金币的值
                     $userRecord = new UserRecordModel();
