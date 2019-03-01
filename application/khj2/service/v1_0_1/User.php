@@ -26,14 +26,20 @@ class User
 		$appid = Config::get('wx_appid');
 		$secret = Config::get('wx_secret');
 		$loginUrl = Config::get('wx_login_url');
-		$gameid = Config::get('game_id');
+		$game_id = Config::get('game_id');
 
 
-		try{
-			$data = json_decode(file_get_contents(sprintf($loginUrl, $appid, $secret, $code)), true);
-		} catch (\Exception $e) {
-			$result = ['status' => 0];
-			return $result;
+		$test = 0;
+		if($test==1){
+			$data['openid'] = 1;
+			$data['session_key'] = 1;
+		}else{
+			try{
+				$data = json_decode(file_get_contents(sprintf($loginUrl, $appid, $secret, $code)), true);
+			} catch (\Exception $e) {
+				$result = ['status' => 0];
+				return $result;
+			}
 		}
 
 
@@ -82,7 +88,8 @@ class User
 				Db::commit();
 			} catch (\Exception $e) {
 				Db::rollback();
-				$result = ['status' => 0];
+				$result = ['errcode' => 1,'errmsg'=>$e->getMessage()];
+				trace("login error ".$e->getMessage(),'error');
 				return $result;
 			}
 
@@ -98,7 +105,7 @@ class User
 				];
 		} else {
 			trace("login error ".json_encode($data),'error');
-			$result = ['status' => 0];
+			$result = ['errcode' => 1,'errmsg'=>'请求微信服务器失败'];
 		}
 
 		return $result;
@@ -152,6 +159,9 @@ class User
 	 */
 	public function friend($data)
 	{
+		if(empty($data['user_id'])){
+			return ['errcode' => 1,'errmsg'=>'用户ID不能为空'];
+		}
 		try {
 			$userRecord = UserModel::where('invite_id', $data['user_id'])->field("nickname,avatar")->select();
 			return $userRecord;

@@ -1,0 +1,74 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+{/block}
+{block name="content"}
+<div class="layui-form-item layui-inline">
+
+
+</div>
+<div class="layui-form-item layui-inline" style="margin-left: 30px;">
+
+<form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">用户id</label>
+        <div class="layui-input-inline">
+            <input name="user_id" value="{$Think.get.user_id|default=''}"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">openid</label>
+        <div class="layui-input-inline">
+            <input name="openid" value="{$Think.get.openid|default=''}"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+
+</div>
+<form onsubmit="return false;" data-auto="true" method="post">
+	<!--{empty name='list'}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <table class="layui-table" lay-skin="line">
+    	<thead>
+		<tr>
+            <th class='text-left nowrap'>操作</th>
+            <th class='text-left nowrap'>ID</th>
+            <th class='text-left nowrap'>用户id</th>
+            <th class='text-left nowrap'>adid</th>
+            <th class='text-left nowrap'>时间</th>
+    	</tr>
+    	</thead>
+    	<tbody>
+    	<!--{foreach $list as $key=>$vo}-->
+    	<tr>
+            <td>
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.user_id}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.ad_id}
+            </td>
+            
+            <td class='text-left nowrap'>
+                {$vo.create_time}
+            </td>
+            
+        </tr>
+    	<!--{/foreach}-->
+    	</tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/empty}-->
+    <script>window.form.render();</script>
+</form>
+{/block}
