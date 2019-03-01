@@ -56,10 +56,7 @@ class User
 					$user->update_time = $time;
 					$user->session_key = $data['session_key'];
 					$user->invite_id = $invite_id?$invite_id:0;
-
 					$user->save();
-					$user->userRecord->last_login = $time;
-					$user->userRecord->save();
 				} else {
 					$user = new UserModel();
 					$user->openid = $data['openid'];
@@ -126,29 +123,29 @@ class User
 			if(empty($user)){
 				Db::rollback();
 				trace($userModel->getLastSql(),'error');
-				return ['error' => '用户不存在'];
+				return ['errcode'=>1,'errmsg' => '用户不存在'];
 			}
 			//dump($user);die;
 			$user->nickname = $data['nickname'];
 			$user->avatar = $data['avatar'];
 			$user->gender = $data['gender'];
 			$user->update_time = $time;
-			$user->userRecord->nickname = $data['nickname'];
-			$user->userRecord->avatar = $data['avatar'];
-			$user->userRecord->update_time = $time;
-			$user->userRecord->gender = $data['gender'];
+			//$user->userRecord->nickname = $data['nickname'];
+			//$user->userRecord->avatar = $data['avatar'];
+			//$user->userRecord->update_time = $time;
+			//$user->userRecord->gender = $data['gender'];
 
 			$user->save();
-			$user->userRecord->save();
+			//$user->userRecord->save();
 
 			Db::commit();
 
-			$user_status = $user->userRecord->user_status;
+			//$user_status = $user->userRecord->user_status;
 
-			return ['user_status' => $user_status];
+			return ['errcode'=>0,'user_status' => 1];
 		} catch (\Exception $e) {
 			Db::rollback();
-			return ['error' => $e->getMessage()];
+			return ['errcode'=>1,'errmsg' => $e->getMessage()];
 		}
 	}
 

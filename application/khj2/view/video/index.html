@@ -13,15 +13,15 @@
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">用户id</label>
+        <label class="layui-form-label">时间范围</label>
         <div class="layui-input-inline">
-            <input name="user_id" value="{$Think.get.user_id|default=''}"  class="layui-input">
+			<input name="create_time" id='create_time' value="{$Think.get.create_time|default=''}" placeholder="请选择时间" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">openid</label>
         <div class="layui-input-inline">
-            <input name="openid" value="{$Think.get.openid|default=''}"  class="layui-input">
+			<input name="openid" value="{$Think.get.openid|default=''}" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
@@ -38,37 +38,48 @@
     	<thead>
 		<tr>
             <th class='text-left nowrap'>操作</th>
-            <th class='text-left nowrap'>ID</th>
             <th class='text-left nowrap'>用户id</th>
-            <th class='text-left nowrap'>adid</th>
-            <th class='text-left nowrap'>时间</th>
+            <th class='text-left nowrap'>openid</th>
+            <th class='text-left nowrap'>观看次数</th>
     	</tr>
     	</thead>
     	<tbody>
     	<!--{foreach $list as $key=>$vo}-->
+		<?php
+		$total = 0;  //总点击统计
+		$total += $vo['c'];
+		?>
     	<tr>
             <td>
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.id}
             </td>
             <td class='text-left nowrap'>
                 {$vo.user_id}
             </td>
             <td class='text-left nowrap'>
-                {$vo.ad_id}
+                {$vo.openid}
             </td>
             
             <td class='text-left nowrap'>
-                {$vo.create_time}
+                {$vo.c}
             </td>
             
         </tr>
     	<!--{/foreach}-->
+ <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class='text-left nowrap'>
+            <?php echo "总观看:".$total; ?>
+        </td>
+    </tr>
     	</tbody>
     </table>
     {if isset($page)}<p>{$page|raw}</p>{/if}
     <!--{/empty}-->
-    <script>window.form.render();</script>
+	<script>
+	window.form.render();
+	window.laydate.render({range: true, elem: '#create_time', type: 'date'});
+	</script>
 </form>
 {/block}
