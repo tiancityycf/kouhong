@@ -37,7 +37,7 @@ class User
 			try{
 				$data = json_decode(file_get_contents(sprintf($loginUrl, $appid, $secret, $code)), true);
 			} catch (\Exception $e) {
-				$result = ['status' => 0];
+				$result = ['errcode' => 1,'errmsg'=>$e->getMessage()];
 				return $result;
 			}
 		}
