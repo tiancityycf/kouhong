@@ -119,7 +119,7 @@ class User
 		try {
 			$time = time();
 			$userModel = new UserModel();
-			$user = $userModel->where('openid', $data['openid'])->find();
+			$user = $userModel->where('id', $data['user_id'])->find();
 			if(empty($user)){
 				Db::rollback();
 				trace($userModel->getLastSql(),'error');
@@ -208,9 +208,9 @@ class User
 	{
 		try {
 			$where = [];
-			$where['index'] = 'broadcast';
-			$userRecord = ConfigModel::where($where)->find();
-			$userRecord['value'] = json_decode($userRecord['value']);
+			//$where['index'] = 'broadcast';
+			$userRecord = ConfigModel::where($where)->column('value','index');
+			$userRecord['broadcast'] = json_decode($userRecord['broadcast']);
 			return $userRecord;
 		} catch (\Exception $e) {
 			trace($e->getMessage(),'error');
