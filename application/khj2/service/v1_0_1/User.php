@@ -176,10 +176,13 @@ class User
 		$result = [];
 		$result['errcode'] = 0;
 		try {
-			$userRecord = UserModel::where('id', $data['user_id'])->field("free_used,invite_times")->find();
+			$userRecord = UserModel::where('id', $data['user_id'])->field("free_used,invite_times,share_times")->find();
 			if($data['is_play']==1){
 				if($userRecord['free_used']==0){
 					$userRecord->free_used = 1;
+					$userRecord->save();
+				}elseif($userRecord['share_times']>0){
+					$userRecord->share_times = ['dec', 1];
 					$userRecord->save();
 				}elseif($userRecord['invite_times']>0){
 					$userRecord->invite_times = ['dec', 1];
