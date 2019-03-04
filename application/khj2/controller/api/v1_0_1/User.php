@@ -58,7 +58,7 @@ class User extends BasicController
 	public function update()
 	{
         //前台测试链接：https://khj2.wqop2018.com/khj2/api/v1_0_1/user/update.html?openid=1&nickname=xxx&avatar=1&gender=1
-        require_params('openid', 'nickname', 'avatar', 'gender');
+        require_params('user_id', 'nickname', 'avatar', 'gender');
 		$data = Request::param();
 
 		$userService = new UserService();
