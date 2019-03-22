@@ -117,5 +117,16 @@ class User extends BasicController
 
 		return result(200, 'ok', $result);
 	}
+	/**
+	 * @return boolean
+	 */
+	public function update_free_used()
+	{
+
+		$userService = new UserService();
+		$result = $userService->update_free_used();
+
+		return result(200, 'ok', $result);
+	}
 
 }

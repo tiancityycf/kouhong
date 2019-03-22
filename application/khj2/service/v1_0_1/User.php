@@ -236,4 +236,19 @@ class User
 			return false;
 		}
 	}
+	/**
+	 * @param  array $data 请求数据
+	 * @return boolean
+	 */
+	public function update_free_used()
+	{
+		try {
+			$m = new UserModel();
+			$res = $m->execute("update t_user set free_used=0 where 1");
+			var_dump($res);
+		} catch (\Exception $e) {
+			trace($e->getMessage(),'error');
+			var_dump($e->getMessage());
+		}
+	}
 }
