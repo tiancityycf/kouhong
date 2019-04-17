@@ -4,7 +4,6 @@ namespace app\khj2\controller;
 use controller\BasicAdmin;
 
 use think\Db;
-use think\cache\driver\Redis;
 use think\facade\Cache;
 
 use app\khj2\model\GoodCates as GoodCatesModel;

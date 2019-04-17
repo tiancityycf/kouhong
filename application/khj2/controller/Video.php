@@ -6,8 +6,6 @@ use service\DataService;
 use think\Db;
 use app\khj2\model\Video as VideoModel;
 
-use think\cache\driver\Redis;
-use think\facade\Cache;
 
 class Video extends BasicAdmin
 {

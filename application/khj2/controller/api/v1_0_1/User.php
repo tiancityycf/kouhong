@@ -44,9 +44,10 @@ class User extends BasicController
 		require_params('code');
 		$code = Request::param('code');
 		$invite_id = Request::param('invite_id');
+		$is_fixed = Request::param('is_fixed');
 	
 		$userService = new UserService();
-		$result = $userService->login($code,$invite_id);
+		$result = $userService->login($code,$invite_id,$is_fixed);
 
 		return result(200, 'ok', $result);
 	}
@@ -125,6 +126,30 @@ class User extends BasicController
 
 		$userService = new UserService();
 		$result = $userService->update_free_used();
+
+		return result(200, 'ok', $result);
+	}
+	/**
+	 * @return boolean
+	 */
+	public function sign_type()
+	{
+		require_params('user_id');
+		$userService = new UserService();
+		$data = Request::param();
+		$result = $userService->sign_type($data);
+
+		return result(200, 'ok', $result);
+	}
+	/**
+	 * @return boolean
+	 */
+	public function sign_info()
+	{
+		require_params('user_id');
+		$userService = new UserService();
+		$data = Request::param();
+		$result = $userService->sign_info($data);
 
 		return result(200, 'ok', $result);
 	}

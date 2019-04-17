@@ -7,7 +7,6 @@ use think\Db;
 use app\khj2\model\Goods as GoodsModel;
 use app\khj2\model\UserLipstick as UserLipstickModel;
 
-use think\cache\driver\Redis;
 use think\facade\Cache;
 
 class Order extends BasicAdmin

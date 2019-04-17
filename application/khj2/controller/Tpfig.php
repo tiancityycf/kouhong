@@ -4,8 +4,6 @@ namespace app\khj2\controller;
 use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
-use think\cache\driver\Redis;
-use think\facade\Cache;
 
 class Tpfig extends BasicAdmin
 {
@@ -122,12 +120,6 @@ class Tpfig extends BasicAdmin
 
     protected function redisSave()
     {
-        $arr = Db::name($this->table)->where('status',1)->column('index, value, type', 'index');
-
-        if (Cache::set(config('config_key'), $arr)) {
-            return true;
-        } else {
-            return false;
-        }
+	return true;
     }
 }

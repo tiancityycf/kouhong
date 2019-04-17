@@ -3,12 +3,13 @@
 namespace app\khj2\service\v1_0_1;
 
 use think\Db;
-use think\facade\Cache;
 use think\facade\Config;
 use app\khj2\model\User as UserModel;
 use app\khj2\model\Video as VideoModel;
 use app\khj2\model\Config as ConfigModel;
 use app\khj2\model\UserRecord as UserRecordModel;
+use app\khj2\model\ChallengeLog as ChallengeLogModel;
+use app\khj2\model\Sign as SignModel;
 
 use zhise\HttpClient;
 
@@ -21,7 +22,7 @@ class User
 	 * 用户登录
 	 * @return array
 	 */
-	public function login($code,$invite_id)
+	public function login($code,$invite_id,$is_fixed)
 	{
 		$appid = Config::get('wx_appid');
 		$secret = Config::get('wx_secret');
@@ -55,7 +56,7 @@ class User
 				if (!empty($user)) {
 					$user->update_time = $time;
 					$user->session_key = $data['session_key'];
-					$user->invite_id = $invite_id?$invite_id:0;
+					//$user->invite_id = $invite_id?$invite_id:0;
 					$user->save();
 				} else {
 					$user = new UserModel();
@@ -79,6 +80,29 @@ class User
 						if ($user_record) {
 							$user_record->invite_times       = ['inc', 1];
 							$user_record->save();
+						}
+						if($is_fixed>0 && $user_record['sign_type']>0 && $user_record['sign_left']>0){
+							$dday = date("ymd");
+							$preday = date("ymd",strtotime("-1 day"));
+							$preday2 = date("ymd",strtotime("-2 day"));
+							$p1 = SignModel::where('user_id',$invite_id)->where("dday",$preday)->find();
+							if(empty($p1)){
+								$p2 = SignModel::where('user_id',$invite_id)->where("dday",$preday2)->find();
+								if(!empty($p2)){
+									$sm = new SignModel();	
+									$sm->ext = 1;
+									$sm->linked = $p2['linked']+1;
+									$sm->user_id = $invite_id;
+									$sm->dday = $preday;
+									$sm->addtime = time();
+									$sm->save();
+									$p = SignModel::where('user_id',$invite_id)->where("dday",$dday)->find();
+									if(!empty($p)){
+										$p->linked = $p2['linked']+2;
+										$p->save();
+									}
+								}
+							}
 						}
 					}
 				}
@@ -181,11 +205,11 @@ class User
 				if($userRecord['free_used']==0){
 					$userRecord->free_used = 1;
 					$userRecord->save();
-				}elseif($userRecord['share_times']>0){
-					$userRecord->share_times = ['dec', 1];
-					$userRecord->save();
 				}elseif($userRecord['invite_times']>0){
 					$userRecord->invite_times = ['dec', 1];
+					$userRecord->save();
+				}elseif($userRecord['share_times']>0){
+					$userRecord->share_times = ['dec', 1];
 					$userRecord->save();
 				}else{
 					$result['errmsg'] = "次数不足";
@@ -249,6 +273,59 @@ class User
 		} catch (\Exception $e) {
 			trace($e->getMessage(),'error');
 			var_dump($e->getMessage());
+		}
+	}
+	public function sign_type($data)
+	{
+		try {
+			if($data['sign_type']>0){
+				$m = UserModel::where('id', $data['user_id'])->find();
+				$m->sign_type = $data['sign_type'];
+				$m->sign_date = date('ymd');
+				$m->save();
+				$start = strtotime(date('Y-m-d').' 00:00:00');
+				$end = strtotime(date('Y-m-d').' 23:59:59');
+				$result = ChallengeLogModel::where('user_id',$data['user_id'])->where("start_time","between",[$start,$end])->count();
+				if($result>2){
+					$dday = date('ymd');
+					$sm = SignModel::where('user_id', $data['user_id'])->where('dday',$dday)->find();
+					if(empty($sm)){
+						$sm = new SignModel();	
+						$sm->ext = 0;
+						$sm->linked = 1;
+						$sm->user_id = $data['user_id'];
+						$sm->dday = $dday;
+						$sm->addtime = time();
+						$sm->save();
+					}
+				}
+				return true;
+			}else{
+				return false;
+			}
+		} catch (\Exception $e) {
+			trace($e->getMessage(),'error');
+			return false;
+		}
+	}
+	public function sign_info($data)
+	{
+		try {
+			$m = UserModel::where('id', $data['user_id'])->find();
+			if(empty($m)){
+				return false;
+			}
+			$result = [];
+			$result['userinfo'] = $m;
+			$sm = SignModel::where('user_id', $data['user_id'])->order("dday desc")->limit(10)->select();
+			$result['sign'] = $sm;
+			$start = strtotime(date('Y-m-d').' 00:00:00');
+			$end = strtotime(date('Y-m-d').' 23:59:59');
+			$result['game_times'] = ChallengeLogModel::where('user_id',$data['user_id'])->where("start_time","between",[$start,$end])->count();
+			return $result;
+		} catch (\Exception $e) {
+			trace($e->getMessage(),'error');
+			return false;
 		}
 	}
 }

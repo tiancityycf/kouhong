@@ -7,7 +7,6 @@ use app\khj2\model\GoodImgs as GoodImgsModel;
 use app\khj2\model\Goods as GoodsModel;
 use controller\BasicAdmin;
 use think\Db;
-use think\facade\Cache;
 
 class Goods extends BasicAdmin
 {
@@ -110,7 +109,6 @@ class Goods extends BasicAdmin
     public function redisSave()
     {
 
-        $redis = Cache::init();
 
         $goods_info = [];
 
@@ -127,11 +125,6 @@ class Goods extends BasicAdmin
             $goods_info[$k]['info']      = $arr;
             $goods_info[$k]['cate_name'] = $v['cate_name'];
 
-        }
-        if (Cache::set(config('goods_info'), $goods_info)) {
-            return 'success';
-        } else {
-            return 'fail';
         }
 
     }

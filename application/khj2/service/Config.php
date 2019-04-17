@@ -3,7 +3,6 @@
 namespace app\khj2\service;
 
 use app\khj2\model\Config as ConfigModel;
-use think\facade\Cache;
 use think\facade\Config as ThinkConfig;
 
 class Config
@@ -19,16 +18,7 @@ class Config
 
     public function getAll()
     {
-        $cache    = Cache::init();
-        $cacheKey = config('config_key');
-
-        if (!$cache->has($cacheKey)) {
             $value  = ConfigModel::getAll();
-            $expire = ThinkConfig::get('cache_conf_time');
-            Cache::set($cacheKey, $value, $expire);
-        } else {
-            $value = $cache->get($cacheKey);
-        }
 
         $data = [];
         if ($value) {

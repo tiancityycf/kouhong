@@ -5,6 +5,7 @@ namespace app\khj2\service\v1_0_1;
 use app\khj2\model\GameRecord as GameRecordModel;
 use app\khj2\model\ChallengeLog as ChallengeLogModel;
 use app\khj2\model\User as UserModel;
+use app\khj2\model\Sign as SignModel;
 use app\khj2\model\UserLipstick as UserLipstickModel;
 use app\khj2\model\Goods as GoodsModel;
 use think\Db;
@@ -15,20 +16,20 @@ use think\Db;
 class Game
 {
 
-    //创建挑战记录
-    private function create_log($data)
-    {
-        $time = time();
-        $trade_no = date("YmdHis").rand(100000,999999);
-        $sdata = [
-            'user_id' => $data['user_id'],
-            'successed' => $data['success'],
-            'goods_id' => 0,
-            'trade_no' => $trade_no,
-            'start_time' => $time,
-            'create_time' => $time,
-        ];
-        $challenge = ChallengeLogModel::create($sdata);
+	//创建挑战记录
+	private function create_log($data)
+	{
+		$time = time();
+		$trade_no = date("YmdHis").rand(100000,999999);
+		$sdata = [
+			'user_id' => $data['user_id'],
+			'successed' => $data['success'],
+			'goods_id' => 0,
+			'trade_no' => $trade_no,
+			'start_time' => $time,
+			'create_time' => $time,
+			];
+		$challenge = ChallengeLogModel::create($sdata);
 
 		if($data['success']==1){
 			$sdata = [
@@ -58,33 +59,58 @@ class Game
 			$where['status'] = 0;
 			$lipstick_id = UserLipstickModel::where($where)->count();
 		}
-        return $lipstick_id;
-    }
 
-    /**
-     * 游戏结束
-     * @param  [type] $data 接收参数
-     * @return [type]       [description]
-     */
-    public function end($data)
-    {
-        try {
-            $id = $this->create_log($data);
+		$m = UserModel::where('id', $data['user_id'])->find();
+		if($m['sign_type']>0){
+			$start = strtotime(date('Y-m-d').' 00:00:00');
+			$end = strtotime(date('Y-m-d').' 23:59:59');
+			$result = ChallengeLogModel::where('user_id',$data['user_id'])->where("start_time","between",[$start,$end])->count();
+			if($result>2){
+				$dday = date('ymd');
+				$sm = SignModel::where('user_id', $data['user_id'])->where('dday',$dday)->find();
+				if(empty($sm)){
+					$preday = date("ymd",strtotime("-1 day"));
+					$pre = SignModel::where('user_id', $data['user_id'])->where('dday',$preday)->find();
+					if(!empty($pre)){
+						$linked = $pre['linked']+1;
+					}
+					$sm = new SignModel();
+					$sm->ext = 0;
+					$sm->linked = $linked;
+					$sm->user_id = $data['user_id'];
+					$sm->dday = $dday;
+					$sm->addtime = time();
+					$sm->save();
+				}
+			}
+		}
+		return $lipstick_id;
+	}
+
+	/**
+	 * 游戏结束
+	 * @param  [type] $data 接收参数
+	 * @return [type]       [description]
+	 */
+	public function end($data)
+	{
+		try {
+			$id = $this->create_log($data);
 			if($id>0){
 				$has_reward = 1;
 			}else{
 				$has_reward = 0;
 			}
-            return [
-                'has_reward' => $has_reward,
-            ];
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-    }
-    //查看是否有未领取的口红
-    public function lipstick($data)
-    {
+			return [
+				'has_reward' => $has_reward,
+				];
+		} catch (\Exception $e) {
+			throw new \Exception($e->getMessage());
+		}
+	}
+	//查看是否有未领取的口红
+	public function lipstick($data)
+	{
 		$where = [];
 		$where['user_id'] = $data['user_id'];
 		$where['status'] = 0;
@@ -102,18 +128,18 @@ class Game
 	 * @param  [type] $data 接收参数
 	 * @return [type]       [description]
 	 */
-    public function challenge_log($data)
-    {
-        try {
-            $user_id = intval($data['user_id']);
-//            $result = ChallengeLogModel::where('a.user_id',$data['user_id'])->order("id desc")->select();
-            $result = Db::query("select a.*,b.title,b.img,c.status,d.cate_name from t_challenge_log a left join t_goods b on a.goods_id=b.id left join t_good_cates d on b.cate=d.id left join t_user_goods c on a.id=c.challenge_id where a.user_id={$user_id} order by a.id desc");
-            return $result;
-        } catch (\Exception $e) {
-            Db::rollback();
-            lg($e);
-            throw new \Exception($e->getMessage());
-        }
-    }
+	public function challenge_log($data)
+	{
+		try {
+			$user_id = intval($data['user_id']);
+			//            $result = ChallengeLogModel::where('a.user_id',$data['user_id'])->order("id desc")->select();
+			$result = Db::query("select a.*,b.title,b.img,c.status,d.cate_name from t_challenge_log a left join t_goods b on a.goods_id=b.id left join t_good_cates d on b.cate=d.id left join t_user_goods c on a.id=c.challenge_id where a.user_id={$user_id} order by a.id desc");
+			return $result;
+		} catch (\Exception $e) {
+			Db::rollback();
+			lg($e);
+			throw new \Exception($e->getMessage());
+		}
+	}
 
 }
