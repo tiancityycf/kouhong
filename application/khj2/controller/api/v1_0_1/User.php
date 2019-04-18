@@ -153,5 +153,9 @@ class User extends BasicController
 
 		return result(200, 'ok', $result);
 	}
+	public function test(){
+		$userService = new UserService();
+		$result = $userService->test();
+	}
 
 }

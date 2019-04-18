@@ -10,6 +10,7 @@ use app\khj2\model\Config as ConfigModel;
 use app\khj2\model\UserRecord as UserRecordModel;
 use app\khj2\model\ChallengeLog as ChallengeLogModel;
 use app\khj2\model\Sign as SignModel;
+use app\khj2\model\Shop as ShopModel;
 
 use zhise\HttpClient;
 
@@ -254,6 +255,20 @@ class User
 			$m->is_end = $data['is_end'];
 			$m->create_time = time();
 			$m->save();
+			if($data['is_end']==1){
+				$where = [];
+				$where['index'] = 'video_score';
+				$c = ConfigModel::where($where)->find();
+				if(!empty($c)){
+					$u = UserModel::where('id', $data['user_id'])->find();
+					$shop_data = [];
+					$game_id = Config::get('game_id');
+					$shop_data['openid'] = $u['openid'];
+					$shop_data['game_id'] = $game_id;
+					$shop_data['score'] = $c['value'];
+					//ShopModel::add_score($shop_data);
+				}
+			}
 			return true;
 		} catch (\Exception $e) {
 			trace($e->getMessage(),'error');
@@ -327,5 +342,15 @@ class User
 			trace($e->getMessage(),'error');
 			return false;
 		}
+	}
+	public function test(){
+		$shop_data = [];
+		$game_id = 1;
+		$shop_data['openid'] = 'o_dT15ZuFuSJ7PFEdcfTPzj-1808';
+		$shop_data['game_id'] = $game_id;
+		$shop_data['score'] = 1.5;
+		$shop = new ShopModel();
+		$result = $shop->add_score($shop_data);
+		print_r($result);
 	}
 }
