@@ -12,22 +12,60 @@
 <div class="layui-form-item layui-inline" style="margin-left: 30px;">
 <form class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 
+    <div class="layui-form-item layui-inline" >
+        <label class="layui-form-label">ID</label>
+        <div class="layui-input-inline">
+            <input name="id" value="{$Think.get.id|default=''}" placeholder="ID" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">openid</label>
         <div class="layui-input-inline">
-            <input name="openid" value="{$Think.get.openid|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+            <input name="openid" value="{$Think.get.openid|default=''}" placeholder="openid" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">昵称</label>
         <div class="layui-input-inline">
-            <input name="nickname" value="{$Think.get.nickname|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+            <input name="nickname" value="{$Think.get.nickname|default=''}" placeholder="昵称" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">邀请人id</label>
         <div class="layui-input-inline">
-            <input name="invite_id" value="{$Think.get.invite_id|default=''}" placeholder="请输入想要搜索的关键字" class="layui-input">
+            <input name="invite_id" value="{$Think.get.invite_id|default=''}" placeholder="邀请人ID" class="layui-input">
+        </div>
+    </div>
+
+ <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">是否参与打卡</label>
+        <div class="layui-input-inline">
+            <select name='sign_type' class='layui-select' lay-search="">
+                <option value=''> - 所有状态 -</option>
+                <!--{foreach [0 => '没参与打卡', 1=> '参与打卡'] as $k => $v}-->
+                <!--{if($Think.get.sign_type != '' && $Think.get.sign_type == $k)}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+
+ <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">今日是否已打卡</label>
+        <div class="layui-input-inline">
+            <select name='today_sign' class='layui-select' lay-search="">
+                <option value=''> - 所有状态 -</option>
+                <!--{foreach [1 => '今日已打卡', 2=> '今日未打卡'] as $k => $v}-->
+                <!--{if($Think.get.today_sign != '' && $Think.get.today_sign == $k)}-->
+                <option selected="selected" value='{$k}'> - {$v} - </option>
+                <!--{else}-->
+                <option value='{$k}'> - {$v} - </option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
         </div>
     </div>
 
@@ -43,22 +81,25 @@
     <table class="layui-table" lay-skin="line">
     	<thead>
 		<tr>
-            <th class='text-left nowrap'>操作</th>
             <th class='text-left nowrap'>用户ID</th>
             <th class='text-left nowrap'>openid</th>
             <th class='text-left nowrap'>昵称</th>
-            <th class='text-left nowrap'>性别</th>
+            <th class='text-left' style="width:10px;">性别</th>
             <th class='text-left nowrap'>邀请人ID</th>
-            <th class='text-left nowrap'>免费次数</th>
-            <th class='text-left nowrap'>邀请次数</th>
+            <th class='text-left' style="width:10px;">免费次数</th>
+            <th class='text-left' style="width:10px;">邀请次数</th>
+            <th class='text-left' style="width:10px;">是否参与打卡</th>
+            <th class='text-left' style="width:10px;">已打卡天数</th>
+            <th class='text-left' style="width:10px;">今日是否打卡</th>
+            <th class='text-left' style="width:10px;">总游戏次数</th>
+            <th class='text-left' style="width:10px;">今日游戏次数</th>
+            <th class='text-left' style="width:10px;">已邀请好友数</th>
+            <th class='text-left nowrap'>最近登录时间</th>
     	</tr>
     	</thead>
     	<tbody>
     	<!--{foreach $list as $key=>$vo}-->
     	<tr>
-            <td>
-                 
-            </td>
             <td class='text-left nowrap'>
                 {$vo.id}
             </td>
@@ -81,14 +122,43 @@
        
             <td class='text-left nowrap'>
                 {if condition="$vo.free_used == 1"}
-                已使用
+                已
                 {else /}
-                未使用
+                未
                 {/if}
             </td>
 
             <td class='text-left nowrap'>
                {$vo.invite_times}
+            </td>
+            <td class='text-left nowrap'>
+                {if condition="$vo.sign_type == 1"}
+                是
+                {else /}
+                否
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+               {$vo.sign_days}
+            </td>
+            <td class='text-left nowrap'>
+                {if condition="$vo.sid > 0"}
+                是
+                {else /}
+                否
+                {/if}
+            </td>
+            <td class='text-left nowrap'>
+               {$vo.total_games}
+            </td>
+            <td class='text-left nowrap'>
+               {$vo.today_games}
+            </td>
+            <td class='text-left nowrap'>
+               {$vo.total_invite}
+            </td>
+            <td class='text-left nowrap'>
+               {$vo.update_time}
             </td>
             
         </tr>

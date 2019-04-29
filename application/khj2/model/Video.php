@@ -23,9 +23,15 @@ class Video extends Model
 			$query->whereLike('u.openid', "%{$params['openid']}%");
         }
         if (isset($params['create_time']) && $params['create_time'] !== '') {
-			list($start_create_time, $end_create_time) = explode(' - ', $params['create_time']);
-			$query->whereBetweenTime('a.create_time', "{$start_create_time}", "{$end_create_time}");
-        }
+		list($start_create_time, $end_create_time) = explode(' - ', $params['create_time']);
+		$query->whereBetweenTime('a.create_time', "{$start_create_time}", "{$end_create_time}");
+        }else{
+		$s = time()-24*3600;
+		$e = time();
+		$start_create_time = date('Y-m-d',$s);
+		$end_create_time = date('Y-m-d',$e);
+		$query->whereBetweenTime('a.create_time', "{$start_create_time}", "{$end_create_time}");
+	}
         $query->group('a.user_id');
 
         return $query;

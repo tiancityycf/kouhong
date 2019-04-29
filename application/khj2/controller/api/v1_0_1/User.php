@@ -130,6 +130,7 @@ class User extends BasicController
 		return result(200, 'ok', $result);
 	}
 	/**
+	 * @desc 补卡方式选择
 	 * @return boolean
 	 */
 	public function sign_type()
@@ -142,6 +143,7 @@ class User extends BasicController
 		return result(200, 'ok', $result);
 	}
 	/**
+	 * @desc 补卡信息列表
 	 * @return boolean
 	 */
 	public function sign_info()
@@ -153,9 +155,23 @@ class User extends BasicController
 
 		return result(200, 'ok', $result);
 	}
+	/**
+	 * @desc 补卡
+	 * @return boolean
+	 */
+	public function sign_up()
+	{
+		require_params('user_id');
+		$userService = new UserService();
+		$data = Request::param();
+		$result = $userService->sign_up($data);
+
+		return result(200, 'ok', $result);
+	}
 	public function test(){
 		$userService = new UserService();
 		$result = $userService->test();
+		return result(200, 'ok', $result);
 	}
 
 }

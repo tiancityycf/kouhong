@@ -60,31 +60,34 @@ class Game
 			$lipstick_id = UserLipstickModel::where($where)->count();
 		}
 
+		
+		$result = [];
 		$m = UserModel::where('id', $data['user_id'])->find();
-		if($m['sign_type']>0){
+		if($m['sign_type']>0 && $m['sign_result']==0 && $m['sign_days']<180){
 			$start = strtotime(date('Y-m-d').' 00:00:00');
 			$end = strtotime(date('Y-m-d').' 23:59:59');
-			$result = ChallengeLogModel::where('user_id',$data['user_id'])->where("start_time","between",[$start,$end])->count();
-			if($result>2){
+			$c = ChallengeLogModel::where('user_id',$data['user_id'])->where("start_time","between",[$start,$end])->count();
+			if($c>2){
 				$dday = date('ymd');
 				$sm = SignModel::where('user_id', $data['user_id'])->where('dday',$dday)->find();
 				if(empty($sm)){
-					$preday = date("ymd",strtotime("-1 day"));
-					$pre = SignModel::where('user_id', $data['user_id'])->where('dday',$preday)->find();
-					if(!empty($pre)){
-						$linked = $pre['linked']+1;
-					}
 					$sm = new SignModel();
 					$sm->ext = 0;
-					$sm->linked = $linked;
+					$sm->linked = 1;
 					$sm->user_id = $data['user_id'];
 					$sm->dday = $dday;
 					$sm->addtime = time();
 					$sm->save();
+					$m->sign_days = $m->sign_days + 1;
+					$m->save();
+					$result['msg'] = '今日打卡完成';
 				}
 			}
 		}
-		return $lipstick_id;
+
+		$result['lipstick_id'] = $lipstick_id;
+		$result['msg'] = $lipstick_id;
+		return $result;
 	}
 
 	/**
@@ -95,14 +98,15 @@ class Game
 	public function end($data)
 	{
 		try {
-			$id = $this->create_log($data);
-			if($id>0){
+			$result = $this->create_log($data);
+			if($result['lipstick_id']>0){
 				$has_reward = 1;
 			}else{
 				$has_reward = 0;
 			}
 			return [
 				'has_reward' => $has_reward,
+				'msg' => $result['msg'],
 				];
 		} catch (\Exception $e) {
 			throw new \Exception($e->getMessage());

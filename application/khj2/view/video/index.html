@@ -15,7 +15,7 @@
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">时间范围</label>
         <div class="layui-input-inline">
-			<input name="create_time" id='create_time' value="{$Think.get.create_time|default=''}" placeholder="请选择时间" class="layui-input">
+	<input name="create_time" id='create_time' value="{$Think.get.create_time|default=$default_time}" placeholder="请选择时间" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item layui-inline">
@@ -44,11 +44,9 @@
     	</tr>
     	</thead>
     	<tbody>
+	<?php $total=0; ?>
     	<!--{foreach $list as $key=>$vo}-->
-		<?php
-		$total = 0;  //总点击统计
-		$total += $vo['c'];
-		?>
+	<?php $total += $vo['c']; ?>
     	<tr>
             <td>
             </td>

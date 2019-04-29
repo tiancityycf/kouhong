@@ -5,6 +5,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use app\khj2\model\User as UserModel;
 use app\khj2\model\Address as AddressModel;
+use app\khj2\model\ChallengeLog as ChallengeLogModel;
 
 class UserRecord extends BasicAdmin
 {
@@ -17,6 +18,15 @@ class UserRecord extends BasicAdmin
   
         $db = $db->search($get);
        	$result = parent::_list($db, true, false, false);
+
+	foreach ($result['list'] as $key => $value) {
+            //用户信息
+            $result['list'][$key]['total_games']= ChallengeLogModel::where('user_id', $value['id'])->count();
+	    $today = strtotime(date('Y-m-d')." 00:00:00");
+	    $result['list'][$key]['today_games']= ChallengeLogModel::where('user_id', $value['id'])->where("start_time",">",$today)->count();
+	    $result['list'][$key]['total_invite']= UserModel::where('invite_id', $value['id'])->count();
+        }
+
         $this->assign('title', $this->title);
         return  $this->fetch('index', $result);
     }
