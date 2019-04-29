@@ -25,8 +25,8 @@ class Video extends BasicAdmin
 		$result = parent::_list($db, true, false, false);
 		$this->assign('title', $this->title);
 
-		$s = time()-24*3600;
-		$e = time();
+		$s = time();
+		$e = time()+24*3600;
 		$start_create_time = date('Y-m-d',$s);
                 $end_create_time = date('Y-m-d',$e);
 		$this->assign('default_time', $start_create_time.' - '.$end_create_time);

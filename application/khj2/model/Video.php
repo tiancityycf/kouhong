@@ -26,8 +26,8 @@ class Video extends Model
 		list($start_create_time, $end_create_time) = explode(' - ', $params['create_time']);
 		$query->whereBetweenTime('a.create_time', "{$start_create_time}", "{$end_create_time}");
         }else{
-		$s = time()-24*3600;
-		$e = time();
+		$s = time();
+		$e = time()+24*3600;
 		$start_create_time = date('Y-m-d',$s);
 		$end_create_time = date('Y-m-d',$e);
 		$query->whereBetweenTime('a.create_time', "{$start_create_time}", "{$end_create_time}");
