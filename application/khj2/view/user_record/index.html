@@ -42,7 +42,7 @@
         <div class="layui-input-inline">
             <select name='sign_type' class='layui-select' lay-search="">
                 <option value=''> - 所有状态 -</option>
-                <!--{foreach [0 => '没参与打卡', 1=> '参与打卡'] as $k => $v}-->
+                <!--{foreach [0 => '没参与打卡', 1=> '参与打卡没失败',2=>'参与打卡失败了'] as $k => $v}-->
                 <!--{if($Think.get.sign_type != '' && $Think.get.sign_type == $k)}-->
                 <option selected="selected" value='{$k}'> - {$v} - </option>
                 <!--{else}-->

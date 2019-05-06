@@ -30,7 +30,15 @@ class User extends Model
         	$query->where('u.invite_id', $params['invite_id']);
         }
         if (isset($params['sign_type']) && $params['sign_type'] !== '') {
-        	$query->where('u.sign_type', $params['sign_type']);
+		if($params['sign_type']==1){
+			$query->where('u.sign_type', 1);
+			$query->where('u.sign_result', 0);
+		}elseif($params['sign_type']==2){
+			$query->where('u.sign_type', 1);
+			$query->where('u.sign_result', 1);
+		}else{
+			$query->where('u.sign_type', 0);
+		}
         }
 
         if (isset($params['nickname']) && $params['nickname'] !== '') {
@@ -50,7 +58,7 @@ class User extends Model
 	$query->leftJoin(['t_sign'=>'s'],'s.user_id=u.id and s.dday='.$dday);
         if (isset($params['today_sign']) && $params['today_sign'] !== '') {
 	    if($params['today_sign']==1){
-		$query->where('s.id','is null');
+		$query->where('s.id','not null');
 	    }elseif($params['today_sign']==2){
 		$query->where('s.id','null');
 	    }

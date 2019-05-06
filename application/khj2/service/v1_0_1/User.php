@@ -388,6 +388,8 @@ class User
 	public function sign_up($data){
 		$user_id = $data['user_id'];
 		$m = UserModel::where('id', $data['user_id'])->find();
+		$m->update_time = time();
+		$m->save();
 		if($m['sign_days']>=180){
 			$result['errcode'] = "1";
 			$result['errmsg'] = "打卡任务已经完成";
